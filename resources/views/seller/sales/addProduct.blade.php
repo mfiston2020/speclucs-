@@ -1,0 +1,502 @@
+@extends('seller.includes.app')
+
+@section('title','seller Dashboard - Add Product')
+
+@push('css')
+<link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/libs/select2/dist/css/select2.min.css')}}">
+<link rel="stylesheet" href="{{ asset('dashboard/assets/dist/css/style.css')}}">
+@endpush
+
+{{-- ==== Breadcumb ======== --}}
+@section('page_name','New Product')
+@section('current','Add Product')
+{{-- === End of breadcumb == --}}
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header bg-info">
+                    <h4 class="m-b-0 text-white">Product Type</h4>
+                </div>
+                <form class="form-horizontal" action="#" method="POST">
+                    @csrf
+                    <div class="card-body">
+                        {{-- ====== input error message ========== --}}
+                        @include('seller.includes.layouts.message')
+                        {{-- ====================================== --}}
+                        <div class="form-group row">
+                            <label for="pname" class="col-sm-3 text-right control-label col-form-label">Product
+                                Category</label>
+                            <div class="col-sm-9">
+                                <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
+                                    name="category" id="category">
+                                    <option value="">Select</option>
+                                    @foreach ($categories as $category)
+                                    <span hidden>{{$initial=initials($category->name)}}</span>
+                                    @if ($initial=='LL')
+                                        <option value="{{$category->id}}"
+                                            {{(old('category')==$category->id)?'selected':''}}>
+                                            {{$category->name}}
+                                        </option>
+                                    @else
+                                        
+                                    @endif
+                                    @endforeach
+                                    <option value="others"
+                                        {{(old('category')=='others')?'selected':''}}>
+                                        Others
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {{-- second card for selecting lens characteristics --}}
+            <div class="card" id="lens">
+                <div class="card-header bg-info">
+                    <h4 class="m-b-0 text-white">Lens Information</h4>
+                </div>
+                <form class="form-horizontal" action="#" method="POST">
+                    @csrf
+                    <div class="form-body">
+                        <br>
+                        <div class="card-body">
+                            <div class="alert alert-warning alert-rounded col-7" id="warning">
+                                <b>Warning! </b>No Results Found!!
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span
+                                        aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <!--/row-->
+                            <div class="row">
+                                <!--/span-->
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Lens Type</label>
+                                        <select class="form-control custom-select" name="lens_type" id="lens_type">
+                                            <option value="">-- Select --</option>
+                                            @foreach ($lens_types as $lens_type)
+                                            <option value="{{$lens_type->id}}"
+                                                {{(old('lens_type')==$lens_type->id)?'selected':''}}>
+                                                {{$lens_type->name}}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Index</label>
+                                        <select class="form-control custom-select" name="index" id="index">
+                                            <option value="">-- Select --</option>
+                                            @foreach ($index as $index)
+                                            <option value="{{$index->id}}" {{(old('index')==$index->id)?'selected':''}}>
+                                                {{$index->name}}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Chromatics Aspects</label>
+                                        <select class="form-control custom-select" name="chromatics" id="chromatics">
+                                            <option value="">-- Select --</option>
+                                            @foreach ($chromatics as $chromatics)
+                                            <option value="{{$chromatics->id}}"
+                                                {{(old('chromatics')==$chromatics->id)?'selected':''}}>
+                                                {{$chromatics->name}}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Coating</label>
+                                        <select class="form-control custom-select" name="coating" id="coating">
+                                            <option value="">-- Select --</option>
+                                            @foreach ($coatings as $coatings)
+                                            <option value="{{$coatings->id}}"
+                                                {{(old('coating')==$coatings->id)?'selected':''}}>
+                                                {{$coatings->name}}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>SPHERE</label>
+                                        <input type="text" class="form-control" name="sphere" value="{{ old('sphere')}}"
+                                            id="sphere">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>CYLINDER</label>
+                                        <input type="text" class="form-control" name="cylinder"
+                                            value="{{ old('cylinder')}}" id="cylinder">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group" id="axiss">
+                                        <label>AXIS</label>
+                                        <input type="text" class="form-control" name="axis" value="{{ old('axis')}}"
+                                            id="axis">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group" id="adds">
+                                        <label>ADD</label>
+                                        <input type="text" class="form-control" name="add" value="{{ old('add')}}"
+                                            id="add">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="eyes">
+                                    <div class="form-group row">
+                                        <div class="radiobtn col-4">
+                                            <input type="radio" id="Left" name="eye" value="left" />
+                                            <label for="Left">Left Eye</label>
+                                        </div>
+
+                                        <div class="radiobtn col-4">
+                                            <input type="radio" id="Right" name="eye" value="right" />
+                                            <label for="Right">Right Eye</label>
+                                        </div>
+
+                                        {{-- <div class="radiobtn col-4">
+                                            <input type="radio" id="Both" name="eye" value="both" checked />
+                                            <label for="Both">Both Eyes</label>
+                                        </div> --}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                </form>
+                {{-- ============================================================ --}}
+                <div id="search_results" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                    aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Product Search Result</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <form method="POST" action="{{route('seller.sales.save')}}">
+                                <div class="modal-body">
+                                    @csrf
+                                    <input type="hidden" value="{{$id}}" name="invoice_id">
+                                    <input type="hidden" value="{{$id}}" name="product" id="product_id">
+                                    <div class="form-group row">
+                                        <label for="stock" class="col-sm-4 text-right control-label col-form-label">Unit
+                                            Price</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="unit_price" class="form-control" placeholder="0"
+                                                name="unit_price" readonly required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="fstock"
+                                            class="col-sm-4 text-right control-label col-form-label">Quantity
+                                            <span id="left" style="color: red"></span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input type="number" class="form-control" id="quantity"
+                                                placeholder="quantity" name="quantity" value="{{old('quantity')}}"
+                                                min="1">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="discount"
+                                            class="col-sm-4 text-right control-label col-form-label invalid">Adjust Price </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="discount" placeholder="0"
+                                                name="discount" value="{{old('discount')}}">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label for="cost"
+                                            class="col-sm-4 text-right control-label col-form-label invalid">Total
+                                            Amount</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="total_amount" placeholder="0"
+                                                name="total_amount" value="{{old('total_amount')}}" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-warning waves-effect"
+                                        data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-default waves-effect waves-light">Add
+                                        Product</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {{-- ======================================================================= --}}
+                <div class="card-body">
+                    <div class="form-group m-b-0 text-center">
+                        <img src="{{ asset('dashboard/assets/images/loading.gif')}}" alt="" height="50px" width="50px"
+                            id="loading">
+                        <a class="btn btn-info waves-effect waves-light text-white" id="searching">Search</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- second card for selecting lens characteristics --}}
+        <div class="card" id="non-lens">
+            <div class="card-header bg-info">
+                <h4 class="m-b-0 text-white">Product Information</h4>
+            </div>
+            <br>
+            <form action="{{route('seller.sales.save')}}" method="POST">
+                @csrf
+                
+                <input type="hidden" value="{{$id}}" name="invoice_id">
+                
+                <div class="form-group row">
+                    <label for="pname" class="col-sm-3 text-right control-label col-form-label">Product
+                    </label>
+                    <div class="col-sm-9">
+                        <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
+                            name="product" id="product">
+                            <option value="">Select</option>
+                            @foreach ($products as $product)
+                            <option value="{{$product->id}}" {{(old('product')==$product->id)?'selected':''}}>
+                                {{$product->product_name}} | {{$product->description}}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="stock" class="col-sm-3 text-right control-label col-form-label">Unit Price</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="unit_price2" class="form-control" placeholder="0" name="unit_price"
+                            readonly required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="fstock" class="col-sm-3 text-right control-label col-form-label">Quantity
+                        <span id="left2" style="color: red"></span>
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control" id="quantity2" placeholder="quantity" name="quantity"
+                            value="{{old('quantity')}}" min="1">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="discount2" class="col-sm-3 text-right control-label col-form-label">Adjust Price +/-
+                        <span id="left2" style="color: red"></span>
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control" id="discount2" placeholder="discount" name="discount"
+                            value="{{old('discount')}}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="cost" class="col-sm-3 text-right control-label col-form-label invalid">Total
+                        Amount</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="total_amount2" placeholder="0" name="total_amount"
+                            value="{{old('total_amount')}}" readonly>
+                    </div>
+                </div>
+                <hr>
+                <div class="card-body">
+                    <div class="form-group m-b-0 text-center">
+                        <button type="submit" class="btn btn-info waves-effect waves-light">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+@endsection
+
+@push('scripts')
+<script src="{{ asset('dashboard/assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
+<script src="{{ asset('dashboard/assets/libs/select2/dist/js/select2.min.js')}}"></script>
+<script src="{{ asset('dashboard/assets/dist/js/pages/forms/select2/select2.init.js')}}"></script>
+
+<script>
+    $('#warning').hide();
+    $('#loading').hide();
+    $('#non-lens').hide();
+    $('#lens').hide();
+
+    // $('#discount').attr('readonly',true);
+    // $('#discount2').attr('readonly',true);
+
+
+    $('#category').on('change', function () {
+        if ($(this).val() == '1') {
+            $('#non-lens').hide();
+            $('#lens').show();
+        } else if ($(this).val() == '') {
+            $('#non-lens').hide();
+            $('#lens').hide();
+        } else {
+            $('#lens').hide();
+            $('#non-lens').show();
+            $('#warning').hide();
+        }
+    });
+
+    // ====================================
+    $('#searching').on('click', function () {
+
+        $('#loading').show();
+
+        var eye = '';
+        var lens_type = $('#lens_type').val();
+        var index = $('#index').val();
+        var chromatics = $('#chromatics').val();
+        var coating = $('#coating').val();
+        var sphere = $('#sphere').val();
+        var cylinder = $('#cylinder').val();
+        var axis = $('#axis').val();
+        var add = $('#add').val();
+        var eye_array = document.getElementsByName('eye');
+
+        for (i = 0; i < eye_array.length; i++) {
+            if (eye_array[i].checked) {
+                eye = eye + eye_array[i].value;
+            }
+        }
+
+        $.ajax({
+            url: "{{ route('seller.fetchProductData') }}",
+            method: 'POST',
+            data: {
+                "_token": "{{ csrf_token() }}",
+
+                lens_types: lens_type,
+                index: index,
+                chromatics: chromatics,
+                coating: coating,
+                sphere: sphere,
+                cylinder: cylinder,
+                axis: axis,
+                add: add,
+                eye: eye,
+            },
+
+            success: function (data) {
+                if (!data.length) {
+                    $('#loading').hide();
+                    $('#warning').show();
+                } else {
+                    $('#loading').hide();
+                    $('#warning').hide();
+
+                    $("#unit_price").val(data[0].price);
+                    $("#left").html('| ' + data[0].stock + ' left');
+                    $('#product_id').val(data[0].id);
+
+                    $('#search_results').modal('show');
+                    
+                    // console.log(data);
+                }
+                
+            },
+            error: function (data) {
+                console.log(data.length);
+            }
+        });
+    });
+    // ====================================
+
+
+    $('#product').on('change', function () {
+        var id = ($(this).val());
+
+        $.ajax({
+            url: "{{ route('seller.fetchProduct') }}",
+            method: 'POST',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                id: id,
+            },
+
+            success: function (data) {
+                $("#unit_price2").val(data.price);
+                $("#left2").html('| ' + data.stock + ' left');
+                console.log(data.price);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    });
+
+    $('#quantity').on('input', function () {
+        var qty = $(this).val();
+        var up = $('#unit_price').val();
+
+        var total = $("#total_amount").val(qty * up);
+    });
+
+    $('#discount').on('input', function () {
+        var dsct = $(this).val();
+        var up = $('#unit_price').val();
+        var qty = $('#quantity').val();
+
+        var total = $("#total_amount").val((parseInt(up)+parseInt(dsct))*qty);
+
+        // var total = $("#total_amount").val((qty * up) + parseInt(dsct));
+    });
+
+    $('#discount2').on('input', function () {
+        var dsct = $(this).val();
+        var up = $('#unit_price2').val();
+        var qty = $('#quantity2').val();
+
+        // var total = $("#total_amount2").val((up+dsct)*qty);
+
+        var total = $("#total_amount2").val((parseInt(up)+parseInt(dsct))*qty);
+
+        // var total = $("#total_amount2").val((qty * up) - parseInt(dsct));
+    });
+
+    $('#quantity2').on('input', function () {
+        var qty = $(this).val();
+        var up = $('#unit_price2').val();
+
+        var total = $("#total_amount2").val(qty * up);
+    });
+    
+
+
+    $('#lens_type').on('change',function(){
+        if ($(this).val()=='2') {
+            $('#adds').hide();
+            $('#axiss').hide();
+            $('#eyes').hide();
+        }
+        else{
+            $('#adds').show();
+            $('#axiss').show();
+            $('#eyes').show();
+        }
+    });
+</script>
+@endpush

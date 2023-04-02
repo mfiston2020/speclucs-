@@ -1,0 +1,369 @@
+@extends('manager.includes.app')
+
+@section('title','Manager\'s Manager')
+
+@push('css')
+
+@endpush
+{{-- ==== Breadcumb ======== --}}
+@section('current','Manager Report')
+@section('page_name','Manager Report')
+{{-- === End of breadcumb == --}}
+
+@section('content')
+<span hidden>{{$company=\App\Models\CompanyInformation::find(Auth::user()->company_id)}}</span>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-12">
+            <!-- Row -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-bottom border-info">
+                        <div class="card-body">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <h2>{{count(\App\Models\Product::where('company_id',Auth::user()->company_id)->get())}}
+                                    </h2>
+                                    <h6 class="text-info">Products</h6>
+                                </div>
+                                <div class="ml-auto">
+                                    <span class="text-info display-6"><i class="ti-notepad"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-bottom border-cyan">
+                        <div class="card-body">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <h2>{{count(\App\Models\Invoice::where('company_id',Auth::user()->company_id)->get())}}
+                                    </h2>
+                                    <h6 class="text-cyan">Invoices</h6>
+                                </div>
+                                <div class="ml-auto">
+                                    <span class="text-cyan display-6"><i class="ti-clipboard"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-bottom border-success">
+                        <div class="card-body">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <h2>{{count(\App\Models\Supplier::where('company_id',Auth::user()->company_id)->get())}}
+                                    </h2>
+                                    <h6 class="text-success">Suppliers</h6>
+                                </div>
+                                <div class="ml-auto">
+                                    <span class="text-success display-6"><i class="ti-wallet"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-bottom border-orange">
+                        <div class="card-body">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <h2>{{\App\Models\CompanyInformation::where('id',Auth::user()->company_id)->pluck('sms_quantity')->first()}}
+                                    </h2>
+                                    <h6 class="text-orange">SMS</h6>
+                                </div>
+                                <div class="ml-auto">
+                                    <span class="text-orange display-6"><i class="ti-comment-alt"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Row -->
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Sales chart -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-md-flex align-items-center">
+                        <div>
+                            <h4 class="card-title">Sales Summary</h4>
+                            <h5 class="card-subtitle">Annual Overview </h5>
+                        </div>
+                        <div class="ml-auto d-flex no-block align-items-center">
+                            <ul class="list-inline font-12 dl m-r-15 m-b-0">
+                                <li class="list-inline-item text-info"><i class="fa fa-circle"></i> Product Sold
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- column -->
+                        <div class="col-lg-4">
+
+                        <?php
+                            $totalValue=0;
+                            $earning=0;
+                            $Anual_income =   \App\Models\SoldProduct::where('company_id',Auth::user()->company_id)->whereYear('created_at',date('Y'))->get();
+                            foreach ($Anual_income as $key => $value) {
+                                $income =   $value->total_amount-($value->quantity*(\App\Models\Product::where('id',$value->product_id)->pluck('cost')->first()));
+                                $earning+=$income;
+                            }
+                        ?>
+                            @if ($earning>0)
+                            <h1 class="m-b-0 m-t-30">{{format_money($earning)}}</h1>
+                            @else
+                            <h1 class="m-b-0 m-t-30" style="color: red">{{format_money($earning)}}</h1>
+                            @endif
+                            <h6 class="font-light text-muted">Annual Gross Profit</h6>
+                            <span
+                                hidden>{{$pro  =   \App\Models\Product::where('company_id',Auth::user()->company_id)->select('*')->get()}}</span>
+
+                            @foreach ($pro as $pro)
+                            <span hidden>{{$amount =   $pro->cost*$pro->stock}}</span>
+                            <span hidden>{{$totalValue =   $totalValue+$amount}}</span>
+                            @endforeach
+                            <h3 class="m-t-30 m-b-0">{{format_money($totalValue)}}</h3>
+                            <h6 class="font-light text-muted">Current Stock Value</h6>
+                        </div>
+                        <!-- column -->
+                        <div class="col-lg-8">
+                            <div class="campaign ct-charts"></div>
+                        </div>
+                        <!-- column -->
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+
+                <div class="card-body border-top">
+                    <div class="row m-b-0">
+                        <!-- col -->
+
+                        <div class="col-lg-3 col-md-6">
+                            <div class="d-flex align-items-center">
+                                <div class="m-r-10"><span class="text-orange display-5"><i
+                                            class="mdi mdi-wallet"></i></span></div>
+                                <span hidden
+                                    >{{$pro  =   \App\Models\Transactions::where('company_id',Auth::user()->company_id)->
+                                                        whereYear('created_at',date('Y'))->select('*')->get()}}</span>
+                                @foreach ($pro as $pro)
+                                <span hidden>{{$amount =   $pro->cost*$pro->stock}}</span>
+                                <span hidden>{{$totalValue =   $totalValue+$amount}}</span>
+                                @endforeach
+                                <div>
+                                    <span>Total Sales</span>
+                                    <h3 class="font-medium m-b-0">
+                                        {{format_money(\App\Models\SoldProduct::where('company_id',Auth::user()->company_id)
+                                            ->whereYear('created_at',date('Y'))->select('*')->sum('total_amount'))}}
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- col -->
+                        <!-- col -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="d-flex align-items-center">
+                                <div class="m-r-10"><span class="text-cyan display-5"><i
+                                            class="mdi mdi-star-circle"></i></span></div>
+                                <div>
+                                    <span>Cost Of Good Sold</span>
+                                    <h3 class="font-medium m-b-0">
+                                        @php
+                                            $total_product_cost =   0;
+
+                                            $products =   \App\Models\SoldProduct::where('company_id',Auth::user()->company_id)
+                                                                    ->whereYear('created_at',date('Y'))->select('product_id','quantity')->get();
+                                            foreach ($products as $key => $product_cost) {
+                                                $total_product_cost +=  \App\Models\Product::where('id',$product_cost->product_id)->pluck('cost')->first()*$product_cost->quantity;
+                                            }
+
+                                        @endphp
+                                        {{format_money($total_product_cost)}}
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- col -->
+                        <!-- col -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="d-flex align-items-center">
+                                <div class="m-r-10"><span class="text-info display-5"><i
+                                            class="mdi mdi-shopping"></i></span></div>
+                                <div>
+                                    <span>Receivables</span>
+                                    <h3 class="font-medium m-b-0">
+                                        {{format_money(\App\Models\Invoice::where('company_id',Auth::user()->company_id)->select('*')
+                                                            ->sum('due'))}}
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- col -->
+                        <!-- col -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="d-flex align-items-center">
+                                <div class="m-r-10">
+                                    <span class="text-primary display-5"><i
+                                            class="mdi mdi-wallet"></i></span></div>
+                                <div><span>Payables</span>
+                                    <h3 class="font-medium m-b-0">
+                                        {{format_money(\App\Models\Receipt::where('company_id',Auth::user()->company_id)->select('*')
+                                                            ->where('status','<>','paid')->sum('total_cost'))}}
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- col -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- column -->
+        <div class="col-sm-12 col-lg-4">
+            <div class="card card-hover">
+                <div class="card-body">
+                    <h4 class="card-title">Product Sales</h4>
+                    <div class="d-flex">
+                        <h2>{{format_numbers(\App\Models\SoldProduct::where('company_id',Auth::user()->company_id)->select()->sum('quantity'))}}
+                            <small><i class="ti-arrow-up text-success"></i></small></h2>
+                        {{-- <span class="ml-auto">Users per minute</span> --}}
+                    </div>
+                    <div class="m-t-20 m-b-30 text-center">
+                        <div id="active-users"></div>
+                    </div>
+                    <h5>Top 5 Seling Product</h5>
+                    <ul class="list-group list-group-flush">
+                        @foreach ($product as $item)
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{\App\Models\Product::where(['id'=>$item->product_id])->where('company_id',Auth::user()->company_id)->pluck('product_name')->first()}}
+                                {{\App\Models\Product::where(['id'=>$item->product_id])->where('company_id',Auth::user()->company_id)->pluck('description')->first()}}
+                                <span class="badge badge-light badge-pill">{{number_format($item->sold)}}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- column -->
+        <div class="col-sm-12 col-lg-4">
+            <div class="card card-hover">
+                <div class="card-body">
+                    <h4 class="card-title">Expenses</h4>
+                    <div class="d-flex">
+                        <h2>{{format_numbers($expenses_count)}} <small><i class="ti-arrow-up text-success"></i></small>
+                        </h2>
+                        {{-- <span class="ml-auto">Users per minute</span> --}}
+                    </div>
+                    <div class="m-t-20 m-b-30 text-center">
+                        <div id="active-users"></div>
+                    </div>
+                    <h5>Top 5 Expenses</h5>
+                    <ul class="list-group list-group-flush">
+                        @foreach ($expenses as $item)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{\App\Models\Transactions::where(['id'=>$item->id])->where('company_id',Auth::user()->company_id)->pluck('title')->first()}}
+                            <span
+                                class="badge badge-light badge-pill">{{
+                                    format_money(\App\Models\Transactions::where(['id'=>$item->id])->where('company_id',Auth::user()->company_id)->pluck('amount')->first())}}</span>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- column -->
+        <div class="col-sm-12 col-lg-4">
+            <div class="card card-hover">
+                <div class="card-body">
+                    <h4 class="card-title">Customer Invoices</h4>
+                    <div class="d-flex">
+                        <h2>{{format_numbers(count($customerInvoices))}} <small><i
+                                    class="ti-arrow-up text-success"></i></small></h2>
+                        {{-- <span class="ml-auto">Users per minute</span> --}}
+                    </div>
+                    <div class="m-t-20 m-b-30 text-center">
+                        <div id="active-users"></div>
+                    </div>
+                    <h5>Top 5 Customer Invoices</h5>
+                    <ul class="list-group list-group-flush">
+                        @foreach ($customerInvoices as $item)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{\App\Models\Customer::where(['id'=>$item->client_id])->pluck('name')->first()}}
+                            {{-- Invoice #{{sprintf('%04d',$item->reference_number)}} --}}
+                            <span class="">{{date('Y-m-d',strtotime($item->created_at))}}</span>
+                            <span
+                                class="text-{{($item->status=='pending')?'waring':'success'}}">{{$item->status}}</span>
+                            <span class="badge badge-light badge-pill">{{format_money(+$item->total_amount)}}</span>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<!--chartis chart-->
+<script src="{{ asset('dashboard/assets/libs/chartist/dist/chartist.min.js')}}"></script>
+<script src="{{ asset('dashboard/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js')}}"></script>
+<script>
+    $(function () {
+        var myData = '';
+        $.ajax({
+            url: "{{ route('manager.getChartData') }}",
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                chart(data);
+            }
+        });
+
+
+        // ==============================================================
+        // Newsletter
+        // ==============================================================
+
+        function chart(data) {
+            var chart = new Chartist.Line('.campaign', {
+                labels: data.months,
+                series: [
+                    data.product_count,
+                    // data.product_income
+                    // [0, 3, 1, 2,]
+                ]
+            }, {
+                low: 0,
+                high: data.max,
+
+                showArea: true,
+                fullWidth: true,
+                plugins: [
+                    Chartist.plugins.tooltip()
+                ],
+                axisY: {
+                    onlyInteger: true,
+                    scaleMinSpace: 40,
+                    offset: 20,
+                    labelInterpolationFnc: function (value) {
+                        return (value / 1);
+                    }
+                },
+
+            });
+        }
+    });
+</script>
+@endpush

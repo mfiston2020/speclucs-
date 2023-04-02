@@ -1,0 +1,463 @@
+@extends('seller.includes.app')
+
+@section('title','Seller - Sales')
+
+@push('css')
+
+<style>
+
+table {
+  margin: 1em 0;
+  border-collapse: collapse;
+  border: 0.1em solid #d6d6d6;
+}
+
+caption {
+  text-align: left;
+  font-style: italic;
+  padding: 0.25em 0.5em 0.5em 0.5em;
+}
+
+th,
+td {
+  padding: 0.25em 0.5em 0.25em 1em;
+  vertical-align: text-top;
+  text-align: left;
+  text-indent: -0.5em;
+}
+
+th {
+  vertical-align: bottom;
+  background-color: #666;
+  color: #fff;
+}
+
+tr:nth-child(even) th[scope=row] {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) th[scope=row] {
+  background-color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+tr:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+td:nth-of-type(2) {
+  font-style: italic;
+}
+
+th:nth-of-type(3),
+td:nth-of-type(3) {
+  text-align: right;
+}
+
+/* Fixed Headers */
+
+th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+th[scope=row] {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+th[scope=row] {
+  vertical-align: top;
+  color: inherit;
+  background-color: inherit;
+  background: linear-gradient(90deg, transparent 0%, transparent calc(100% - .05em), #d6d6d6 calc(100% - .05em), #d6d6d6 100%);
+}
+
+th:not([scope=row]):first-child {
+  left: 0;
+  z-index: 3;
+  background: linear-gradient(90deg, #666 0%, #666 calc(100% - .05em), #ccc calc(100% - .05em), #ccc 100%);
+}
+
+/* Scrolling wrapper */
+
+div[tabindex="0"][aria-labelledby][role="region"] {
+  overflow: auto;
+}
+
+div[tabindex="0"][aria-labelledby][role="region"]:focus {
+  box-shadow: 0 0 .5em rgba(0,0,0,.5);
+  outline: .1em solid rgba(0,0,0,.1);
+}
+
+div[tabindex="0"][aria-labelledby][role="region"] table {
+  margin: 0;
+}
+
+div[tabindex="0"][aria-labelledby][role="region"].rowheaders {
+  background:
+    linear-gradient(to right, transparent 30%, rgba(255,255,255,0)),
+    linear-gradient(to right, rgba(255,255,255,0), white 70%) 0 100%,
+    radial-gradient(farthest-side at 0% 50%, rgba(0,0,0,0.2), rgba(0,0,0,0)),
+    radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.2), rgba(0,0,0,0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-size: 4em 100%, 4em 100%, 1.4em 100%, 1.4em 100%;
+  background-position: 0 0, 100%, 0 0, 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
+div[tabindex="0"][aria-labelledby][role="region"].colheaders {
+  background:
+    linear-gradient(white 30%, rgba(255,255,255,0)),
+    linear-gradient(rgba(255,255,255,0), white 70%) 0 100%,
+    radial-gradient(farthest-side at 50% 0, rgba(0,0,0,.2), rgba(0,0,0,0)),
+    radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,.2), rgba(0,0,0,0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  background-size: 100% 4em, 100% 4em, 100% 1.4em, 100% 1.4em;
+  background-attachment: local, local, scroll, scroll;
+}
+
+/* Strictly for making the scrolling happen. */
+
+th[scope=row] {
+  min-width: 40vw;
+}
+
+@media all and (min-width: 30em) {
+  th[scope=row] {
+    min-width: 20em;
+  }
+}
+  
+th[scope=row] + td {
+  min-width: 24em;
+}
+
+/* div[tabindex="0"][aria-labelledby][role="region"]:nth-child(3) {
+  max-height: 200em;
+} */
+
+div[tabindex="0"][aria-labelledby][role="region"]:nth-child(7) {
+  max-height: 35em;
+  margin: 0 1em;
+}
+</style>
+@endpush
+
+{{-- ==== Breadcumb ======== --}}
+@section('current','Lens Stock')
+@section('page_name','Lens Stock Management')
+{{-- === End of breadcumb == --}}
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <form action="{{route('seller.search.lens.stock')}}" method="post">
+                @csrf
+                <div class="card">
+                    <div class="card-body">
+                        {{-- <h4 class="card-title">Contact Info &amp; Bio</h4> --}}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-form-label">Lens Type</label>
+                                    <select class="form-control" name="lens_type">
+                                        <option>Choose Your Option</option>
+                                        @foreach ($lens_type as $lens_type)
+                                            <option value="{{$lens_type->id}}"
+                                                {{(old('lens_type')==$lens_type->id)?'selected':''}}>
+                                                {{$lens_type->name}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-form-label">Index</label>
+                                    <select class="form-control" name="index">
+                                        <option>Choose Your Option</option>
+                                        @foreach ($index as $index)
+                                            <option value="{{$index->id}}"
+                                                {{(old('index')==$index->id)?'selected':''}}>
+                                                {{$index->name}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-form-label">Chromatics Aspects</label>
+                                    <select class="form-control" name="chromatics">
+                                        <option>Choose Your Option</option>
+                                        @foreach ($chromatics as $chromatics)
+                                            <option value="{{$chromatics->id}}"
+                                                {{(old('chromatics')==$chromatics->id)?'selected':''}}>
+                                                {{$chromatics->name}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-form-label">Coating</label>
+                                    <select class="form-control" name="coating">
+                                        <option>Choose Your Option</option>
+                                        @foreach ($coatings as $coatings)
+                                            <option value="{{$coatings->id}}"
+                                                {{(old('coating')==$coatings->id)?'selected':''}}>
+                                                {{$coatings->name}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card-body">
+                        <div class="action-form">
+                            <div class="form-group m-b-0 text-center">
+                                <button type="submit"
+                                    class="btn btn-info waves-effect waves-light">Search</button>
+                                <a href="{{url()->previous()}}"
+                                    class="btn btn-dark waves-effect waves-light">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            @if ($results->isEmpty())
+                {{-- <div class="card"> --}}
+                    {{-- <div class="card-body"> --}}
+                        {{-- ====== input error message ========== --}}
+                        @include('seller.includes.layouts.message')
+                        {{-- ====================================== --}}
+                    {{-- </div> --}}
+                {{-- </div> --}}
+            @else
+                <div class="card">
+                    <div class="card-body">
+                      <span hidden>{{$type=\App\Models\LensType::where(['id'=>$lt])->pluck('name')->first()}}</span>
+                      <span hidden>{{$indx=\App\Models\PhotoIndex::where(['id'=>$ix])->pluck('name')->first()}}</span>
+                      <span hidden>{{$chro=\App\Models\PhotoChromatics::where(['id'=>$chrm])->pluck('name')->first()}}</span>
+                      <span hidden>{{$coat=\App\Models\PhotoCoating::where(['id'=>$ct])->pluck('name')->first()}}</span>
+                        <h4 class="card-title" style="text-transform: uppercase">{{$type." ".$indx." ".$chro." ".$coat}}</h4>
+                        <hr>
+                        {{-- {{$results}} --}}
+                        @if (initials($type)=='SV')
+                          <div class="table-responsive colheaders" role="region" aria-labelledby="HeadersRow" tabindex="0">
+                            <div>
+                            <table id="zero_config" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>SPH \ CYL</th>
+                                        @for ($i = $cylinder_max; $i >= $cylinder_min; $i=$i-0.25)
+                                            <th>{{$i}}</th>
+                                        @endfor
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for ($i = $sphere_max; $i >= $sphere_min; $i=$i-0.25)
+                                        <tr>
+                                            <th>{{$i}}</th>
+                                            @for ($j = $cylinder_max; $j >= $cylinder_min; $j=$j-0.25)
+                                            <span hidden>{{$product_id=\App\Models\Power::where(['cylinder'=>format_values($j)])->where('company_id',Auth::user()->company_id)->where(['sphere'=>format_values($i)])
+                                                                  ->where('type_id',$lt)
+                                                                  ->where('index_id',$ix)
+                                                                  ->where('chromatics_id',$chrm)
+                                                                  ->where('coating_id',$ct)
+                                                                  ->pluck('product_id')->first()}}</span>
+                                                                  
+                                            <span hidden>{{$stock=\App\Models\Product::where(['id'=>$product_id])->select('*')->sum('stock')}}</span>
+                                            <td>
+                                                @if ($stock==0)
+                                                    <center>
+                                                      <span>-</span>
+                                                    </center>
+                                                @else
+                                                    <center>
+                                                      <span class="label label-success">{{$stock}}</span>
+                                                    </center>
+                                                @endif
+                                            </td>
+                                            @endfor
+                                        </tr>
+                                    @endfor
+                                </tbody>
+                            </table>
+                          </div> 
+                        @else
+                        <div class="table-responsive colheaders" role="region" aria-labelledby="HeadersRow" tabindex="0">
+                          <div>
+                            <table id="zero_config" class="table table-striped table-bordered">
+                                <thead>
+                                  <tr>
+                                      <th>EYE</th>
+                                      @for ($i = $add_min; $i <= $add_max; $i=$i+0.25)
+                                        <th><center>R</center></th>
+                                        <th><center>L</center></th>
+                                      @endfor
+                                  </tr>
+                                  <tr>
+                                      <th>SPH/ADD</th>
+                                      @for ($i = $add_min; $i <= $add_max; $i=$i+0.25)
+                                        <th colspan="2"><center>{{$i}}</center></th>
+                                      @endfor 
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                        @for ($i = $sphere_min; $i <= $sphere_max; $i=$i+0.25)
+                                        <tr>
+                                          <th><center>{{$i}}</center></th>
+                                          @for ($j = $add_min; $j <= $add_max; $j=$j+0.25)
+
+                                          <td>
+                                            @foreach ($products_id_array as $product_id)
+                                              <span hidden>{{$stock=\App\Models\Product::where(['id'=>$product_id->product_id])
+                                                                                        ->where('company_id',Auth::user()->company_id)
+                                                                                        ->select('*')->sum('stock')}}</span>
+                                              
+
+                                                @if ($product_id->sphere==$i && $product_id->add==$j)
+                                                
+                                                <span hidden>{{$eye=\App\Models\Power::where(['sphere'=>format_values($i)])
+                                                                                    ->where('type_id',$lt)
+                                                                                    ->where('index_id',$ix)
+                                                                                    ->where('chromatics_id',$chrm)
+                                                                                    ->where('coating_id',$ct)
+                                                                                    ->where('product_id',$product_id->product_id)
+                                                                                    ->where('company_id',Auth::user()->company_id)
+                                                                                    ->where(['add'=>format_values($j)])
+                                                                                    ->pluck('eye')->first()}}
+                                                                                    </span>
+                                                    @if ($eye=='right')
+                                                      @if ($stock==0)
+                                                        <center>
+                                                          <span>-</span>
+                                                        </center>
+                                                      @else
+                                                        <center>
+                                                          <span class="label label-success">{{$stock}}</span>
+                                                        </center>
+                                                      @endif
+                                                    @endif
+                                                @endif
+                                            @endforeach
+                                          </td>
+                                          <td>
+                                            @foreach ($products_id_array as $product_id)
+                                              <span hidden>{{$stock=\App\Models\Product::where(['id'=>$product_id->product_id])
+                                                                                        ->where('company_id',Auth::user()->company_id)
+                                                                                        ->select('*')->sum('stock')}}</span>
+                                              
+
+                                                @if ($product_id->sphere==$i && $product_id->add==$j)
+                                                
+                                                <span hidden>{{$eye=\App\Models\Power::where(['sphere'=>format_values($i)])
+                                                                                    ->where('type_id',$lt)
+                                                                                    ->where('index_id',$ix)
+                                                                                    ->where('chromatics_id',$chrm)
+                                                                                    ->where('coating_id',$ct)
+                                                                                    ->where('product_id',$product_id->product_id)
+                                                                                    ->where('company_id',Auth::user()->company_id)
+                                                                                    ->where(['add'=>format_values($j)])
+                                                                                    ->pluck('eye')->first()}}
+                                                                                    </span>
+                                                    @if ($eye=='left')
+                                                      @if ($stock==0)
+                                                        <center>
+                                                          <span>-</span>
+                                                        </center>
+                                                      @else
+                                                        <center>
+                                                          <span class="label label-success">{{$stock}}</span>
+                                                        </center>
+                                                      @endif
+                                                    @endif
+                                                @endif
+                                            @endforeach
+                                          </td>
+
+                                          {{-- @foreach ($products_id_array as $product_id)
+                                            <span hidden>{{$stock=\App\Models\Product::where(['id'=>$product_id->product_id])
+                                                                                      ->where('company_id',Auth::user()->company_id)
+                                                                                      ->select('*')->sum('stock')}}</span>
+
+                                            <span hidden>{{$eye=\App\Models\Power::where(['sphere'=>format_values($i)])
+                                                                          ->where('type_id',$lt)
+                                                                          ->where('index_id',$ix)
+                                                                          ->where('chromatics_id',$chrm)
+                                                                          ->where('coating_id',$ct)
+                                                                          ->where('product_id',$product_id->product_id)
+                                                                          ->where('company_id',Auth::user()->company_id)
+                                                                          ->where(['add'=>format_values($j)])
+                                                                          ->pluck('eye')->first()}}
+                                                                          </span>
+
+                                          @if ($stock==0)
+                                            @if ($eye=='right')
+                                              <td>-</td>
+                                            @endif
+                                            @if ($eye=='left')
+                                              <td>-</td>
+                                            @endif
+                                          @else
+                                            @if ($product_id->sphere==$i && $product_id->add==$j)
+                                                <td>hello</td>
+                                            @endif
+                                          @endif
+                                          @endforeach --}}
+
+                                          @endfor
+                                        </tr>
+                                    @endfor
+                                </tbody>
+                            </table>
+                        </div> 
+                        @endif
+                    </div>
+                </div>
+                <div>
+                  
+                  <a onclick="exportAll('xls');" href="#" type="button" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                    <i class="fa fa-download"></i> Export To Excel</a>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+    </div>
+@endsection
+
+@push('scripts')
+
+<script src="{{ asset('dashboard/assets/dist/js/export.js')}}"></script>
+<script>
+  function exportAll(type) {
+
+$('#zero_config').tableExport({
+    filename: 'table_%DD%-%MM%-%YY%-month(%MM%)',
+    format: type
+});
+}
+</script>
+@endpush
