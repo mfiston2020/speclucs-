@@ -19,8 +19,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="form-group m-b-0 text-center">
-                        <button id="print" class="btn btn-info waves-effect waves-light">Print</button>
+                        <a href="{{ route('manager.patient.medical.prescription',Crypt::encrypt($file->id)) }}" class="btn btn-info waves-effect waves-light">Medical Prescription</a>
                         <a href="{{route('manager.patient.final.prescription',Crypt::encrypt($file->id))}}" class="btn btn-success waves-effect waves-light">Final Prescription</a>
+                        {{-- <button id="print" class="btn btn-warning waves-effect waves-light">Print</button> --}}
                         <a href="{{route('manager.patient.file.invoice',Crypt::encrypt($file->id))}}" class="btn btn-danger waves-effect waves-light text-right">Invoice</a>
                     </div>
                 </div>
@@ -493,6 +494,71 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
+
+                                                @if ($medical_prescription)
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                                <tr>
+                                                                    <td colspan='7' class="text-center border-0">
+
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan='7' class="text-center">
+                                                                        <h4>Medical Prescription</h4>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="text-left">
+                                                                        <span class="font-weight-bold">Medicatio</span>
+                                                                    </td>
+                                                                    <td class="text-left">
+                                                                        <span class="font-weight-bold">Strength</span>
+                                                                    </td>
+                                                                    <td class="text-left">
+                                                                        <span class="font-weight-bold">Route</span>
+                                                                    </td>
+                                                                    <td class="text-left">
+                                                                        <span class="font-weight-bold">Strength</span>
+                                                                    </td>
+                                                                    <td class="text-left">
+                                                                        <span class="font-weight-bold">Frequency</span>
+                                                                    </td>
+                                                                    <td class="text-left">
+                                                                        <span class="font-weight-bold">Total Dosage</span>
+                                                                    </td>
+                                                                    <td class="text-left">
+                                                                        <span class="font-weight-bold">Duration</span>
+                                                                    </td>
+                                                                </tr>
+                                                                @foreach ($medical_prescription as $item)
+                                                                    <tr>
+                                                                        <td class="text-left">
+                                                                            <span class="invoice-number">{{$item->medication}}</span>
+                                                                        </td>
+                                                                        <td class="text-left">
+                                                                            <span class="invoice-number">{{$item->strength}}</span>
+                                                                        </td>
+                                                                        <td class="text-left">
+                                                                            <span class="invoice-number">{{$item->route}}</span>
+                                                                        </td>
+                                                                        <td class="text-left">
+                                                                            <span class="invoice-number">{{$item->dosage}}</span>
+                                                                        </td>
+                                                                        <td class="text-left">
+                                                                            <span class="invoice-number">{{$item->frequency}}</span>
+                                                                        </td>
+                                                                        <td class="text-left">
+                                                                            <span class="invoice-number">{{$item->t_dosage}}</span>
+                                                                        </td>
+                                                                        <td class="text-left">
+                                                                            <span class="invoice-number">{{$item->duration}}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                @endif
                                             </div>
                                         </div>
                                         {{-- <div class="col-md-12">
@@ -519,8 +585,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="form-group m-b-0 text-center">
-                        <button id="print" class="btn btn-info waves-effect waves-light">Print</button>
+                        <a href="{{ route('manager.patient.medical.prescription',Crypt::encrypt($file->id)) }}" class="btn btn-info waves-effect waves-light">Medical Prescription</a>
                         <a href="{{route('manager.patient.final.prescription',Crypt::encrypt($file->id))}}" class="btn btn-success waves-effect waves-light">Final Prescription</a>
+                        {{-- <button id="print" class="btn btn-warning waves-effect waves-light">Print</button> --}}
                         <a href="{{route('manager.patient.file.invoice',Crypt::encrypt($file->id))}}" class="btn btn-danger waves-effect waves-light text-right">Invoice</a>
                     </div>
                 </div>

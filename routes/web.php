@@ -330,6 +330,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/patient/file/invoice/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'fileinvoice'])->name('patient.file.invoice');
     Route::get('/patient/file/delete/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'filedelete'])->name('patient.file.delete');
     Route::get('/patientfinal/prescription/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'final_prescription'])->name('patient.final.prescription');
+    Route::get('/patient/medical/prescription/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'medical_prescription'])->name('patient.medical.prescription');
 
     // ====================== Routes about Insurances and proforma invoices ==========================
     Route::get('/proforma',[\App\Http\Controllers\Manager\ProformaController::class,'index'])->name('proforma');

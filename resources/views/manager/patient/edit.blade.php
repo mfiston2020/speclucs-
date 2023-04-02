@@ -1373,6 +1373,95 @@
                 </div>
             </div>
 
+            <div class="col-12 d-flex justify-content-center">
+                <h4 class="card-title mt-2">Medical Prescription</h4>
+            </div>
+
+            <div class="col-12">
+                <div class="card shadow rounded-sm">
+                    <div class="card-body">
+
+                        @foreach ($medical_prescription as $item)
+                            <div class="form-group row">
+                                <input type="hidden" name="dseijhntrel" value="{{ $item->id }}">
+                                <div class="col-4">
+                                    <div class="input-group mt-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Medication</span>
+                                        </div>
+                                        <input type="text" step="any" class="form-control" name="medication_update[]"
+                                            value="{{ $item->medication }}">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="input-group mt-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Strength</span>
+                                        </div>
+                                        <input type="text" step="any" class="form-control" name="strength[]"
+                                            value="{{$item->strength}}">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="input-group mt-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Route</span>
+                                        </div>
+                                        <input type="text" step="any" class="form-control" name="route[]"
+                                            value="{{$item->route}}">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="input-group mt-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Dosage</span>
+                                        </div>
+                                        <input type="text" step="any" class="form-control" name="dosage[]"
+                                            value="{{$item->dosage}}">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="input-group mt-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Frequency</span>
+                                        </div>
+                                        <input type="text" step="any" class="form-control" name="frequency[]"
+                                            value="{{$item->frequency}}">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="input-group mt-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">T.Dosage</span>
+                                        </div>
+                                        <input type="text" step="any" class="form-control" name="total_dosage[]"
+                                            value="{{$item->t_dosage}}">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="input-group mt-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Duration</span>
+                                        </div>
+                                        <input type="text" step="any" class="form-control" name="duration[]"
+                                            value="{{$item->duration}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        @endforeach
+
+                        <div class="form-group m-b-0 text-right">
+                            <button type="button" class="btn btn-success waves-effect waves-light" onclick="add_medication();">
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </div>
+                        <div id="add_meddication" class=" m-t-20"></div>
+
+                    </div>
+                </div>
+            </div>
+
             {{-- ===========  =============== --}}
             <div class="col-md-12" id="action_buttons">
                 <div class="card shadow">
@@ -1393,4 +1482,5 @@
 @push('scripts')
 <script src="{{ asset('dashboard/assets/libs/bootstrap-duallistbox/dist/jquery.bootstrap-duallistbox.min.js')}}"></script>
 <script src="{{ asset('dashboard/assets/dist/js/pages/forms/dual-listbox/dual-listbox.js')}}"></script>
+<script src="{{ asset('dashboard/assets/extra-libs/jquery.repeater/add-medication.js') }}"></script>
 @endpush

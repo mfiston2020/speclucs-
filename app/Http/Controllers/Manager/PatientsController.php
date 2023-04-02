@@ -3,6 +3,22 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\CompanyInformation;
+use App\Models\Complaint;
+use App\Models\Exam;
+use App\Models\FileComplaint;
+use App\Models\FileHistory;
+use App\Models\History;
+use App\Models\Insurance;
+use App\Models\InsuranceExam;
+use App\Models\LensType;
+use App\Models\MedicalPrescription;
+use App\Models\Patient;
+use App\Models\PatientFile;
+use App\Models\PhotoChromatics;
+use App\Models\PhotoCoating;
+use App\Models\PhotoIndex;
+use App\Models\PrescriptionInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -11,7 +27,7 @@ class PatientsController extends Controller
 {
     public function index()
     {
-        $patients   =   \App\Models\Patient::where('company_id',Auth::user()->company_id)->get();
+        $patients   =   Patient::where('company_id',Auth::user()->company_id)->get();
         return view('manager.patient.index',compact('patients'));
     }
 
@@ -28,8 +44,8 @@ class PatientsController extends Controller
             'birthdate'=>'required',
         ]);
 
-        $patient    =   new \App\Models\Patient();
-        $patient_count  =   count(\App\Models\Patient::where('company_id',Auth::user()->company_id)->get());
+        $patient    =   new Patient();
+        $patient_count  =   count(Patient::where('company_id',Auth::user()->company_id)->get());
 
         $patient->company_id    =   Auth::user()->company_id;
         $patient->firstname     =   $request->firstname;
@@ -53,40 +69,40 @@ class PatientsController extends Controller
 
             return redirect()->route('manager.patients')->with('successMsg','Patient successfully saved!');
         } catch (\Throwable $th) {
-            
+
             return redirect()->back()->with('errorMsg','Something Went Wrong!' );
         }
     }
 
     public function detail($id)
     {
-        $patient    =   \App\Models\Patient::findOrFail(Crypt::decrypt($id));
-        $files      =   \App\Models\PatientFile::where('patient_id',$patient->id)->orderBy('created_at','DESC')->get();
+        $patient    =   Patient::findOrFail(Crypt::decrypt($id));
+        $files      =   PatientFile::where('patient_id',$patient->id)->orderBy('created_at','DESC')->get();
         return view('manager.patient.detail',compact('patient','files'));
     }
 
     public function diagnose($id)
     {
-        $insurance  =   \App\Models\Insurance::where('company_id',Auth::user()->company_id)->get();
-        $lens_types =   \App\Models\LensType::all();
-        $chromatics =   \App\Models\PhotoChromatics::all();
-        $coatings   =   \App\Models\PhotoCoating::all();
-        $index      =   \App\Models\PhotoIndex::all();
-        $patient    =   \App\Models\Patient::findOrFail(Crypt::decrypt($id));
+        $insurance  =   Insurance::where('company_id',Auth::user()->company_id)->get();
+        $lens_types =   LensType::all();
+        $chromatics =   PhotoChromatics::all();
+        $coatings   =   PhotoCoating::all();
+        $index      =   PhotoIndex::all();
+        $patient    =   Patient::findOrFail(Crypt::decrypt($id));
 
-        $complaint  =   \App\Models\Complaint::where('company_id',Auth::user()->company_id)->get();
-        $history    =   \App\Models\History::where('company_id',Auth::user()->company_id)->get();
+        $complaint  =   Complaint::where('company_id',Auth::user()->company_id)->get();
+        $history    =   History::where('company_id',Auth::user()->company_id)->get();
 
-        $exams      =   \App\Models\Exam::where('company_id',Auth::user()->company_id)->get();
+        $exams      =   Exam::where('company_id',Auth::user()->company_id)->get();
 
         return view('manager.patient.diagnosis',compact('lens_types','chromatics','coatings','index','patient','complaint','history','exams','insurance'));
     }
 
     public function diagnoseSave(Request $request)
     {
-        $number =   count(\App\Models\PatientFile::where('company_id',Auth::user()->company_id)->get());
+        $number =   count(PatientFile::where('company_id',Auth::user()->company_id)->get());
 
-        $diagnose   =   new \App\Models\PatientFile();
+        $diagnose   =   new PatientFile();
 
         $complaint  =   null;
         $history    =   null;
@@ -94,7 +110,7 @@ class PatientsController extends Controller
 
 
         // ============
-        if ($request->exams==null) 
+        if ($request->exams==null)
         {
             $exam_  =   null;
         }
@@ -190,13 +206,12 @@ class PatientsController extends Controller
         $diagnose->exams                        =   $exam_;
         $diagnose->assessment_diagnosis         =   $request->assessment_diagnosis;
         $diagnose->management_treatment         =   $request->management_treatment;
-        try 
+        try
         {
-
             $total_amount   =   0;
 
             // ============
-            if ($request->exams==null) 
+            if ($request->exams==null)
             {
                 $exam_  =   null;
             }
@@ -204,25 +219,25 @@ class PatientsController extends Controller
             {
                 foreach($request->exams as $exam)
                 {
-                    $exam_   =   \App\Models\Exam::find($exam);
+                    $exam_   =   Exam::find($exam);
                     $total_amount   =   $total_amount + $exam_->amount;
                 }
             }
 
-            $invoice_number =   count(\App\Models\PrescriptionInvoice::where('company_id',Auth::user()->company_id)->get());
+            $invoice_number =   count(PrescriptionInvoice::where('company_id',Auth::user()->company_id)->get());
 
             $diagnose->save();
 
             // adding complaint into the database
-            if ($request->complaint==null) 
+            if ($request->complaint==null)
             {
                 $complaint  =   null;
             }
             else
             {
-                foreach ($request->complaint as $key => $complaint) 
+                foreach ($request->complaint as $key => $complaint)
                 {
-                    $complaint_data =   new \App\Models\FileComplaint();
+                    $complaint_data =   new FileComplaint();
 
                     $complaint_data->file_id        =   $diagnose->id;
                     $complaint_data->company_id     =   Auth::user()->company_id;
@@ -232,15 +247,15 @@ class PatientsController extends Controller
                 }
             }
             // ============
-            if ($request->history==null) 
+            if ($request->history==null)
             {
                 $history  =   null;
             }
             else
             {
-                foreach ($request->history as $key => $history) 
+                foreach ($request->history as $key => $history)
                 {
-                    $history_data =   new \App\Models\FileHistory();
+                    $history_data =   new FileHistory();
 
                     $history_data->file_id      =   $diagnose->id;
                     $history_data->company_id   =   Auth::user()->company_id;
@@ -250,7 +265,25 @@ class PatientsController extends Controller
                 }
             }
 
-            $invoice                    =   new \App\Models\PrescriptionInvoice();
+            // adding medical prescription if any
+            if (count($request->medication)>0) {
+                for ($i=0; $i < count($request->medication); $i++) {
+                    $medical_prescription   =   new MedicalPrescription();
+
+                    $medical_prescription->company_id   =   userInfo()->company_id;
+                    $medical_prescription->file_id      =   $diagnose->id;
+                    $medical_prescription->medication   =   $request->medication[$i];
+                    $medical_prescription->strength     =   $request->medication_strength[$i];
+                    $medical_prescription->route        =   $request->medication_route[$i];
+                    $medical_prescription->dosage       =   $request->medication_dosage[$i];
+                    $medical_prescription->t_dosage       =   $request->medication_total_dosage[$i];
+                    $medical_prescription->frequency    =   $request->medication_frequency[$i];
+                    $medical_prescription->duration     =   $request->medication_duration[$i];
+                    $medical_prescription->save();
+                }
+            }
+
+            $invoice                    =   new PrescriptionInvoice();
 
             $invoice->patient_id        =   $request->patient_id;
             $invoice->company_id        =   Auth::user()->company_id;
@@ -260,11 +293,11 @@ class PatientsController extends Controller
             $invoice->due               =   0;
             $invoice->save();
 
-            $patientNumber  =   \App\Models\Patient::find($request->patient_id);
-            $company_name   =   \App\Models\CompanyInformation::find(Auth::user()->company_id);
+            $patientNumber  =   Patient::find($request->patient_id);
+            $company_name   =   CompanyInformation::find(Auth::user()->company_id);
             // <?php
 
-                if ($company_name->can_send_sms==1 && $company_name->sms_quantity>0) 
+                if ($company_name->can_send_sms==1 && $company_name->sms_quantity>0)
                 {
                     $curl = curl_init();
 
@@ -277,9 +310,9 @@ class PatientsController extends Controller
                     CURLOPT_FOLLOWLOCATION => true,
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_POSTFIELDS 
-                    => array('to' => $patientNumber->phone,'from' => 'SPECLUCS','unicode' => '0','sms' 
-                    => 'Hello '.$patientNumber->firstname.', '.$company_name->company_name.' is sending you the invoice of '.$total_amount.'RWF','action' 
+                    CURLOPT_POSTFIELDS
+                    => array('to' => $patientNumber->phone,'from' => 'SPECLUCS','unicode' => '0','sms'
+                    => 'Hello '.$patientNumber->firstname.', '.$company_name->company_name.' is sending you the invoice of '.$total_amount.'RWF','action'
                     => 'send-sms'),
                     CURLOPT_HTTPHEADER => array(
                         'x-api-key: ecb697cc-99f3-913e-a618-aae6038c4613-5f82c0d9'
@@ -294,8 +327,8 @@ class PatientsController extends Controller
                     $company_name->save();
                 }
             return redirect()->route('manager.patient.detail',Crypt::encrypt($request->patient_id))->with('successMsg','Patient successfully saved!');
-        } 
-        catch (\Throwable $th) 
+        }
+        catch (\Throwable $th)
         {
             return redirect()->back()->with('errorMsg','Something Went Wrong!' )->withInput();
         }
@@ -303,13 +336,13 @@ class PatientsController extends Controller
 
     public function delete($id)
     {
-        $patient    =   \App\Models\Patient::findOrFail(Crypt::decrypt($id));
+        $patient    =   Patient::findOrFail(Crypt::decrypt($id));
         try {
             $patient->delete();
 
             return redirect()->route('manager.patients')->with('successMsg','Patient successfully deleted!');
         }    catch (\Throwable $th) {
-            
+
             return redirect()->back()->with('errorMsg','Something Went Wrong!' );
         }
     }
@@ -317,41 +350,42 @@ class PatientsController extends Controller
 
     public function fileDetail($id)
     {
-        $file       =   \App\Models\PatientFile::find(Crypt::decrypt($id));
-        $patient    =   \App\Models\Patient::find($file->patient_id);
-        $complaint  =   \App\Models\Complaint::all();
-        $history    =   \App\Models\History::all();
+        $file       =   PatientFile::find(Crypt::decrypt($id));
+        $patient    =   Patient::find($file->patient_id);
+        $complaint  =   Complaint::all();
+        $history    =   History::all();
+        $medical_prescription    =   MedicalPrescription::all();
 
         // $complaint_data =   explode(',',$file->complaint);
         // $history_data   =   explode(',',$file->history);
-        $complaint_data =   \App\Models\FileComplaint::where('file_id',$file->id)->select('*')->get();
-        $history_data =   \App\Models\FileHistory::where('file_id',$file->id)->select('*')->get();
+        $complaint_data =   FileComplaint::where('file_id',$file->id)->select('*')->get();
+        $history_data =   FileHistory::where('file_id',$file->id)->select('*')->get();
 
-        return view('manager.patient.prescription',compact('file','patient','complaint','history','complaint_data','history_data'));
+        return view('manager.patient.prescription',compact('file','patient','complaint','history','complaint_data','history_data','medical_prescription'));
     }
 
     public function fileinvoice($id)
     {
-        $invoice        =   \App\Models\PrescriptionInvoice::where('prescription_id',Crypt::decrypt($id))->first();
-        $patient        =   \App\Models\Patient::findOrFail($invoice->patient_id);
-        $prescription   =  explode(',',\App\Models\PatientFile::where('id',$invoice->prescription_id)->pluck('exams')->first());
-        $insurance      =  \App\Models\PatientFile::where('id',$invoice->prescription_id)->pluck('insurance_id')->first();
+        $invoice        =   PrescriptionInvoice::where('prescription_id',Crypt::decrypt($id))->first();
+        $patient        =   Patient::findOrFail($invoice->patient_id);
+        $prescription   =  explode(',',PatientFile::where('id',$invoice->prescription_id)->pluck('exams')->first());
+        $insurance      =  PatientFile::where('id',$invoice->prescription_id)->pluck('insurance_id')->first();
 
         $exams          =   array();
 
         $grandT =   0;
 
-        if ($prescription[0]==null) 
+        if ($prescription[0]==null)
         {
             return redirect()->back()->with('warningMsg','This File have no Exams');
-        } 
-        else 
+        }
+        else
         {
-            foreach ($prescription as $key => $value) 
+            foreach ($prescription as $key => $value)
             {
                 $total_amount   =   0;
-                $exam           =   \App\Models\Exam::find($value);
-                $percentage     =   \App\Models\InsuranceExam::where('insurance_id',$insurance)->where('exam_id',$exam->id)->where('company_id',Auth::user()->company_id)->pluck("percentage")->first();
+                $exam           =   Exam::find($value);
+                $percentage     =   InsuranceExam::where('insurance_id',$insurance)->where('exam_id',$exam->id)->where('company_id',Auth::user()->company_id)->pluck("percentage")->first();
 
 
                 if($percentage==null)
@@ -376,7 +410,7 @@ class PatientsController extends Controller
                 $grandT =   $grandT+$exam->amount;
             }
         }
-        
+
 
         // return $grandT;
 
@@ -385,19 +419,19 @@ class PatientsController extends Controller
 
     public function all_invoices()
     {
-        $patient_invoices   =   \App\Models\PrescriptionInvoice::where('company_id',Auth::user()->company_id)->get();
+        $patient_invoices   =   PrescriptionInvoice::where('company_id',Auth::user()->company_id)->get();
         return view('manager.patient.invoices',compact('patient_invoices'));
         // return $patient_invoices;
     }
 
     public function filedelete($id)
     {
-        $file   =   \App\Models\PatientFile::find(Crypt::decrypt($id));
-        try 
+        $file   =   PatientFile::find(Crypt::decrypt($id));
+        try
         {
             $file->delete();
             return redirect()->back()->with('successMsg','Patient File successfully Deleted!');
-        } 
+        }
         catch (\Throwable $th)
         {
             return redirect()->back()->with('errorMsg','Something Went Wrong!' );
@@ -406,41 +440,49 @@ class PatientsController extends Controller
 
     public function final_prescription($id)
     {
-        $file   =   \App\Models\PatientFile::find(Crypt::decrypt($id));
-        $patient    =   \App\Models\Patient::find($file->patient_id);
+        $file       =   PatientFile::find(Crypt::decrypt($id));
+        $patient    =   Patient::find($file->patient_id);
 
         return view('manager.patient.final_prescription',compact('file','patient'));
     }
 
+    function medical_prescription($id){
+        $file       =   PatientFile::find(Crypt::decrypt($id));
+        $patient    =   Patient::find($file->patient_id);
+
+        return view('manager.patient.medical_prescription',compact('file','patient'));
+    }
+
     function file_edit($id)
     {
-        
-        $file   =   \App\Models\PatientFile::find(Crypt::decrypt($id));
 
-        $patient    =   \App\Models\Patient::findOrFail($file->patient_id);
+        $file   =   PatientFile::find(Crypt::decrypt($id));
 
-        $insurance  =   \App\Models\Insurance::where('company_id',Auth::user()->company_id)->get();
-        $lens_types =   \App\Models\LensType::all();
-        $chromatics =   \App\Models\PhotoChromatics::all();
-        $coatings   =   \App\Models\PhotoCoating::all();
-        $index      =   \App\Models\PhotoIndex::all();
+        $patient    =   Patient::findOrFail($file->patient_id);
 
-        $complaint  =   \App\Models\Complaint::where('company_id',Auth::user()->company_id)->get();
-        $history    =   \App\Models\History::where('company_id',Auth::user()->company_id)->get();
+        $insurance  =   Insurance::where('company_id',Auth::user()->company_id)->get();
+        $lens_types =   LensType::all();
+        $chromatics =   PhotoChromatics::all();
+        $coatings   =   PhotoCoating::all();
+        $index      =   PhotoIndex::all();
 
-        $exams      =   \App\Models\Exam::where('company_id',Auth::user()->company_id)->get();
-        
+        $complaint  =   Complaint::where('company_id',Auth::user()->company_id)->get();
+        $history    =   History::where('company_id',Auth::user()->company_id)->get();
+
+        $exams      =   Exam::where('company_id',Auth::user()->company_id)->get();
+
+        $medical_prescription      =   MedicalPrescription::where('company_id',Auth::user()->company_id)->where('file_id',Crypt::decrypt($id))->get();
+        // return $medical_prescription;
+
         $file_exams =   explode(',',$file->exams);
         // return $file_exams;
 
-        return view('manager.patient.edit',compact('file','patient','lens_types','chromatics','coatings','index','complaint','history','exams','insurance','file_exams'));
+        return view('manager.patient.edit',compact('file','patient','lens_types','chromatics','coatings','index','complaint','history','exams','insurance','file_exams','medical_prescription'));
     }
 
     function file_update(Request $request)
     {
-        // $number =   count(\App\Models\PatientFile::where('company_id',Auth::user()->company_id)->get());
-
-        $diagnose   =   \App\Models\PatientFile::find($request->file_id);
+        $diagnose   =   PatientFile::find($request->file_id);
 
         $complaint  =   null;
         $history    =   null;
@@ -448,7 +490,7 @@ class PatientsController extends Controller
 
 
         // ============
-        if ($request->exams==null) 
+        if ($request->exams==null)
         {
             $exam_  =   null;
         }
@@ -544,13 +586,13 @@ class PatientsController extends Controller
         $diagnose->exams                        =   $exam_;
         $diagnose->assessment_diagnosis         =   $request->assessment_diagnosis;
         $diagnose->management_treatment         =   $request->management_treatment;
-        try 
+        try
         {
 
             $total_amount   =   0;
 
             // ============
-            if ($request->exams==null) 
+            if ($request->exams==null)
             {
                 $exam_  =   null;
             }
@@ -558,25 +600,25 @@ class PatientsController extends Controller
             {
                 foreach($request->exams as $exam)
                 {
-                    $exam_   =   \App\Models\Exam::find($exam);
+                    $exam_   =   Exam::find($exam);
                     $total_amount   =   $total_amount + $exam_->amount;
                 }
             }
 
-            // $invoice_number =   count(\App\Models\PrescriptionInvoice::where('company_id',Auth::user()->company_id)->get());
+            // $invoice_number =   count(PrescriptionInvoice::where('company_id',Auth::user()->company_id)->get());
 
             $diagnose->save();
 
             // adding complaint into the database
-            if ($request->complaint==null) 
+            if ($request->complaint==null)
             {
                 $complaint  =   null;
             }
             else
             {
-                foreach ($request->complaint as $key => $complaint) 
+                foreach ($request->complaint as $key => $complaint)
                 {
-                    $complaint_data =   \App\Models\FileComplaint::find($request->complaint_id[$key]);
+                    $complaint_data =   FileComplaint::find($request->complaint_id[$key]);
 
                     // $complaint_data->file_id        =   $diagnose->id;
                     $complaint_data->company_id     =   Auth::user()->company_id;
@@ -586,15 +628,15 @@ class PatientsController extends Controller
                 }
             }
             // ============
-            if ($request->history==null) 
+            if ($request->history==null)
             {
                 $history  =   null;
             }
             else
             {
-                foreach ($request->history as $key => $history) 
+                foreach ($request->history as $key => $history)
                 {
-                    $history_data =   \App\Models\FileHistory::find($request->history_id[$key]);
+                    $history_data =   FileHistory::find($request->history_id[$key]);
 
                     // $history_data->file_id      =   $diagnose->id;
                     $history_data->company_id   =   Auth::user()->company_id;
@@ -604,21 +646,60 @@ class PatientsController extends Controller
                 }
             }
 
-            $invoice                    =   \App\Models\PrescriptionInvoice::where('patient_id',$request->patient_id)->where('prescription_id',$request->file_id)->first();
+            // adding medical prescription if any
+            if (count($request->medication_update)>0) {
+                foreach ($request->medication_update as $key => $value) {
+
+                        // $medical_pres               =   MedicalPrescription::find();
+                    try {
+
+                        MedicalPrescription::find($request->dseijhntrel)->update([
+                            'medication'   =>   $request->medication_update[$key],
+                            'strength'     =>   $request->strength[$key],
+                            'route'        =>   $request->route[$key],
+                            'dosage'       =>   $request->dosage[$key],
+                            't_dosage'     =>   $request->total_dosage[$key],
+                            'frequency'    =>   $request->frequency[$key],
+                            'duration'     =>   $request->duration[$key],
+                        ]);
+                    } catch (\Throwable $th) {
+                        return $th;
+                    }
+                }
+            }
+
+            if ($request->medication) {
+                if (count($request->medication)>0) {
+                    for ($i=0; $i < count($request->medication); $i++) {
+                        $medical_prescription   =   new MedicalPrescription();
+
+                        $medical_prescription->company_id   =   userInfo()->company_id;
+                        $medical_prescription->file_id      =   $diagnose->id;
+                        $medical_prescription->medication   =   $request->medication[$i];
+                        $medical_prescription->strength     =   $request->medication_strength[$i];
+                        $medical_prescription->route        =   $request->medication_route[$i];
+                        $medical_prescription->dosage       =   $request->medication_dosage[$i];
+                        $medical_prescription->t_dosage       =   $request->medication_total_dosage[$i];
+                        $medical_prescription->frequency    =   $request->medication_frequency[$i];
+                        $medical_prescription->duration     =   $request->medication_duration[$i];
+                        $medical_prescription->save();
+                    }
+                }
+            }
+
+            $invoice                    =   PrescriptionInvoice::where('patient_id',$request->patient_id)->where('prescription_id',$request->file_id)->first();
 
             $invoice->patient_id        =   $request->patient_id;
             $invoice->company_id        =   Auth::user()->company_id;
-            // $invoice->prescription_id   =   $diagnose->id;
-            // $invoice->invoice_number    =   $invoice_number+1;
             $invoice->amount            =   $total_amount;
             $invoice->due               =   0;
             $invoice->save();
-            
+
             return redirect()->route('manager.patient.detail',Crypt::encrypt($request->patient_id))->with('successMsg','Patient data Updated!');
-        } 
-        catch (\Throwable $th) 
+        }
+        catch (\Throwable $th)
         {
-            return redirect()->back()->with('errorMsg','Something Went Wrong!' )->withInput();
+            return redirect()->back()->with('errorMsg','Something Went Wrong!')->withInput();
         }
     }
 }
