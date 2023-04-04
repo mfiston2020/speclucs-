@@ -317,18 +317,19 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     // ====================== Routes about Patients management ==========================
     Route::get('/patient',[\App\Http\Controllers\Manager\PatientsController::class,'index'])->name('patients');
-    Route::get('/patient/invoices',[\App\Http\Controllers\Manager\PatientsController::class,'all_invoices'])->name('patients.invoices');
     Route::get('/patientAdd',[\App\Http\Controllers\Manager\PatientsController::class,'add'])->name('patient.add');
     Route::post('/patientSave',[\App\Http\Controllers\Manager\PatientsController::class,'save'])->name('patient.save');
     Route::get('/patientDetail/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'detail'])->name('patient.detail');
     Route::get('/patient/remove/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'delete'])->name('patient.delete');
     Route::get('/patientDiagnose/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'diagnose'])->name('patient.diagnose');
-    Route::post('/patientDiagnoseSave',[\App\Http\Controllers\Manager\PatientsController::class,'diagnoseSave'])->name('patient.diagnose.save');
-    Route::get('/patient/file/detail/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'fileDetail'])->name('patient.file.detail');
+    Route::get('/patient/invoices',[\App\Http\Controllers\Manager\PatientsController::class,'all_invoices'])->name('patients.invoices');
     Route::get('/patient/file/edit/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'file_edit'])->name('patient.file.edit');
     Route::post('/patient/file/update',[\App\Http\Controllers\Manager\PatientsController::class,'file_update'])->name('patient.file.update');
-    Route::get('/patient/file/invoice/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'fileinvoice'])->name('patient.file.invoice');
+    Route::post('/patientDiagnoseSave',[\App\Http\Controllers\Manager\PatientsController::class,'diagnoseSave'])->name('patient.diagnose.save');
+    Route::get('/patient/file/detail/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'fileDetail'])->name('patient.file.detail');
     Route::get('/patient/file/delete/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'filedelete'])->name('patient.file.delete');
+    Route::get('/patient/file/invoice/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'fileinvoice'])->name('patient.file.invoice');
+    Route::get('/patient/file/remove/mp/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'removeMedication'])->name('patient.file.medical.remove');
     Route::get('/patientfinal/prescription/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'final_prescription'])->name('patient.final.prescription');
     Route::get('/patient/medical/prescription/{id}',[\App\Http\Controllers\Manager\PatientsController::class,'medical_prescription'])->name('patient.medical.prescription');
 

@@ -1448,6 +1448,14 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="form-group m-b-0 text-right">
+                                <a href="{{ route('manager.patient.file.medical.remove',Crypt::encrypt($item->id)) }}"
+                                    onclick="return confirm('Do you want to remove {{$item->medication}}?')"
+                                    class="btn btn-danger waves-effect waves-light">
+                                    <i class="fas fa-minus-circle"></i>
+                                </a>
+                            </div>
                             <hr>
                         @endforeach
 
@@ -1467,7 +1475,7 @@
                 <div class="card shadow">
                     <div class="card-body">
                         <div class="form-group m-b-0 text-center">
-                            <button type="submit" class="btn btn-info waves-effect waves-light">Save</button>
+                            <button type="submit" class="btn btn-info waves-effect waves-light">Update</button>
                             <a href="{{url()->previous()}}" class="btn btn-dark waves-effect waves-light">Cancel</a>
                         </div>
                     </div>

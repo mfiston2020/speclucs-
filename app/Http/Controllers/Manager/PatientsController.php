@@ -354,7 +354,7 @@ class PatientsController extends Controller
         $patient    =   Patient::find($file->patient_id);
         $complaint  =   Complaint::all();
         $history    =   History::all();
-        $medical_prescription    =   MedicalPrescription::all();
+        $medical_prescription    =   MedicalPrescription::where('file_id',$file->id)->get();
 
         // $complaint_data =   explode(',',$file->complaint);
         // $history_data   =   explode(',',$file->history);
@@ -450,7 +450,9 @@ class PatientsController extends Controller
         $file       =   PatientFile::find(Crypt::decrypt($id));
         $patient    =   Patient::find($file->patient_id);
 
-        return view('manager.patient.medical_prescription',compact('file','patient'));
+        $medical_prescription      =   MedicalPrescription::where('company_id',Auth::user()->company_id)->where('file_id',Crypt::decrypt($id))->get();
+
+        return view('manager.patient.medical_prescription',compact('file','patient','medical_prescription'));
     }
 
     function file_edit($id)
@@ -620,10 +622,8 @@ class PatientsController extends Controller
                 {
                     $complaint_data =   FileComplaint::find($request->complaint_id[$key]);
 
-                    // $complaint_data->file_id        =   $diagnose->id;
                     $complaint_data->company_id     =   Auth::user()->company_id;
                     $complaint_data->value          =   $complaint;
-                    // $complaint_data->complaint_id   =   $request->complaint_id[$key];
                     $complaint_data->save();
                 }
             }
@@ -647,7 +647,7 @@ class PatientsController extends Controller
             }
 
             // adding medical prescription if any
-            if (count($request->medication_update)>0) {
+            if ($request->medication_update && count($request->medication_update)>0) {
                 foreach ($request->medication_update as $key => $value) {
 
                         // $medical_pres               =   MedicalPrescription::find();
@@ -700,6 +700,15 @@ class PatientsController extends Controller
         catch (\Throwable $th)
         {
             return redirect()->back()->with('errorMsg','Something Went Wrong!')->withInput();
+        }
+    }
+
+    function removeMedication($id){
+        try {
+            MedicalPrescription::findOrFail(Crypt::decrypt($id))->delete();
+            return redirect()->back()->with('successMsg','Medication Removed');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errorMsg','Something Went Wrong!');
         }
     }
 }

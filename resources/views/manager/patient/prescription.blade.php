@@ -495,7 +495,7 @@
                                                     </tbody>
                                                 </table>
 
-                                                @if ($medical_prescription)
+                                                @if (count($medical_prescription)>0)
                                                     <table class="table table-hover">
                                                         <tbody>
                                                                 <tr>
@@ -561,20 +561,6 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        {{-- <div class="col-md-12">
-                                            <div class="pull-right mt-4 text-right">
-                                                <p>Sub - Total amount: $13,848</p>
-                                                <p>vat (10%) : $138 </p>
-                                                <hr>
-                                                <h3><b>Total :</b> $13,986</h3>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <hr>
-                                            <div class="text-right">
-                                                <button class="btn btn-danger" type="submit"> Proceed to payment </button>
-                                                <button class="btn btn-default print-page" type="button"> <span><i class="fa fa-print"></i> Print</span> </button>
-                                            </div>
-                                        </div> --}}
                                 </div>
                             </div>
                         </div>
