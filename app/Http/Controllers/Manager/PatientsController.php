@@ -27,7 +27,7 @@ class PatientsController extends Controller
 {
     public function index()
     {
-        $patients   =   Patient::where('company_id',Auth::user()->company_id)->get();
+        $patients   =   Patient::where('company_id',Auth::user()->company_id)->orderBydesc('created_at')->get();
         return view('manager.patient.index',compact('patients'));
     }
 
@@ -51,6 +51,7 @@ class PatientsController extends Controller
         $patient->firstname     =   $request->firstname;
         $patient->lastname      =   $request->lastname;
         $patient->phone         =   $request->phone;
+        $patient->gender        =   $request->gender;
         $patient->province      =   $request->province;
         $patient->district      =   $request->district;
         $patient->sector        =   $request->sector;

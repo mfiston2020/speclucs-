@@ -60,19 +60,21 @@
                 <!-- ============================================================== -->
                 <!-- create new -->
                 <!-- ============================================================== -->
-                {{-- <li class="nav-item dropdown">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="flag-icon flag-icon-us"></i>
+                        <i class="flag-icon flag-icon-{{App::getLocale()=='en'?'us':App::getLocale()}}"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right  animated bounceInDown"
                         aria-labelledby="navbarDropdown2">
-                        <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-us"></i> English</a>
-                        <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-fr"></i> French</a>
-                        <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-es"></i> Spanish</a>
-                        <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-de"></i> German</a>
+                        @foreach (Config::get('language') as $lang => $language)
+                            <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}">
+                                <i class="flag-icon flag-icon-{{$lang=='en'?'us':$lang}}"></i> {{$language}}
+                            </a>
+                        @endforeach
+
                     </div>
-                </li> --}}
+                </li>
                 <!-- ============================================================== -->
                 <!-- Comment -->
                 <!-- ============================================================== -->
@@ -207,32 +209,33 @@
 
 
                 <li class="sidebar-item"><a href="{{route('manager')}}" class="sidebar-link"><i
-                            class="mdi mdi-view-dashboard"></i><span class="hide-menu"> Dashboard </span></a>
+                            class="mdi mdi-view-dashboard"></i><span class="hide-menu"> {{ __('navigation.dashboard') }} </span></a>
                 </li>
 
                 @if (userInfo()->permissions=='manager' || userInfo()->permissions=='seller')
                     <!-- User Profile-->
-                    <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Dispensing Department</span></li>
+                    <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i>
+                        <span class="hide-menu">{{ __('navigation.dispensing_dept') }}</span></li>
 
                     <li class="sidebar-item"><a href="{{ route('manager.sales')}}" class="sidebar-link"><i
-                                class="mdi mdi-adjust"></i><span class="hide-menu"> Sales </span></a>
+                                class="mdi mdi-adjust"></i><span class="hide-menu"> {{ __('navigation.sales') }} </span></a>
                     </li>
 
                     <li class="sidebar-item"><a href="{{route('manager.order')}}" class="sidebar-link"><i
-                                class="mdi mdi-cart-plus"></i><span class="hide-menu"> Lab Orders </span></a>
+                                class="mdi mdi-cart-plus"></i><span class="hide-menu"> {{ __('navigation.lab_orders') }} </span></a>
                     </li>
 
                     <li class="sidebar-item">
                         <a href="{{ route('manager.proforma')}}" class="sidebar-link">
                             <i class="mdi mdi-content-paste"></i>
-                            <span class="hide-menu"> Insurance </span>
+                            <span class="hide-menu"> {{ __('navigation.insurance')}} </span>
                         </a>
                     </li>
                 @endif
 
                 @if (userInfo()->permissions=='manager' || userInfo()->permissions=='store')
                 <!-- User Profile-->
-                    <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Stock Department</span></li>
+                    <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">{{ __('navigation.stock_dept') }}</span></li>
 
 
                     <li class="sidebar-item"><a href="{{route('manager.product')}}" class="sidebar-link"><i

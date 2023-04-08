@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title','Manager Dashboard - File Details')
+@section('title','Manager Dashboard - Medical Prescription')
 
 @push('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/libs/select2/dist/css/select2.min.css')}}">
@@ -8,7 +8,7 @@
 
 {{-- ==== Breadcumb ======== --}}
 @section('page_name','File')
-@section('current','File Detail')
+@section('current','Medical Prescription')
 {{-- === End of breadcumb == --}}
 
 @section('content')
@@ -51,9 +51,10 @@
                                                     <br>
                                                     {{-- <h3> &nbsp;<b>Name:</b> {{$company->company_name}}</h3> --}}
                                                     <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>{{$company->company_tin_number}}
-                                                        {{-- <br /> <strong class="text-black-50">Phone Number:</strong> {{$company->company_street}} --}}
-                                                        <br /> <strong class="text-black-50">Phone Number:</strong>{{$company->company_phone}}
-                                                        <br /> <strong class="text-black-50">E-mail Address:</strong> {{$company->company_email}}</p>
+                                                        <br /> <strong class="text-black-50">Phone Number:</strong> {{$company->company_street}}
+                                                        <br /> <strong class="text-black-50">E-mail Address:</strong> {{$company->company_email}}
+                                                        <br>
+                                                        <br /> <strong class="text-black-50">Prescription:</strong> {{date('Y-m-d',strtotime($company->created_at))}}</p>
                                                 </address>
                                             </div>
                                         </div>
@@ -68,20 +69,20 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="text-left">
-                                                                <span class="font-weight-bold ml-1">Firstname:</span>
-                                                                <span class="invoice-number ml-2">{{$patient->firstname}}</span>
+                                                                <span class="font-weight-bold ml-1">Name:</span>
+                                                                <span class="invoice-number ml-2">{{$patient->firstname}} {{$patient->lastname}}</span>
                                                             </td>
                                                             <td class="text-left" colspan="2">
-                                                                <span class="font-weight-bold ml-1">Lastname:</span>
-                                                                <span class="invoice-number ml-2">{{$patient->lastname}}</span>
+                                                                <span class="font-weight-bold ml-1">Date of Birth:</span>
+                                                                <span class="invoice-number ml-2">{{$patient->birthdate}}</span>
                                                             </td>
                                                             <td class="text-left" colspan="2">
-                                                                {{-- <span class="font-weight-bold ml-1">Birthdate:</span>
-                                                                <span class="invoice-number ml-2">{{$patient->birthdate}}</span> --}}
+                                                                <span class="font-weight-bold ml-1">Gender:</span>
+                                                                <span class="invoice-number ml-2 text-capitalize">{{$patient->gender}}</span>
                                                             </td>
                                                             <td class="text-left">
-                                                                <span class="font-weight-bold ml-1">Date:</span>
-                                                                <span class="invoice-number ml-2">{{date('Y-m-d',strtotime($file->created_at))}}</span>
+                                                                {{-- <span class="font-weight-bold ml-1">Prescripoin Date:</span>
+                                                                <span class="invoice-number ml-2">{{date('Y-m-d',strtotime($file->created_at))}}</span> --}}
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -94,7 +95,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th class="border-top-0 font-weight-bold border-left-0 border-right-0">#</th>
-                                                            <th class="border-top-0 font-weight-bold border-left-0 border-right-0">Medicatio</th>
+                                                            <th class="border-top-0 font-weight-bold border-left-0 border-right-0">Medication</th>
                                                             <th class="border-top-0 font-weight-bold border-left-0 border-right-0">Strength</th>
                                                             <th class="border-top-0 font-weight-bold border-left-0 border-right-0">Route</th>
                                                             <th class="border-top-0 font-weight-bold border-left-0 border-right-0">Frequency</th>

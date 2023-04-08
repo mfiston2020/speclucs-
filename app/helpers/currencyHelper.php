@@ -69,3 +69,11 @@ function userInfo()
 {
     return auth()->user();
 }
+
+function makeMonths(){
+    $months =   [];
+    for ($x = 1; $x <= 12; $x++)
+        array_push($months,date('F', mktime(0, 0, 0, $x, 10)));
+
+    return $months;
+}

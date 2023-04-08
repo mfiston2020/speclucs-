@@ -6,8 +6,8 @@
 
 @endpush
 {{-- al business information must be kept private unless you want to see them all the dashboard itmes must be removed and add a company logo
-    
-    invoice 
+
+    invoice
     =======
 
     invoice must have all product all products
@@ -22,6 +22,23 @@
 @section('content')
 <div class="container-fluid">
    <div class="row">
+    <a href="{{route('manager.insurance.proforma')}}" class="col-lg-4 col-md-6 text-success">
+        <div class="">
+            <div class="card border-right border-success">
+                <div class="card-body">
+                    <div class="d-flex no-block align-items-center">
+                        <div>
+                            <span class="text-success display-6"><i class="ti-layout-slider-alt"></i></span>
+                        </div>
+                        <div class="ml-auto">
+                            <h3>Insurance Invoice</h3>
+                            <small class="text-dark">Create monthly Insurance Invoices</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
     <a href="{{route('manager.cutomerInvoice')}}" class="col-lg-4 col-md-6 text-dark">
         <div class="">
             <div class="card border-right border-dark">

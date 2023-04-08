@@ -25,29 +25,28 @@
                 <hr>
                 <div class="px-5">
                     <p class="text-justify">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Necessitatibus vel officia error, pariatur qui id in cum ab veniam? Velit porro, r
-                        em reprehenderit ducimus beatae impedit ipsa eligendi perspiciatis repellat voluptatem, tota
-                        m quibusdam adipisci, sequi delectus! Quod facilis beatae voluptates itaque quisquam quas dolor p
-                        ariatur ipsam obcaecati inventore. Provident consequatur quasi aperiam, repellat quibusdam ipsum tenet
-                        ur, tempora et corrupti quod architecto? Culpa numquam inventore tempore ut nobis maxime consequatur,
-                        doloribus aperiam repellat libero facere ipsam, dolorum fuga blanditiis sunt molestias beatae. Quasi sa</p>
+                        <ul>
+                            <li>This functionality will help you to forecast for future stock.</li>
+                            <li>It will show:</li>
+                            <ul>
+                                <li>Current stock: What you have on hand.</li>
+                                <li>Usage: What you sold.</li>
+                                <li>Additional: to manually increase/decrease the quantity of stock forecast.</li>
+                                <li>Model stock: Minimum stock for the selected period.</li>
+                                <li>Stock forecast: Quantity needed for the selected period</li>
+                            </ul>
+                            <li>
+                                How to use it:
+                                <ul>
+                                    <li>Select the type of product you need to order below</li>
+                                    <li>Select the previous dates i.e you can select a range of past dates.</li>
+                                    <li>If you select 1st Jan to 31st march , it means you are going to order products that will last for 3 Months as you selected a range of three months.</li>
+                                    <li>If there is a product that was out of your stock during the period you selected, you can add the quantity you need to order, manually in addition column.</li>
+                                    <li>In addition column you can use +/- signs before a number to increase/decrease the stock forecast.</li>
+                                </ul>
+                            </li>
+                        </ul>
 
-                        <p class="text-justify">epe, assumenda magni temporibus libero architecto quam fugiat enim pariatur, doloribus in modi rem sunt
-                        debitis quas odit laboriosam, omnis deserunt distinctio expedita sequi. Totam aperiam autem non dolorum e
-                        nim? Molestias eos iste suscipit cum harum eum asperiores placeat, dolorem optio enim totam numquam rem lib
-                        ero consectetur dignissimos nam tenetur? Voluptatum molestias voluptatem ab aspernatur ratione enim ut non d
-                        electus dolore assumenda repudiandae quas quos doloribus obcaecati nihil, tenetur harum laborum sapiente temp
-                        ore recusandae rem, sunt quam explicabo cumque? Omnis molestias magnam consequatur dolore inventore soluta te
-                        mporibus eaque sequi, ullam est, delectus maiores ex corporis laborum quos unde. Beatae, labore aspernatur ex
-                        ercitationem et itaque perspiciatis sit recusandae quisquam praesentium unde inventore, iste at, explicabo vita
-                        e magni placeat architecto. Quo eius officiis ab culpa nobis modi fugiat corporis ratione. Molestiae dolores li
-                        ero hic vitae tenetur nobis impedit porro, provident aut, obcaecati, nostrum ratione culpa laboriosam voluptas i
-                        ste? Dicta blanditiis iure vitae illo tenetur placeat quo at, reiciendis accusantium mollitia, laudantium nobis d
-                        ignissimos nemo id nihil harum quae sit voluptatem. Doloribus quo dolor enim ipsa tenetur obcaecati adipisci labo
-                        riosam dolorum odio! Minus consectetur alias aut ullam neque excepturi beatae, aspernatur veniam corporis error vo
-                        luptas vitae magni aliquam explicabo sed illo. Provident, numquam, sunt iure quisquam minima exercitationem hic mol
-                        estiae nisi error, sapiente alias! Ipsum, qui odio. Minima optio nam consectetur.
                     </p>
                 </div>
             </div>

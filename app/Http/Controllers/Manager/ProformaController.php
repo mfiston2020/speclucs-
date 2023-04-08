@@ -14,8 +14,8 @@ class ProformaController extends Controller
         $proformas  =   \App\Models\Proforma::join('insurances','proformas.insurance_id','insurances.id')
                                                 ->where('proformas.company_id',Auth::user()->company_id)
                                                 ->select('proformas.*','insurances.insurance_name')
-                                                ->orderBy('created_at','DESC')->get();      
-    
+                                                ->orderBy('created_at','DESC')->get();
+
 
         return view('manager.proforma.index',compact('proformas'));
     }
@@ -30,7 +30,7 @@ class ProformaController extends Controller
 
         // return $request->all();
 
-        if ($request->category=='system') 
+        if ($request->category=='system')
         {
             $proforma   =   new \App\Models\Proforma();
 
@@ -48,8 +48,8 @@ class ProformaController extends Controller
                 return  redirect()->back()->with('errorMsg','Something went wrong!');
             }
         }
-        
-        if ($request->category=='new') 
+
+        if ($request->category=='new')
         {
             $proforma   =   new \App\Models\Proforma();
 
@@ -141,11 +141,11 @@ class ProformaController extends Controller
         $proforma   =   \App\Models\Proforma::find(Crypt::decrypt($id));
 
         $proforma->status   =   'finalized';
-        try 
+        try
         {
             $proforma->save();
             return redirect()->back()->with('successMsg','Proforma Finalized!!');
-        } catch (\Throwable $th) 
+        } catch (\Throwable $th)
         {
             return  redirect()->back()->with('errorMsg','Something went wrong!');
         }
@@ -198,7 +198,7 @@ class ProformaController extends Controller
         $product   =   \App\Models\Proforma::find(Crypt::decrypt($id));
 
         $product->status    =   'approved';
-        
+
         try {
 
             $product->save();
@@ -214,7 +214,7 @@ class ProformaController extends Controller
         $product   =   \App\Models\Proforma::find(Crypt::decrypt($id));
 
         $product->status    =   'rejected';
-        
+
         try {
 
             $product->save();
@@ -223,5 +223,9 @@ class ProformaController extends Controller
         } catch (\Throwable $th) {
             return  redirect()->back()->with('errorMsg','Something went wrong!'.$th);
         }
+    }
+
+    function insuranceProforma(){
+        return view('manager.invoices.insurance-invoice');
     }
 }

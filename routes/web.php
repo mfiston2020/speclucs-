@@ -24,6 +24,9 @@ Route::get('/', function () {
     }
 });
 
+Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);
+Route::get('lang/{lang}', [App\Http\Controllers\LanguageController::class,'switchLang'])->name('lang.switch');
+
 Route::get('/home',[\App\Http\Controllers\Manager\DashboardController::class,'index'])->middleware('manager');
 Route::get('client',[\App\Http\Controllers\Client\DashboardController::class,'index'])->name('client')->middleware('auth');
 // Route::get('manager',[\App\Http\Controllers\Manager\DashboardController::class,'index'])->name('manager')->middleware('manager');
@@ -351,6 +354,8 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     Route::get('/proforma/add/approve/{id}',[\App\Http\Controllers\Manager\ProformaController::class,'approveProforma'])->name('proforma.approve.proforma');
     Route::get('/proforma/add/decline/{id}',[\App\Http\Controllers\Manager\ProformaController::class,'declineProforma'])->name('proforma.decline.proforma');
+
+    Route::get('/insurance/proforma',[\App\Http\Controllers\Manager\ProformaController::class,'insuranceProforma'])->name('insurance.proforma');
 
     // ===================== New orders ===============
     Route::get('/newOrder',[\App\Http\Controllers\Manager\NewSalesController::class,'newOrder'])->name('new.order');
