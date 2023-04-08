@@ -92,31 +92,42 @@
 
                         <div class="row">
                             <!--/span-->
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Firstname</label>
-                                    <input type="text" wire:model="firstname" class="form-control" required="">
+                                    <input type="text" wire:model.lazy="firstname" class="form-control" required="">
                                 </div>
                             </div>
                             <!--/span-->
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Lastname</label>
-                                    <input type="text" wire:model="lastname" class="form-control" required="">
+                                    <input type="text" wire:model.lazy="lastname" class="form-control" required="">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Gender</label>
+                                    <select class="form-control @error('gender') is-invalid @enderror custom-select" wire:model.lazy='gender'>
+                                        <option>--Select your Gender--</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                    @error('gender') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                             <!--/span-->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Tin Number</label>
-                                    <input type="text" wire:model="tin_number" class="form-control" required="">
+                                    <input type="text" wire:model.lazy="tin_number" class="form-control" required="">
                                 </div>
                             </div>
                             <!--/span-->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Phone Number</label>
-                                    <input type="text" wire:model="phone" class="form-control" required="">
+                                    <input type="text" wire:model.lazy="phone" class="form-control" required="">
                                 </div>
                             </div>
                         </div>
@@ -293,34 +304,30 @@
                     <div class="col-sm-12 col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-body">
-                            @if ($lensProduct)
-                                <input type="hidden" wire:model="productID">
 
                                 <div class="form-group row">
-                                    <label for="stock" class="col-sm-4 text-right control-label col-form-label">
+                            @if ($lensProduct)
+                                <input type="hidden" wire:model="productID">
+                                    <div class="col-sm-12 col-md-2">
+                                    <label for="stock" class="text-right control-label col-form-label">
                                         Unit Price
                                     </label>
-                                    <div class="col-sm-8">
                                         <input type="text" wire:model="product_unit_price" class="form-control" readonly
                                             required>
                                     </div>
-                                </div>
 
-                                <div class="form-group row">
+                                    <div class="col-sm-12 col-md-2">
                                     <label for="stock"
-                                        class="col-sm-4 text-right control-label col-form-label">Stock</label>
-                                    <div class="col-sm-8">
+                                        class="text-right control-label col-form-label">Stock</label>
                                         <input type="text" wire:model="product_stock" class="form-control" readonly
                                             required>
                                     </div>
-                                </div>
                                 @endif
 
-                                <div class="form-group row">
-                                    <label for="fstock" class="col-sm-4 text-right control-label col-form-label">Quantity
+                                    <div class="col-sm-12 col-md-2">
+                                    <label for="fstock" class=" text-right control-label col-form-label">Quantity
                                         <span id="left" style="color: red"></span>
                                     </label>
-                                    <div class="col-sm-8">
                                         <input type="number"
                                             class="form-control @error('proquantity')  is-invalid @enderror" placeholder="0"
                                             wire:model.debounce.500ms="proquantity" min="1" max="{{$product_stock}}">
@@ -328,26 +335,22 @@
                                                 Calculating...
                                             </span>
                                     </div>
-                                </div>
 
-                                <div class="form-group row">
-                                    <label for="discount" class="col-sm-4 text-right control-label col-form-label invalid">
-                                        Price Adjustment
-                                    </label>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-12 col-md-3">
+                                        <label for="discount" class="text-right control-label col-form-label invalid">
+                                            Price Adj.
+                                        </label>
                                         <input type="text" class="form-control @error('prodiscount')  is-invalid @enderror"
                                             id="discount" placeholder="0" wire:model.debounce.500ms="prodiscount">
                                             <span class="text-info" wire:loading wire:target=prodiscount>
                                                 Calculating...
                                             </span>
                                     </div>
-                                </div>
 
-                                <div class="form-group row">
-                                    <label for="cost" class="col-sm-4 text-right control-label col-form-label invalid">
-                                        Total Amount
-                                    </label>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-12 col-md-3">
+                                        <label for="cost" class="text-right control-label col-form-label invalid">
+                                            Total Amount
+                                        </label>
                                         <input type="text" class="form-control" id="total_amount" placeholder="0"
                                             wire:model.debounce.500ms="product_total_amount" readonly>
                                     </div>
@@ -356,9 +359,9 @@
 
                                     <hr>
                                         <div class="form-group row">
+                                            <div class="col-sm-3">
                                             <label for="discount"
-                                                class="col-sm-4 text-right control-label col-form-label invalid">Insurance</label>
-                                            <div class="col-sm-8">
+                                                class="text-right control-label col-form-label invalid">Insurance</label>
                                                 <select class="form-control form-select" required wire:model=insurance_type>
                                                     <option value="">** Select Type **</option>
                                                     <option value="private">private</option>
@@ -371,55 +374,61 @@
                                                     @endif
                                                 </select>
                                             </div>
-                                        </div>
 
                                         @if (!$hide_insurance_details)
-                                        <div class="form-group row">
-                                            <label for="cost" class="col-sm-4 text-right control-label col-form-label invalid">
-                                                Insurance Percentage
-                                            </label>
-                                            <div class="col-sm-8">
+                                            <div class="col-sm-3">
+                                                <label for="cost" class="text-right control-label col-form-label invalid">
+                                                    Ins. Percentage
+                                                </label>
                                                 <input type="number" class="form-control @error('insurance_percentage')  is-invalid @enderror"
                                                 id="insurance_percentage" max="100" min="0"  placeholder="0" wire:model.debounce.500ms="insurance_percentage">
                                             </div>
-                                        </div>
 
-                                        <div class="form-group row">
-                                            <label for="cost" class="col-sm-4 text-right control-label col-form-label invalid">
+                                            <div class="col-sm-3">
+                                                <label for="cost" class="text-right control-label col-form-label invalid">
+                                                    Ins. Card Number
+                                                </label>
+                                                <input type="text" class="form-control @error('insurance_number')  is-invalid @enderror"
+                                                id="insurance_number"  wire:model.debounce.500ms="insurance_number">
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                            <label for="cost" class="text-right control-label col-form-label invalid">
                                                 Ins. Approved Amount
                                             </label>
-                                            <div class="col-sm-8">
                                                 <input type="number" class="form-control @error('approved_amount')  is-invalid @enderror"
                                                 id="approved_amount" min="0"  placeholder="0" wire:model.debounce.500ms="approved_amount">
                                             </div>
                                         </div>
-                                    <button type="button" wire:click="approvedAmount" class="btn btn-default waves-effect waves-light">
-                                        Calculate
-                                    </button>
-                                    <hr>
+                                        <button type="button" wire:click="approvedAmount" class="btn btn-default waves-effect waves-light">
+                                            Calculate
+                                        </button>
+                                        <hr>
 
-                                @endif
+                                    @endif
+
+                                    {{-- @if ($hide_insurance_details)
+                                        </div>
+                                    @endif --}}
 
 
                                 <div class="form-group row">
-                                    <label for="cost" class="col-sm-4 text-right control-label col-form-label invalid">
+                                    <div class="col-sm-6">
+                                    <label for="cost" class="text-right control-label col-form-label invalid">
                                         Insurance Payment
                                     </label>
-                                    <div class="col-sm-8">
                                         <input type="text" class="form-control" id="total_amount" placeholder="0"
                                             wire:model.debounce.500ms="insurance_payment" readonly>
                                     </div>
-                                </div>
 
-                            <div class="form-group row">
-                                <label for="cost" class="col-sm-4 text-right control-label col-form-label invalid">
-                                    Client Payment
-                                </label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="total_amount" placeholder="0"
-                                        wire:model.debounce.500ms="patient_payment" readonly>
+                                    <div class="col-sm-6">
+                                        <label for="cost" class="text-right control-label col-form-label invalid">
+                                            Client Payment
+                                        </label>
+                                        <input type="text" class="form-control" id="total_amount" placeholder="0"
+                                            wire:model.debounce.500ms="patient_payment" readonly>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                             <div class="card-footer">
                                 @if ($patient_payment!=0)
@@ -554,7 +563,7 @@
                                             </label>
                                             <div class="col-sm-8">
                                                 <input type="number" class="form-control @error('insurance_percentage')  is-invalid @enderror"
-                                                id="insurance_percentage" max="100" min="0"  placeholder="0" wire:model.debounce.500ms="insurance_percentage">
+                                                id="insurance_percentage" max="100" min="0"  placeholder="0" wire:model.debounce.500ms="insurance_percentage" required>
                                             </div>
                                         </div>
 
@@ -697,8 +706,5 @@
 </div>
 
 @push('scripts')
-<script src="//unpkg.com/alpinejs" defer></script>
-<script>
-    $('#')
-</script>
+    <script src="//unpkg.com/alpinejs" defer></script>
 @endpush
