@@ -1,13 +1,13 @@
 @extends('manager.includes.app')
 
-@section('title','Manager\'s Dashboard')
+@section('title',__('navigation.manager_s').''. __('navigation.dashboard'))
 
 @push('css')
 
 @endpush
 {{-- al business information must be kept private unless you want to see them all the dashboard itmes must be removed and add a company logo
-    
-    invoice 
+
+    invoice
     =======
 
     invoice must have all product all products
@@ -15,8 +15,8 @@
 
     --}}
 {{-- ==== Breadcumb ======== --}}
-@section('current','Dashboard')
-@section('page_name','Dashboard')
+@section('current', __('navigation.dashboard') )
+@section('page_name',__('navigation.dashboard'))
 {{-- === End of breadcumb == --}}
 
 @section('content')

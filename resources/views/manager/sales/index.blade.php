@@ -7,8 +7,8 @@
 @endpush
 
 {{-- ==== Breadcumb ======== --}}
-@section('current','Sales')
-@section('page_name','Sales List')
+@section('current',__('navigation.sales'))
+@section('page_name',__('manager/dispensing.sales'))
 {{-- === End of breadcumb == --}}
 
 @section('content')

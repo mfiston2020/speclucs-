@@ -2,8 +2,8 @@
 <!-- footer -->
 <!-- ============================================================== -->
 <footer class="footer text-center">
-    All Rights Reserved by Kimu ltd. Designed and Developed by <a target="_blank"
-        href="fiston.xyz">Kimu LTD</a>.
+    {{ __('navigation.footer_copyright')}} <a target="_blank"
+        href="http://www.fiston.xyz">Kimu LTD</a>.
 </footer>
 <!-- ============================================================== -->
 <!-- End footer -->
