@@ -147,21 +147,21 @@
                             </div>
                         </div>
                         <a class="dropdown-item" href="{{route('manager.profile')}}"><i class="ti-user m-r-5 m-l-5"></i>
-                            My Profile</a>
+                            {{ __('navigation.my_profile') }}</a>
 
                             @if (userInfo()->permissions=='manager')
                                     <a class="dropdown-item" href="{{route('manager.settings')}}"><i class="ti-settings m-r-5 m-l-5"></i>
-                                        Settings</a>
+                                        {{ __('navigation.settings')}}</a>
 
                                 <a class="dropdown-item" href="{{route('manager.clinic.settings')}}"><i class="ti-settings m-r-5 m-l-5"></i>
-                                    Clinic Settings</a>
+                                    {{ __('navigation.clinic_settings') }}</a>
                             @endif
 
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('logout') }}" class="btn btn-primary"
                             onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i
                                 class="fa fa-power-off m-r-5 m-l-5"></i>
-                            Logout</a>
+                            {{ __('navigation.logout') }}</a>
                         {{-- logout form --}}
                         <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display:none">
                             {{ csrf_field() }}

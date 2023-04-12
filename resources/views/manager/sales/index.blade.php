@@ -8,7 +8,7 @@
 
 {{-- ==== Breadcumb ======== --}}
 @section('current',__('navigation.sales'))
-@section('page_name',__('manager/dispensing.sales'))
+@section('page_name',__('navigation.sales'))
 {{-- === End of breadcumb == --}}
 
 @section('content')
@@ -18,10 +18,12 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <h4 class="card-title">All Sales</h4><hr>
+                        <h4 class="card-title">{{ __('manager/dispensing.all_sales') }}</h4><hr>
 
-                        <a href="{{route('manager.new.order')}}" type="button" class="btn waves-effect waves-light btn-rounded btn-outline-primary mr-3" style="align-items: right;">
-                            <i class="fa fa-plus"></i> New Order
+                        <a href="{{route('manager.new.order')}}" type="button"
+                            class="btn waves-effect waves-light btn-rounded btn-outline-primary mr-3 text-capitalize"
+                            style="align-items: right;">
+                            <i class="fa fa-plus"></i> {{ __('manager/dispensing.new_order') }}
                         </a>
 
                         {{-- <a href="{{route('manager.sales.customer.add')}}" type="button" class="btn waves-effect waves-light btn-rounded btn-outline-primary mr-3" style="align-items: right;">
@@ -60,6 +62,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($sales as $key=> $sale)
+                                
                                     <tr>
                                         @php
                                             $client=\App\Models\Customer::where(['id'=>$sale->client_id])->where('company_id',Auth::user()->company_id)->pluck('name')->first();
@@ -174,6 +177,7 @@
                                         </div>
                                         <!-- /.modal-dialog -->
                                     </div>
+
                                 @endforeach
 
                             </tbody>
@@ -189,4 +193,5 @@
 @push('scripts')
     <script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js')}}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js')}}"></script>
+
 @endpush

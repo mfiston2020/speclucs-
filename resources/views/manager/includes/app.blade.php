@@ -48,11 +48,11 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-5 align-self-center">
-                        <h4 class="page-title ">@yield('page_name')</h4>
+                        <h4 class="page-title text-capitalize">@yield('page_name')</h4>
                         <div class="d-flex align-items-center">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/">{{__('navigation.dashboard')}}</a></li>
+                                    <li class="breadcrumb-item text-capitalize"><a href="/">{{__('navigation.dashboard')}}</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">@yield('current')</li>
                                 </ol>
                             </nav>

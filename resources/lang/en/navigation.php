@@ -9,5 +9,10 @@ return
     'lab_orders'=>'Lab Orders',
     'insurance'=>'Insurance',
     'stock_dept'=>'Stock Department',
+
+    'my_profile'=>'My Profile',
+    'settings'=>'Settings',
+    'clinic_settings'=>'Clinic Settings',
+    'logout'=>'Logout',
     'footer_copyright'=>'All Rights Reserved by Kimu Technologies ltd. Designed and Developed by'
 ];

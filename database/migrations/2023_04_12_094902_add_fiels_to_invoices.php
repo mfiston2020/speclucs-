@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('customers', function (Blueprint $table) {
+        Schema::table('invoices', function (Blueprint $table) {
+            //
             $table->foreignId('insurance_id')->nullable()->after('company_id')->constrained('insurances','id')->cascadeOnDelete();
             $table->enum('gender',['male','female'])->after('phone')->nullable();
             $table->string('dateOfBirth')->after('phone')->nullable();
@@ -28,11 +29,11 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('customers', function (Blueprint $table) {
+        Schema::table('invoices', function (Blueprint $table) {
             //
             $table->dropColumn('gender');
             $table->dropColumn('dateOfBirth');
-            $table->dropForeign('');
+            $table->dropForeign('insurance_id');
             $table->dropColumn('insurance_card_number');
         });
     }
