@@ -21,6 +21,7 @@ class AddSaleProduct extends Component
     public $lastname;
     public $tin_number;
     public $phone;
+    public $gender,$insurance_number;
 
     // control variables
     public $eye;
@@ -126,8 +127,12 @@ class AddSaleProduct extends Component
             $this->insurance_payment    =   0;
             $this->patient_payment      =   $this->product_total_amount -   $this->insurance_payment;
         } else {
-            $this->insurance_payment    =   ($this->approved_amount  *   $this->insurance_percentage)/100;
-            $this->patient_payment      =   $this->product_total_amount -   $this->insurance_payment;
+            if ($this->approved_amount>$this->product_total_amount) {
+                $this->insurance_payment    =   $this->product_total_amount;
+            }else{
+                $this->insurance_payment    =   ($this->approved_amount  *   $this->insurance_percentage)/100;
+            }
+            $this->patient_payment      =   (($this->product_total_amount -   $this->insurance_payment)<0)?0:$this->product_total_amount -   $this->insurance_payment;
         }
 
     }
@@ -283,6 +288,7 @@ class AddSaleProduct extends Component
                 'client_id'=>null,
                 'client_name'=>$this->firstname.' '.$this->lastname,
                 'phone'=>$this->phone,
+                'gender'=>$this->gender,
                 'tin_number'=>$this->tin_number
             ]);
         }
