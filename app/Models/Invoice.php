@@ -14,5 +14,7 @@ class Invoice extends Model
         'client_name',
         'phone',
         'tin_number',
+        'gender',
+        'dateOfBirth',
     ];
 }

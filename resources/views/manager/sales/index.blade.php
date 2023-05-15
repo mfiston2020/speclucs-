@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <h4 class="card-title">{{ __('manager/dispensing.all_sales') }}</h4><hr>
+                        <h4 class="card-title text-capitalize">{{ __('manager/dispensing.all_sales') }}</h4><hr>
 
                         <a href="{{route('manager.new.order')}}" type="button"
                             class="btn waves-effect waves-light btn-rounded btn-outline-primary mr-3 text-capitalize"
@@ -62,7 +62,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($sales as $key=> $sale)
-                                
+
                                     <tr>
                                         @php
                                             $client=\App\Models\Customer::where(['id'=>$sale->client_id])->where('company_id',Auth::user()->company_id)->pluck('name')->first();

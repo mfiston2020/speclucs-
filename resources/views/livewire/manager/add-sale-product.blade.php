@@ -117,14 +117,21 @@
                                 </div>
                             </div>
                             <!--/span-->
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Date Of Birth</label>
+                                    <input type="date" max="{{date('Y-m-d')}}" wire:model.lazy="date_of_birth" class="form-control" required="">
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Tin Number</label>
                                     <input type="text" wire:model.lazy="tin_number" class="form-control" required="">
                                 </div>
                             </div>
                             <!--/span-->
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Phone Number</label>
                                     <input type="text" wire:model.lazy="phone" class="form-control" required="">

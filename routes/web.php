@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\RoleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
     if (Auth::user()) {
         return redirect()->intended('manager');

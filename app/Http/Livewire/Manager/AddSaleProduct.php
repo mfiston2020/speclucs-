@@ -21,6 +21,7 @@ class AddSaleProduct extends Component
     public $lastname;
     public $tin_number;
     public $phone;
+    public $date_of_birth;
     public $gender,$insurance_number;
 
     // control variables
@@ -288,8 +289,9 @@ class AddSaleProduct extends Component
                 'client_id'=>null,
                 'client_name'=>$this->firstname.' '.$this->lastname,
                 'phone'=>$this->phone,
+                'tin_number'=>$this->tin_number,
                 'gender'=>$this->gender,
-                'tin_number'=>$this->tin_number
+                'dateOfBirth'=>$this->date_of_birth,
             ]);
         }
 
