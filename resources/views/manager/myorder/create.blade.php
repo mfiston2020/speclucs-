@@ -187,37 +187,65 @@
 <div class="col-sm-12 col-md-12 col-lg-12">
     <div class="card">
         <div class="card-body row">
-            <h4 class="card-title col-12">Supplier Selection</h4>
-            <hr>
-            <div class="form-group col-md-3 col-sm-12">
 
-                <label for="upplier">Supplier</label>
+            <div class="col-6">
+                <h4 class="card-title col-12">Frame Selection</h4>
+                <hr>
+                <div class="form-group col-md-8 col-sm-12">
 
-                <select class="select2 form-control custom-select" style="width: 100%; height:36px;" name="supplier"
-                    id="supplier" required>
-                    <option value="">Select Type</option>
-                    @foreach ($suppliers as $supplier)
-                    <span>{{$company=\App\Models\CompanyInformation::where('id',$supplier->company_id)->select('id','company_name')->first()}}</span>
-                    <option value="{{$company->id}}" {{(old('supplier')==$company->id)?'selected':''}}>
-                        {{$company->company_name}}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group col-md-3 col-sm-12">
-                <div class="form-group">
-                    <label for="cost">Cost</label>
-                    <input type="text" class="form-control" id="cost" placeholder="Lens Cost" name="cost"
-                        value="{{old('cost')}}" readonly>
+                    <select class="select2 form-control custom-select" style="width: 100%; height:36px;" name="frame"
+                        id="frames">
+                        <option value="">Select Type</option>
+                        @foreach ($frames as $frame)
+                        <option value="{{$frame->id}}" {{(old('frame')==$frame->id)?'selected':''}}>
+                            {{$frame->product_name}} | {{$frame->description}}
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
-            <div class="form-group col-md-3 col-sm-12">
-                <div class="form-group">
-                    {{-- <label for="stock">Stock</label> --}}
-                    <input type="hidden" class="form-control" id="stock" placeholder="Available Stock" name="stock"
-                        value="{{old('stock')}}" readonly>
-                    <input type="hidden" id="pid" name="pid" value="{{old('pid')}}">
+
+
+            <div class="col-6 row">
+                <h4 class="card-title col-12">Comment</h4>
+                <hr>
+                {{-- <div class="form-group col-md-6 col-sm-12">
+
+                    <label for="upplier">Supplier</label>
+
+                    <select class="select2 form-control custom-select" style="width: 100%; height:36px;" name="supplier"
+                        id="supplier" required>
+                        <option value="">Select Type</option>
+                        @foreach ($suppliers as $supplier)
+                        <span>{{$company=\App\Models\CompanyInformation::where('id',$supplier->company_id)->select('id','company_name')->first()}}</span>
+                        <option value="{{$company->id}}" {{(old('supplier')==$company->id)?'selected':''}}>
+                            {{$company->company_name}}
+                        </option>
+                        @endforeach
+                    </select>
+                </div> --}}
+                <div class="form-group col-md-12 col-sm-12">
+                    <div class="form-group">
+                        {{-- <label for="comment">comment</label> --}}
+                        <input type="text" class="form-control" id="comment" placeholder="comment" name="comment"
+                            value="{{old('comment')}}">
+                    </div>
+                {{-- </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="cost">Cost</label>
+                        <input type="text" class="form-control" id="cost" placeholder="Lens Cost" name="cost"
+                            value="{{old('cost')}}" readonly>
+                    </div>
                 </div>
+                <div class="form-group col-md-6 col-sm-12">
+                    <div class="form-group">
+                        {{-- <label for="stock">Stock</label> --}}
+                        {{-- <input type="hidden" class="form-control" id="stock" placeholder="Available Stock" name="stock"
+                            value="{{old('stock')}}" readonly> --}}
+                        <input type="" id="pid" name="pid" value="{{old('pid')}}">
+                    {{-- </div>
+                </div>  --}}
             </div>
         </div>
     </div>
