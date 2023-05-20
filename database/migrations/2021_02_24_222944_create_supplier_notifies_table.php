@@ -17,6 +17,7 @@ class CreateSupplierNotifiesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('supplier_id');
+            $table->string('order_id')->nullable();
             $table->string('notification');
             $table->string('status')->default('0');
             $table->timestamps();

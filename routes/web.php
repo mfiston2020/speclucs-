@@ -169,6 +169,11 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::post('/payInvoice/{payInvoice}',[\App\Http\Controllers\Manager\SalesController::class,'invoiceTransaction'])->name('invoice.pay');
     Route::post('/deleteInvoice/{deleteInvoice}',[\App\Http\Controllers\Manager\SalesController::class,'invoicedelete'])->name('invoice.delete');
 
+    // pending orders
+    Route::get('/pendingRequest',[\App\Http\Controllers\Manager\PendingOrderController::class,'index'])->name('pending.orders');
+    Route::post('/pendingRequest/setPrice',[\App\Http\Controllers\Manager\PendingOrderController::class,'setOrderPrice'])->name('pending.order.price');
+    Route::post('/pendingRequests/feedback',[\App\Http\Controllers\Manager\PendingOrderController::class,'clientRequestfeedback'])->name('client.request.feedback');
+
     // Route::get('/sales/order/tolab/{id}',[\App\Http\Controllers\Manager\SalesController::class,'send_lab_form'])->name('sales.send.to.lab');
 
     // ======================= All routes about receipt ==============================

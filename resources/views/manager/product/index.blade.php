@@ -56,6 +56,17 @@
                             <a href="{{ route('manager.product.import') }}" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-primary" style="align-items: right;">
                                 <i class="fa fa-upload"></i> Import Excel
                             </a>
+
+
+                            <a href="{{route('manager.pending.orders')}}" type="button"
+                                class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-secondary mr-3 text-capitalize"
+                                style="align-items: right;">
+                                <i class="fa fa-bars"></i> {{ __('manager/sales.pending_orders') }}
+                                <span class="badge badge-danger badge-pill">
+                                    {{(\App\Models\PendingOrder::where('company_id',userInfo()->company_id)->where('status','pending')->count())}}
+                                </span>
+                            </a>
+
                     </div> <hr>
                     {{-- ============================== --}}
                     @include('manager.includes.layouts.message')

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Manager;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Imports\ProductImport;
-use App\Models\LensType;
 use App\Models\Power;
 use App\Models\Product;
 use Illuminate\Http\Request;

@@ -14,5 +14,8 @@ return
     'settings'=>'Settings',
     'clinic_settings'=>'Clinic Settings',
     'logout'=>'Logout',
-    'footer_copyright'=>'All Rights Reserved by Kimu Technologies ltd. Designed and Developed by'
+    'footer_copyright'=>'All Rights Reserved by Kimu Technologies ltd. Designed and Developed by',
+
+    'yes'=>'Yes',
+    'no'=>'No',
 ];

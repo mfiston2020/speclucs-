@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Manager;
 
-use Auth;
-use DB;
-use Crypt;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductSettings extends Controller
 {

@@ -710,8 +710,46 @@
         </div>
     </div>
 
+
+    <div id="product-not-found-modal" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel"><i
+                            class="fa fa-exclamation-triangle"></i> {{ __('manager/sales.product_not_found')}}</h4>
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <h4>{{ __('manager/sales.next_step')}} </h4>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info waves-effect" wire:click="add_pending_product">
+                        <span wire:loading.remove wire:target='add_pending_product'>
+                            {{ __('manager/sales.stock_request')}}
+                        </span>
+                        <span wire:loading wire:target='add_pending_product'>
+                            <img src="{{ asset('dashboard/assets/images/loading2.gif')}}" height="20" alt="">{{ __('manager/sales.request_processing')}}
+                        </span>
+                    </button>
+                    <button type="button" class="btn btn-danger waves-effect"
+                        data-dismiss="modal">{{__('manager/sales.cancel')}}</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
 </div>
 
 @push('scripts')
     <script src="//unpkg.com/alpinejs" defer></script>
+    <script>
+        window.addEventListener('openProductNotFoundModal', event => {
+            $("#product-not-found-modal").modal('show');
+        })
+    </script>
 @endpush

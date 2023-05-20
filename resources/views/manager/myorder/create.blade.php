@@ -205,7 +205,6 @@
                 </div>
             </div>
 
-
             <div class="col-6 row">
                 <h4 class="card-title col-12">Comment</h4>
                 <hr>
