@@ -132,14 +132,14 @@ class AddSaleProduct extends Component
     function add_pending_product()
     {
 
-        $this->validate(
-            [
-                'firstname'           => 'required',
-                'lastname'    => 'required',
-                'gender'           => 'required',
-                'date_of_birth'        => 'required',
-            ]
-        );
+        // $this->validate(
+        //     [
+        //         'firstname'           => 'required',
+        //         'lastname'    => 'required',
+        //         'gender'           => 'required',
+        //         'date_of_birth'        => 'required',
+        //     ]
+        // );
 
         if ($this->rightEye == true) {
             $this->eye  =   'right';

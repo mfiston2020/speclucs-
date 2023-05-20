@@ -272,7 +272,7 @@ class SalesController extends Controller
         $sold_product->client_name  =   $request->name;
         $sold_product->phone        =   $request->phone;
         $sold_product->gender       =   $request->gender;
-        $sold_product->date_of_birth=   $request->date_of_birth;
+        $sold_product->dateOfBirth  =   $request->date_of_birth;
         $sold_product->tin_number   =   $request->tin_number;
 
         try {

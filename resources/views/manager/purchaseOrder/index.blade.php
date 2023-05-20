@@ -80,21 +80,21 @@
                                         <span class="ti-calendar"></span>
                                     </span>
                                 </div>
-                                <input type='text' class="form-control pickadate" placeholder="From" name="from"
-                                    value="{{old('from')}}" />
+                                <input type='date' class="form-control" placeholder="From" name="from"
+                                    value="{{old('from')}}" max="{{date('Y-m-d')}}"/>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-3 text-right control-label col-form-label">To</label>
+                            <label class="col-sm-3 text-right control-label col-form-label" for="to-date">To</label>
                             <div class="input-group col-sm-9">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
                                         <span class="ti-calendar"></span>
                                     </span>
                                 </div>
-                                <input type='text' class="form-control pickadate" placeholder="To" name="to"
-                                    value="{{old('to')}}" />
+                                <input type='date' id="to-date" class="form-control" placeholder="To" name="to"
+                                    value="{{old('to')}}"  max="{{date('Y-m-d')}}"/>
                             </div>
                         </div>
 
