@@ -253,16 +253,16 @@ class AddSaleProduct extends Component
                         $this->type && $this->index &&
                         $this->chromatic && $this->coating &&
                         $this->sphere && $this->cylinder &&
-                        $this->axis && $this->add && $this->eye
+                        $this->axis && $this->addition && $this->eye
                     ) {
                         $product_id     =   \App\Models\Power::where('type_id', $this->type)
                             ->where('index_id', $this->index)
-                            ->where('chromatics_id', $this->chromatics)
+                            ->where('chromatics_id', $this->chromatic)
                             ->where('coating_id', $this->coating)
                             ->where('sphere', format_values($this->sphere))
                             ->where('cylinder', format_values($this->cylinder))
                             ->where('axis', format_values($this->axis))
-                            ->where('add', format_values($this->add))
+                            ->where('add', format_values($this->addition))
                             ->where('eye', $this->eye)
                             ->where('company_id', userInfo()->company_id)
                             ->select('product_id')->first();

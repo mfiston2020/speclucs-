@@ -62,9 +62,14 @@
                                 class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-secondary mr-3 text-capitalize"
                                 style="align-items: right;">
                                 <i class="fa fa-bars"></i> {{ __('manager/sales.pending_orders') }}
-                                <span class="badge badge-danger badge-pill">
-                                    {{(\App\Models\PendingOrder::where('company_id',userInfo()->company_id)->where('status','pending')->count())}}
-                                </span>
+                                @php
+                                    $count  =   \App\Models\PendingOrder::where('company_id',userInfo()->company_id)->where('status','pending')->count();
+                                @endphp
+                                @if ($count>0)
+                                    <span class="badge badge-danger badge-pill">
+                                        {{$count}}
+                                    </span>
+                                @endif
                             </a>
 
                     </div> <hr>

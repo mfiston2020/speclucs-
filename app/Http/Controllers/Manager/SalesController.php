@@ -146,7 +146,6 @@ class SalesController extends Controller
 
         if ($existing_product==0)
         {
-
             $sold   =   new \App\Models\SoldProduct();
 
             $sold->invoice_id   =   $request->invoice_id;

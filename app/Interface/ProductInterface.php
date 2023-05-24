@@ -3,7 +3,12 @@
 namespace App\Interface;
 
 interface ProductInterface{
-    function searchProduct(string $lensType,string $index,string $chromatic,string $coating,string $sphere,string $cylinder,string $eye,string $axis,string $add);
 
-    function saveProduct(array $request);
+    function sellPendingOrder(array $request);
+
+    function searchProduct(array $productDescription);
+
+    function makeLabOrder(array $request,string $product_id);
+    
+    function saveProduct(array $request,string $category,array $pending);
 }

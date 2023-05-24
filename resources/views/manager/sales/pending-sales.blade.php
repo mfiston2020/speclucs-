@@ -60,21 +60,6 @@
                                     @endif
                                     <th>Request Price</th>
                                     <th>Request Status</th>
-                                    {{-- <th>Invoice Date</th>
-                                    <th>Type</th>
-                                    <th>Coating</th>
-                                    <th>Index</th>
-                                    <th>Chromatic Aspect</th>
-
-                                    <th>Sphere Right</th>
-                                    <th>Cylinder Right</th>
-                                    <th>Axis Right</th>
-                                    <th>Addition Right</th>
-
-                                    <th>Sphere Left</th>
-                                    <th>Cylinder Left</th>
-                                    <th>Axis Left</th>
-                                    <th>Addition Left</th> --}}
                                     <th></th>
                                 </tr>
                             </thead>
@@ -82,7 +67,11 @@
                                 @foreach ($pendingOrders as $key=> $order)
                                     <tr>
                                         <td>{{$key+1}}</td>
-                                        <td>#RQST {{$order->id}}</td>
+                                        <td>
+                                            <a href="#!" data-toggle="modal" data-target="#price-{{$key}}">
+                                                #RQST {{sprintf('%04d',$order->id)}}
+                                            </a>
+                                        </td>
                                         <td>{{\Carbon\Carbon::parse($order->created_at)->diffForHumans()}}</td>
                                         <td>{{date('Y-m-d',strtotime($order->date_of_birth))}}</td>
 
@@ -92,45 +81,39 @@
 
                                         <td>{{format_money($order->order_price)}}</td>
                                         <td>
-                                            @if ($order->status=='pending')
-                                                <span class="badge badge-warning">{{$order->status}}</span>
-                                            @endif
-                                            @if ($order->status=='approved')
-                                                <span class="badge badge-info">{{$order->status}}</span>
-                                            @endif
-                                            @if ($order->status=='paid')
-                                                <span class="badge badge-success">{{$order->status}}</span>
-                                            @endif
-                                            @if ($order->status=='declined')
-                                                <span class="badge badge-secondary">{{$order->status}}</span>
-                                            @endif
+                                            <span @class([
+                                                'badge badge-warning' => $order->status=='pending',
+                                                'badge badge-info' => $order->status=='approved',
+                                                'badge badge-success' => $order->status=='paid',
+                                                'text-success' => $order->status=='sold',
+                                                'badge badge-secondary' => $order->status=='declined',
+                                                ])>{{$order->status}}
+                                            </span>
                                         </td>
-
-                                        {{-- <td>{{date('Y-m-d',strtotime($order->invoice_date))}}</td>
-                                        <td>{{\App\Models\LensType::where('id',$order->type_id)->pluck('name')->first()}}</td>
-                                        <td>{{\App\Models\PhotoCoating::where('id',$order->coating_id)->pluck('name')->first()}}</td>
-                                        <td>{{\App\Models\PhotoIndex::where('id',$order->index_id)->pluck('name')->first()}}</td>
-                                        <td>{{\App\Models\PhotoChromatics::where('id',$order->chromatic_id)->pluck('name')->first()}}</td>
-                                        <td>{{$order->sphere_r}}</td>
-                                        <td>{{$order->cylinder_r}}</td>
-                                        <td>{{$order->axis_r}}</td>
-                                        <td>{{$order->addition_r}}</td>
-
-                                        <td>{{$order->sphere_l}}</td>
-                                        <td>{{$order->cylinder_l}}</td>
-                                        <td>{{$order->axis_l}}</td>
-                                        <td>{{$order->addition_l}}</td> --}}
                                         <td>
-                                            @if (userInfo()->role=='store' || userInfo()->role=='manager')
-                                                @if ($order->status=='pending')
-                                                    <a data-toggle="modal" data-target="#price-{{$key}}" class="btn btn-success btn-sm text-white">{{__('manager/sales.add_price')}}</a>
+                                            @if ($order->status!='sold')
+                                                @if (userInfo()->role=='store' || userInfo()->role=='manager')
+                                                    @if ($order->status=='pending')
+                                                        <a data-toggle="modal" data-target="#price-{{$key}}" class="btn btn-success btn-sm text-white">{{__('manager/sales.add_price')}}</a>
+                                                    @endif
                                                 @endif
+
+                                                @if (userInfo()->role=='seller' || userInfo()->role=='manager')
+                                                    @if ($order->status=='approved')
+                                                        <a data-toggle="modal" data-target="#reaction-{{$key}}" class="btn btn-warning btn-sm text-white">{{__('manager/sales.paid')}}</a>
+                                                    @endif
+                                                @endif
+
+                                                @if (userInfo()->role=='seller' || userInfo()->role=='manager')
+                                                    @if ($order->status=='paid')
+                                                        <a data-toggle="modal" data-target="#sell-{{$key}}" class="btn btn-primary btn-sm text-white">{{__('manager/sales.sell')}}</a>
+                                                    @endif
+                                                @endif
+                                                <a  data-toggle="modal" data-target="#cancel-{{$key}}" class="text-danger ml-4">{{__('manager/sales.cancel_order')}}</a>
+
+                                            @else
+                                                <span class="text-info">No Action Needed!</span>
                                             @endif
-                                            {{-- @if (userInfo()->role=='seller' || userInfo()->role=='manager') --}}
-                                                @if ($order->status=='paid')
-                                                    <a data-toggle="modal" data-target="#reaction-{{$key}}" class="btn btn-primary btn-sm text-white">{{__('manager/sales.paid')}}</a>
-                                                @endif
-                                            {{-- @endif --}}
                                         </td>
                                     </tr>
 
@@ -185,35 +168,38 @@
                                                         </div>
 
                                                     </div>
-                                                    <hr>
-                                                    <br>
-                                                    <h4>{{__('manager/sales.add_price')}}</h4>
-                                                    {{-- <hr> --}}
+                                                    @if ($order->status!='sold')
+                                                        <hr>
+                                                        <br>
+                                                        <h4>{{__('manager/sales.add_price')}}</h4>
+                                                        {{-- <hr> --}}
 
-                                                    <form action="{{ route('manager.pending.order.price')}}" method="post" id="setPriceForm">
-                                                        @csrf
-                                                        <input type="hidden" name="thisName" value="{{Crypt::encrypt($order->id)}}">
+                                                        <form action="{{ route('manager.pending.order.price')}}" method="post" id="setPriceForm-{{$key}}">
+                                                            @csrf
+                                                            <input type="hidden" name="thisName" value="{{Crypt::encrypt($order->id)}}">
 
-                                                        <div class="form-group row">
-                                                            <label for="stock" class="col-sm-3 text-right control-label col-form-label">{{__('manager/sales.cost')}}</label>
-                                                            <div class="col-sm-9">
-                                                                <input type="number" id="cost" class="form-control" placeholder="0" name="cost" required value="{{$order->order_cost}}">
+                                                            <div class="form-group row">
+                                                                <label for="stock" class="col-sm-3 text-right control-label col-form-label">{{__('manager/sales.cost')}}</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="number" id="cost" class="form-control" placeholder="0" name="cost" required value="{{$order->order_cost}}" min="1">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
 
-                                                        <div class="form-group row">
-                                                            <label for="stock" class="col-sm-3 text-right control-label col-form-label">{{__('manager/sales.price')}}</label>
-                                                            <div class="col-sm-9">
-                                                                <input type="number" id="price" class="form-control" placeholder="0" name="price" required value="{{$order->order_cost}}">
+                                                            <div class="form-group row">
+                                                                <label for="stock" class="col-sm-3 text-right control-label col-form-label">{{__('manager/sales.price')}}</label>
+                                                                <div class="col-sm-9">
+                                                                    <input type="number" id="price" class="form-control" placeholder="0" name="price" required value="{{$order->order_cost}}" min="1">
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </form>
-
+                                                        </form>
+                                                    @endif
 
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button onclick="document.getElementById('setPriceForm').submit()" class="btn btn-info waves-effect">{{__('manager/sales.add_price')}}</button>
+                                                    @if ($order->status!='sold')
+                                                        <button s="btn btn-info waves-effect">{{__('manager/sales.add_price')}}</button>
+                                                    @endif
                                                     <button type="button" class="btn btn-danger waves-effect"
                                                         data-dismiss="modal">{{__('manager/sales.cancel')}}</button>
                                                 </div>
@@ -239,14 +225,80 @@
                                                     <h4>{{__('manager/sales.client_feedback_detail')}}</h4>
                                                     {{-- <hr> --}}
 
-                                                    <form action="{{ route('manager.client.request.feedback')}}" method="post" id="feedbackForm">
+                                                    <form action="{{ route('manager.client.request.feedback')}}" method="post" id="reactionForm-{{$key}}">
                                                         @csrf
                                                         <input type="hidden" name="thisName" value="{{Crypt::encrypt($order->id)}}">
                                                     </form>
 
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button onclick="document.getElementById('feedbackForm').submit()" class="btn btn-info waves-effect">{{__('navigation.yes')}}</button>
+                                                    <button onclick="document.getElementById('reactionForm-{{$key}}').submit()" class="btn btn-info waves-effect">{{__('navigation.yes')}}</button>
+                                                    <button type="button" class="btn btn-danger waves-effect"
+                                                        data-dismiss="modal">{{__('navigation.no')}}</button>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+
+                                    {{-- client sell modal --}}
+                                    <div id="sell-{{$key}}" class="modal fade" tabindex="-1" role="dialog"
+                                        aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myModalLabel"><i
+                                                            class="fa fa-exclamation-triangle"></i> {{__('manager/sales.sell')}}</h4>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">×</button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <h4>{{__('manager/sales.sell_message')}}</h4>
+                                                    {{-- <hr> --}}
+
+                                                    <form action="{{ route('manager.pending.order.sell')}}" method="post" id="sellForm-{{$key}}">
+                                                        @csrf
+                                                        <input type="hidden" name="thisName" value="{{Crypt::encrypt($order->id)}}">
+                                                    </form>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button onclick="document.getElementById('sellForm-{{$key}}').submit()" class="btn btn-info waves-effect">{{__('navigation.yes')}}</button>
+                                                    <button type="button" class="btn btn-danger waves-effect"
+                                                        data-dismiss="modal">{{__('navigation.no')}}</button>
+                                                </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+
+                                    {{-- cancel modal --}}
+                                    <div id="cancel-{{$key}}" class="modal fade" tabindex="-1" role="dialog"
+                                        aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myModalLabel"><i
+                                                            class="fa fa-exclamation-triangle"></i> {{__('manager/sales.client_feedback')}}</h4>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">×</button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <h4>{{__('manager/sales.cancel_order_message')}}</h4>
+                                                    {{-- <hr> --}}
+
+                                                    <form action="{{ route('manager.pending.order.cancel') }}" method="post" id="cancelForm-{{$key}}">
+                                                        @csrf
+                                                        <input type="hidden" name="thisName" value="{{Crypt::encrypt($order->id)}}">
+                                                    </form>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button onclick="document.getElementById('cancelForm-{{$key}}').submit()" class="btn btn-info waves-effect">{{__('navigation.yes')}}</button>
                                                     <button type="button" class="btn btn-danger waves-effect"
                                                         data-dismiss="modal">{{__('navigation.no')}}</button>
                                                 </div>
@@ -274,7 +326,7 @@
     <script>
         function exportAll(type)
         {
-            $('#scroll_ver_hor').tableExport({
+            $('#zero_config').tableExport({
                 filename: 'table_%DD%-%MM%-%YY%-month(%MM%)',
                 format: type
             });
