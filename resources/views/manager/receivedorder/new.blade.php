@@ -96,7 +96,7 @@
                                             </td>
                                             <td>
                                                 <input class="form-control" type="date" min="{{date('Y-m-d')}}"
-                                                    name="delivery_date[]" id="inlineCheckbox1" value="{{$order->id}}" required>
+                                                    name="delivery_date[]" id="inlineCheckbox1" value="{{$order->id}}">
                                             </td>
                                             <td>{{$order->order_number}}</td>
                                             <td>{{$order->prescription}}</td>

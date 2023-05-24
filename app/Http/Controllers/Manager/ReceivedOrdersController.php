@@ -32,25 +32,32 @@ class ReceivedOrdersController extends Controller
 
     public function production(Request $request)
     {
-        if (!$request->order) 
+        if (!$request->has('order'))
         {
             return redirect()->back()->with('warningMsg','Please select at least one Order!');
         }
         else
         {
-            for ($i=0; $i < count($request->order); $i++)
-            {
-                $order    =   \App\Models\Order::find($request->order[$i]);
-                $order->status   =   'production';
-                $order->production_date   =   now();
-                $order->expected_delivery   =   $request->delivery_date[$i];
-                $order->save();
-                
-                $product        =   \App\Models\Product::find($order->product_id);
-                $product->stock =   $product->stock - $order->quantity;
-                $product->save();
-            }
-            return redirect()->route('manager.received.order')->with('successMsg','Selected Orders now in production');
+            // if (!$request->delivery_date) {
+                $orders_count   =   0;
+                for ($i=0; $i < count($request->order); $i++)
+                {
+                    $order    =   \App\Models\Order::find($request->order[$i]);
+                    $order->status   =   'production';
+                    $order->production_date   =   now();
+                    $order->expected_delivery   =   $request->delivery_date[$i];
+                    $order->save();
+
+                    $product        =   \App\Models\Product::find($order->product_id);
+                    $product->stock =   $product->stock - $order->quantity;
+                    $product->save();
+                    $orders_count++;
+                }
+                return redirect()->route('manager.received.order')->with('successMsg',$orders_count.' Selected Orders now in production');
+            // } else {
+            //     return redirect()->back()->with('warningMsg','Please add the date!')->withInput();
+            // }
+
         }
     }
 
@@ -63,7 +70,7 @@ class ReceivedOrdersController extends Controller
     // ========= in completed ============
     public function completed(Request $request)
     {
-        if (!$request->order) 
+        if (!$request->order)
         {
             return redirect()->back()->with('warningMsg','Please select at least one Order!');
         }
@@ -74,7 +81,7 @@ class ReceivedOrdersController extends Controller
                 $order    =   \App\Models\Order::find($request->order[$i]);
                 $order->status   =   'completed';
                 $order->completed_date   =   now();
-                $order->save();                
+                $order->save();
             }
             return redirect()->route('manager.received.order')->with('successMsg','Selected Orders now Completed');
         }
@@ -93,7 +100,7 @@ class ReceivedOrdersController extends Controller
     }
     public function delivery (Request $request)
     {
-        if (!$request->order) 
+        if (!$request->order)
         {
             return redirect()->back()->with('warningMsg','Please select at least one Order!');
         }
@@ -106,7 +113,7 @@ class ReceivedOrdersController extends Controller
                 $order->status   =   'delivery ';
                 $order->delivery_date   =   now();
                 $order->save();
-                
+
                 // creating invoices for each select order
                 // =======================================
                 $invoice    =   new \App\Models\OrderInvoice();
