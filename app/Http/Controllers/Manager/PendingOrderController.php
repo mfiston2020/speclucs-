@@ -64,7 +64,7 @@ class PendingOrderController extends Controller
     }
 
     function sellPendingOrder(Request $request){
-        $product  =   Order::where('pending_order_id',Crypt::decrypt($request->thisName))->select('id','order_cost','product_id')->first()->toArray();
+        $product  =   Order::where('pending_order_id',Crypt::decrypt($request->thisName))->select('id','order_cost','product_id','firstname','lastname','patient_number')->first()->toArray();
 
         $invoice_id =   $this->productRepo->sellPendingOrder($product);
 

@@ -212,17 +212,18 @@ class ProductRepo implements ProductInterface{
         $invoice    =   new \App\Models\Invoice();
 
         $invoice->reference_number  =   $reference+1;
+        $invoice->client_name       =   $product['firstname'].' '.$product['lastname'];
+        $invoice->phone             =   $product['patient_number'];
         $invoice->status            =   'pending';
         $invoice->user_id           =   userInfo()->id;
         $invoice->total_amount      =   '0';
         $invoice->company_id        =   userInfo()->company_id;
-
         $invoice->save();
 
         $sold   =   new \App\Models\SoldProduct();
 
         $sold->invoice_id   =   $invoice->id;
-        $sold->product_id   =   $product['id'];
+        $sold->product_id   =   $product['product_id'];
         $sold->quantity     =   '1';
         $sold->unit_price   =   $product['order_cost'];
         $sold->discount     =   '0';

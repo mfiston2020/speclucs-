@@ -198,7 +198,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     @if ($order->status!='sold')
-                                                        <button s="btn btn-info waves-effect">{{__('manager/sales.add_price')}}</button>
+                                                    <button class="btn btn-info waves-effect" onclick="document.getElementById('setPriceForm-{{$key}}').submit()" >{{__('manager/sales.add_price')}}</button>
                                                     @endif
                                                     <button type="button" class="btn btn-danger waves-effect"
                                                         data-dismiss="modal">{{__('manager/sales.cancel')}}</button>
@@ -326,7 +326,7 @@
     <script>
         function exportAll(type)
         {
-            $('#zero_config').tableExport({
+            $('#scroll_ver_hor').tableExport({
                 filename: 'table_%DD%-%MM%-%YY%-month(%MM%)',
                 format: type
             });
