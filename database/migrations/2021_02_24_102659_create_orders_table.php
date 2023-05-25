@@ -16,6 +16,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('supplier_id');
+            $table->foreignId('product_id')->after('id')->nullable()->constrained('products','id')->cascadeOnDelete();
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('type_id');
             $table->unsignedBigInteger('coating_id');
@@ -42,8 +43,8 @@ class CreateOrdersTable extends Migration
             $table->string('quantity');
             $table->string('cost');
             $table->timestamps();
-            
-            
+
+
             // $table->foreign('supplier_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('company_information')->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('lens_types')->onDelete('cascade');

@@ -14,7 +14,6 @@ class AddNamesToOrders extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->foreignId('product_id')->after('id')->nullable()->constrained('products','id')->cascadeOnDelete();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
         });
@@ -29,7 +28,6 @@ class AddNamesToOrders extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             //
-            $table->dropForeign('product_id');
             $table->dropColumn('firstname');
             $table->dropColumn('lastname');
         });
