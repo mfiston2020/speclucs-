@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->foreignId('pending_order_id')->after('id')->nullable()->constrained('pending_orders','id')->cascadeOnDelete();
-            $table->foreignId('product_id')->after('pending_order_id')->nullable()->constrained('products','id')->cascadeOnDelete();
         });
     }
 
@@ -27,7 +26,6 @@ return new class extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeign('product_id');
             $table->dropForeign('pending_order_id');
         });
     }
