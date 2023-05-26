@@ -24,13 +24,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer('manager.includes.layouts.header',function($view)
-        {
-            $count_notification     =   count(\App\Models\SupplierNotify::where('supplier_id',Auth::user()->company_id)->where('status','0')->get());
-            $notifications           =   \App\Models\SupplierNotify::where('supplier_id',Auth::user()->company_id)->where('status','0')->orderBy('created_at','desc')->get();
+        if ($this->app->environment('production')) {
+            \URL::forceScheme('https');
+        }
 
-            $view->with('count_notification',$count_notification)
-                 ->with('notifications',$notifications);
+        view()->composer('manager.includes.layouts.header', function ($view) {
+            $count_notification     =   count(\App\Models\SupplierNotify::where('supplier_id', Auth::user()->company_id)->where('status', '0')->get());
+            $notifications           =   \App\Models\SupplierNotify::where('supplier_id', Auth::user()->company_id)->where('status', '0')->orderBy('created_at', 'desc')->get();
+
+            $view->with('count_notification', $count_notification)
+                ->with('notifications', $notifications);
         });
     }
 }
