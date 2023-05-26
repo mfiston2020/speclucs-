@@ -14,7 +14,8 @@ class CreateSectorsTable extends Migration
     public function up()
     {
         Schema::create('sectors', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_');
+            $table->string('id');
             $table->string('name');
             $table->string('district_id',5);
             $table->timestamps();

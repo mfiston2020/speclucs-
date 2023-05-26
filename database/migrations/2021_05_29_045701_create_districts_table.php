@@ -14,7 +14,8 @@ class CreateDistrictsTable extends Migration
     public function up()
     {
         Schema::create('districts', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_');
+            $table->string('id');
             $table->string('name');
             $table->string('province_id',1);
             $table->timestamps();

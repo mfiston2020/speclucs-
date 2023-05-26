@@ -14,7 +14,8 @@ class CreateCellsTable extends Migration
     public function up()
     {
         Schema::create('cells', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_');
+            $table->string('id');
             $table->string('name');
             $table->string('sector_id',10);
             $table->timestamps();

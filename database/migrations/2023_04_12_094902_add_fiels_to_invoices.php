@@ -33,7 +33,7 @@ return new class extends Migration
             //
             $table->dropColumn('gender');
             $table->dropColumn('dateOfBirth');
-            $table->dropForeign('insurance_id');
+            $table->dropForeign(['insurance_id']);
             $table->dropColumn('insurance_card_number');
         });
     }

@@ -16,7 +16,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('supplier_id');
-            $table->foreignId('product_id')->after('id')->nullable()->constrained('products','id')->cascadeOnDelete();
+            $table->foreignId('product_id')->nullable()->constrained('products','id')->cascadeOnDelete();
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('type_id');
             $table->unsignedBigInteger('coating_id');
