@@ -229,6 +229,7 @@ class AddSaleProduct extends Component
                         $this->lensProduct    =   \App\Models\Product::find($product_id);
                         if (!$this->lensProduct) {
                             $this->emitSelf('product-not-found');
+                            $this->dispatchBrowserEvent('openProductNotFoundModal');
                             $this->showProductDetails   =   false;
                         } else {
                             $this->productID            =   $this->lensProduct[0]->id;
