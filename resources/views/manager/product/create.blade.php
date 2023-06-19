@@ -20,11 +20,11 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Product Category</h4>
+                        <h4 class="card-title">Product & Supplier</h4>
                         <div class="form-group row">
                             {{-- <label for="pname" class="col-sm-3 text-left control-label col-form-label">Product
                                 Category</label> --}}
-                            <div class="col-md-9 col-sm-12">
+                            <div class="col-md-6 col-sm-12">
                                 <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
                                     name="category" id="category" required>
                                     <option value="">Select</option>
@@ -32,6 +32,18 @@
                                     <option value="{{$category->id}}">
                                         {{$category->name}}
                                     </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 col-sm-12">
+                                <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
+                                    name="category" id="supplier">
+                                    <option value="">Select Supplier</option>
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{$supplier->id}}">
+                                            {{$supplier->name}}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -189,7 +201,7 @@
                             <div class="col-md-12" id="eyes">
                                 <div class="form-group row">
 
-                                    
+
 
                                     <div class="col-12">
                                         <div class="form-group">

@@ -25,8 +25,9 @@ class CreateProductsTable extends Migration
             $table->text('description');
             $table->string('stock');
             $table->string('deffective_stock');
-            $table->string('price');
-            $table->string('cost');
+            $table->string('price')->nullable();
+            $table->string('cost')->nullable();
+            $table->string('fitting_cost')->default('0');
             $table->timestamps();
             // ========== Foreign key definition ==================
             $table->foreign('category_id')->references('id')->on('categories')->onUpdate('cascade');

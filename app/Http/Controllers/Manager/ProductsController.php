@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\ProductImport;
 use App\Models\Power;
 use App\Models\Product;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -25,8 +26,9 @@ class ProductsController extends Controller
         $chromatics =   \App\Models\PhotoChromatics::all();
         $coatings   =   \App\Models\PhotoCoating::all();
         $index      =   \App\Models\PhotoIndex::all();
+        $suppliers  =   Supplier::where('company_id',userInfo()->company_id)->get();
 
-        return view('manager.product.create',compact('categories','lens_types','chromatics','coatings','index'));
+        return view('manager.product.create',compact('categories','lens_types','chromatics','coatings','index','suppliers'));
     }
 
     public function save(Request $request)
@@ -69,6 +71,7 @@ class ProductsController extends Controller
                     if (initials($lens_type->name)=='SV')
                     {
                         $product->category_id       =   $request->category;
+                        $product->supplier_id       =   $request->supplier;
                         $product->product_name      =   $lens_type->name;
                         $product->description       =   $description;
                         $product->stock             =   $request->lens_stock[$i];
