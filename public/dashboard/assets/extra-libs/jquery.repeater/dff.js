@@ -53,28 +53,34 @@ function education_fields() {
                                     </div>\
                                     <div class="row col-12 mt-3">\
                                         <!--/span-->\
-                                        <div class="col-md-3">\
+                                        <div class="col-md-2">\
                                             <div class="form-group">\
                                                 <label>Stock</label>\
                                                 <input type="text" class="form-control" name="lens_stock[]" placeholder="Stock" required>\
                                             </div>\
                                         </div>\
-                                        <div class="col-md-3">\
+                                        <div class="col-md-2">\
                                             <div class="form-group">\
                                                 <label>Cost</label>\
                                                 <input type="text" class="form-control" name="lens_cost[]" placeholder="Cost" required>\
                                             </div>\
                                         </div>\
-                                        <div class="col-md-3">\
+                                        <div class="col-md-2">\
                                             <div class="form-group">\
                                                 <label>Price</label>\
                                                 <input type="text" class="form-control" name="lens_price[]" placeholder="Price">\
                                             </div>\
                                         </div>\
-                                        <div class="col-md-3">\
+                                        <div class="col-md-2">\
                                             <div class="form-group">\
                                                 <label>Fitting Cost</label>\
                                                 <input type="text" class="form-control" name="fitting_cost[]" placeholder="Fitting Cost">\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-md-2">\
+                                            <div class="form-group">\
+                                                <label>Location</label>\
+                                                <input type="text" class="form-control" name="location[]" placeholder="Location">\
                                             </div>\
                                         </div><!--/span--></div><hr>';
 

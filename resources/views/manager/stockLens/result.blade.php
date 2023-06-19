@@ -10,7 +10,7 @@
     margin: 1em 0;
     border-collapse: collapse;
     border: 0.1em solid #d6d6d6;
-    
+
   }
 
   caption {
@@ -270,7 +270,7 @@
                               <table id="zero_config" class="table table-striped table-bordered">
                                   <thead>
                                       <tr>
-                                          <th>SPH \ CYL</th>
+                                          <th>SPH \ CYLsdafsd</th>
                                           @for ($i = $cylinder_max; $i >= $cylinder_min; $i=$i-0.25)
                                               <th>{{$i}}</th>
                                           @endfor

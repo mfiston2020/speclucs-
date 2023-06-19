@@ -81,6 +81,7 @@
                         <table id="" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Category</th>
                                     <th>Product</th>
                                     <th>Description</th>
@@ -88,17 +89,18 @@
                                     <th>Price</th>
                                     <th>cost</th>
                                     <th>Stock</th>
-                                    <th>Fitting Cost</th>
+                                    <th>Location</th>
                                     <th>Total Sold</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($products as $product)
+                                @foreach ($products as $key=> $product)
                                 <span hidden>{{$quantity = \App\Models\SoldProduct::where(['product_id'=>$product->id])->where('company_id',Auth::user()->company_id)->select('quantity')->get()}}</span>
                                 @foreach ($quantity as $item)
                                     <span hidden>{{$product_sold   =   $product_sold + $item->quantity}}</span>
                                 @endforeach
                                 <tr>
+                                    <td>{{$product->id}}</td>
                                     <td>{{\App\Models\Category::where(['id'=>$product->category_id])->pluck('name')->first()}}</td>
                                     <td>{{$product->product_name}}</td>
                                     <span hidden>{{$power=\App\Models\Power::where(['product_id'=>$product->id])->where('company_id',Auth::user()->company_id)->select('*')->first()}}</span>
@@ -125,9 +127,13 @@
 
                                         </td>
                                     {{-- <td>{{$product->deffective_stock}}</td> --}}
-                                    <td>{{$product->fitting_cost}}</td>
                                     <td>
-                                        {{$product_sold}}
+                                        <center>
+                                            {{$product->location==null?'-':$product->location}}
+                                        </center>
+                                    </td>
+                                    <td>
+                                        {{number_format($product_sold)}}
                                     </td>
                                 </tr>
                                 <span hidden>{{$product_sold =   0}}</span>
@@ -135,6 +141,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <th>#</th>
                                     <th>Category</th>
                                     <th>Product</th>
                                     <th>Description</th>
@@ -142,7 +149,7 @@
                                     <th>Price</th>
                                     <th>cost</th>
                                     <th>Stock</th>
-                                    <th>Faulty</th>
+                                    <th>Location</th>
                                     <th>Total Sold</th>
                                 </tr>
                             </tfoot>

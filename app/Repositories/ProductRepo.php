@@ -18,6 +18,11 @@ class ProductRepo implements ProductInterface{
     public String $message  =   '';
     public bool $showProductDetails  =   false;
     public $product =   [];
+    private     $products;
+
+    public function __construct() {
+        $this->products = Product::all();
+    }
 
     function searchProduct(array $productDescription)
     {}
@@ -142,7 +147,7 @@ class ProductRepo implements ProductInterface{
         $order  =   new \App\Models\Order();
 
         $order->company_id      =   userInfo()->company_id;
-        // $order->supplier_id     =   $request->supplier;
+        // $order->supplier_id     =   $request['supplier'];
         $order->pending_order_id=   $request['id'];
         $order->supplier_id     =   userInfo()->company_id;
         $order->product_id      =   $product_id;
@@ -236,5 +241,138 @@ class ProductRepo implements ProductInterface{
         } catch (\Throwable $th) {
             return 'Sorry Something Went Wrong! ';
         }
+    }
+
+    // fetching products for matrix
+    function productMatrix(array $request)
+    {
+        $final_results  =   array();
+        $matrix         =   array();
+        $lens_type      =   \App\Models\LensType::all();
+        $index          =   \App\Models\PhotoIndex::all();
+        $chromatics     =   \App\Models\PhotoChromatics::all();
+        $coatings       =   \App\Models\PhotoCoating::all();
+
+        // ==========================================
+        $sphere     =   array();
+        $cylinder   =   array();
+        $add        =   array();
+        $my_array   =   array();
+
+
+        $results    =   DB::table('powers')->select('*')->where('type_id',$request['lens_type'])
+                                            ->where('index_id',$request['index'])
+                                            ->where('chromatics_id',$request['chromatics'])
+                                            ->where('company_id',Auth::user()->company_id)
+                                            ->where('coating_id',$request['coating'])
+                                            ->get();
+
+        if ($results->isEmpty())
+        {
+            return 'No Result Found This search';
+        }
+        else
+        {
+            foreach($results as $result){
+                $sphere[] =   $result->sphere;
+                $cylinder[] =   $result->cylinder;
+                $add[] =   $result->add;
+            }
+
+            $sphere_min =   min(array_unique($sphere));
+            $sphere_max =   max(array_unique($sphere));
+
+            $cylinder_min =   min(array_unique($cylinder));
+            $cylinder_max =   max(array_unique($cylinder));
+
+            $add_min =   min(array_unique($add));
+            $add_max =   max(array_unique($add));
+
+            // ================ getting the value of seleected items ========
+            $lt  =   $request['lens_type'];
+            $ix  =   $request['index'];
+            $chrm  =   $request['chromatics'];
+            $ct  =   $request['coating'];
+
+            $products_id_array   =   array();
+            $type=\App\Models\LensType::where(['id'=>$lt])->pluck('name')->first();
+
+            if (initials($type)!='SV')
+            {
+                for($i = $sphere_min; $i <= $sphere_max; $i=$i+0.25)
+                {
+                    for ($j = $add_min; $j <= $add_max; $j=$j+0.25)
+                    {
+                        $product_id=\App\Models\Power::where(['sphere'=>format_values($i)])
+                                                                      ->where('type_id',$lt)
+                                                                      ->where('index_id',$ix)
+                                                                      ->where('chromatics_id',$chrm)
+                                                                      ->where('coating_id',$ct)
+                                                                      ->where('company_id',Auth::user()->company_id)
+                                                                      ->where(['add'=>format_values($j)])
+                                                                      ->select('product_id','sphere','add')->get();
+                        foreach($product_id as $p_id)
+                        {
+                            // dd($p_id);
+                            array_push($products_id_array,$p_id);
+                        }
+                    }
+                }
+            }
+        }
+
+        $final_results    =   [
+            'lens_type'=>$lens_type,
+            'index'=>$index,
+            'chromatics'=>$chromatics,
+            'coatings'=>$coatings,
+            'results'=>$results,
+            'sphere'=>$sphere,
+            'sphere_max'=>$sphere_max,
+            'sphere_min'=>$sphere_min,
+            'cylinder'=>$cylinder,
+            'cylinder_min'=>$cylinder_min,
+            'cylinder_max'=>$cylinder_max,
+            'lt'=>$lt,
+            'ix'=>$ix,
+            'chrm'=>$chrm,
+            'ct'=>$ct,
+            'add'=>$add,
+            'add_max'=>$add_max,
+            'add_min'=>$add_min,
+            'products_id_array'=>$products_id_array
+        ];
+
+
+        for ($i=$final_results['sphere_max']; $i >= $final_results['sphere_min']; $i=$i-0.25) {
+            $sum_of_all_products    =   0;
+
+            for ($j=$final_results['cylinder_max']; $j >= $final_results['cylinder_min']; $j=$j-0.25) {
+
+                $prdct  =   Power::where('cylinder',format_values($j))->where('company_id',Auth::user()->company_id)->where('sphere',format_values($i))
+                                ->where('type_id',$lt)
+                                ->where('index_id',$ix)
+                                ->where('chromatics_id',$chrm)
+                                ->where('coating_id',$ct)
+                                ->select('product_id')->get();
+
+                foreach ($prdct as $key => $prd) {
+
+                    $stock          =   Product::where('id',$prd->product_id)->pluck('stock')->first();
+                    // dd($i.'-'.$j);
+
+                    $stock_value    =   $stock==null?0:$stock;
+
+                    $sum_of_all_products    =   $sum_of_all_products+$stock_value;
+                }
+
+                $matrix[$i][$j]=$sum_of_all_products;
+                $sum_of_all_products    =   0;
+            }
+
+
+        }
+
+        return $matrix;
     }
 }

@@ -16,6 +16,9 @@
     <form class="form-horizontal" action="{{route('manager.product.save')}}" method="POST">
         @csrf
         <div class="row">
+
+            @include('manager.includes.layouts.message')
+
             {{-- =========== Product category start =============== --}}
             <div class="col-md-12">
                 <div class="card">
@@ -38,7 +41,7 @@
 
                             <div class="col-md-6 col-sm-12">
                                 <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
-                                    name="category" id="supplier">
+                                    name="supplier" id="supplier">
                                     <option value="">Select Supplier</option>
                                     @foreach ($suppliers as $supplier)
                                         <option value="{{$supplier->id}}">

@@ -33,6 +33,8 @@ class ProductsController extends Controller
 
     public function save(Request $request)
     {
+        // return $request->all();
+
         $this->validate($request,[
             'category'=>'required',
         ]);
@@ -79,6 +81,7 @@ class ProductsController extends Controller
                         $product->price             =   $request->lens_price[$i];
                         $product->cost              =   $request->lens_cost[$i];
                         $product->fitting_cost      =   $request->fitting_cost[$i];
+                        $product->location          =   $request->location[$i];
                         $product->company_id        =   Auth::user()->company_id;
                         try {
                             $product->save();
