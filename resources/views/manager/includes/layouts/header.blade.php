@@ -239,36 +239,36 @@
 
 
                     <li class="sidebar-item"><a href="{{route('manager.product')}}" class="sidebar-link"><i
-                        class="mdi mdi-adjust"></i><span class="hide-menu"> Product </span></a>
+                        class="mdi mdi-adjust"></i><span class="hide-menu"> {{__('navigation.product_nav')}} </span></a>
                     </li>
 
                     <li class="sidebar-item"><a href="{{route('manager.receipt')}}" class="sidebar-link"><i
-                            class="mdi mdi-adjust"></i><span class="hide-menu"> (GRN) Receipt
+                            class="mdi mdi-adjust"></i><span class="hide-menu"> {{__('navigation.grn_receipt')}}
                         </span></a>
                     </li>
 
                     <li class="sidebar-item"><a href="{{route('manager.lens.stock',0)}}" class="sidebar-link"><i
-                            class="mdi mdi-adjust"></i><span class="hide-menu"> lens Stock
+                            class="mdi mdi-adjust"></i><span class="hide-menu"> {{__('navigation.lens_stock')}}
                         </span></a>
                     </li>
 
                     <li class="sidebar-item"><a href="{{ route('manager.po')}}" class="sidebar-link"><i
-                                class="mdi mdi-account-convert"></i><span class="hide-menu"> Purchase Order </span></a>
+                                class="mdi mdi-account-convert"></i><span class="hide-menu"> {{__('navigation.purchase_order')}} </span></a>
                     </li>
 
                     <li class="sidebar-item"><a href="{{ route('manager.quations')}}" class="sidebar-link"><i
-                                class="mdi mdi-account-convert"></i><span class="hide-menu"> Quotations</span></a>
+                                class="mdi mdi-account-convert"></i><span class="hide-menu"> {{__('navigation.quotation')}}</span></a>
                     </li>
                 @endif
 
 
                 <!-- User Profile-->
                 @if (userInfo()->permissions=='manager' || userInfo()->permissions=='accountant')
-                    <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Finance Department</span></li>
+                    <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">{{__('navigation.finance_department')}}</span></li>
 
 
                     <li class="sidebar-item"><a href="{{ route('manager.all.invoices')}}" class="sidebar-link"><i
-                                class="mdi mdi-archive"></i><span class="hide-menu"> Invoice </span></a>
+                                class="mdi mdi-archive"></i><span class="hide-menu"> {{__('navigation.invoice')}} </span></a>
                     </li>
 
                     {{-- <li class="sidebar-item"><a href="{{ route('manager.credit')}}" class="sidebar-link"><i
@@ -276,21 +276,21 @@
                     </li> --}}
 
                     <li class="sidebar-item"><a href="{{route('manager.suppliers')}}" class="sidebar-link"><i
-                                class="mdi mdi-truck-delivery"></i><span class="hide-menu"> Suppliers </span></a>
+                                class="mdi mdi-truck-delivery"></i><span class="hide-menu"> {{__('navigation.suppliers')}} </span></a>
                     </li>
 
                     <li class="sidebar-item"><a href="{{ route('manager.clients')}}" class="sidebar-link"><i
-                                class="mdi mdi-account-circle"></i><span class="hide-menu"> Clients </span></a>
+                                class="mdi mdi-account-circle"></i><span class="hide-menu"> {{__('navigation.clients')}} </span></a>
                     </li>
 
                     <li class="sidebar-item"><a href="{{route('manager.expenses')}}" class="sidebar-link"><i
-                        class="mdi mdi-adjust"></i><span class="hide-menu">Operating Expenses
+                        class="mdi mdi-adjust"></i><span class="hide-menu">{{__('navigation.operating_expenses')}}
                     </span></a></li>
                     <li class="sidebar-item"><a href="{{route('manager.income')}}" class="sidebar-link"><i
-                                class="mdi mdi-adjust"></i><span class="hide-menu">Other Income </span></a>
+                                class="mdi mdi-adjust"></i><span class="hide-menu">{{__('navigation.other_income')}} </span></a>
                     </li>
                     <li class="sidebar-item"><a href="{{route('manager.payment')}}" class="sidebar-link"><i
-                                class="mdi mdi-adjust"></i><span class="hide-menu"> Supplier Payment </span></a>
+                                class="mdi mdi-adjust"></i><span class="hide-menu"> {{__('navigation.supplier_payment')}} </span></a>
                     </li>
                 @endif
 
@@ -299,17 +299,17 @@
                 @if (userInfo()->permissions=='manager' || userInfo()->permissions=='accountant')
                     <!-- User Profile-->
                     @if (userInfo()->permissions=='manager')
-                        <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Administration Department</span></li>
+                        <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">{{__('navigation.administration_department')}}</span></li>
 
 
                         <li class="sidebar-item"><a href="{{route('manager.users')}}" class="sidebar-link"><i
-                            class="mdi mdi-account-multiple"></i><span class="hide-menu"> Users </span></a>
+                            class="mdi mdi-account-multiple"></i><span class="hide-menu"> {{__('navigation.users')}} </span></a>
                         </li>
                     @endif
 
                     @if (userInfo()->permissions=='manager' || userInfo()->permissions=='accountant')
                         <li class="sidebar-item"><a href="{{route('manager.report')}}" class="sidebar-link"><i
-                                    class="mdi mdi-note-multiple"></i><span class="hide-menu"> Reports </span></a>
+                                    class="mdi mdi-note-multiple"></i><span class="hide-menu"> {{__('navigation.report')}} </span></a>
                         </li>
                     @endif
                 @endif
@@ -317,11 +317,11 @@
 
                 @if (userInfo()->permissions=='manager' || userInfo()->permissions=='lab')
                     <!-- User Profile-->
-                    <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Laboratory Department</span></li>
+                    <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">{{__('navigation.laboratory_department')}}</span></li>
 
 
                     <li class="sidebar-item"><a href="{{route('manager.received.order')}}" class="sidebar-link"><i
-                        class="mdi mdi-flask"></i><span class="hide-menu"> Laboratory </span></a>
+                        class="mdi mdi-flask"></i><span class="hide-menu"> {{__('navigation.laboratory')}} </span></a>
                     </li>
                     {{-- <li class="sidebar-item"><a href="{{ route('manager.cutomerInvoice')}}" class="sidebar-link"><i
                         class="mdi mdi-archive"></i><span class="hide-menu"> Statement Invoice </span></a>
@@ -332,13 +332,13 @@
                     @if (\App\Models\CompanyInformation::where('id',Auth::user()->company_id)->pluck('is_clinic')->first()=='1')
                         <!-- User Profile-->
                         <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i>
-                            <span class="hide-menu">CLINIC DEPARTMENT</span>
+                            <span class="hide-menu">{{__('navigation.clinic_department')}}</span>
                         </li>
 
                         <li class="sidebar-item">
                             <a href="{{ route('manager.patients')}}" class="sidebar-link">
                                 <i class="mdi mdi-hospital"></i>
-                                <span class="hide-menu"> Patients </span>
+                                <span class="hide-menu"> {{__('navigation.patient')}} </span>
                             </a>
                         </li>
                     @endif

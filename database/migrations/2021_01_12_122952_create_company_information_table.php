@@ -24,6 +24,7 @@ class CreateCompanyInformationTable extends Migration
             $table->string('company_tin_number')->nullable();
             $table->string('is_clinic',20)->nullable();
             $table->string('sms_quantity',20)->default('0');
+            $table->string('can_send_sms',2)->nullable();
             $table->timestamps();
         });
     }

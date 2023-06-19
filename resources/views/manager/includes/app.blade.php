@@ -15,6 +15,7 @@
     <link href="{{ asset('dashboard/assets/extra-libs/c3/c3.min.css')}}" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="{{ asset('dashboard/assets/dist/css/style.min.css')}}" rel="stylesheet">
+    {{-- <link rel="stylesheet" href="{{ asset('dashboard/assets/dist/css/custom-style.min.css') }}"> --}}
     @stack('css')
     @livewireStyles
     <!-- Global site tag (gtag.js) - Google Analytics -->

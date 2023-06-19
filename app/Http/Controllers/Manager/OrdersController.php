@@ -39,7 +39,7 @@ class OrdersController extends Controller
     public function placeOrder(Request $request)
     {
         $company_id =   Auth()->user()->company_id;
-        $product_from_stock =   $this->fetchSupplierProduct($request);
+        $product_from_stock =   $this->fetchSupplierProduct($request)->toArray();
 
         // return $product_from_stock;
 
@@ -50,7 +50,7 @@ class OrdersController extends Controller
         // if (!$request->pid) {
         //     return redirect()->back()->withInput()->with('warningMsg', 'this product was not found to this suplier!');
         // }
-        
+
         $this->validate($request, [
             'order_number' => 'unique:orders',
             'patient_number' => 'required',
@@ -79,7 +79,7 @@ class OrdersController extends Controller
         $order->supplier_id     =   Auth::user()->company_id;
         $order->type_id         =   $request->type;
         $order->coating_id      =   $request->coating;
-        $order->product_id      =   $request->pid;
+        $order->product_id      =   $product_from_stock['id'];
         $order->index_id        =   $request->coating;
         $order->chromatic_id    =   $request->chromatic;
         $order->order_number    =   $request->order_number;
@@ -88,7 +88,7 @@ class OrdersController extends Controller
         $order->lastname        =   $request->lastname;
         $order->invoice_date    =   date('Y-m-d');
         $order->prescription    =   $request->prescription_hospital;
-        $order->order_cost      =   $request->cost;
+        $order->order_cost      =   $product_from_stock['price'];
         $order->frame_id        =   $request->frame;
         $order->status          =   'submitted';
         $order->quantity        =   '1';
@@ -105,29 +105,38 @@ class OrdersController extends Controller
         $order->comment     =   $request->comment;
 
         try {
-            $power          =   \App\Models\Power::where(['product_id' => $request->pid])->select('*')->first();
+            $power          =   \App\Models\Power::where(['product_id' => $product_from_stock['id']])->select('*')->first();
             $company        =   \App\Models\CompanyInformation::find($company_id);
             $this_company   =   \App\Models\CompanyInformation::find(Auth::user()->company_id);
 
-            $product           =   \App\Models\Product::find($request->pid);
+            // return $product;
 
-            if (initials($product->product_name) == 'SV') {
-                $lenPower   =   $product->description . " " . $power->sphere . " / " . $power->cylinder;
+            $product           =   \App\Models\Product::find($product_from_stock['id']);
+            // return initials($product->product_name);
+
+            if ($product) {
+
+                if (initials($product->product_name) == 'SV') {
+                    $lenPower   =   $product->description . " " . $power->sphere . " / " . $power->cylinder;
+                } else {
+                    $lenPower   =   $product->description . " " . $power->sphere . " / " . $power->cylinder . " * " . $power->axis . " " . $power->add;
+                }
+
+                // Notification::route('mail', $company->company_email)->notify(new OrderPlaced($this_company->company_name,$lenPower));
+                $order->save();
+
+                $notification   =   new \App\Models\SupplierNotify();
+                $notification->company_id   =   Auth::user()->company_id;
+                $notification->supplier_id  =   $company_id;
+                $notification->order_id     =   $order->id;
+                $notification->notification  =   'New Order Received';
+                $notification->save();
+
+                return redirect()->route('manager.order')->with('successMsg', ' Order Successfully Placed! the supplier will notify you at any change!');
             } else {
-                $lenPower   =   $product->description . " " . $power->sphere . " / " . $power->cylinder . " * " . $power->axis . " " . $power->add;
+                return redirect()->back()->with('warningMsg', 'Product not Found!')->withInput();
             }
 
-            // Notification::route('mail', $company->company_email)->notify(new OrderPlaced($this_company->company_name,$lenPower));
-            $order->save();
-
-            $notification   =   new \App\Models\SupplierNotify();
-            $notification->company_id   =   Auth::user()->company_id;
-            $notification->supplier_id  =   $company_id;
-            $notification->order_id     =   $order->id;
-            $notification->notification  =   'New Order Received';
-            $notification->save();
-
-            return redirect()->route('manager.order')->with('successMsg', ' Order Successfully Placed! the supplier will notify you at any change!');
         } catch (\Throwable $th) {
             return redirect()->back()->withInput()->with('errorMsg', 'Something Went Wrong!' . $th);
         }
@@ -155,34 +164,35 @@ class OrdersController extends Controller
 
         if (initials($type->name) == 'SV') {
             $product_id     =   \App\Models\Power::where('type_id', $type->id)
-                ->where('index_id', $request->index)
-                ->where('chromatics_id', $request->chromatic)
-                ->where('coating_id', $request->coating)
-                ->where('sphere', format_values($request->sphere_right))
-                ->where('cylinder', format_values($request->cylinder_right))
-                ->where('eye', 'any')
-                ->where('company_id', $company_id)
-                ->pluck('product_id')->first();
+                                                ->where('index_id', $request->index)
+                                                ->where('chromatics_id', $request->chromatic)
+                                                ->where('coating_id', $request->coating)
+                                                ->where('sphere', format_values($request->sphere_right))
+                                                ->where('cylinder', format_values($request->cylinder_right))
+                                                ->where('eye', 'any')
+                                                ->where('company_id', $company_id)
+                                                ->pluck('product_id')->first();
 
                 $product    =   \App\Models\Product::find($product_id);
 
-                return response()->json($product);
+                return $product;
         } else {
             $product_id     =   \App\Models\Power::where('type_id', $type->id)
-                ->where('index_id', $request->index)
-                ->where('chromatics_id', $request->chromatics)
-                ->where('coating_id', $request->coating)
-                ->where('sphere', format_values($request->sphere))
-                ->where('cylinder', format_values($request->cylinder))
-                ->where('axis', format_values($request->axis))
-                ->where('add', format_values($request->add))
-                ->where('eye', $request->eye)
-                ->where('company_id', Auth::user()->company_id)
-                ->select('product_id')->first();
+                                                ->where('index_id', $request->index)
+                                                ->where('chromatics_id', $request->chromatics)
+                                                ->where('coating_id', $request->coating)
+                                                ->where('sphere', format_values($request->sphere))
+                                                ->where('cylinder', format_values($request->cylinder))
+                                                ->where('axis', format_values($request->axis))
+                                                ->where('add', format_values($request->add))
+                                                ->where('eye', $request->eye)
+                                                ->where('company_id', Auth::user()->company_id)
+                                                ->select('product_id')->first();
 
                 $product    =   \App\Models\Product::find($product_id);
 
-                return response()->json($product);
+                return $product;
+                // return response()->json($product);
             // $product    =   $request->all();
         }
         // return response()->json($product);

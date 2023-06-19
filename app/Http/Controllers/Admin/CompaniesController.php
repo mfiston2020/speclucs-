@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Hash;
-use Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 
 class CompaniesController extends Controller
 {
@@ -51,11 +50,12 @@ class CompaniesController extends Controller
             $id     =   $company->id;
 
             $user->company_id   =   $id;
-            $user->name   = $request->director_name;
-            $user->email   =   $request->director_email;
-            $user->role   =   'manager';
-            $user->phone   =   $request->director_phone;
-            $user->password   =   Hash::make($request->director_phone);
+            $user->name         = $request->director_name;
+            $user->email        =   $request->director_email;
+            $user->role         =   'manager';
+            $user->permissions  =   'manager';
+            $user->phone        =   $request->director_phone;
+            $user->password     =   Hash::make($request->director_phone);
 
 
             try {
@@ -81,8 +81,8 @@ class CompaniesController extends Controller
         }
 
         $company->status    =   'disabled';
-        
-        try 
+
+        try
         {
             $company->save();
             return redirect()->back()->with('successMsg','The Company has been successfully De Activated!');
@@ -102,8 +102,8 @@ class CompaniesController extends Controller
         }
 
         $company->status    =   'active';
-        
-        try 
+
+        try
         {
             $company->save();
             return redirect()->back()->with('successMsg','The Company has been successfully Activated!');
@@ -122,7 +122,7 @@ class CompaniesController extends Controller
         $sms_state      =   $request->sms;
         $sms            =   (int)$company->sms_quantity + (int)$request->additional_sms;
 
-        if ($clinic_state) 
+        if ($clinic_state)
         {
             $clinic_state  =   '1';
         }
@@ -130,7 +130,7 @@ class CompaniesController extends Controller
             $clinic_state  =   '0';
         }
 
-        if ($sms_state) 
+        if ($sms_state)
         {
             $sms_state  =   '1';
         }
@@ -141,7 +141,7 @@ class CompaniesController extends Controller
         $company->is_clinic =   $clinic_state;
         $company->can_send_sms  =   $sms_state;
         $company->sms_quantity  =   $sms;
-        try 
+        try
         {
             $company->save();
             return redirect()->back()->with('successMsg','The Company Settings has been successfully Updated!');

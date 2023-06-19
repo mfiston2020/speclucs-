@@ -59,7 +59,6 @@ class ProductsController extends Controller
                                             ->where('add',format_values($request->add[$i]))
                                             ->where('eye',initials($lens_type->name)=='SV'?'any':$request->eye[$i])->first();
 
-
                 $prdt   =   $product_exists==null?null:Product::where('id',$product_exists->id)->first();
 
                 if ($product_exists && $prdt->cost==$request->lens_cost[$i])
@@ -175,7 +174,16 @@ class ProductsController extends Controller
 
         try {
             Excel::import(new ProductImport(),$request->excelFile);
-            return redirect()->route('manager.product')->with('successMsg','Importing successful');
+
+            $count  =   session('countSkippedImport');
+
+            if ($count>0) {
+                return redirect()->route('manager.product')->with('successMsg','Importing successful skipped '.$count.' Duplicates');
+            } else {
+                return redirect()->route('manager.product')->with('successMsg','Importing successful');
+            }
+
+
         } catch (\Throwable $th) {
             return redirect()->back()->with('errorMsg','Oops! something Went Wrong!');
         }

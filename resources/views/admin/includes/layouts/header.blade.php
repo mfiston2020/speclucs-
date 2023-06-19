@@ -69,7 +69,7 @@
                         aria-labelledby="navbarDropdown2">
                         <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-us"></i> English</a>
                         <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-fr"></i> French</a>
-                        <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-es"></i> Kinyarwanda</a>
+                        <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-rw"></i> Kinyarwanda</a>
                     </div>
                 </li>
                 <!-- ============================================================== -->

@@ -31,9 +31,16 @@
                         </label>
                         <input class="form-control" type="file" id="excelFile" name="excelFile">
 
+                        <div class="flex w-full justify-between">
+                            <a href="{{asset('dashboard/Lenses upload format.xlsx')}}" type="submit" class="btn btn-primary rounded-pill px-4 mt-5" download="lens Format">
+                                Download Template
+                            </a>
+
                             <button type="submit" class="btn btn-success rounded-pill px-4 mt-5">
                                 Import
                             </button>
+                        </div>
+
                         </div>
                     </div>
                 </form>
