@@ -113,6 +113,15 @@
                                     value="{{old('price')}}">
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label for="price"
+                                class="col-sm-3 text-right control-label col-form-label invalid">Price</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="location" placeholder="Location Here" name="location"
+                                    value="{{old('location')}}">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

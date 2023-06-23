@@ -90,6 +90,7 @@
                                     <th>cost</th>
                                     <th>Stock</th>
                                     <th>Location</th>
+                                    <th>Supplier</th>
                                     <th>Total Sold</th>
                                 </tr>
                             </thead>
@@ -133,6 +134,11 @@
                                         </center>
                                     </td>
                                     <td>
+                                        <center>
+                                            {{$product->supplier_id==null?'-':\App\Models\Supplier::where('id',$product->supplier_id)->pluck('name')->first()}}
+                                        </center>
+                                    </td>
+                                    <td>
                                         {{number_format($product_sold)}}
                                     </td>
                                 </tr>
@@ -150,6 +156,7 @@
                                     <th>cost</th>
                                     <th>Stock</th>
                                     <th>Location</th>
+                                    <th>Supplier</th>
                                     <th>Total Sold</th>
                                 </tr>
                             </tfoot>
