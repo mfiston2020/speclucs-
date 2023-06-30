@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->foreignId('supplier_id')->nullable()->after('company_id')->constrained('suppliers','id')->cascadeOnDelete();
-            $table->string('location',25)->nullable()->after('fitting_cost');
+            // $table->foreignId('supplier_id')->nullable()->after('company_id')->constrained('suppliers','id')->cascadeOnDelete();
+            // $table->string('location',25)->nullable()->after('fitting_cost');
         });
     }
 
@@ -27,8 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropForeign('supplier_id');
-            $table->dropColumn('location');
+            // $table->dropForeign('supplier_id');
+            // $table->dropColumn('location');
         });
     }
 };

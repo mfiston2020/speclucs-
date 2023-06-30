@@ -225,7 +225,7 @@
                                                     <h4>{{__('manager/sales.client_feedback_detail')}}</h4>
                                                     {{-- <hr> --}}
 
-                                                    <form action="{{ route('manager.client.request.feedback')}}" method="post" id="reactionForm-{{$key}}">
+                                                    <form action="{{ route('manager.sell.na.product')}}" method="post" id="reactionForm-{{$key}}">
                                                         @csrf
                                                         <input type="hidden" name="thisName" value="{{Crypt::encrypt($order->id)}}">
                                                     </form>

@@ -11,6 +11,7 @@ use App\Models\PhotoCoating;
 use App\Models\PhotoIndex;
 use App\Models\Product;
 use App\Models\SoldProduct;
+use App\Models\UnavailableProduct;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -70,6 +71,7 @@ class AddSaleProduct extends Component
 
     // get all prducts related to this invoice variable
     public $invoiceProduct;
+    public $notAvailableStockProducts;
 
     // insurance
     public $allInsurances;
@@ -117,6 +119,111 @@ class AddSaleProduct extends Component
             $this->insurance_percentage =   100;
             $this->insurance_payment    =   0;
             $this->hide_insurance_details =  'yes';
+        }
+    }
+
+    // adding unavailable products into the database
+    function addUnavailableProducts()
+    {
+
+        $validatedData  = $this->validate(
+            [
+                'invoice_id'    => 'required',
+                // 'productID'     => 'required',
+                // 'proquantity'           => 'required',
+                // 'product_unit_price'    => 'required',
+                // 'prodiscount'           => 'required',
+                // 'insurance_type'        => 'required',
+                // 'product_total_amount'  => 'required',
+                // 'insurance_percentage'  => 'required',
+            ]
+        );
+
+        if ($this->singleExistingCustomer) {
+
+            Invoice::find($validatedData['invoice_id'])->update([
+                'client_id' => null,
+                'client_name' => null,
+                'phone' => null,
+            ]);
+
+            Invoice::find($validatedData['invoice_id'])->update([
+                'client_id' => $this->singleExistingCustomer->id
+            ]);
+        }
+
+        if ($this->customerType == 'new') {
+            Invoice::find($validatedData['invoice_id'])->update([
+                'client_id' => null,
+                'client_name' => $this->firstname . ' ' . $this->lastname,
+                'phone' => $this->phone,
+                'tin_number' => $this->tin_number,
+                'gender' => $this->gender,
+                'dateOfBirth' => $this->date_of_birth,
+            ]);
+        }
+
+
+        $_product   =   UnavailableProduct::where('company_id', Auth::user()->company_id)->get();
+        $existing_product   =  0;
+
+        foreach ($_product as $key => $item) {
+            if ($validatedData['productID'] == $item->product_id && $validatedData['invoice_id'] == $item->invoice_id) {
+                $existing_product   =   1;
+                $id                 =   $item->id;
+            }
+        }
+
+        if ($existing_product == 0) {
+            if ($this->rightEye == true) {
+                $this->eye  =   'right';
+            }
+            if ($this->leftEye == true) {
+                $this->eye  =   'left';
+            }
+            else{
+                $this->eye='any';
+            }
+
+            $sold   =   new UnavailableProduct();
+
+            $sold->company_id   =   Auth::user()->company_id;
+            $sold->invoice_id   =   $validatedData['invoice_id'];
+
+            $sold->type_id      =   $this->type;
+            $sold->coating_id   =   $this->coating;
+            $sold->index_id     =   $this->index;
+            $sold->chromatic_id =   $this->chromatic;
+
+
+            $sold->eye       =   $this->eye;
+            $sold->sphere    =   $this->sphere;
+            $sold->cylinder  =   $this->cylinder;
+            $sold->axis      =   $this->axis;
+            $sold->addition  =   $this->addition;
+
+            try {
+                $sold->save();
+                $this->resetInput();
+                $this->emitSelf('product-added');
+                $this->dispatchBrowserEvent('hideProductNotFoundModal');
+            } catch (\Throwable $th) {
+                return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
+            }
+        } else {
+            $product = \App\Models\SoldProduct::find($id);
+
+            $product->quantity        =   $validatedData['proquantity'] + $product->quantity;
+
+            try {
+                $product->save();
+
+                $this->resetInput();
+                $this->emitSelf('product-added');
+                $this->dispatchBrowserEvent('hideProductNotFoundModal');
+            } catch (\Throwable $th) {
+                return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
+            }
         }
     }
 
@@ -175,6 +282,7 @@ class AddSaleProduct extends Component
         $order->save();
 
         $product    =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'pending')->orderBy('created_at', 'desc')->first();
+
         $product->delete();
 
         $notification   =   new \App\Models\SupplierNotify();
@@ -310,7 +418,6 @@ class AddSaleProduct extends Component
     // saving the product
     function saveSoldProduct()
     {
-
         $validatedData  = $this->validate(
             [
                 'invoice_id'    => 'required',
@@ -401,11 +508,11 @@ class AddSaleProduct extends Component
         }
     }
 
-
     //function get all prducts related to this invoice
     function getAllInvoiceProduct()
     {
-        $this->invoiceProduct   =   SoldProduct::where('invoice_id', $this->invoice_id)->get();
+        $this->invoiceProduct               =   SoldProduct::where('invoice_id', $this->invoice_id)->get();
+        $this->notAvailableStockProducts    =   UnavailableProduct::where('invoice_id',$this->invoice_id)->get();
     }
 
     // removing one of the saved product
@@ -414,6 +521,13 @@ class AddSaleProduct extends Component
         SoldProduct::find($id)->delete();
         $this->getAllInvoiceProduct();
     }
+    // removing one of the unavailable product
+    function removeUnavailableProduct($id)
+    {
+        UnavailableProduct::find($id)->delete();
+        $this->getAllInvoiceProduct();
+    }
+
 
     // rest fields
     function resetInput()

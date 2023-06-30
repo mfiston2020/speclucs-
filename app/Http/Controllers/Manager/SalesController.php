@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\UnavailableProduct;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
@@ -104,9 +105,12 @@ class SalesController extends Controller
         $id =   Crypt::decrypt($id);
 
         $invoice    =   \App\Models\Invoice::find($id);
-        $products   =   DB::table('sold_products')->select('*')->where('invoice_id','=',$id)->get();
+        $products   =   DB::table('sold_products')->select('*')->where('invoice_id',$id)->get();
 
-        return view('manager.sales.detail',compact('invoice','products'));
+        $na_products    =   UnavailableProduct::where('invoice_id',$id)->whereIn('status',['pending','approved'])->get();
+        $has_na_products=   UnavailableProduct::where('invoice_id',$id)->where('status','sold')->count();
+
+        return view('manager.sales.detail',compact('invoice','products','na_products','has_na_products'));
     }
 
     public function addSalesProduct($id)
@@ -232,6 +236,14 @@ class SalesController extends Controller
     {
         $id =   Crypt::decrypt($id);
 
+        $na_products    =   UnavailableProduct::where('invoice_id',$id)->get();
+
+        foreach ($na_products as $key => $value) {
+            if ($value->status=='pending') {
+                return redirect()->back()->withInput()->with('warningMsg','Some Products still need to be approved! ');
+            }
+        }
+
         $quantity   =   0;
         $allProducts    =   \App\Models\SoldProduct::where(['invoice_id'=>$id])->where('company_id',Auth::user()->company_id)->select('*')->get();
 
@@ -257,10 +269,11 @@ class SalesController extends Controller
                 return redirect()->back()->with('warningMsg','The product \''.$product_stock->product_name.'\' does not have enough stock. Only has '.$product_stock->stock.' units.');
             }
             else{
-                $product_stock->stock   =   $product_stock->stock-$product_;
-                $product_stock->save();
+                if (!UnavailableProduct::where('product_id',$product)->where('invoice_id',$id)->exists()) {
+                    $product_stock->stock   =   $product_stock->stock-$product_;
+                    $product_stock->save();
+                }
             }
-            $quantity   =   0;
         }
         // ==============
 
@@ -439,18 +452,4 @@ class SalesController extends Controller
             return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
         }
     }
-
-    // public function send_lab_form($id)
-    // {
-    //     $suppliers  =   \App\Models\User::where('role','manager')->where('supplier_state','1')->select('*')->get();
-
-    //     $lens_types =   \App\Models\LensType::all();
-    //     $chromatics =   \App\Models\PhotoChromatics::all();
-    //     $coatings   =   \App\Models\PhotoCoating::all();
-    //     $index      =   \App\Models\PhotoIndex::all();
-
-    //     $customer   =   \App\Models\
-
-    //     return view('manager.sales.send-lab-form',compact('suppliers','lens_types','chromatics','coatings','index'));
-    // }
 }

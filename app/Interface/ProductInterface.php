@@ -12,5 +12,5 @@ interface ProductInterface{
 
     function makeLabOrder(array $request,string $product_id);
 
-    function saveProduct(array $request,string $category,array $pending);
+    function saveProduct(array $request,string $category,array $pending,bool $isOrder);
 }

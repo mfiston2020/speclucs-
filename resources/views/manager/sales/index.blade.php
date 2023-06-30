@@ -60,13 +60,13 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Date</th>
-                                    <th>Order</th>
-                                    <th>Reference #</th>
-                                    <th>Customer</th>
+                                    <th>{{__('manager/sales.date')}}</th>
+                                    <th>{{__('manager/sales.order')}}</th>
+                                    <th>{{__('manager/sales.reference_number')}} #</th>
+                                    <th>{{__('manager/sales.customer')}}</th>
                                     <th>User</th>
                                     {{-- <th>Products</th> --}}
-                                    <th>Ins</th>
+                                    <th>{{__('manager/sales.ins')}}</th>
                                     <th>T. Amnt</th>
                                     <th>Ins Due Amnt</th>
                                     <th>Pt Due Amnt</th>

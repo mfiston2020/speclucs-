@@ -217,8 +217,15 @@
                     <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i>
                         <span class="hide-menu">{{ __('navigation.dispensing_dept') }}</span></li>
 
-                    <li class="sidebar-item"><a href="{{ route('manager.sales')}}" class="sidebar-link"><i
-                                class="mdi mdi-adjust"></i><span class="hide-menu"> {{ __('navigation.sales') }} </span></a>
+                    <li class="sidebar-item">
+                        <a href="{{ route('manager.sales')}}" class="sidebar-link">
+                            <i class="mdi mdi-adjust"></i>
+                            <span class="hide-menu"> {{ __('navigation.sales') }} </span>
+
+                        @if ($pending_product_on_invoice>0)
+                            <span class="badge badge-danger badge-pill ml-2"> {{$pending_product_on_invoice}}</span>
+                        @endif
+                        </a>
                     </li>
 
                     <li class="sidebar-item"><a href="{{route('manager.order')}}" class="sidebar-link"><i
@@ -235,8 +242,10 @@
 
                 @if (userInfo()->permissions=='manager' || userInfo()->permissions=='store')
                 <!-- User Profile-->
-                    <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">{{ __('navigation.stock_dept') }}</span></li>
-
+                    <li class="nav-small-cap">
+                        <i class="mdi mdi-dots-horizontal"></i>
+                        <span class="hide-menu">{{ __('navigation.stock_dept') }} </span>
+                    </li>
 
                     <li class="sidebar-item"><a href="{{route('manager.product')}}" class="sidebar-link"><i
                         class="mdi mdi-adjust"></i><span class="hide-menu"> {{__('navigation.product_nav')}} </span></a>

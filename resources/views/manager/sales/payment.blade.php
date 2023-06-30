@@ -16,7 +16,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Payment of 
+                    <h4 class="card-title">Payment of
                         <strong>#{{sprintf('%04d',$product->reference_number)}}</strong>
                     </h4>
 
@@ -46,8 +46,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="pname" class="col-sm-3 text-right control-label col-form-label">payment Method
-                                </label>
+                            <label for="pname" class="col-sm-3 text-right control-label col-form-label">payment Method</label>
                             <div class="col-sm-9">
                                 <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
                                     name="payment" id="payment" required>
@@ -57,7 +56,7 @@
                                             {{$payment->name}}
                                         </option>
                                     @endforeach
-                                    
+
                                 </select>
                             </div>
                         </div>
@@ -105,7 +104,7 @@
 @push('scripts')
 
 <script>
-    
+
     $('#amount_paid').on('input',function(){
         var paid             =   $(this).val();
         var total_amount    =   $('#balance').val();

@@ -28,7 +28,7 @@ class ProductRepo implements ProductInterface{
     {}
 
     // save products
-    function saveProduct(array $request,string $category,array $pending)
+    function saveProduct(array $request,string $category,array $pending,bool $isOrder=false)
     {
         if ($category=='1' && $category!=null)
         {
@@ -41,15 +41,22 @@ class ProductRepo implements ProductInterface{
             $coating    =   \App\Models\PhotoCoating::find($request['coating_id']);
 
 
-            $axis       =   $request['axis_r'] || $request['axis_l'];
-            $sphere     =   $request['sphere_r'] || $request['sphere_l'];
-            $cylinder   =   $request['cylinder_r']|| $request['cylinder_l'];
-            $add        =   $request['addition_r'] || $request['addition_l'];
-            $eye        =   $request['axis_r']?'right':'left';
+            if ($isOrder) {
+                $eye        =   $request['eye'];
+                $axis       =   $request['axis'];
+                $sphere     =   $request['sphere'];
+                $cylinder   =   $request['cylinder'];
+                $add        =   $request['addition'];
+            }
+            else{
+                $axis       =   $request['axis_r'] || $request['axis_l'];
+                $sphere     =   $request['sphere_r'] || $request['sphere_l'];
+                $cylinder   =   $request['cylinder_r']|| $request['cylinder_l'];
+                $add        =   $request['addition_r'] || $request['addition_l'];
+                $eye        =   $request['axis_r']?'right':'left';
+            }
 
             $description    =   initials($lens_type['name'])." ".$index['name']." ".$chromatic['name']." ".$coating['name'];
-
-            // dd($pending);
 
             // checking the existance of the product
             $product_exists =   Power::where('type_id',$lens_type->id)

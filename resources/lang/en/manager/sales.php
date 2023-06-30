@@ -18,4 +18,17 @@ return [
     'client_feedback_detail'=>'Did the client confirm the request?',
     'pending_orders'=>'Pending Requests',
     'request_processing'=>'Requesting...',
+
+    // sales table
+    'date'=>'Date',
+    'order'=>'Order',
+    'reference_number'=>'Reference',
+    'customer'=>'Customer',
+    'user'=>'User',
+    'ins'=>'Ins',
+    't_amount'=>'T. Amount',
+    'ins_due_amount'=>'Ins Due Amount',
+    'pt_due_amount'=>'Pt. Due Amount',
+    'status'=>'Status'
+
 ];

@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\PendingOrder;
+use App\Models\Product;
+use App\Models\SoldProduct;
+use App\Models\UnavailableProduct;
 use App\Repositories\ProductRepo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
 class PendingOrderController extends Controller
@@ -88,5 +92,69 @@ class PendingOrderController extends Controller
             //throw $th;
             return redirect()->back()->with('errorMsg','Oops! Something Went Wrong!'.$th);
         }
+    }
+
+    function adjustPrice(Request $request){
+
+        $order  =   UnavailableProduct::findOrFail(Crypt::decrypt($request->thisName));
+        $order->price   =   $request->price;
+        $order->cost    =   $request->cost;
+        $order->status  =   'approved';
+        try {
+            $order->save();
+            return redirect()->back()->with('successMsg','Price set!');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->back()->with('errorMsg','Something went Wrong!');
+        }
+    }
+
+    function sellProduct(Request $request){
+
+        $order  =   UnavailableProduct::findOrFail(Crypt::decrypt($request->thisName));
+        try {
+
+            $newProduct = $this->productRepo->saveProduct($order->toArray(),'1',$order->toArray(),true);
+
+            $sold               =   new SoldProduct();
+            $sold->invoice_id   =   $order->invoice_id;
+            $sold->product_id   =   $newProduct->id;
+            $sold->quantity     =   $order->quantity;
+            $sold->unit_price   =   $order->price;
+            $sold->discount     =   '0';
+            $sold->total_amount =   $order->price;
+            $sold->company_id   =   Auth::user()->company_id;
+            $sold->save();
+
+            $order->status      =   'sold';
+            $order->product_id  =   $newProduct->id;
+            $order->save();
+
+            return redirect()->back()->with('successMsg','Product Sold!');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->back()->with('errorMsg','Something went Wrong!'.$th);
+        }
+    }
+
+    function sellProductOff($id){
+        $naProducts =   UnavailableProduct::where('invoice_id',Crypt::decrypt($id))->get();
+
+        foreach ($naProducts as $key => $value) {
+
+            $product_stock          =   Product::find($value->product_id);
+            $product_stock->stock   =   $product_stock->stock-$value->quantity;
+            try {
+                $product_stock->save();
+
+                $value->status =   'completed';
+                $value->save();
+            } catch (\Throwable $th) {
+                return redirect()->back()->with('errorMsg','Something Went Wrong!');
+            }
+        }
+
+        return redirect()->back()->with('successMsg','Product Sold Off!');
+
     }
 }

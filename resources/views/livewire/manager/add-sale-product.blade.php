@@ -639,13 +639,13 @@
     <div class="col-md-4 col-sm-12 fix-sticky">
 
         <div class="col-md-12 col-sm-12 mt-4">
-            <div class="card">
+            <div class="card bg-transparent">
 
                 <div class="card-header">
                     Product List
                 </div>
 
-                <div class="card-body custom-border">
+                <div class="card-body custom-border bg-white">
 
                     @if (count($invoiceProduct)>0)
 
@@ -699,6 +699,64 @@
                     @endif
 
                 </div>
+
+
+                @if (count($notAvailableStockProducts)>0)
+                    <div class="card-header mt-4 rounded-top">
+                        N/A Product List
+                    </div>
+
+                    {{-- ============================ --}}
+                    <div class="card-body custom-border bg-white">
+
+                        {{-- <ul class="list-style-none"> --}}
+                        @foreach ($notAvailableStockProducts as $product)
+                            <div class="todo-item all-todo-list p-3 border-bottom position-relative">
+                                <div class="inner-item d-flex align-items-start">
+                                    <div class="w-100">
+                                        @php
+                                            $type   =   \App\Models\LensType::where('id',$product->type_id)->pluck('name')->first();
+                                            $coating=   \App\Models\PhotoCoating::where('id',$product->type_id)->pluck('name')->first();
+                                            $index  =   \App\Models\PhotoIndex::where('id',$product->index_id)->pluck('name')->first();
+                                            $chromatics  =   \App\Models\PhotoChromatics::where('id',$product->chromatic_id)->pluck('name')->first();
+                                        @endphp
+                                        <!-- Checkbox -->
+                                        <div class="form-check d-flex justify-content-between">
+                                            <div>
+                                                <div class="content-todo ms-3">
+                                                    <h5 class="font-medium fs-4 todo-header mb-0"
+                                                        data-todo-header="Meeting with Mr.Jojo Sukla at 5.00PM">
+                                                        {{initials($type)." ".$index." ".$chromatics." ".$coating;}}
+                                                        <span class="text-warning">[{{$product->quantity}}]</span>
+                                                    </h5>
+                                                    <span class="todo-time fs-2 text-muted d-flex align-items-center">
+                                                        {{-- <small class="text-muted">
+                                                            @if($power=\App\Models\Power::where(['product_id'=>$product->product_id])->where('company_id',Auth::user()->company_id)->select('*')->first())
+                                                                @if (initials($prod->product_name)=='SV')
+                                                                    <span> {{$power->sphere}} / {{$power->cylinder}}</span>
+                                                                @else
+                                                                    <span>{{$power->sphere}} / {{$power->cylinder}} *{{$power->axis}}
+                                                                        {{$power->add}}</span>
+                                                                @endif
+                                                            @endif
+                                                        </small> --}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button wire:click="removeUnavailableProduct({{$product->id}})" class="btn btn-link text-dark p-1 text-decoration-none" >
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- Content -->
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                    </div>
+                @endif
             </div>
             <div class="mt-1">
                 <button type="button" class="btn btn-warning waves-effect">Close</button>
@@ -726,11 +784,12 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-info waves-effect" wire:click="add_pending_product">
-                        <span wire:loading.remove wire:target='add_pending_product'>
-                            {{ __('manager/sales.stock_request')}}
+                    <button class="btn btn-info waves-effect" wire:click="addUnavailableProducts">
+                        <span wire:loading.remove wire:target='addUnavailableProducts'>
+                            {{-- {{ __('manager/sales.stock_request')}} --}}
+                            Add anyway
                         </span>
-                        <span wire:loading wire:target='add_pending_product'>
+                        <span wire:loading wire:target='addUnavailableProducts'>
                             <img src="{{ asset('dashboard/assets/images/loading2.gif')}}" height="20" alt="">{{ __('manager/sales.request_processing')}}
                         </span>
                     </button>
@@ -750,6 +809,9 @@
     <script>
         window.addEventListener('openProductNotFoundModal', event => {
             $("#product-not-found-modal").modal('show');
+        })
+        window.addEventListener('hideProductNotFoundModal', event => {
+            $("#product-not-found-modal").modal('hide');
         })
     </script>
 @endpush
