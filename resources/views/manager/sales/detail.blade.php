@@ -188,17 +188,17 @@
                                                 @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
                                                         @if ($product->status=='pending')
                                                             <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                                                                data-target="#price-{{ $key }}">
+                                                                data-target="#price-{{ $count }}">
                                                                 set Price
                                                             </button>
                                                         @elseif($product->status=='approved')
                                                             <div class="row align-center">
                                                                 <button type="button" class="btn btn-sm btn-warning"
-                                                                    data-toggle="modal" data-target="#reaction-{{ $key }}">
+                                                                    data-toggle="modal" data-target="#reaction-{{ $count }}">
                                                                     Sell
                                                                 </button>
                                                                 <a href="#!" class="text-danger ml-2"
-                                                                    data-toggle="modal" data-target="#reaction-{{ $key }}">
+                                                                    data-toggle="modal" data-target="#reaction-{{ $count }}">
                                                                     Cancel
                                                                 </a>
                                                             </div>
