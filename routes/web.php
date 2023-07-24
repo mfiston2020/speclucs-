@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Livewire\Manager\Sales\ProductRetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -165,6 +166,9 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/due-payInvoice/{id}', [\App\Http\Controllers\Manager\SalesController::class, 'payDueInvoice'])->name('pay.invoice.due');
     Route::post('/payInvoice/{payInvoice}', [\App\Http\Controllers\Manager\SalesController::class, 'invoiceTransaction'])->name('invoice.pay');
     Route::post('/deleteInvoice/{deleteInvoice}', [\App\Http\Controllers\Manager\SalesController::class, 'invoicedelete'])->name('invoice.delete');
+
+    // sales
+    Route::get('/sales/retail', ProductRetail::class)->name('retail');
 
     // pending orders
     Route::get('/pendingRequest', [\App\Http\Controllers\Manager\PendingOrderController::class, 'index'])->name('pending.orders');

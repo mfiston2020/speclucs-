@@ -41,10 +41,22 @@ class AddSaleProduct extends Component
     public $existingCustomer    =   array();
     public $singleExistingCustomer;
 
+    // =================================
+    public $r_sphere;
+    public $r_cylinder;
+    public $r_axis;
+    public $r_addition;
+
+    public $l_sphere;
+    public $l_cylinder;
+    public $l_axis;
+    public $l_addition;
+
     public $sphere;
     public $cylinder;
     public $axis;
     public $addition;
+    // ==================================
 
     public $lensProduct;
     public $productSelected;
@@ -180,9 +192,8 @@ class AddSaleProduct extends Component
             }
             if ($this->leftEye == true) {
                 $this->eye  =   'left';
-            }
-            else{
-                $this->eye='any';
+            } else {
+                $this->eye = 'any';
             }
 
             $sold   =   new UnavailableProduct();
@@ -317,6 +328,16 @@ class AddSaleProduct extends Component
 
             if ($lensTypeFull) {
                 if (initials($lensTypeFull->name) == 'SV') {
+                    if ($this->rightEye == true) {
+                        $this->eye  =   'right';
+                        $this->sphere = $this->r_sphere;
+                        $this->cylinder = $this->r_cylinder;
+                    }
+                    if ($this->leftEye == true) {
+                        $this->eye  =   'left';
+                        $this->sphere = $this->l_sphere;
+                        $this->cylinder = $this->l_cylinder;
+                    }
                     if (
                         $this->type != null && $this->index != null
                         && $this->chromatic != null
@@ -324,6 +345,7 @@ class AddSaleProduct extends Component
                         && $this->sphere != null
                         && $this->cylinder != null
                     ) {
+
                         $product_id     =   \App\Models\Power::where('type_id', $this->type)
                             ->where('index_id', $this->index)
                             ->where('chromatics_id', $this->chromatic)
@@ -353,9 +375,17 @@ class AddSaleProduct extends Component
                 } else {
                     if ($this->rightEye == true) {
                         $this->eye  =   'right';
+                        $this->sphere   =   $this->r_sphere;
+                        $this->cylinder =   $this->r_cylinder;
+                        $this->axis     =   $this->r_axis;
+                        $this->addition =   $this->r_addition;
                     }
                     if ($this->leftEye == true) {
                         $this->eye  =   'left';
+                        $this->sphere   =   $this->l_sphere;
+                        $this->cylinder =   $this->l_cylinder;
+                        $this->axis     =   $this->l_axis;
+                        $this->addition =   $this->l_addition;
                     }
 
                     if (
@@ -512,7 +542,7 @@ class AddSaleProduct extends Component
     function getAllInvoiceProduct()
     {
         $this->invoiceProduct               =   SoldProduct::where('invoice_id', $this->invoice_id)->get();
-        $this->notAvailableStockProducts    =   UnavailableProduct::where('invoice_id',$this->invoice_id)->get();
+        $this->notAvailableStockProducts    =   UnavailableProduct::where('invoice_id', $this->invoice_id)->get();
     }
 
     // removing one of the saved product

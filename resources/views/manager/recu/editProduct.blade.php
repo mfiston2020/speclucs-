@@ -26,11 +26,11 @@
                         @endif
                     @else
                         <span>
-                            {{\App\Models\Category::where(['id'=>$prod->category_id])->where('company_id',Auth::user()->company_id)->pluck('name')->first()}}
+                            {{\App\Models\Category::where(['id'=>$product->category_id])->where('company_id',Auth::user()->company_id)->pluck('name')->first()}}
                         </span>
                     @endif
                     </strong></h4>
-                    
+
                 </div>
                 <hr>
 

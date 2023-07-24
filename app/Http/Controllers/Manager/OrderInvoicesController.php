@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class OrderInvoicesController extends Controller
 {
@@ -33,9 +33,7 @@ class OrderInvoicesController extends Controller
             'company'=>'required',
         ]);
 
-        $invoices    =   \App\Models\OrderInvoice::where('supplier_id',Auth::user()->company_id)->whereDate('created_at','>=',date('Y-m-d',strtotime($request->from)))
-                                                  ->whereDate('created_at','<=',date('Y-m-d',strtotime($request->to)))
-                                                  ->where('company_id',$request->company)->get();
+        $invoices    =   \App\Models\OrderInvoice::where('supplier_id',Auth::user()->company_id)->whereDate('created_at','>=',date('Y-m-d',strtotime($request->from)))->whereDate('created_at','<=',date('Y-m-d',strtotime($request->to)))->where('company_id',$request->company)->get();
 
         if ($invoices->isEmpty())
         {

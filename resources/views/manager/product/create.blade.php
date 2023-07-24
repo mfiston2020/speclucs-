@@ -30,7 +30,7 @@
                             <div class="col-md-6 col-sm-12">
                                 <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
                                     name="category" id="category" required>
-                                    <option value="">Select</option>
+                                    <option value="" selected>Select</option>
                                     @foreach ($categories as $category)
                                     <option value="{{$category->id}}">
                                         {{$category->name}}
@@ -42,7 +42,7 @@
                             <div class="col-md-6 col-sm-12">
                                 <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
                                     name="supplier" id="supplier">
-                                    <option value="">Select Supplier</option>
+                                    <option value="" selected>Select Supplier</option>
                                     @foreach ($suppliers as $supplier)
                                         <option value="{{$supplier->id}}">
                                             {{$supplier->name}}
