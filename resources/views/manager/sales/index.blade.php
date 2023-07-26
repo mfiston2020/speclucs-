@@ -142,7 +142,7 @@
                                                     Private
                                                 @endif
                                             </td>
-                                            <td>{{ format_money($sale->total_amount == null ? 0 : $sale->total_amount) }}</td>
+                                            <td>{{ format_money(($sale->total_amount == null ||$sale->total_amount == 'completed') ? 0 : $sale->total_amount) }}</td>
                                             <td>
                                                 {{ format_money($ins_due_amount==null?0:$ins_due_amount) }}
                                             </td>

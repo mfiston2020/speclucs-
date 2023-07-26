@@ -248,7 +248,7 @@ class ProductRetail extends Component
             $invoice->dateOfBirth       =   $this->date_of_birth;
             $invoice->insurance_id      =   $this->insurance_type;
             $invoice->status            =   'completed';
-            $invoice->total_amount      =   'completed';
+            $invoice->total_amount      =   0;
             $invoice->insurance_card_number       =   $this->insurance_number;
 
             $invoice->save();
