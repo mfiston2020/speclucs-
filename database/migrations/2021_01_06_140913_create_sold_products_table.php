@@ -17,7 +17,7 @@ class CreateSoldProductsTable extends Migration
             $table->id();
             $table->string('company_id');
             $table->unsignedBigInteger('invoice_id');
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->string('quantity');
             $table->string('unit_price');
             $table->string('discount');
