@@ -148,9 +148,9 @@
                                             </td>
                                             <td>
                                                 @if ($product && $product->insurance_id != null)
-                                                    {{ format_money($pt_due_amount - $amount_paid) }}
+                                                    {{ $pt_due_amount - $amount_paid }}
                                                 @else
-                                                    {{ format_money($pt_due_amount - $amount_paid) }}
+                                                    {{ $pt_due_amount - $amount_paid }}
                                                 @endif
                                             </td>
                                             {{-- <td >{{format_money($sale->due)}}</td> --}}
