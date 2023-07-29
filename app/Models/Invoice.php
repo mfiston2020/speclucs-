@@ -31,4 +31,9 @@ class Invoice extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+
+    function unavailableProducts()
+    {
+        return $this->hasMany(UnavailableProduct::class);
+    }
 }

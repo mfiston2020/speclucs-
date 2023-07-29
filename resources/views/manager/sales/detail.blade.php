@@ -155,10 +155,11 @@
                                                 <small class="text-muted">
                                                     {{-- @if ($power) --}}
                                                     @if (initials($type) == 'SV')
-                                                        <span> {{ $product->sphere }} /
-                                                            {{ $product->cylinder }}</span>
+                                                        <span> {{ format_values($product->sphere) }} /
+                                                            {{ format_values($product->cylinder) }}</span>
                                                     @else
-                                                        <span>{{ $product->sphere }} / {{ $product->cylinder }}
+                                                        <span>{{ format_values($product->sphere) }} /
+                                                            {{ format_values($product->cylinder) }}
                                                             *{{ $product->axis }} {{ $product->add }}</span>
                                                     @endif
                                                     {{-- @endif --}}
@@ -174,255 +175,7 @@
                                             <td>
                                                 {{ format_money($product->total_amount) }}
                                             </td>
-                                            <td>
-                                                @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
-                                                    @if ($product->status == 'pending')
-                                                        <button type="button" class="btn btn-sm btn-primary"
-                                                            data-toggle="modal" data-target="#price-{{ $count }}">
-                                                            set Price
-                                                        </button>
-                                                    @elseif($product->status == 'approved')
-                                                        <div class="row align-center">
-                                                            <button type="button" class="btn btn-sm btn-warning"
-                                                                data-toggle="modal"
-                                                                data-target="#reaction-{{ $count }}">
-                                                                Sell
-                                                            </button>
-                                                            <a href="#!" class="text-danger ml-2" data-toggle="modal"
-                                                                data-target="#reaction-{{ $count }}">
-                                                                Cancel
-                                                            </a>
-                                                        </div>
-                                                    @endif
-                                                @else
-                                                    <span
-                                                        class="label label-{{ $product->status == 'sold' ? 'success' : 'warning' }}">{{ $product->status }}</span>
-                                                @endif
-                                            </td>
                                         </tr>
-
-                                        {{-- setting price modal --}}
-                                        <div id="price-{{ $count }}" class="modal fade" tabindex="-1"
-                                            role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" id="myModalLabel"><i
-                                                                class="fa fa-exclamation-triangle"></i>
-                                                            {{ __('manager/sales.order_detail') }}</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-hidden="true">×</button>
-                                                    </div>
-                                                    <div class="modal-body">
-
-                                                        <h5 class="text-secondary">
-                                                            {{ __('manager/sales.order_detail') }}</h5>
-                                                        <br>
-                                                        {{-- <div class="row"> --}}
-                                                        <strong>Description: </strong>
-                                                        <span>
-                                                            {{ initials2(\App\Models\LensType::where('id', $product->type_id)->pluck('name')->first()) }}
-
-                                                            {{ \App\Models\PhotoIndex::where('id', $product->index_id)->pluck('name')->first() }}
-
-                                                            {{ \App\Models\PhotoChromatics::where('id', $product->chromatic_id)->pluck('name')->first() }}
-
-                                                            {{ \App\Models\PhotoCoating::where('id', $product->coating_id)->pluck('name')->first() }}
-                                                            - {{ $product->sphere_r == null ? 'left' : 'right' }}
-                                                        </span>
-                                                        {{-- </div> --}}
-                                                        <br>
-                                                        <br>
-                                                        <div class="row">
-                                                            <div class="row col-md-3">
-                                                                <strong class="col-12">Sphere: </strong>
-                                                                <span
-                                                                    class="col-12">{{ $product->sphere == null ? format_values($product->sphere_l) : format_values($product->sphere) }}</span>
-                                                            </div>
-
-                                                            <div class="row col-md-3">
-                                                                <strong class="col-12">Cylinder: </strong>
-                                                                <span
-                                                                    class="col-12">{{ $product->cylinder == null ? format_values($product->cylinder_l) : format_values($product->cylinder) }}</span>
-                                                            </div>
-
-                                                            <div class="row col-md-3">
-                                                                <strong class="col-12">Axis: </strong>
-                                                                <span
-                                                                    class="col-12">{{ $product->axis == null ? format_values($product->axis_l) : format_values($product->axis) }}</span>
-                                                            </div>
-
-                                                            <div class="row col-md-3">
-                                                                <strong class="col-12">Addition: </strong>
-                                                                <span
-                                                                    class="col-12">{{ $product->addition == null ? format_values($product->addition_l) : format_values($product->addition) }}</span>
-                                                            </div>
-
-                                                        </div>
-                                                        @if ($product->status != 'sold')
-                                                            <hr>
-                                                            <br>
-                                                            <h4>{{ __('manager/sales.add_price') }}</h4>
-                                                            {{-- <hr> --}}
-
-                                                            <form action="{{ route('manager.adjust.order.price') }}"
-                                                                method="post" id="setPriceForm-{{ $count }}">
-                                                                @csrf
-                                                                <input type="hidden" name="thisName"
-                                                                    value="{{ Crypt::encrypt($product->id) }}">
-
-                                                                <div class="form-group row">
-                                                                    <label for="stock"
-                                                                        class="col-sm-3 text-right control-label col-form-label">{{ __('manager/sales.cost') }}</label>
-                                                                    <div class="col-sm-9">
-                                                                        <input type="number" id="cost"
-                                                                            class="form-control" placeholder="0"
-                                                                            name="cost" required
-                                                                            value="{{ $product->cost }}" min="1">
-                                                                    </div>
-                                                                </div>
-
-
-                                                                <div class="form-group row">
-                                                                    <label for="stock"
-                                                                        class="col-sm-3 text-right control-label col-form-label">{{ __('manager/sales.price') }}</label>
-                                                                    <div class="col-sm-9">
-                                                                        <input type="number" id="price"
-                                                                            class="form-control" placeholder="0"
-                                                                            name="price" required
-                                                                            value="{{ $product->price }}" min="1">
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        @endif
-
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        @if ($product->status != 'sold')
-                                                            <button class="btn btn-info waves-effect"
-                                                                onclick="document.getElementById('setPriceForm-{{ $count }}').submit()">{{ __('manager/sales.add_price') }}</button>
-                                                        @endif
-                                                        <button type="button" class="btn btn-danger waves-effect"
-                                                            data-dismiss="modal">{{ __('manager/sales.cancel') }}</button>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-
-                                        {{-- product available modal --}}
-                                        <div id="reaction-{{ $count }}" class="modal fade" tabindex="-1"
-                                            role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" id="myModalLabel"><i
-                                                                class="fa fa-exclamation-triangle"></i> Warning</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-hidden="true">×</button>
-                                                    </div>
-                                                    <div class="modal-body">
-
-                                                        <h4>{{ __('manager/sales.client_feedback_detail') }}</h4>
-                                                        {{-- <hr> --}}
-
-                                                        <form action="{{ route('manager.sell.na.product') }}"
-                                                            method="post" id="reactionForm-{{ $count }}">
-                                                            @csrf
-                                                            <input type="hidden" name="thisName"
-                                                                value="{{ Crypt::encrypt($product->id) }}">
-                                                        </form>
-
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button
-                                                            onclick="document.getElementById('reactionForm-{{ $count }}').submit()"
-                                                            class="btn btn-info waves-effect">{{ __('navigation.yes') }}</button>
-                                                        <button type="button" class="btn btn-danger waves-effect"
-                                                            data-dismiss="modal">{{ __('navigation.no') }}</button>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-
-                                        {{-- client sell modal --}}
-                                        <div id="sell-{{ $count }}" class="modal fade" tabindex="-1"
-                                            role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" id="myModalLabel"><i
-                                                                class="fa fa-exclamation-triangle"></i>
-                                                            {{ __('manager/sales.sell') }}</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-hidden="true">×</button>
-                                                    </div>
-                                                    <div class="modal-body">
-
-                                                        <h4>{{ __('manager/sales.sell_message') }}</h4>
-                                                        {{-- <hr> --}}
-
-                                                        <form action="{{ route('manager.pending.order.sell') }}"
-                                                            method="post" id="sellForm-{{ $count }}">
-                                                            @csrf
-                                                            <input type="hidden" name="thisName"
-                                                                value="{{ Crypt::encrypt($product->id) }}">
-                                                        </form>
-
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button
-                                                            onclick="document.getElementById('sellForm-{{ $count }}').submit()"
-                                                            class="btn btn-info waves-effect">{{ __('navigation.yes') }}</button>
-                                                        <button type="button" class="btn btn-danger waves-effect"
-                                                            data-dismiss="modal">{{ __('navigation.no') }}</button>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-
-                                        {{-- cancel modal --}}
-                                        <div id="cancel-{{ $count }}" class="modal fade" tabindex="-1"
-                                            role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" id="myModalLabel"><i
-                                                                class="fa fa-exclamation-triangle"></i>
-                                                            {{ __('manager/sales.client_feedback') }}</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-hidden="true">×</button>
-                                                    </div>
-                                                    <div class="modal-body">
-
-                                                        <h4>{{ __('manager/sales.cancel_order_message') }}</h4>
-                                                        {{-- <hr> --}}
-
-                                                        <form action="{{ route('manager.pending.order.cancel') }}"
-                                                            method="post" id="cancelForm-{{ $count }}">
-                                                            @csrf
-                                                            <input type="hidden" name="thisName"
-                                                                value="{{ Crypt::encrypt($product->id) }}">
-                                                        </form>
-
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button
-                                                            onclick="document.getElementById('cancelForm-{{ $count }}').submit()"
-                                                            class="btn btn-info waves-effect">{{ __('navigation.yes') }}</button>
-                                                        <button type="button" class="btn btn-danger waves-effect"
-                                                            data-dismiss="modal">{{ __('navigation.no') }}</button>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
                                     @endforeach
                                     {{-- </form> --}}
                                 </tbody>
@@ -436,7 +189,7 @@
                     <div class="card-body">
                         <span
                             hidden>{{ $client = \App\Models\Customer::where(['id' => $invoice->client_id])->where('company_id', Auth::user()->company_id)->pluck('name')->first() }}</span>
-                        <h4 class="card-title">Order #{{ sprintf('%04d', $invoice->reference_number) }}
+                        <h4 class="card-title">Order #{{ sprintf('%04d', $invoice->id) }}
                             @if ($client)
                                 for: {{ $client }}
                             @else
@@ -480,8 +233,8 @@
                         @else
                         @endif
 
-                        <div id="myModal" class="modal fade" tabindex="-1" role="dialog"
-                            aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                            aria-hidden="true">
                             <div class="modal-dialog">
                                 <form action="{{ route('manager.sales.finalize', Crypt::encrypt($invoice->id)) }}"
                                     method="post">

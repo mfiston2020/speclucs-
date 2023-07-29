@@ -121,6 +121,7 @@ class ProductRetail extends Component
             'cylinder'    =>  $this->r_cylinder,
             'axis'        =>  $this->r_axis,
             'addition'    =>  $this->r_addition,
+            'eye'    =>  'right',
         ];
 
         $left_data  =   [
@@ -136,6 +137,7 @@ class ProductRetail extends Component
             'cylinder'    =>  $this->l_cylinder,
             'axis'        =>  $this->l_axis,
             'addition'    =>  $this->l_addition,
+            'eye'    =>  'left',
         ];
 
         $repo   =   new ProductRepo();
@@ -246,16 +248,31 @@ class ProductRetail extends Component
             $invoice->tin_number        =   $this->tin_number;
             $invoice->gender            =   $this->gender;
             $invoice->dateOfBirth       =   $this->date_of_birth;
-            $invoice->insurance_id      =   $this->insurance_type;
-            $invoice->status            =   'completed';
+            $invoice->insurance_id      =   $this->insurance_type == 'private' ? null : $this->insurance_type;
+            $invoice->status            =   'requested';
             $invoice->total_amount      =   0;
-            $invoice->insurance_card_number       =   $this->insurance_number;
+            $invoice->insurance_card_number =   $this->insurance_number;
 
             $invoice->save();
 
             if ($this->leftLenFound && $this->rightLenFound) {
                 $this->save('lens', 'available', $invoice->id, 'left');
                 $this->save('lens', 'available', $invoice->id, 'right');
+            }
+
+            if (!$this->leftLenFound && $this->rightLenFound) {
+                $this->save('lens', 'not-available', $invoice->id, 'left');
+                $this->save('lens', 'available', $invoice->id, 'right');
+            }
+
+            if ($this->leftLenFound && !$this->rightLenFound) {
+                $this->save('lens', 'available', $invoice->id, 'left');
+                $this->save('lens', 'not-available', $invoice->id, 'right');
+            }
+
+            if (!$this->leftLenFound && !$this->rightLenFound) {
+                $this->save('lens', 'not-available', $invoice->id, 'left');
+                $this->save('lens', 'not-available', $invoice->id, 'right');
             }
 
             if ($this->frame) {
@@ -297,6 +314,30 @@ class ProductRetail extends Component
             $sold->save();
 
             $total  += $sold->total_amount;
+        }
+
+        if ($availability == 'not-available' && $type == 'lens') {
+            $data = [
+                'invoice_id' => $invoiceId,
+
+                'type'      => $this->lens_type,
+                'coating'   => $this->lens_coating,
+                'index'     => $this->lens_index,
+                'chromatic' => $this->lens_chromatic,
+
+                'eye'       => $eye,
+                'sphere'    => $eye == 'right' ? $this->r_sphere : $this->l_sphere,
+                'cylinder'  => $eye == 'right' ? $this->r_cylinder : $this->l_cylinder,
+                'axis'      => $eye == 'right' ? $this->r_axis : $this->l_axis,
+                'addition'  => $eye == 'right' ? $this->r_addition : $this->l_addition,
+
+                'mono_pd'   => $this->r_mono_pd,
+                'segment_h' => $this->r_segment_height
+            ];
+
+            $repo   =   new ProductRepo();
+
+            $repo->addUnavailableProduct($data);
         } else {
             $sold   =   new SoldProduct();
 
@@ -325,6 +366,7 @@ class ProductRetail extends Component
 
         redirect('/manager/editSales/' . Crypt::encrypt($invoiceId))->with('successMsg', 'Invoice ');
     }
+
     // mount
     function mount()
     {

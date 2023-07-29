@@ -2,7 +2,9 @@
 
 namespace App\Interface;
 
-interface ProductInterface{
+interface ProductInterface
+{
+    function addUnavailableProduct(array $productInfo);
 
     function productMatrix(array $request);
 
@@ -10,7 +12,7 @@ interface ProductInterface{
 
     function searchProduct(array $productDescription);
 
-    function makeLabOrder(array $request,string $product_id);
+    function makeLabOrder(array $request, string $product_id);
 
-    function saveProduct(array $request,string $category,array $pending,bool $isOrder);
+    function saveProduct(array $request, string $category, array $pending, bool $isOrder);
 }

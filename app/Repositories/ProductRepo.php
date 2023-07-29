@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Power;
 use App\Models\Product;
 use App\Models\SoldProduct;
+use App\Models\UnavailableProduct;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -154,6 +155,8 @@ class ProductRepo implements ProductInterface
                     $product->cost              =   count($pending) > 0 ? $pending['cost'] : $request['lens_cost'];
                     $product->fitting_cost      =   count($pending) > 0 ? '0' : $request['fitting_cost'];
                     $product->company_id        =   userInfo()->company_id;
+                    $product->location          =   $pending['location'];
+                    $product->supplier_id       =   $pending['supplier_id'] == null ? null : $pending['supplier_id'];
                     try {
                         $product->save();
 
@@ -436,5 +439,30 @@ class ProductRepo implements ProductInterface
         }
 
         return $matrix;
+    }
+
+    // adding un available products
+    function addUnavailableProduct(array $request)
+    {
+        $sold   =   new UnavailableProduct();
+
+        $sold->company_id   =   Auth::user()->company_id;
+        $sold->invoice_id   =   $request['invoice_id'];
+
+        $sold->type_id      =   $request['type'];
+        $sold->coating_id   =   $request['coating'];
+        $sold->index_id     =   $request['index'];
+        $sold->chromatic_id =   $request['chromatic'];
+
+        $sold->eye       =   $request['eye'];
+        $sold->sphere    =   $request['sphere'];
+        $sold->cylinder  =   $request['cylinder'];
+        $sold->axis      =   $request['axis'];
+        $sold->addition  =   $request['addition'];
+
+        $sold->mono_pd    =   $request['mono_pd'];
+        $sold->segment_h  =   $request['segment_h'];
+
+        $sold->save();
     }
 }

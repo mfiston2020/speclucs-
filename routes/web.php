@@ -180,6 +180,15 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::post('/request/inStock-receive', [\App\Http\Controllers\Manager\LabRequestController::class, 'receiveRequest'])->name('sent.request.to.receive');
     Route::post('/request/inStock-dispense', [\App\Http\Controllers\Manager\LabRequestController::class, 'dispenseRequest'])->name('sent.request.to.dispense');
 
+    Route::post('/request/addPricing', [\App\Http\Controllers\Manager\LabRequestController::class, 'addpriceRequest'])->name('sent.request.to.addprice');
+
+    Route::get('/request/confirmPayment/{id}', [\App\Http\Controllers\Manager\LabRequestController::class, 'requestConfirmPayment'])->name('sent.request.confirm.payment');
+
+    // order pending when not in stock
+    Route::post('/request/sendToSupplier', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendRequestToSupplier'])->name('sent.request.send.to.supplier');
+    Route::post('/request/sendTolab', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendRequestTolab'])->name('sent.request.send.to.lab');
+
+
     // pending orders
     Route::get('/pendingRequest', [\App\Http\Controllers\Manager\PendingOrderController::class, 'index'])->name('pending.orders');
     Route::post('/pendingCancel', [\App\Http\Controllers\Manager\PendingOrderController::class, 'cancelOrder'])->name('pending.order.cancel');

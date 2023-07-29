@@ -27,8 +27,13 @@ class PendingOrderController extends Controller
     {
         // $pendingOrders  =   PendingOrder::where('company_id', userInfo()->company_id)->orderBy('created_at', 'desc')->get();
 
-        $sales  =   Invoice::where('company_id', Auth::user()->company_id)->whereNotIn('status', ['collected', 'received'])->orderBy('status', 'DESC')->get();
-        return view('manager.sales.pending', compact('sales'));
+        $sales_requested  =   Invoice::where('company_id', Auth::user()->company_id)->where('status', 'requested')->orderBy('created_at', 'DESC')->get();
+
+        $sales_priced  =   Invoice::where('company_id', Auth::user()->company_id)->where('status', 'priced')->orderBy('created_at', 'DESC')->get();
+
+        $sales_delivered  =   Invoice::where('company_id', Auth::user()->company_id)->where('status', 'delivered')->orderBy('created_at', 'DESC')->get();
+
+        return view('manager.sales.pending', compact('sales_requested', 'sales_priced', 'sales_delivered'));
     }
 
     function setOrderPrice(Request $request)

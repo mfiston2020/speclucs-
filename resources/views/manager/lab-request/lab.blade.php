@@ -24,90 +24,40 @@
                         @include('manager.includes.layouts.message')
                         {{-- =============================== --}}
 
-                        @if ($from == 'seller')
-                            <hr>
-
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" role="tablist">
-
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#requested-products" role="tab">
-                                        <span class="hidden-sm-up">
-                                            <i class="ti-home"></i>
-                                        </span>
-                                        <span class="hidden-xs-down">Requested Products</span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#po-sent" role="tab">
-                                        <span class="hidden-sm-up">
-                                            <i class="ti-home"></i>
-                                        </span>
-                                        <span class="hidden-xs-down">PO Sent</span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#po-received" role="tab">
-                                        <span class="hidden-sm-up">
-                                            <i class="ti-home"></i>
-                                        </span>
-                                        <span class="hidden-xs-down">PO Received</span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link " data-toggle="tab" href="#provided-to-lab" role="tab">
-                                        <span class="hidden-sm-up">
-                                            <i class="ti-home"></i>
-                                        </span>
-                                        <span class="hidden-xs-down">Provided to Lab</span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link " data-toggle="tab" href="#new-lab-order" role="tab">
-                                        <span class="hidden-sm-up">
-                                            <i class="ti-home"></i>
-                                        </span>
-                                        <span class="hidden-xs-down">Lab New Order</span>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        @endif
-
-                        @if ($from == 'lab')
-                            <ul class="nav nav-pills mt-4 mb-4">
-                                <li class=" nav-item">
-                                    <a href="#new-orders" class="nav-link active" data-toggle="tab" aria-expanded="false">
-                                        New Orders
-                                    </a>
-                                </li>
-                                <li class=" nav-item">
-                                    <a href="#inProduction" class="nav-link" data-toggle="tab" aria-expanded="false">
-                                        In Production
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#completed" class="nav-link" data-toggle="tab" aria-expanded="false">
-                                        Completed
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#delivered" class="nav-link" data-toggle="tab" aria-expanded="true">
-                                        Delivered
-                                    </a>
-                                </li>
-                            </ul>
-                        @endif
+                        <ul class="nav nav-pills mt-4 mb-4">
+                            <li class=" nav-item">
+                                <a href="#new-orders" class="nav-link active" data-toggle="tab" aria-expanded="false">
+                                    New Orders
+                                </a>
+                            </li>
+                            <li class=" nav-item">
+                                <a href="#inProduction" class="nav-link" data-toggle="tab" aria-expanded="false">
+                                    In Production
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#completed" class="nav-link" data-toggle="tab" aria-expanded="false">
+                                    Completed
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#delivered" class="nav-link" data-toggle="tab" aria-expanded="true">
+                                    Delivered
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#delivered" class="nav-link" data-toggle="tab" aria-expanded="true">
+                                    Order Status
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="tab-content br-n pn">
+            {{-- new orders --}}
             <div id="new-orders" class="tab-pane active">
                 <div class="row">
                     <div class="col-12">
@@ -121,11 +71,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        {{-- <th>SN</th> --}}
                                                         <th>Request # </th>
                                                         <th>Patient Name</th>
-                                                        {{-- <th>Product detail</th> --}}
-                                                        {{-- <th>Branch Name</th> --}}
                                                         <th>Request Date</th>
                                                         <th>Request Age</th>
                                                         <th>Status</th>
@@ -135,9 +82,6 @@
                                                 <tbody>
                                                     @foreach ($requests as $key => $request)
                                                         <tr>
-                                                            {{-- <td>
-                                                                <input type="checkbox" name="requestId[]" id="">
-                                                            </td> --}}
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>
                                                                 <a href="#!" data-toggle="modal"
@@ -192,55 +136,68 @@
                                                                             data-dismiss="modal"
                                                                             aria-hidden="true">×</button>
                                                                     </div>
-                                                                    @if ($from == 'lab')
-                                                                        <form
-                                                                            action="{{ route('manager.sent.request.to.production') }}"
-                                                                            method="post">
-                                                                            @csrf
-                                                                            <input type="hidden" name="idsalfjei"
-                                                                                value="{{ Crypt::encrypt($request->id) }}">
-                                                                    @endif
                                                                     <div class="modal-body">
                                                                         <h4 class="text-info">Lens</h4>
                                                                         <hr>
-                                                                        @foreach ($request->soldproduct as $product)
-                                                                            @php
-                                                                                $invoice_product = $products->where('id', $product->product_id)->first();
-                                                                            @endphp
 
-                                                                            {{-- for lens --}}
-                                                                            @if ($invoice_product->category_id == 1)
-                                                                                <div class="row mb-2">
-                                                                                    <div class="col-1">
+                                                                        @if (!$request->unavailableproducts->isEmpty())
+                                                                            @php
+                                                                                $right_len = $request->unavailableproducts->where('eye', 'right')->first();
+                                                                                if (!$right_len) {
+                                                                                    $right_len = $request->soldproduct->where('eye', 'right')->first();
+                                                                                }
+                                                                                
+                                                                                $type = $lens_type
+                                                                                    ->where('id', $right_len->type_id)
+                                                                                    ->pluck('name')
+                                                                                    ->first();
+                                                                                
+                                                                                $indx = $index
+                                                                                    ->where('id', $right_len->index_id)
+                                                                                    ->pluck('name')
+                                                                                    ->first();
+                                                                                
+                                                                                $ct = $coatings
+                                                                                    ->where('id', $right_len->coating_id)
+                                                                                    ->pluck('name')
+                                                                                    ->first();
+                                                                                
+                                                                                $chrm = $chromatics
+                                                                                    ->where('id', $right_len->chromatic_id)
+                                                                                    ->pluck('name')
+                                                                                    ->first();
+                                                                                
+                                                                                $left_len = $request->unavailableproducts->where('eye', 'left')->first();
+                                                                                if (!$left_len) {
+                                                                                    $left_len = $request->soldproduct->where('eye', 'left')->first();
+                                                                                }
+                                                                            @endphp
+                                                                            @foreach ($request->unavailableproducts as $unavail)
+                                                                                <div class="row mb-4">
+                                                                                    <div class="col-3 row">
                                                                                         <h4 class="text-capitalize">
-                                                                                            {{ $product->eye == null ? '' : initials($product->eye) }}
+                                                                                            {{ $unavail->eye == null ? '' : Oneinitials($unavail->eye) }}
                                                                                         </h4>
-                                                                                    </div>
-                                                                                    <div class="col-3">
-                                                                                        <span>
-                                                                                            {{ $invoice_product->description }}
+                                                                                        <span class="ml-3">
+                                                                                            {{ initials($type) }}
+                                                                                            {{ $chrm }}
+                                                                                            {{ $ct }}
+                                                                                            {{ $indx }}
                                                                                         </span>
                                                                                     </div>
                                                                                     <div class="col-2">
-                                                                                        @if (initials($invoice_product->product_name) == 'SV')
-                                                                                            <span>{{ $invoice_product->power->sphere }}
-                                                                                                /
-                                                                                                {{ $invoice_product->power->cylinder }}</span>
-                                                                                        @else
-                                                                                            <span>{{ $invoice_product->power->sphere }}
-                                                                                                /
-                                                                                                {{ $invoice_product->power->cylinder }}
-                                                                                                *{{ $invoice_product->power->axis }}
-                                                                                                {{ $invoice_product->power->add }}</span>
-                                                                                        @endif
+
+                                                                                        <span>{{ format_values($unavail->sphere) }}
+                                                                                            /
+                                                                                            {{ format_values($unavail->cylinder) }}
+                                                                                            *{{ $unavail->axis }}
+                                                                                            {{ $unavail->addition }}</span>
                                                                                     </div>
                                                                                     <div class="col-2 row">
                                                                                         <span>
                                                                                             <h6>Location: </h6>
                                                                                         </span>
-                                                                                        {{-- </div>
-                                                                                        <div class="col-2"> --}}
-                                                                                        {{ $product->location == null ? '-' : $product->location }}
+                                                                                        {{ $unavail->location == null ? '-' : $unavail->location }}
                                                                                     </div>
                                                                                     <div class="col-2 ">
                                                                                         <span
@@ -249,7 +206,7 @@
                                                                                                 PD:
                                                                                             </h6>
                                                                                             <span class="text-capitalize">
-                                                                                                {{ $product->mono_pd }}
+                                                                                                {{ $unavail->mono_pd }}
                                                                                             </span>
                                                                                         </span>
                                                                                     </div>
@@ -260,13 +217,84 @@
                                                                                                 H:
                                                                                             </h6>
                                                                                             <span class="text-capitalize">
-                                                                                                {{ $product->segment_h }}
+                                                                                                {{ $unavail->segment_h }}
                                                                                             </span>
                                                                                         </span>
                                                                                     </div>
                                                                                 </div>
-                                                                            @endif
-                                                                        @endforeach
+                                                                            @endforeach
+                                                                        @endif
+
+                                                                        @if (!$request->soldproduct->isEmpty())
+                                                                            @foreach ($request->soldproduct as $product)
+                                                                                @php
+                                                                                    $invoice_product = $products->where('id', $product->product_id)->first();
+                                                                                @endphp
+
+                                                                                {{-- for lens --}}
+                                                                                @if ($invoice_product->category_id == 1)
+                                                                                    <div class="row mb-2">
+                                                                                        <div class="col-1">
+                                                                                            <h4 class="text-capitalize">
+                                                                                                {{ $product->eye == null ? '' : Oneinitials($product->eye) }}
+                                                                                            </h4>
+                                                                                        </div>
+                                                                                        <div class="col-3">
+                                                                                            <span>
+                                                                                                {{ $invoice_product->description }}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div class="col-2">
+                                                                                            @if (initials($invoice_product->product_name) == 'SV')
+                                                                                                <span>{{ $invoice_product->power->sphere }}
+                                                                                                    /
+                                                                                                    {{ $invoice_product->power->cylinder }}</span>
+                                                                                            @else
+                                                                                                <span>{{ $invoice_product->power->sphere }}
+                                                                                                    /
+                                                                                                    {{ $invoice_product->power->cylinder }}
+                                                                                                    *{{ $invoice_product->power->axis }}
+                                                                                                    {{ $invoice_product->power->add }}</span>
+                                                                                            @endif
+                                                                                        </div>
+                                                                                        <div class="col-2 row">
+                                                                                            <span>
+                                                                                                <h6>Location: </h6>
+                                                                                            </span>
+                                                                                            {{-- </div>
+                                                                                    <div class="col-2"> --}}
+                                                                                            {{ $product->location == null ? '-' : $product->location }}
+                                                                                        </div>
+                                                                                        <div class="col-2 ">
+                                                                                            <span
+                                                                                                class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                <h6 class="text-dark">
+                                                                                                    Mono
+                                                                                                    PD:
+                                                                                                </h6>
+                                                                                                <span
+                                                                                                    class="text-capitalize">
+                                                                                                    {{ $product->mono_pd }}
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div class="col-2 ">
+                                                                                            <span
+                                                                                                class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                <h6 class="text-dark">
+                                                                                                    Seg
+                                                                                                    H:
+                                                                                                </h6>
+                                                                                                <span
+                                                                                                    class="text-capitalize">
+                                                                                                    {{ $product->segment_h }}
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        @endif
 
                                                                         {{-- for frame --}}
                                                                         <hr>
@@ -350,19 +378,28 @@
 
 
                                                                         {{-- for frame --}}
-                                                                        <hr>
-                                                                        <h4 class="text-info">Operation</h4>
-                                                                        <hr>
-                                                                        <div class="row d-flex justify-content-end">
-                                                                            <div class="form-group col-3">
-                                                                                <label for="delivery_date">Delivery
-                                                                                    Date</label>
-                                                                                <input type="date" name="delivery_date"
-                                                                                    id="delivery_date" required
-                                                                                    class="form-control"
-                                                                                    min="{{ date('Y-m-d') }}">
+                                                                        <form
+                                                                            action="{{ route('manager.sent.request.to.production') }}"
+                                                                            method="post">
+                                                                            @csrf
+                                                                            <input type="hidden" name="idsalfjei"
+                                                                                required
+                                                                                value="{{ Crypt::encrypt($request->id) }}">
+
+                                                                            <hr>
+                                                                            <h4 class="text-info">Operation</h4>
+                                                                            <hr>
+                                                                            <div class="row d-flex justify-content-end">
+                                                                                <div class="form-group col-3">
+                                                                                    <label for="delivery_date">Delivery
+                                                                                        Date</label>
+                                                                                    <input type="date"
+                                                                                        name="delivery_date"
+                                                                                        id="delivery_date" required
+                                                                                        class="form-control"
+                                                                                        min="{{ date('Y-m-d') }}">
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
                                                                     </div>
                                                                     <div
                                                                         class="modal-footer d-flex justify-content-between">
@@ -374,24 +411,15 @@
                                                                         <button type="button"
                                                                             class="btn btn-success waves-effect text-left"
                                                                             data-dismiss="modal">Print</button>
-                                                                        @if ($from == 'seller')
-                                                                            <a href="{{ route('manager.receive.order.from', Crypt::encrypt($request->id)) }}"
-                                                                                onclick="return confirm('are you sure?')"
+
+                                                                        @if ($request->status == 'sent to lab')
+                                                                            <button type="submit"
                                                                                 class="btn btn-info waves-effect text-left">
-                                                                                Send to Lab
-                                                                            </a>
-                                                                        @else
-                                                                            @if ($request->status == 'sent to lab')
-                                                                                <button type="submit"
-                                                                                    class="btn btn-info waves-effect text-left">
-                                                                                    Send To Production
-                                                                                </button>
-                                                                            @endif
+                                                                                Send To Production
+                                                                            </button>
                                                                         @endif
                                                                     </div>
-                                                                    @if ($from == 'lab')
-                                                                        </form>
-                                                                    @endif
+                                                                    </form>
                                                                 </div>
                                                                 <!-- /.modal-content -->
                                                             </div>
@@ -414,6 +442,7 @@
                 </div>
             </div>
 
+            {{-- in production --}}
             <div id="inProduction" class="tab-pane">
                 <div class="row">
                     <div class="col-12">
@@ -490,6 +519,7 @@
                 </div>
             </div>
 
+            {{-- completed --}}
             <div id="completed" class="tab-pane">
                 <div class="row">
                     <div class="col-12">
@@ -556,6 +586,7 @@
                 </div>
             </div>
 
+            {{-- delivered --}}
             <div id="delivered" class="tab-pane">
                 <div class="row">
                     <div class="col-12">

@@ -229,11 +229,6 @@
                         <a href="{{ route('manager.sales') }}" class="sidebar-link">
                             <i class="mdi mdi-adjust"></i>
                             <span class="hide-menu"> {{ __('navigation.sales') }} </span>
-
-                            @if ($pending_product_on_invoice > 0)
-                                <span class="badge badge-danger badge-pill ml-2">
-                                    {{ $pending_product_on_invoice }}</span>
-                            @endif
                         </a>
                     </li>
 

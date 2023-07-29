@@ -16,7 +16,7 @@ class SalesController extends Controller
     {
         $pending  =   Invoice::where('company_id', Auth::user()->company_id)->whereNotIn('status', ['collected', 'received'])->count();
 
-        $sales  =   \App\Models\Invoice::where('company_id', Auth::user()->company_id)->whereIn('status', ['collected', 'received'])->orderBy('created_at', 'DESC')->get();
+        $sales  =   \App\Models\Invoice::where('company_id', Auth::user()->company_id)->where('status', 'received')->orderBy('created_at', 'DESC')->get();
 
         return view('manager.sales.index', compact('sales', 'pending'));
     }
