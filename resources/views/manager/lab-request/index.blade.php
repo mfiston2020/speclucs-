@@ -875,30 +875,40 @@
                                                                 </td>
 
                                                                 @php
+                                                                    $availability = true;
+                                                                    $descripition = null;
                                                                     $right_len = $request->unavailableproducts->where('eye', 'right')->first();
                                                                     if (!$right_len) {
                                                                         $right_len = $request->soldproduct->where('eye', 'right')->first();
+                                                                        $availability = false;
                                                                     }
                                                                     
-                                                                    $type = $lens_type
-                                                                        ->where('id', $right_len->type_id)
-                                                                        ->pluck('name')
-                                                                        ->first();
+                                                                    if ($availability == true) {
+                                                                        $type = $lens_type
+                                                                            ->where('id', $right_len->type_id)
+                                                                            ->pluck('name')
+                                                                            ->first();
                                                                     
-                                                                    $indx = $index
-                                                                        ->where('id', $right_len->index_id)
-                                                                        ->pluck('name')
-                                                                        ->first();
+                                                                        $indx = $index
+                                                                            ->where('id', $right_len->index_id)
+                                                                            ->pluck('name')
+                                                                            ->first();
                                                                     
-                                                                    $ct = $coatings
-                                                                        ->where('id', $right_len->coating_id)
-                                                                        ->pluck('name')
-                                                                        ->first();
+                                                                        $ct = $coatings
+                                                                            ->where('id', $right_len->coating_id)
+                                                                            ->pluck('name')
+                                                                            ->first();
                                                                     
-                                                                    $chrm = $chromatics
-                                                                        ->where('id', $right_len->chromatic_id)
-                                                                        ->pluck('name')
-                                                                        ->first();
+                                                                        $chrm = $chromatics
+                                                                            ->where('id', $right_len->chromatic_id)
+                                                                            ->pluck('name')
+                                                                            ->first();
+                                                                    } else {
+                                                                        $description = $products
+                                                                            ->where('id', $right_len->product_id)
+                                                                            ->pluck('description')
+                                                                            ->first();
+                                                                    }
                                                                     
                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                     if (!$left_len) {
@@ -906,8 +916,12 @@
                                                                     }
                                                                 @endphp
                                                                 <td>
-                                                                    {{ initials($type) }} {{ $chrm }}
-                                                                    {{ $ct }} {{ $indx }}
+                                                                    @if ($availability)
+                                                                        {{ initials($type) }} {{ $chrm }}
+                                                                        {{ $ct }} {{ $indx }}
+                                                                    @else
+                                                                        {{ $description }}
+                                                                    @endif
                                                                 </td>
                                                                 <td>
 

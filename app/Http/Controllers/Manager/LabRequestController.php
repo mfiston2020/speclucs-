@@ -37,6 +37,7 @@ class LabRequestController extends Controller
 
         // sent to supplier
         $requests_lab  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('soldproduct')->with('client')->with('SoldProduct')->get();
+        
 
 
         return view('manager.lab-request.index', compact('requests', 'products', 'unavailableProducts', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings'));
