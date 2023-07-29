@@ -263,7 +263,7 @@
                                                                                 <hr>
                                                                                 <h4 class="text-info">Frame</h4>
                                                                                 <hr>
-                                                                                @if ($product)
+                                                                                @if ($products)
                                                                                     @foreach ($request->soldproduct as $product)
                                                                                         @php
                                                                                             $invoice_product = $products->where('id', $product->product_id)->first();
@@ -408,7 +408,7 @@
                                                                     <td>{{ $key + 1 }}</td>
                                                                     <td>
                                                                         <a href="#!" data-toggle="modal"
-                                                                        data-target="#request-{{ $key }}-detail">
+                                                                            data-target="#request-{{ $key }}-detail">
                                                                             Request
                                                                             #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                         </a>
@@ -849,27 +849,27 @@
                                                                     if (!$right_len) {
                                                                         $right_len = $request->soldproduct->where('eye', 'right')->first();
                                                                     }
-
+                                                                    
                                                                     $type = $lens_type
                                                                         ->where('id', $right_len->type_id)
                                                                         ->pluck('name')
                                                                         ->first();
-
+                                                                    
                                                                     $indx = $index
                                                                         ->where('id', $right_len->index_id)
                                                                         ->pluck('name')
                                                                         ->first();
-
+                                                                    
                                                                     $ct = $coatings
                                                                         ->where('id', $right_len->coating_id)
                                                                         ->pluck('name')
                                                                         ->first();
-
+                                                                    
                                                                     $chrm = $chromatics
                                                                         ->where('id', $right_len->chromatic_id)
                                                                         ->pluck('name')
                                                                         ->first();
-
+                                                                    
                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                     if (!$left_len) {
                                                                         $left_len = $request->soldproduct->where('eye', 'left')->first();
