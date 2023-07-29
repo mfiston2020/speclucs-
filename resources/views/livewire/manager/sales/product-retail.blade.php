@@ -278,7 +278,7 @@
                             <div class="form-group col-1">
                                 <label>Stock</label>
                                 <input type="text"
-                                    class="form-control {{ $frame_stock == 0 && $frame_stock != null ? 'is-invalid' : '' }}"
+                                    class="form-control {{ $frame_stock == 0 && $frame_stock != null ? 'border border-danger' : '' }}"
                                     id="frame_stock" placeholder="Stock" wire:model.lazy="frame_stock" readonly>
                             </div>
 
@@ -290,13 +290,13 @@
 
                             <div class="form-group col-1">
                                 <label>Quantity</label>
-                                <input type="text" class="form-control" id="frame_quantity" placeholder="Qty"
+                                <input type="number" class="form-control" id="frame_quantity" placeholder="Qty"
                                     wire:model.lazy="frame_quantity">
                             </div>
 
                             <div class="form-group col-2">
                                 <label>Price Adj</label>
-                                <input type="text" class="form-control" id="frame_price_adjust"
+                                <input type="number" class="form-control" id="frame_price_adjust"
                                     placeholder="Price Adj" wire:model="frame_price_adjust">
                             </div>
 
@@ -345,13 +345,15 @@
 
                             <div class="form-group col-1">
                                 <label>Stock</label>
-                                <input type="text" class="form-control" id="accessory_stock" placeholder="Stock"
-                                    wire:model.lazy="accessory_stock" readonly>
+                                <input type="text"
+                                    class="form-control {{ $accessory_stock <= 0 && $accessory_stock != null ? 'border border-danger' : '' }}"
+                                    id="accessory_stock" placeholder="Stock" wire:model.lazy="accessory_stock"
+                                    readonly>
                             </div>
 
                             <div class="form-group col-1">
                                 <label>U. Price</label>
-                                <input type="text" class="form-control" id="accessory_unit_price"
+                                <input type="text" class="form-control border-red-500" id="accessory_unit_price"
                                     placeholder="Unit Price" wire:model.lazy="accessory_unit_price" readonly>
                             </div>
 
@@ -363,13 +365,13 @@
 
                             <div class="form-group col-2">
                                 <label>Price Adj</label>
-                                <input type="text" class="form-control" id="accessory_price_adjust"
+                                <input type="number" class="form-control" id="accessory_price_adjust"
                                     placeholder="Price Adj" wire:model="accessory_price_adjust">
                             </div>
 
                             <div class="form-group col-2">
                                 <label>T.Amount</label>
-                                <input type="text" class="form-control" id="accessory_total_amount"
+                                <input type="number" class="form-control" id="accessory_total_amount"
                                     placeholder="Total">
                             </div>
 
@@ -540,11 +542,12 @@
 @push('scripts')
     <script src="//unpkg.com/alpinejs" defer></script>
     <script>
-        // $('#frame').on('change', function() {
-        //     var total = $('#frame_quantity').val() * $('#frame_unit_price').val();
-        //     $('#frame_total_amount').val(total);
-        //     $('#frame_final_total').val(total);
-        // })
+        $('#frame_price_adjust').on('keyup', function() {
+            var total = $('#frame_quantity').val() * ($('#frame_unit_price').val() + $('#frame_price_adjust')
+                .val());
+            $('#frame_total_amount').val(total);
+            $('#frame_final_total').val(total);
+        })
 
         $('#frame_quantity').on('keyup', function() {
             var total = $('#frame_quantity').val() * $('#frame_unit_price').val();
@@ -552,10 +555,11 @@
             $('#frame_final_total').val(total);
         });
         // ======================================================
-        // $('#accessory_quantity').on('keyup', function() {
-        //     var total = $('#accessory_quantity').val() * $('#accessory_unit_price').val();
-        //     $('#accessory_total_amount').val(total);
-        // });
+        $('#accessory_price_adjust').on('keyup', function() {
+            var total = $('#accessory_quantity').val() * $('#accessory_unit_price').val() + $(
+                '#accessory_price_adjust').val();
+            $('#accessory_total_amount').val(total);
+        });
 
         $('#accessory_quantity').on('keyup', function() {
             var total = $('#accessory_quantity').val() * $('#accessory_unit_price').val();

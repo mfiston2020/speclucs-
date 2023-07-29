@@ -21,36 +21,6 @@
                             <h4 class="card-title text-capitalize">{{ __('manager/dispensing.all_sales') }}</h4>
                             <hr>
 
-                            <a href="{{ route('manager.retail') }}" type="button"
-                                class="btn waves-effect waves-light btn-rounded btn-outline-success mr-3 text-capitalize"
-                                style="align-items: right;">
-                                <i class="fa fa-plus"></i> Retail
-                            </a>
-
-                            <a href="{{ route('manager.new.order') }}" type="button"
-                                class="btn waves-effect waves-light btn-rounded btn-outline-primary mr-3 text-capitalize"
-                                style="align-items: right;">
-                                <i class="fa fa-plus"></i> Wholesale
-                            </a>
-
-                            {{-- <a href="{{route('manager.new.order')}}" type="button"
-                                    class="btn waves-effect waves-light btn-rounded btn-outline-primary mr-3 text-capitalize"
-                                    style="align-items: right;">
-                                    <i class="fa fa-plus"></i> {{ __('manager/dispensing.new_order') }}
-                                </a> --}}
-
-                            <a href="{{ route('manager.pending.orders') }}" type="button"
-                                class="btn waves-effect waves-light btn-rounded btn-outline-secondary mr-3 text-capitalize"
-                                style="align-items: right;">
-                                <i class="fa fa-bars"></i> {{ __('manager/sales.pending_orders') }}
-
-                                @if ($pending > 0)
-                                    <span class="badge badge-danger badge-pill">
-                                        {{ $pending }}
-                                    </span>
-                                @endif
-                            </a>
-
                             {{-- <a href="{{route('manager.sales.customer.add')}}" type="button" class="btn waves-effect waves-light btn-rounded btn-outline-primary mr-3" style="align-items: right;">
                             <i class="fa fa-plus"></i> Create Customer Order
                         </a>
@@ -66,7 +36,7 @@
                         {{-- ========================== --}}
 
                         <div class="table-responsive">
-                            <form action="{{ route('manager.sent.request.to.dispense') }}" method="post">
+                            <form action="{{ route('manager.sent.request.to.receive') }}" method="post">
                                 @csrf
                                 <table id="zero_config" class="table table-striped table-bordered nowrap"
                                     style="width:100%">
@@ -77,7 +47,7 @@
                                             <th>{{ __('manager/sales.order') }}</th>
                                             <th>{{ __('manager/sales.reference_number') }} #</th>
                                             <th>{{ __('manager/sales.customer') }}</th>
-                                            {{-- <th>User</th> --}}
+                                            <th>User</th>
                                             {{-- <th>Products</th> --}}
                                             <th>{{ __('manager/sales.ins') }}</th>
                                             <th>T. Amnt</th>
@@ -95,12 +65,12 @@
                                                         ->where('company_id', Auth::user()->company_id)
                                                         ->pluck('name')
                                                         ->first();
-
+                                                    
                                                     $product = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
                                                         ->where('company_id', Auth::user()->company_id)
                                                         ->select('product_id', 'insurance_id', 'insurance_payment', 'patient_payment')
                                                         ->first();
-
+                                                    
                                                     $amount_paid = \App\Models\Transactions::where('invoice_id', $sale->id)
                                                         ->select('amount')
                                                         ->sum('amount');
@@ -115,7 +85,8 @@
                                                 @endphp
                                                 <td>
                                                     <input type="checkbox" name="requestid[]" value="{{ $sale->id }}"
-                                                        {{ $sale->status == 'collected' ? 'checked disabled' : '' }} />
+                                                        {{ $sale->status == 'delivered' ? '' : 'disabled' }} />
+                                                    {{-- {{ $key + 1 }} --}}
                                                 </td>
                                                 <td>{{ date('Y-m-d', strtotime($sale->created_at)) }}</td>
                                                 <td>
@@ -123,7 +94,8 @@
                                                         #{{ sprintf('%04d', $sale->id) }}</a>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('manager.sales.edit', Crypt::encrypt($sale->id)) }}">Order#
+                                                    <a href="{{ route('manager.sales.edit', Crypt::encrypt($sale->id)) }}">
+                                                        Order#
                                                         {{ $sale->reference_number }}</a>
                                                 </td>
                                                 <td>
@@ -135,8 +107,8 @@
                                                         </center>
                                                     @endif
                                                 </td>
-                                                {{-- <td>{{ \App\Models\User::where(['id' => $sale->user_id])->where('company_id', Auth::user()->company_id)->pluck('name')->first() }}
-                                                </td> --}}
+                                                <td>{{ \App\Models\User::where(['id' => $sale->user_id])->where('company_id', Auth::user()->company_id)->pluck('name')->first() }}
+                                                </td>
                                                 <td>
                                                     @if ($product && $product->insurance_id != null)
                                                         {{ \App\Models\Insurance::where('id', $product->insurance_id)->pluck('insurance_name')->first() }}
@@ -151,21 +123,24 @@
                                                 </td>
                                                 <td>
                                                     @if ($product && $product->insurance_id != null)
-                                                        {{ format_money($pt_due_amount - $amount_paid) }}
+                                                        {{ $pt_due_amount - $amount_paid }}
                                                     @else
-                                                        {{ format_money($pt_due_amount - $amount_paid) }}
+                                                        {{ $pt_due_amount - $amount_paid }}
                                                     @endif
                                                 </td>
                                                 {{-- <td >{{format_money($sale->due)}}</td> --}}
                                                 <td>
-                                                    <span @class([
-                                                        'label',
-                                                        'label-warning' => $sale->status == 'delivered',
-                                                        'label-info' => $sale->status == 'received',
-                                                        'label-success' => $sale->status == 'dispensed',
-                                                    ])>
-                                                        {{ $sale->status }}
-                                                    </span>
+
+                                                    @if ($sale->status == 'completed' && $sale->emailState == 'submited')
+                                                        <span class="label label-warning">submited</span>
+                                                    @else
+                                                        <span
+                                                            class="label label-{{ $sale->status == 'completed' ? 'success' : 'danger' }}">{{ $sale->status }}</span>
+                                                    @endif
+
+                                                    @if ($sale->payment == 'paid')
+                                                        <span class="label label-success">{{ $sale->payment }}</span>
+                                                    @endif
 
                                                 </td>
                                                 <td>
@@ -181,9 +156,9 @@
                                                     @else
                                                         <a href="{{ route('manager.sales.edit', Crypt::encrypt($sale->id)) }}"
                                                             class="btn btn-primary btn-sm">edit</a>
-                                                        {{-- <a href="#" data-toggle="modal"
+                                                        <a href="#" data-toggle="modal"
                                                             data-target="#myModal-{{ $key }}"
-                                                            class="btn btn-danger btn-sm">delete</a> --}}
+                                                            class="btn btn-danger btn-sm">delete</a>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -226,7 +201,7 @@
                                     </tbody>
                                 </table>
                                 <hr>
-                                <button class="btn btn-success">Despense</button>
+                                <button class="btn btn-success">Receive</button>
                             </form>
                         </div>
                     </div>

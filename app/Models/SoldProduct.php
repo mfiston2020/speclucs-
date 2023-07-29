@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SoldProduct extends Model
 {
     use HasFactory;
+
+    function productSold()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

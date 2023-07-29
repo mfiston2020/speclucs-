@@ -282,6 +282,7 @@ class ProductRetail extends Component
             $sold->invoice_id   =   $invoiceId;
             $sold->quantity     =   '1';
             $sold->discount     =   '0';
+            $sold->eye          =   $eye;
             $sold->unit_price   =   $eye == 'right' ? $this->rightLenInfo[0]->price : $this->leftLenInfo[0]->price;
             $sold->total_amount =   $eye == 'right' ? $this->rightLenInfo[0]->price : $this->leftLenInfo[0]->price;
             $sold->segment_h    =   $eye == 'right' ? $this->r_segment_height : $this->l_segment_height;
@@ -318,9 +319,9 @@ class ProductRetail extends Component
             $total  += $sold->total_amount;
         }
 
-        // Invoice::update([
-        //     'total_amount' => $total
-        // ])->where('id', $invoiceId);
+        Invoice::where('id', $invoiceId)->update([
+            'total_amount' => $total
+        ]);
 
         redirect('/manager/editSales/' . Crypt::encrypt($invoiceId))->with('successMsg', 'Invoice ');
     }

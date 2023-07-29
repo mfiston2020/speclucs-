@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\PendingOrder;
 use App\Models\Product;
@@ -17,69 +18,77 @@ class PendingOrderController extends Controller
 {
     protected $productRepo;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->productRepo  =   new ProductRepo();
     }
 
-    function index(){
-        $pendingOrders  =   PendingOrder::where('company_id',userInfo()->company_id)->orderBy('created_at','desc')->get();
-        return view('manager.sales.pending-sales',compact('pendingOrders'));
+    function index()
+    {
+        // $pendingOrders  =   PendingOrder::where('company_id', userInfo()->company_id)->orderBy('created_at', 'desc')->get();
+
+        $sales  =   Invoice::where('company_id', Auth::user()->company_id)->whereNotIn('status', ['collected', 'received'])->orderBy('status', 'DESC')->get();
+        return view('manager.sales.pending', compact('sales'));
     }
 
-    function setOrderPrice(Request $request){
+    function setOrderPrice(Request $request)
+    {
         if ($request->cost <= 0 || $request->price <= 0) {
 
-            return redirect()->back()->with('warningMsg','The '.($request->cost==0?'Cost':'Price').' can\'t be zero!')->withInput();
+            return redirect()->back()->with('warningMsg', 'The ' . ($request->cost == 0 ? 'Cost' : 'Price') . ' can\'t be zero!')->withInput();
         }
 
         try {
-            PendingOrder::where('id',Crypt::decrypt($request->thisName))->update([
-                'order_cost'=>$request->cost,
-                'order_price'=>$request->price,
-                'status'=>'approved',
+            PendingOrder::where('id', Crypt::decrypt($request->thisName))->update([
+                'order_cost' => $request->cost,
+                'order_price' => $request->price,
+                'status' => 'approved',
             ]);
-            return redirect()->back()->with('successMsg','Pricing Updated Successfully!');
+            return redirect()->back()->with('successMsg', 'Pricing Updated Successfully!');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('errorMsg','Oops! Something went wrong!');
+            return redirect()->back()->with('errorMsg', 'Oops! Something went wrong!');
         }
     }
 
-    function clientRequestfeedback(Request $request){
+    function clientRequestfeedback(Request $request)
+    {
         $productDetail  =   array();
         try {
             $product    =   PendingOrder::findOrFail(Crypt::decrypt($request->thisName));
-            $productDetail=([
-                'cost'=>$product->order_cost,
-                'price'=>$product->order_price,
+            $productDetail = ([
+                'cost' => $product->order_cost,
+                'price' => $product->order_price,
             ]);
 
-            $productInfo    =   $this->productRepo->saveProduct($product->toArray(),'1',$productDetail);
+            $productInfo    =   $this->productRepo->saveProduct($product->toArray(), '1', $productDetail);
 
-            $placeOrderMessage  =   $this->productRepo->makeLabOrder($product->toArray(),$productInfo->id);
+            $placeOrderMessage  =   $this->productRepo->makeLabOrder($product->toArray(), $productInfo->id);
 
-            PendingOrder::where('id',Crypt::decrypt($request->thisName))->update([
-                'status'=>'paid',
+            PendingOrder::where('id', Crypt::decrypt($request->thisName))->update([
+                'status' => 'paid',
             ]);
 
-            return redirect()->back()->with('successMsg',$placeOrderMessage);
+            return redirect()->back()->with('successMsg', $placeOrderMessage);
         } catch (\Throwable $th) {
-            return redirect()->back()->with('errorMsg','Oops! Something went wrong!'.$th);
+            return redirect()->back()->with('errorMsg', 'Oops! Something went wrong!' . $th);
         }
     }
 
-    function sellPendingOrder(Request $request){
-        $product  =   Order::where('pending_order_id',Crypt::decrypt($request->thisName))->select('id','order_cost','product_id','firstname','lastname','patient_number')->first()->toArray();
+    function sellPendingOrder(Request $request)
+    {
+        $product  =   Order::where('pending_order_id', Crypt::decrypt($request->thisName))->select('id', 'order_cost', 'product_id', 'firstname', 'lastname', 'patient_number')->first()->toArray();
 
         $invoice_id =   $this->productRepo->sellPendingOrder($product);
 
-        PendingOrder::where('id',Crypt::decrypt($request->thisName))->update([
-            'status'=>'sold',
+        PendingOrder::where('id', Crypt::decrypt($request->thisName))->update([
+            'status' => 'sold',
         ]);
 
-        return redirect()->route('manager.sales.edit',Crypt::encrypt($invoice_id))->with('successMsg','The product has been disposed of! ');
+        return redirect()->route('manager.sales.edit', Crypt::encrypt($invoice_id))->with('successMsg', 'The product has been disposed of! ');
     }
 
-    function cancelOrder(Request $request){
+    function cancelOrder(Request $request)
+    {
 
         $id = Crypt::decrypt($request->thisName);
 
@@ -87,14 +96,15 @@ class PendingOrderController extends Controller
             $order  =   PendingOrder::find($id);
             $order->delete();
 
-            return redirect()->back()->with('successMsg','Order Cancel!');
+            return redirect()->back()->with('successMsg', 'Order Cancel!');
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->back()->with('errorMsg','Oops! Something Went Wrong!'.$th);
+            return redirect()->back()->with('errorMsg', 'Oops! Something Went Wrong!' . $th);
         }
     }
 
-    function adjustPrice(Request $request){
+    function adjustPrice(Request $request)
+    {
 
         $order  =   UnavailableProduct::findOrFail(Crypt::decrypt($request->thisName));
         $order->price   =   $request->price;
@@ -102,19 +112,20 @@ class PendingOrderController extends Controller
         $order->status  =   'approved';
         try {
             $order->save();
-            return redirect()->back()->with('successMsg','Price set!');
+            return redirect()->back()->with('successMsg', 'Price set!');
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->back()->with('errorMsg','Something went Wrong!');
+            return redirect()->back()->with('errorMsg', 'Something went Wrong!');
         }
     }
 
-    function sellProduct(Request $request){
+    function sellProduct(Request $request)
+    {
 
         $order  =   UnavailableProduct::findOrFail(Crypt::decrypt($request->thisName));
         try {
 
-            $newProduct = $this->productRepo->saveProduct($order->toArray(),'1',$order->toArray(),true);
+            $newProduct = $this->productRepo->saveProduct($order->toArray(), '1', $order->toArray(), true);
 
             $sold               =   new SoldProduct();
             $sold->invoice_id   =   $order->invoice_id;
@@ -130,31 +141,31 @@ class PendingOrderController extends Controller
             $order->product_id  =   $newProduct->id;
             $order->save();
 
-            return redirect()->back()->with('successMsg','Product Sold!');
+            return redirect()->back()->with('successMsg', 'Product Sold!');
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->back()->with('errorMsg','Something went Wrong!'.$th);
+            return redirect()->back()->with('errorMsg', 'Something went Wrong!' . $th);
         }
     }
 
-    function sellProductOff($id){
-        $naProducts =   UnavailableProduct::where('invoice_id',Crypt::decrypt($id))->get();
+    function sellProductOff($id)
+    {
+        $naProducts =   UnavailableProduct::where('invoice_id', Crypt::decrypt($id))->get();
 
         foreach ($naProducts as $key => $value) {
 
             $product_stock          =   Product::find($value->product_id);
-            $product_stock->stock   =   $product_stock->stock-$value->quantity;
+            $product_stock->stock   =   $product_stock->stock - $value->quantity;
             try {
                 $product_stock->save();
 
                 $value->status =   'completed';
                 $value->save();
             } catch (\Throwable $th) {
-                return redirect()->back()->with('errorMsg','Something Went Wrong!');
+                return redirect()->back()->with('errorMsg', 'Something Went Wrong!');
             }
         }
 
-        return redirect()->back()->with('successMsg','Product Sold Off!');
-
+        return redirect()->back()->with('successMsg', 'Product Sold Off!');
     }
 }

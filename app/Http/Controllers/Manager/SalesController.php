@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use App\Models\UnavailableProduct;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -13,29 +14,30 @@ class SalesController extends Controller
 {
     public function index()
     {
-        $sales  =   \App\Models\Invoice::where('company_id',Auth::user()->company_id)->orderBy('created_at','DESC')->get();
-        return view('manager.sales.index',compact('sales'));
+        $pending  =   Invoice::where('company_id', Auth::user()->company_id)->whereNotIn('status', ['collected', 'received'])->count();
+
+        $sales  =   \App\Models\Invoice::where('company_id', Auth::user()->company_id)->whereIn('status', ['collected', 'received'])->orderBy('created_at', 'DESC')->get();
+
+        return view('manager.sales.index', compact('sales', 'pending'));
     }
 
     public function addCustomerSale()
     {
-        $customers  =  \App\Models\Customer::where('company_id',Auth::user()->company_id)->get();
-        return view('manager.sales.customerForm',compact('customers'));
+        $customers  =  \App\Models\Customer::where('company_id', Auth::user()->company_id)->get();
+        return view('manager.sales.customerForm', compact('customers'));
     }
 
     public function create()
     {
-        $reference  =   count(DB::table('invoices')->select('reference_number')->where('company_id',Auth::user()->company_id)->get());
-        $pending    =   count(DB::table('invoices')->select('*')->where('status','=','pending')->where('company_id',Auth::user()->company_id)->where('user_id','=',Auth::user()->id)->get());
+        $reference  =   count(DB::table('invoices')->select('reference_number')->where('company_id', Auth::user()->company_id)->get());
+        $pending    =   count(DB::table('invoices')->select('*')->where('status', '=', 'pending')->where('company_id', Auth::user()->company_id)->where('user_id', '=', Auth::user()->id)->get());
 
-        if ($pending>0)
-        {
-            return redirect()->back()->with('warningMsg','Complete pending invoices first!');
-        }
-        else{
+        if ($pending > 0) {
+            return redirect()->back()->with('warningMsg', 'Complete pending invoices first!');
+        } else {
             $invoice    =   new \App\Models\Invoice();
 
-            $invoice->reference_number  =   $reference+1;
+            $invoice->reference_number  =   $reference + 1;
             $invoice->status            =   'pending';
             $invoice->user_id           =   Auth::user()->id;
             $invoice->total_amount      =   '0';
@@ -43,46 +45,41 @@ class SalesController extends Controller
 
             try {
                 $invoice->save();
-                return redirect()->route('manager.sales.edit',Crypt::encrypt($invoice->id));
+                return redirect()->route('manager.sales.edit', Crypt::encrypt($invoice->id));
             } catch (\Throwable $th) {
-                return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
+                return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }
         }
     }
 
     public function createCustomerInvoice(Request $request)
     {
-        $this->validate($request,[
-            'customer'=>'required',
+        $this->validate($request, [
+            'customer' => 'required',
         ]);
 
         $customer_found  =   0;
         $invoice_id     =   0;
 
 
-        $invoices  =   DB::table('invoices')->select('*')->where('company_id',Auth::user()->company_id)->get();
+        $invoices  =   DB::table('invoices')->select('*')->where('company_id', Auth::user()->company_id)->get();
 
-        foreach ($invoices as $key => $invoice)
-        {
-            if ($invoice->client_id ==  $request->customer && $invoice->status=='pending')
-            {
+        foreach ($invoices as $key => $invoice) {
+            if ($invoice->client_id ==  $request->customer && $invoice->status == 'pending') {
                 $customer_found  =   1;
                 $invoice_id     =   $invoice->id;
             }
         }
 
-        if ($customer_found==1)
-        {
-            return redirect()->route('manager.sales.edit',Crypt::encrypt($invoice_id));
-        }
-        else
-        {
-            $reference  =   count(DB::table('invoices')->select('reference_number')->where('company_id',Auth::user()->company_id)->get());
-            $pending    =   count(DB::table('invoices')->select('*')->where('company_id',Auth::user()->company_id)->where('status','=','pending')->where('user_id','=',Auth::user()->id)->get());
+        if ($customer_found == 1) {
+            return redirect()->route('manager.sales.edit', Crypt::encrypt($invoice_id));
+        } else {
+            $reference  =   count(DB::table('invoices')->select('reference_number')->where('company_id', Auth::user()->company_id)->get());
+            $pending    =   count(DB::table('invoices')->select('*')->where('company_id', Auth::user()->company_id)->where('status', '=', 'pending')->where('user_id', '=', Auth::user()->id)->get());
 
             $invoice    =   new \App\Models\Invoice();
 
-            $invoice->reference_number  =   $reference+1;
+            $invoice->reference_number  =   $reference + 1;
             $invoice->status            =   'pending';
             $invoice->user_id           =   Auth::user()->id;
             $invoice->client_id         =   $request->customer;
@@ -91,11 +88,9 @@ class SalesController extends Controller
 
             try {
                 $invoice->save();
-                return redirect()->route('manager.sales.edit',Crypt::encrypt($invoice->id));
-            }
-            catch (\Throwable $th)
-            {
-                return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
+                return redirect()->route('manager.sales.edit', Crypt::encrypt($invoice->id));
+            } catch (\Throwable $th) {
+                return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }
         }
     }
@@ -105,19 +100,19 @@ class SalesController extends Controller
         $id =   Crypt::decrypt($id);
 
         $invoice    =   \App\Models\Invoice::find($id);
-        $products   =   DB::table('sold_products')->select('*')->where('invoice_id',$id)->get();
+        $products   =   DB::table('sold_products')->select('*')->where('invoice_id', $id)->get();
 
-        $na_products    =   UnavailableProduct::where('invoice_id',$id)->whereIn('status',['pending','approved'])->get();
-        $has_na_products=   UnavailableProduct::where('invoice_id',$id)->where('status','sold')->count();
+        $na_products    =   UnavailableProduct::where('invoice_id', $id)->whereIn('status', ['pending', 'approved'])->get();
+        $has_na_products =   UnavailableProduct::where('invoice_id', $id)->where('status', 'sold')->count();
 
-        return view('manager.sales.detail',compact('invoice','products','na_products','has_na_products'));
+        return view('manager.sales.detail', compact('invoice', 'products', 'na_products', 'has_na_products'));
     }
 
     public function addSalesProduct($id)
     {
         $id =   Crypt::decrypt($id);
 
-        $products   =   \App\Models\Product::orderBy('product_name','DESC')->where('company_id',Auth::user()->company_id)->where('category_id','<>','1')->get();
+        $products   =   \App\Models\Product::orderBy('product_name', 'DESC')->where('company_id', Auth::user()->company_id)->where('category_id', '<>', '1')->get();
 
         $categories =   \App\Models\Category::all();
         $lens_types =   \App\Models\LensType::all();
@@ -125,31 +120,29 @@ class SalesController extends Controller
         $coatings   =   \App\Models\PhotoCoating::all();
         $index      =   \App\Models\PhotoIndex::all();
 
-        return view('manager.sales.addProduct',compact('products','id','categories','lens_types','chromatics','coatings','index'));
+        return view('manager.sales.addProduct', compact('products', 'id', 'categories', 'lens_types', 'chromatics', 'coatings', 'index'));
     }
 
     public function save(Request $request)
     {
-        $this->validate($request,[
-            'product'=>'required',
-            'unit_price'=>'required | integer',
-            'quantity'=>'required | integer',
-            'total_amount'=>'required | integer',
+        $this->validate($request, [
+            'product' => 'required',
+            'unit_price' => 'required | integer',
+            'quantity' => 'required | integer',
+            'total_amount' => 'required | integer',
         ]);
 
-        $_product   =   \App\Models\SoldProduct::where('company_id',Auth::user()->company_id)->get();
+        $_product   =   \App\Models\SoldProduct::where('company_id', Auth::user()->company_id)->get();
         $existing_product   =  0;
 
         foreach ($_product as $key => $item) {
-            if ($request->product==$item->product_id && $request->invoice_id==$item->invoice_id)
-            {
+            if ($request->product == $item->product_id && $request->invoice_id == $item->invoice_id) {
                 $existing_product   =   1;
                 $id                 =   $item->id;
             }
         }
 
-        if ($existing_product==0)
-        {
+        if ($existing_product == 0) {
             $sold   =   new \App\Models\SoldProduct();
 
             $sold->invoice_id   =   $request->invoice_id;
@@ -162,22 +155,21 @@ class SalesController extends Controller
 
             try {
                 $sold->save();
-                return redirect()->route('manager.sales.edit',Crypt::encrypt($request->invoice_id))->with('successMsg','The product has been disposed of successfully.! ');
+                return redirect()->route('manager.sales.edit', Crypt::encrypt($request->invoice_id))->with('successMsg', 'The product has been disposed of successfully.! ');
             } catch (\Throwable $th) {
-                return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
+                return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }
-        }
-        else{
+        } else {
             $product = \App\Models\SoldProduct::find($id);
 
             $product->quantity        =   $request->quantity + $product->quantity;
 
             try {
                 $product->save();
-                return redirect()->route('manager.sales.edit',Crypt::encrypt($request->invoice_id))->with('successMsg','Product has been successfully Added!');
+                return redirect()->route('manager.sales.edit', Crypt::encrypt($request->invoice_id))->with('successMsg', 'Product has been successfully Added!');
             } catch (\Throwable $th) {
                 //throw $th;
-                return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
+                return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }
         }
     }
@@ -194,107 +186,100 @@ class SalesController extends Controller
 
         // return $type;
 
-        if (initials($type->name)=='SV')
-        {
-            $product_id     =   \App\Models\Power::where('type_id',$type->id)
-                            ->where('index_id',$request->index)
-                            ->where('chromatics_id',$request->chromatics)
-                            ->where('coating_id',$request->coating)
-                            ->where('sphere',format_values($request->sphere))
-                            ->where('cylinder',format_values($request->cylinder))
-                            // ->where('axis',format_values($request->axis))
-                            // ->where('add',format_values($request->add))
-                            ->where('eye','any')
-                            ->where('company_id',Auth::user()->company_id)
-                            ->select('product_id')->first();
+        if (initials($type->name) == 'SV') {
+            $product_id     =   \App\Models\Power::where('type_id', $type->id)
+                ->where('index_id', $request->index)
+                ->where('chromatics_id', $request->chromatics)
+                ->where('coating_id', $request->coating)
+                ->where('sphere', format_values($request->sphere))
+                ->where('cylinder', format_values($request->cylinder))
+                // ->where('axis',format_values($request->axis))
+                // ->where('add',format_values($request->add))
+                ->where('eye', 'any')
+                ->where('company_id', Auth::user()->company_id)
+                ->select('product_id')->first();
 
-        $product    =   \App\Models\Product::find($product_id);
-        // $product    =   $request->all();
-        }
-        else
-        {
-            $product_id     =   \App\Models\Power::where('type_id',$type->id)
-                            ->where('index_id',$request->index)
-                            ->where('chromatics_id',$request->chromatics)
-                            ->where('coating_id',$request->coating)
-                            ->where('sphere',format_values($request->sphere))
-                            ->where('cylinder',format_values($request->cylinder))
-                            ->where('axis',format_values($request->axis))
-                            ->where('add',format_values($request->add))
-                            ->where('eye',$request->eye)
-                            ->where('company_id',Auth::user()->company_id)
-                            ->select('product_id')->first();
+            $product    =   \App\Models\Product::find($product_id);
+            // $product    =   $request->all();
+        } else {
+            $product_id     =   \App\Models\Power::where('type_id', $type->id)
+                ->where('index_id', $request->index)
+                ->where('chromatics_id', $request->chromatics)
+                ->where('coating_id', $request->coating)
+                ->where('sphere', format_values($request->sphere))
+                ->where('cylinder', format_values($request->cylinder))
+                ->where('axis', format_values($request->axis))
+                ->where('add', format_values($request->add))
+                ->where('eye', $request->eye)
+                ->where('company_id', Auth::user()->company_id)
+                ->select('product_id')->first();
 
-        $product    =   \App\Models\Product::find($product_id);
-        // $product    =   $request->all();
+            $product    =   \App\Models\Product::find($product_id);
+            // $product    =   $request->all();
         }
 
         return response()->json($product);
     }
 
-    public function finalize(Request $request,$id)
+    public function finalize(Request $request, $id)
     {
         $id =   Crypt::decrypt($id);
 
-        $na_products    =   UnavailableProduct::where('invoice_id',$id)->get();
+        $na_products    =   UnavailableProduct::where('invoice_id', $id)->get();
 
         foreach ($na_products as $key => $value) {
-            if ($value->status=='pending') {
-                return redirect()->back()->withInput()->with('warningMsg','Some Products still need to be approved! ');
+            if ($value->status == 'pending') {
+                return redirect()->back()->withInput()->with('warningMsg', 'Some Products still need to be approved! ');
             }
         }
 
         $quantity   =   0;
-        $allProducts    =   \App\Models\SoldProduct::where(['invoice_id'=>$id])->where('company_id',Auth::user()->company_id)->select('*')->get();
+        $allProducts    =   \App\Models\SoldProduct::where(['invoice_id' => $id])->where('company_id', Auth::user()->company_id)->select('*')->get();
 
         if ($allProducts->isEmpty()) {
-            return redirect()->back()->withInput()->with('errorMsg','Please add products first! ');
+            return redirect()->back()->withInput()->with('errorMsg', 'Please add products first! ');
         } else {
             // getting all  the products of this invoice
-        foreach($allProducts as $product)
-        {
-            $p[]    =   $product->product_id;
-        }
-
-        $pro    =   array_unique($p);
-
-        // comparing quantities
-        foreach($pro as $product){
-            $product_   =   \App\Models\SoldProduct::where(['product_id'=>$product])->where('company_id',Auth::user()->company_id)->where(['invoice_id'=>$id])->select('*')->sum('quantity');
-
-            $product_stock  =   \App\Models\Product::find($product);
-
-            if($product_>$product_stock->stock)
-            {
-                return redirect()->back()->with('warningMsg','The product \''.$product_stock->product_name.'\' does not have enough stock. Only has '.$product_stock->stock.' units.');
+            foreach ($allProducts as $product) {
+                $p[]    =   $product->product_id;
             }
-            else{
-                if (!UnavailableProduct::where('product_id',$product)->where('invoice_id',$id)->exists()) {
-                    $product_stock->stock   =   $product_stock->stock-$product_;
-                    $product_stock->save();
+
+            $pro    =   array_unique($p);
+
+            // comparing quantities
+            foreach ($pro as $product) {
+                $product_   =   \App\Models\SoldProduct::where(['product_id' => $product])->where('company_id', Auth::user()->company_id)->where(['invoice_id' => $id])->select('*')->sum('quantity');
+
+                $product_stock  =   \App\Models\Product::find($product);
+
+                if ($product_ > $product_stock->stock) {
+                    return redirect()->back()->with('warningMsg', 'The product \'' . $product_stock->product_name . '\' does not have enough stock. Only has ' . $product_stock->stock . ' units.');
+                } else {
+                    if (!UnavailableProduct::where('product_id', $product)->where('invoice_id', $id)->exists()) {
+                        $product_stock->stock   =   $product_stock->stock - $product_;
+                        $product_stock->save();
+                    }
                 }
             }
+            // ==============
+
+            $sold_product   =   \App\Models\Invoice::find($id);
+
+            $sold_product->status       =   'completed';
+            $sold_product->total_amount =   $request->total;
+            $sold_product->client_name  =   $request->name;
+            $sold_product->phone        =   $request->phone;
+            $sold_product->gender       =   $request->gender;
+            $sold_product->dateOfBirth  =   $request->date_of_birth;
+            $sold_product->tin_number   =   $request->tin_number;
+
+            try {
+                $sold_product->save();
+                return redirect()->back()->with('successMsg', 'Sale has been Finalized successfully! ');
+            } catch (\Throwable $th) {
+                return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
+            }
         }
-        // ==============
-
-        $sold_product   =   \App\Models\Invoice::find($id);
-
-        $sold_product->status       =   'completed';
-        $sold_product->total_amount =   $request->total;
-        $sold_product->client_name  =   $request->name;
-        $sold_product->phone        =   $request->phone;
-        $sold_product->gender       =   $request->gender;
-        $sold_product->dateOfBirth  =   $request->date_of_birth;
-        $sold_product->tin_number   =   $request->tin_number;
-
-        try {
-            $sold_product->save();
-            return redirect()->back()->with('successMsg','Sale has been Finalized successfully! ');
-        } catch (\Throwable $th) {
-            return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
-        }
-        }
-
     }
 
     public function removeSaleProduct($id)
@@ -303,25 +288,25 @@ class SalesController extends Controller
         return $product;
         try {
             $product->delete();
-            return redirect()->back()->with('successMsg','Product successfully removed');
+            return redirect()->back()->with('successMsg', 'Product successfully removed');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('errorMsg','Something went wrong!');
+            return redirect()->back()->with('errorMsg', 'Something went wrong!');
         }
     }
 
     public function editSaleProduct($id)
     {
-        $product    =   \App\Models\SoldProduct::where(['id'=>Crypt::decrypt($id)])->where('company_id',Auth::user()->company_id)->select("*")->first();
+        $product    =   \App\Models\SoldProduct::where(['id' => Crypt::decrypt($id)])->where('company_id', Auth::user()->company_id)->select("*")->first();
 
-        return view('manager.sales.editProduct',compact('product'));
+        return view('manager.sales.editProduct', compact('product'));
     }
 
-    public function updateSaleProduct(Request $request,$id)
+    public function updateSaleProduct(Request $request, $id)
     {
-        $this->validate($request,[
-            'unit_price'=>'required | integer',
-            'quantity'=>'required | integer',
-            'total_amount'=>'required | integer',
+        $this->validate($request, [
+            'unit_price' => 'required | integer',
+            'quantity' => 'required | integer',
+            'total_amount' => 'required | integer',
         ]);
 
         $sold   =   \App\Models\SoldProduct::find(Crypt::decrypt($id));
@@ -332,35 +317,35 @@ class SalesController extends Controller
 
         try {
             $sold->save();
-            return redirect()->route('manager.sales.edit',Crypt::encrypt($request->invoice_id))->with('successMsg','The product has been updated of successfully.! ');
+            return redirect()->route('manager.sales.edit', Crypt::encrypt($request->invoice_id))->with('successMsg', 'The product has been updated of successfully.! ');
         } catch (\Throwable $th) {
-            return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
+            return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
         }
     }
 
-    public function payInvoice ($id)
+    public function payInvoice($id)
     {
-        $product    =   \App\Models\Invoice::where(['id'=>Crypt::decrypt($id)])->where('company_id',Auth::user()->company_id)->select("*")->first();
+        $product    =   \App\Models\Invoice::where(['id' => Crypt::decrypt($id)])->where('company_id', Auth::user()->company_id)->select("*")->first();
         $payment_method =   \App\Models\PaymentMethod::all();
 
-        return view('manager.sales.payment',compact('product','payment_method'));
+        return view('manager.sales.payment', compact('product', 'payment_method'));
     }
 
-    function payDueInvoice($id){
-        $product    =   \App\Models\Invoice::where(['id'=>Crypt::decrypt($id)])->where('company_id',Auth::user()->company_id)->select("*")->first();
+    function payDueInvoice($id)
+    {
+        $product    =   \App\Models\Invoice::where(['id' => Crypt::decrypt($id)])->where('company_id', Auth::user()->company_id)->select("*")->first();
         $payment_method =   \App\Models\PaymentMethod::all();
 
-        return view('manager.sales.due-payment',compact('product','payment_method'));
-
+        return view('manager.sales.due-payment', compact('product', 'payment_method'));
     }
 
-    public  function invoiceTransaction(Request $request,$id)
+    public  function invoiceTransaction(Request $request, $id)
     {
-        $this->validate($request,[
-            'payment_type'=>'required',
-            'payment'=>'required',
-            'amount_paid'=>'required | integer',
-            'remain'=>'required | integer',
+        $this->validate($request, [
+            'payment_type' => 'required',
+            'payment' => 'required',
+            'amount_paid' => 'required | integer',
+            'remain' => 'required | integer',
         ]);
 
         $invoice    =   \App\Models\Invoice::find(Crypt::decrypt($id));
@@ -388,12 +373,10 @@ class SalesController extends Controller
                 $client_name    =   null;
                 $client_phone   =   null;
 
-                if ($invoice->client_id!=null)
-                {
+                if ($invoice->client_id != null) {
                     $cl   =   \App\Models\Customer::find($invoice->client_id);
                     $client_name    =   $cl->name;
                     $client_phone   =   $cl->phone;
-
                 } else {
                     $client_name    =   $invoice->client_name;
                     $client_phone   =   $invoice->phone;
@@ -403,8 +386,7 @@ class SalesController extends Controller
                 $company_name   =   \App\Models\CompanyInformation::find(Auth::user()->company_id);
                 $message        =   $company_name->sms_message;
 
-                if ($company_name->can_send_sms==1 && $company_name->sms_quantity>0)
-                {
+                if ($company_name->can_send_sms == 1 && $company_name->sms_quantity > 0) {
                     // $curl = curl_init();
 
                     // curl_setopt_array($curl, array(
@@ -432,24 +414,25 @@ class SalesController extends Controller
                     $company_name->save();
                 }
 
-                return redirect()->route('manager.sales.edit',Crypt::encrypt($invoice->id))->with('successMsg','The Invoice has been successfully Paid!');
+                return redirect()->route('manager.sales.edit', Crypt::encrypt($invoice->id))->with('successMsg', 'The Invoice has been successfully Paid!');
             } catch (\Throwable $th) {
                 //throw $th;
-                return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
+                return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }
         } catch (\Throwable $th) {
-            return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
+            return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
         }
     }
 
-    public function invoicedelete($id){
+    public function invoicedelete($id)
+    {
         $invoice    =   \App\Models\Invoice::find(Crypt::decrypt($id));
         try {
             $invoice->delete();
-            return redirect()->back()->with('successMsg','The Invoice has been successfully Deleted!');
+            return redirect()->back()->with('successMsg', 'The Invoice has been successfully Deleted!');
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
+            return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
         }
     }
 }

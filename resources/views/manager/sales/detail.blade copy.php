@@ -17,22 +17,33 @@
                             <h4 class="card-title">Products: <strong>{{ count($products) + count($na_products) }}</strong>
                             </h4>
                             <hr>
-
-                            <a href="{{ route('manager.invoice.receipt', Crypt::encrypt($invoice->id)) }}"
-                                class="pull-right btn btn-outline-warning "><i class="fa fa-print"></i> Print
-                                Receipt
-                            </a>
-
                             @if ($invoice->status == 'delivered')
-                            @else
-                                @if ($invoice->client_id != null)
-                                @endif
+                                {{-- @if ($invoice->payment == 'paid') --}}
 
-                                @if ($invoice->status == 'received')
-                                    <a href="#!" class="pull-right btn btn-outline-secondary ml-2"
-                                        onclick="return confirm('Are you sure ?')"><i class="fa fa-basket"></i>
-                                        Despense
+                                    <a href="{{ route('manager.invoice.receipt', Crypt::encrypt($invoice->id)) }}"
+                                        class="pull-right btn btn-outline-warning"><i class="fa fa-print"></i> Print
+                                        Invoice
                                     </a>
+
+
+                                    {{-- <a href="{{route('manager.sales.send.to.lab',Crypt::encrypt($invoice->id))}}"
+                            class="pull-right btn btn-outline-primary ml-2"><i class="fa fa-paper-plane"></i> Send To Lab </a> --}}
+                                @else
+                                    @if ($invoice->client_id != null)
+                                        {{-- <a href="{{route('manager.cutomerInvoice')}}"
+                                    class="pull-right btn btn-outline-secondary" style="margin-right: 10px">create Invoice</a> --}}
+                                    @endif
+
+                                    @if ($has_na_products > 0)
+                                        <a href="{{ route('manager.sell.na.product.off', Crypt::encrypt($invoice->id)) }}"
+                                            class="pull-right btn btn-outline-secondary mr-2"
+                                            onclick="return confirm('Are you sure ?')"><i class="fa fa-basket"></i>
+                                            Sell Off
+                                        </a>
+                                    @endif
+
+                                    {{-- <a href="{{ route('manager.invoice.pay', Crypt::encrypt($invoice->id)) }}"
+                                        class="pull-right btn btn-outline-primary">Proceed Payment</a> --}}
                                 @endif
                                 {{-- @else
                                 <a href="{{ route('manager.sales.add', Crypt::encrypt($invoice->id)) }}"
