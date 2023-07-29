@@ -205,7 +205,7 @@
                                                                                                 <div class="col-1">
                                                                                                     <h4
                                                                                                         class="text-capitalize">
-                                                                                                        {{ $product->eye == null ? '' : initial($product->eye) }}
+                                                                                                        {{ $product->eye == null ? '' : Oneinitials($product->eye) }}
                                                                                                     </h4>
                                                                                                 </div>
                                                                                                 <div class="col-3">
@@ -484,7 +484,7 @@
                                                                                                 <div class="col-1">
                                                                                                     <h4
                                                                                                         class="text-capitalize">
-                                                                                                        {{ $product->eye == null ? '' : initials($product->eye) }}
+                                                                                                        {{ $product->eye == null ? '' : Oneinitials($product->eye) }}
                                                                                                     </h4>
                                                                                                 </div>
                                                                                                 <div class="col-3">
@@ -882,23 +882,23 @@
                                                                         $right_len = $request->soldproduct->where('eye', 'right')->first();
                                                                         $availability = false;
                                                                     }
-                                                                    
+
                                                                     if ($availability == true) {
                                                                         $type = $lens_type
                                                                             ->where('id', $right_len->type_id)
                                                                             ->pluck('name')
                                                                             ->first();
-                                                                    
+
                                                                         $indx = $index
                                                                             ->where('id', $right_len->index_id)
                                                                             ->pluck('name')
                                                                             ->first();
-                                                                    
+
                                                                         $ct = $coatings
                                                                             ->where('id', $right_len->coating_id)
                                                                             ->pluck('name')
                                                                             ->first();
-                                                                    
+
                                                                         $chrm = $chromatics
                                                                             ->where('id', $right_len->chromatic_id)
                                                                             ->pluck('name')
@@ -909,7 +909,7 @@
                                                                             ->pluck('description')
                                                                             ->first();
                                                                     }
-                                                                    
+
                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                     if (!$left_len) {
                                                                         $left_len = $request->soldproduct->where('eye', 'left')->first();
