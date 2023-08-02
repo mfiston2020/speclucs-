@@ -13,7 +13,9 @@ class UnavailableProduct extends Model
         'cost',
         'price',
         'location',
-        'supplier_id'
+        'supplier_id',
+        'product_id'
+
     ];
 
     function invoice()

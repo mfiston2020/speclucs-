@@ -98,7 +98,7 @@
                                                         <th>Ins Due Amnt</th>
                                                         <th>Pt Due Amnt</th>
                                                         <th>Status</th>
-                                                        <th></th>
+                                                        {{-- <th></th> --}}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -109,12 +109,12 @@
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->pluck('name')
                                                                     ->first();
-                                                                
+
                                                                 $product = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->select('product_id', 'insurance_id', 'insurance_payment', 'patient_payment')
                                                                     ->first();
-                                                                
+
                                                                 $amount_paid = \App\Models\Transactions::where('invoice_id', $sale->id)
                                                                     ->select('amount')
                                                                     ->sum('amount');
@@ -187,7 +187,7 @@
                                                                 @endif
 
                                                             </td>
-                                                            <td>
+                                                            {{-- <td>
                                                                 @if ($sale->status == 'completed')
                                                                     @if ($sale->due != 0)
                                                                         <a href="{{ route('manager.pay.invoice.due', Crypt::encrypt($sale->id)) }}"
@@ -204,7 +204,7 @@
                                                                         data-target="#myModal-{{ $key }}"
                                                                         class="btn btn-danger btn-sm">delete</a>
                                                                 @endif
-                                                            </td>
+                                                            </td> --}}
                                                         </tr>
                                                     @endforeach
 
@@ -253,12 +253,12 @@
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->pluck('name')
                                                                     ->first();
-                                                                
+
                                                                 $product = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->select('product_id', 'insurance_id', 'insurance_payment', 'patient_payment')
                                                                     ->first();
-                                                                
+
                                                                 $amount_paid = \App\Models\Transactions::where('invoice_id', $sale->id)
                                                                     ->select('amount')
                                                                     ->sum('amount');
@@ -387,12 +387,12 @@
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->pluck('name')
                                                                     ->first();
-                                                                
+
                                                                 $product = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->select('product_id', 'insurance_id', 'insurance_payment', 'patient_payment')
                                                                     ->first();
-                                                                
+
                                                                 $amount_paid = \App\Models\Transactions::where('invoice_id', $sale->id)
                                                                     ->select('amount')
                                                                     ->sum('amount');

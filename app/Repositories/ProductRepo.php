@@ -465,4 +465,54 @@ class ProductRepo implements ProductInterface
 
         $sold->save();
     }
+
+    // save unavailable products to stock
+    function saveUnavailableToStock(array $request)
+    {
+        $product    =   new \App\Models\Product();
+
+        $lens_type  =   \App\Models\LensType::find($request['type_id']);
+        $index      =   \App\Models\PhotoIndex::find($request['index_id']);
+        $chromatic  =   \App\Models\PhotoChromatics::find($request['chromatic_id']);
+        $coating    =   \App\Models\PhotoCoating::find($request['coating_id']);
+
+        $description    =   initials($lens_type['name']) . " " . $index['name'] . " " . $chromatic['name'] . " " . $coating['name'];
+
+        $eye        =   $request['eye'];
+        $axis       =   $request['axis'];
+        $sphere     =   $request['sphere'];
+        $cylinder   =   $request['cylinder'];
+        $add        =   $request['addition'];
+
+
+        $product->category_id       =   '1';
+        $product->product_name      =   $lens_type->name;
+        $product->description       =   $description;
+        $product->stock             =   $request['quantity'];
+        $product->deffective_stock  =   '0';
+        $product->price             =   $request['price'];
+        $product->cost              =   $request['cost'];
+        $product->fitting_cost      =   '0';
+        $product->company_id        =   userInfo()->company_id;
+        $product->location          =   $request['location'];
+        $product->supplier_id       =   $request['supplier_id'];
+
+        $product->save();
+
+        $power                    =   new \App\Models\Power();
+        $power->product_id        =   $product->id;
+        $power->type_id           =   $lens_type->id;
+        $power->index_id          =   $index->id;
+        $power->chromatics_id     =   $chromatic->id;
+        $power->coating_id        =   $coating->id;
+        $power->sphere            =   format_values($sphere);
+        $power->cylinder          =   format_values($cylinder);
+        $power->axis              =   format_values($axis);
+        $power->add               =   format_values($add);
+        $power->eye               =   initials($lens_type->name) == 'SV' ? 'any' : $eye;
+        $power->company_id        =   userInfo()->company_id;
+        $power->save();
+
+        return $product;
+    }
 }

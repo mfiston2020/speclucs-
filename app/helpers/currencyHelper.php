@@ -85,3 +85,8 @@ function makeMonths()
 
     return $months;
 }
+
+function getuserType()
+{
+    return userInfo()->permissions;
+}

@@ -7,7 +7,9 @@
             <div class="card">
                 <div class="card-header">
                     Customer Information
+                    {{-- <button wire:click=showModal>shwi</button> --}}
                 </div>
+
                 <div class="card-body">
 
                     <div class="row">
@@ -18,6 +20,7 @@
                                 <input type="text" wire:model.lazy="firstname" class="form-control" required="">
                             </div>
                         </div>
+
                         <!--/span-->
                         <div class="col-md-3">
                             <div class="form-group">
@@ -25,12 +28,13 @@
                                 <input type="text" wire:model.lazy="lastname" class="form-control" required="">
                             </div>
                         </div>
+
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Gender</label>
                                 <select class="form-control @error('gender') is-invalid @enderror custom-select"
-                                    wire:model.lazy='gender'>
-                                    <option>--Select your Gender--</option>
+                                    wire:model.lazy='gender' required>
+                                    <option value="">--Select your Gender--</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
                                 </select>
@@ -39,6 +43,7 @@
                                 @enderror
                             </div>
                         </div>
+
                         <!--/span-->
                         <div class="col-md-3">
                             <div class="form-group">
@@ -47,6 +52,7 @@
                                     class="form-control" required="">
                             </div>
                         </div>
+
                         <!--/span-->
                         <div class="col-md-3">
                             <div class="form-group">
@@ -54,6 +60,7 @@
                                 <input type="text" wire:model.lazy="tin_number" class="form-control">
                             </div>
                         </div>
+
                         <!--/span-->
                         <div class="col-md-3">
                             <div class="form-group">
@@ -61,12 +68,13 @@
                                 <input type="text" wire:model.lazy="phone" class="form-control" required="">
                             </div>
                         </div>
+
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Insurance</label>
                                 <select class="form-control @error('insurance_type') is-invalid @enderror custom-select"
                                     wire:model.lazy='insurance_type' required>
-                                    <option>** Select Type **</option>
+                                    <option value="">** Select Type **</option>
                                     <option value="private">private</option>
                                     @if (count($insuranceList) > 0)
 
@@ -82,12 +90,16 @@
                                 @enderror
                             </div>
                         </div>
+
                         <div class="col-sm-3">
                             <label for="cost">
                                 Ins. Number
                             </label>
                             <input type="text" class="form-control @error('insurance_number')  is-invalid @enderror"
                                 id="insurance_number" placeholder="0" wire:model.debounce.500ms="insurance_number">
+                            @error('insurance_number')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 
@@ -121,7 +133,7 @@
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
                                     <select class="form-control" wire:model.lazy="lens_coating">
-                                        <option>
+                                        <option value=>
                                             *** Select Coating ***
                                         </option>
                                         @foreach ($lensCoating as $len_coating)
@@ -135,7 +147,7 @@
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
                                     <select class="form-control" wire:model.lazy='lens_index'>
-                                        <option>
+                                        <option value="">
                                             *** Select Index ***
                                         </option>
                                         @foreach ($lensIndex as $len_index)
@@ -149,7 +161,7 @@
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
                                     <select class="form-control" wire:model.lazy="lens_chromatic">
-                                        <option>
+                                        <option value="">
                                             *** Select Chromatic Aspect ***
                                         </option>
                                         @foreach ($lensChromaticAspect as $len_chromatic)
@@ -169,7 +181,7 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="rightEye"
-                                            wire:model.lazy="rightEye" {{ $leftEye == true ? 'disabled' : '' }}>
+                                            wire:model.lazy="rightEye">
                                         <label class="custom-control-label" for="rightEye">Right</label>
                                     </div>
                                 </div>
@@ -209,7 +221,7 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="leftEye"
-                                            wire:model="leftEye" {{ $leftEye == true ? 'disabled' : '' }}>
+                                            wire:model="leftEye">
                                         <label class="custom-control-label" for="leftEye">Left</label>
                                     </div>
                                 </div>
@@ -291,7 +303,7 @@
                             <div class="form-group col-1">
                                 <label>Quantity</label>
                                 <input type="number" class="form-control" id="frame_quantity" placeholder="Qty"
-                                    wire:model.lazy="frame_quantity">
+                                    wire:model.lazy="frame_quantity" readonly>
                             </div>
 
                             <div class="form-group col-2">
@@ -359,8 +371,8 @@
 
                             <div class="form-group col-1">
                                 <label>Quantity</label>
-                                <input type="text" class="form-control" id="accessory_quantity" placeholder="Qty"
-                                    wire:model="accessory_quantity">
+                                <input type="number" class="form-control" id="accessory_quantity" placeholder="Qty"
+                                    wire:model="accessory_quantity"readonly>
                             </div>
 
                             <div class="form-group col-2">
@@ -404,6 +416,7 @@
             @if ($showPaymentSection)
                 <div class="col-md-12 col-sm-12 mt-2">
                     <div class="card d-flex">
+
                         <div class="card-header d-flex justify-content-between items-center">
                             <span>
                                 Insurance / Patient Payment
@@ -418,61 +431,65 @@
                                 </span>
                             </h5>
                         </div>
+
                         <div class="card-body">
-                            <div class="row">
-                                <!--/span-->
-                                <div class="d-flex flex-col items-center">
-                                    <div class="col-md-2 col-sm-12">
-                                        <label>Lens</label>
-                                        <br>
-                                        <span>R</span>
-                                        @if ($rightLen)
-                                            <label class="badge badge-success badge-pill ml-2">Available</label>
-                                        @else
-                                            <label class="badge badge-danger badge-pill ml-2">N/A</label>
-                                        @endif
-                                        <br>
-                                        <span>L</span>
-                                        @if ($leftLen)
-                                            <label class="badge badge-success badge-pill ml-2">Available</label>
-                                        @else
-                                            <label class="badge badge-danger badge-pill ml-2">N/A</label>
-                                        @endif
-                                    </div>
+                            @if ($searchProduct)
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="d-flex flex-col items-center">
+                                        <div class="col-md-2 col-sm-12">
+                                            <label>Lens</label>
+                                            <br>
+                                            <span>R</span>
+                                            @if ($rightLen)
+                                                <label class="badge badge-success badge-pill ml-2">Available</label>
+                                            @else
+                                                <label class="badge badge-danger badge-pill ml-2">N/A</label>
+                                            @endif
+                                            <br>
+                                            <span>L</span>
+                                            @if ($leftLen)
+                                                <label class="badge badge-success badge-pill ml-2">Available</label>
+                                            @else
+                                                <label class="badge badge-danger badge-pill ml-2">N/A</label>
+                                            @endif
+                                        </div>
 
-                                    <div class="form-group col-2">
-                                        <label>Total Amount</label>
-                                        <input type="text" class="form-control" id="total_lens_amount"
-                                            placeholder="Total Amount" wire:model="total_lens_amount" readonly>
-                                    </div>
+                                        <div class="form-group col-2">
+                                            <label>Total Amount</label>
+                                            <input type="text" class="form-control" id="total_lens_amount"
+                                                placeholder="Total Amount" wire:model="total_lens_amount" readonly>
+                                        </div>
 
-                                    <div class="form-group col-2">
-                                        <label>Insurance Percentage</label>
-                                        <input type="number" min="0" max="100" class="form-control"
-                                            id="insurance_percentage" placeholder="Ins. %"
-                                            wire:model="insurance_percentage_lens">
-                                    </div>
+                                        <div class="form-group col-2">
+                                            <label>Insurance Percentage</label>
+                                            <input type="number" min="0" max="100" class="form-control"
+                                                id="insurance_percentage" placeholder="Ins. %"
+                                                wire:model="insurance_percentage_lens">
+                                        </div>
 
-                                    <div class="form-group col-2">
-                                        <label>Ins Apprv</label>
-                                        <input type="text" class="form-control" id="lens_approved_amount"
-                                            placeholder="approved amt" wire:model="insurance_approved_lens">
-                                    </div>
+                                        <div class="form-group col-2">
+                                            <label>Ins Apprv</label>
+                                            <input type="text" class="form-control" id="lens_approved_amount"
+                                                placeholder="approved amt" wire:model="insurance_approved_lens">
+                                        </div>
 
-                                    <div class="form-group col-2">
-                                        <label>Ins Payment</label>
-                                        <input type="text" class="form-control" id="insurance_payment_lens"
-                                            placeholder="Ins. payment" wire:model="insurance_payment_lens" readonly>
-                                    </div>
+                                        <div class="form-group col-2">
+                                            <label>Ins Payment</label>
+                                            <input type="text" class="form-control" id="insurance_payment_lens"
+                                                placeholder="Ins. payment" wire:model="insurance_payment_lens"
+                                                readonly>
+                                        </div>
 
-                                    <div class="form-group col-2">
-                                        <label>Pt Payment</label>
-                                        <input type="text" class="form-control" id="patient_payment_lens"
-                                            placeholder="Pt. Payment" wire:model="patient_payment_lens" readonly>
+                                        <div class="form-group col-2">
+                                            <label>Pt Payment</label>
+                                            <input type="text" class="form-control" id="patient_payment_lens"
+                                                placeholder="Pt. Payment" wire:model="patient_payment_lens" readonly>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr>
+                                <hr>
+                            @endif
                             <div class="row">
                                 <!--/span-->
                                 <div class="d-flex flex-col items-center">
@@ -520,20 +537,39 @@
 
 
                             <div class="row d-flex justify-content-around items-center mt-4">
-                                <button class="btn btn-sm btn-success">
-                                    Submit
-                                </button>
+                                @if ($showsubmit)
+                                    <button class="btn btn-sm btn-success">
+                                        Submit
+                                    </button>
+                                @endif
                                 <button class="btn btn-sm btn-info" type="button" wire:click=calculateInsurance>
                                     Calculate
                                 </button>
                             </div>
 
                         </div>
+
                     </div>
                     <!-- Card -->
                 </div>
             @endif
 
+            <div id="warningModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="vcenter"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title text-info" id="vcenter">Warning</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <h4>{{ $informationMessage }}</h4>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
         </div>
     </form>
 
@@ -542,6 +578,10 @@
 @push('scripts')
     <script src="//unpkg.com/alpinejs" defer></script>
     <script>
+        window.addEventListener('showwarningModal', event => {
+            $("#warningModal").modal('show');
+        })
+
         $('#frame_price_adjust').on('keyup', function() {
             var total = $('#frame_quantity').val() * ($('#frame_unit_price').val() + $('#frame_price_adjust')
                 .val());

@@ -36,4 +36,9 @@ class Product extends Model
     {
         return $this->hasOne(Power::class);
     }
+
+    function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
 }

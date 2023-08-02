@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Livewire\Manager\Report\ProductReport;
 use App\Http\Livewire\Manager\Sales\ProductRetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -391,6 +392,9 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     // ===================== New orders ===============
     Route::get('/newOrder', [\App\Http\Controllers\Manager\NewSalesController::class, 'newOrder'])->name('new.order');
+
+    // stock reporting
+    Route::get('/product-report', ProductReport::class)->name('product.report');
 });
 
 // ===========================================================================

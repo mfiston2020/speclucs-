@@ -20,7 +20,7 @@
                                 @error('year') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Month</label>

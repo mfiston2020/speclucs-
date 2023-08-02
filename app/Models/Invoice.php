@@ -18,7 +18,14 @@ class Invoice extends Model
         'dateOfBirth',
         'status',
         'received_by_lab',
-        'sent_to_lab'
+        'sent_to_lab',
+        'set_price',
+        'sent_to_seller',
+        'payment_approval',
+        'sent_to_supplier',
+        'received_by_seller',
+        'received_by_patient',
+        'receive_from_supplier',
     ];
 
 
