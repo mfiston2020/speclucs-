@@ -165,20 +165,21 @@
 
                                                     // Stock In
                                                     if ($productListing[$stockRecord]['current_stock']->operation == 'in' && $productListing[$stockRecord]['current_stock']->type == 'rm') {
-                                                        $stockInQty = $productListing[$stockRecord]['current_stock']->incoming;
-                                                        $stockInTtl = $productListing[$stockRecord]['current_stock']->incoming * $product->cost;
+                                                        $stockInQty = $productListing[$stockRecord]['incoming'];
+                                                        $stockInTtl = $productListing[$stockRecord]['incoming'] * $product->cost;
                                                     }
 
                                                     // Stock In
                                                     if ($productListing[$stockRecord]['current_stock']->operation == 'out' && $productListing[$stockRecord]['current_stock']->type == 'rm') {
-                                                        $stockOutQty = $productListing[$stockRecord]['current_stock']->incoming;
-                                                        $stockOutTtl = $productListing[$stockRecord]['current_stock']->incoming * $product->cost;
+                                                        $stockOutQty = $productListing[$stockRecord]['incoming'];
+                                                        $stockOutTtl = $productListing[$stockRecord]['incoming'] * $product->cost;
                                                     }
 
                                                     // Closing Stock
                                                     if ($productListing[$stockRecord]['current_stock']->type == 'rm') {
-                                                        $stockClsQty = $productListing[$stockRecord]['current_stock']->change;
-                                                        $stockClsTtl = $productListing[$stockRecord]['current_stock']->change * $product->cost;
+                                                        $stockClsQty = $productListing[$stockRecord]['current_stock']->current_stock - $productListing[$stockRecord]['incoming'];
+                                                        // $stockClsQty = $productListing[$stockRecord]['current_stock']->change;
+                                                        $stockClsTtl = $stockClsQty * $product->cost;
                                                     }
                                                 }
                                             @endphp
@@ -188,9 +189,6 @@
                                                 <td>{{ date('Y-m-d', strtotime($rm)) }}</td>
                                                 <td>{{ sprintf('%04d', $product->id) }}</td>
                                                 <td>
-                                                    {{-- @if ($previousId == $product->id . '' . $ky)
-                                                        yes
-                                                    @endif --}}
                                                     {{ $product->product_name }} | {{ $product->description }}
                                                     @if ($product->power)
                                                         @if (initials($product->product_name) == 'SV')

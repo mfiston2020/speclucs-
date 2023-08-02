@@ -9,7 +9,7 @@ use Livewire\Component;
 
 class ProductReport extends Component
 {
-    public $start_date = "2023-07-31", $end_date = "2023-08-01";
+    public $start_date, $end_date;
     public $productListing = [];
     public $dateList = [];
     public $products, $stockRecords;
@@ -48,13 +48,13 @@ class ProductReport extends Component
                 foreach ($this->dateList as $key => $date) {
                     $this->productListing[$date . '-' . $product->id] = [
                         'product' => $product,
-                        'stockChange' => TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->sum('incoming'),
-                        'current_stock' => TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->first()
+                        'current_stock' => TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->first(),
+                        'incoming' => number_format(TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->sum('incoming')),
                     ];
                 }
             }
         }
-        // dd($this->productListing['2023-08-01-1']['current_stock']);
+        // dd($this->productListing);
         $this->result   =   true;
     }
 
