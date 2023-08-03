@@ -181,11 +181,11 @@
                                                 $openingStockQty = $product->stock;
                                                 $openingStockTtl = $product->stock;
                                                 
-                                                $stockInQty = $product->stock;
-                                                $stockInTtl = $product->stock;
+                                                $stockInQty = 0;
+                                                $stockInTtl = 0;
                                                 
-                                                $stockOutQty = $product->stock;
-                                                $stockOutTtl = $product->stock;
+                                                $stockOutQty = 0;
+                                                $stockOutTtl = 0;
                                                 
                                                 $stockClsQty = $product->stock;
                                                 $stockClsTtl = $product->stock;
@@ -299,15 +299,15 @@
                                                 <td>{{ format_money($openingStockTtl) }}</td>
                                                 {{--  --}}
                                                 <td>{{ $stockInQty }}</td>
-                                                <td>{{ $stockInTtl == '-' ? '-' : format_money($product->cost) }}</td>
+                                                <td>{{ $stockInTtl == 0 ? 0 : format_money($product->cost) }}</td>
                                                 <td>{{ format_money($stockInTtl) }}</td>
                                                 {{--  --}}
                                                 <td>{{ $stockOutQty }}</td>
-                                                <td>{{ $stockOutTtl == '-' ? '-' : format_money($product->cost) }}</td>
+                                                <td>{{ $stockOutTtl == 0 ? 0 : format_money($product->cost) }}</td>
                                                 <td>{{ format_money($stockOutTtl) }}</td>
                                                 {{--  --}}
                                                 <td>{{ $stockClsQty }}</td>
-                                                <td>{{ $stockClsQty == '-' ? '-' : format_money($product->cost) }}</td>
+                                                <td>{{ $stockClsQty == 0 ? 0 : format_money($product->cost) }}</td>
                                                 <td>{{ format_money($stockClsTtl) }}</td>
                                             </tr>
                                         @endforeach
