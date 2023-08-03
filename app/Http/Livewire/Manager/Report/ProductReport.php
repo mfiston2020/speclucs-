@@ -9,7 +9,7 @@ use Livewire\Component;
 
 class ProductReport extends Component
 {
-    public $start_date, $end_date;
+    public $start_date, $end_date, $searchFoundSomething = 'no';
     public $productListing = [];
     public $dateList = [];
     public $products, $stockRecords;
@@ -46,12 +46,21 @@ class ProductReport extends Component
 
             foreach ($this->products as $key => $product) {
                 foreach ($this->dateList as $key => $date) {
-                    $this->productListing[$date . '-' . $product->id] = [
-                        'product' => $product,
-                        'current_stock' => TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->first(),
-                        'incoming' => number_format(TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->sum('incoming')),
-                    ];
+                    $incoming   =   TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->sum('incoming');
+                    if ($incoming != 0) {
+                        $this->productListing[$date . '-' . $product->id] = [
+                            'product' => $product,
+                            'current_stock' => TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->first(),
+                            'incoming' => number_format($incoming),
+                        ];
+                    }
                 }
+            }
+
+            if (count($this->productListing) <= 0) {
+                $this->searchFoundSomething = 'yes';
+            } else {
+                $this->searchFoundSomething = 'no';
             }
         }
         // dd($this->productListing);

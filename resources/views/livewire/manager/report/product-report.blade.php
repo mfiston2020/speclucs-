@@ -59,7 +59,8 @@
         </form>
     </div>
 
-    @if ($result)
+    @if ($result && count($productListing) > 0)
+
         <div class="card">
             <div class="card-body">
                 <!-- Nav tabs -->
@@ -138,36 +139,36 @@
                                     // Lens total for all
                                     $openingStockTotalQuantity = 0;
                                     $openingStockTotalCost = 0;
-                                    
+
                                     $inStockTotalQuantity = 0;
                                     $inStockTotalCost = 0;
-                                    
+
                                     $outStockTotalQuantity = 0;
                                     $outStockTotalCost = 0;
-                                    
+
                                     // Frames total for all
                                     $frameopeningStockTotalQuantity = 0;
                                     $frameopeningStockTotalCost = 0;
-                                    
+
                                     $frameinStockTotalQuantity = 0;
                                     $frameinStockTotalCost = 0;
-                                    
+
                                     $frameoutStockTotalQuantity = 0;
                                     $frameoutStockTotalCost = 0;
-                                    
+
                                     // Accessories total for all
                                     $accessoriesopeningStockTotalQuantity = 0;
                                     $accessoriesopeningStockTotalCost = 0;
-                                    
+
                                     $accessoriesinStockTotalQuantity = 0;
                                     $accessoriesinStockTotalCost = 0;
-                                    
+
                                     $accessoriesoutStockTotalQuantity = 0;
                                     $accessoriesoutStockTotalCost = 0;
-                                    
+
                                     // counting product name
                                     $product_name = '';
-                                    
+
                                 @endphp
 
                                 {{-- body --}}
@@ -177,86 +178,86 @@
                                         @foreach ($dateList as $key => $rm)
                                             @php
                                                 $stockRecord = $rm . '-' . $product->id;
-                                                
+
                                                 $openingStockQty = $product->stock;
                                                 $openingStockTtl = $product->stock;
-                                                
+
                                                 $stockInQty = 0;
                                                 $stockInTtl = 0;
-                                                
+
                                                 $stockOutQty = 0;
                                                 $stockOutTtl = 0;
-                                                
+
                                                 $stockClsQty = $product->stock;
                                                 $stockClsTtl = $product->stock;
-                                                
+
                                                 if ($productListing[$stockRecord]['current_stock'] != null) {
                                                     // opening stock
-                                                
+
                                                     $openingStockQty = $productListing[$stockRecord]['current_stock']->current_stock;
                                                     $openingStockTtl = $productListing[$stockRecord]['current_stock']->current_stock * $product->cost;
-                                                
+
                                                     if ($product_name == '' || ($product_name != $product->id && $product->category_id == '1')) {
                                                         $openingStockTotalQuantity += $openingStockQty;
                                                         $openingStockTotalCost += $openingStockTtl;
-                                                
+
                                                         $product_name = $product->id;
                                                     }
-                                                
+
                                                     if ($product_name == '' || ($product_name != $product->id && $product->category_id == '2')) {
                                                         $frameopeningStockTotalQuantity += $openingStockQty;
                                                         $frameopeningStockTotalCost += $openingStockTtl;
-                                                
+
                                                         $product_name = $product->id;
                                                     }
-                                                
+
                                                     if ($product_name == '' || ($product_name != $product->id && $product->category_id > 2)) {
                                                         $accessoriesopeningStockTotalQuantity += $openingStockQty;
                                                         $accessoriesopeningStockTotalCost += $openingStockTtl;
-                                                
+
                                                         $product_name = $product->id;
                                                     }
-                                                
+
                                                     // Stock In
                                                     if ($productListing[$stockRecord]['current_stock']->operation == 'in' && $productListing[$stockRecord]['current_stock']->type == 'rm') {
                                                         $stockInQty = $productListing[$stockRecord]['incoming'];
                                                         $stockInTtl = $productListing[$stockRecord]['incoming'] * $product->cost;
-                                                
+
                                                         if ($product->category_id == '1') {
                                                             $inStockTotalQuantity += $openingStockQty;
                                                             $inStockTotalCost += $openingStockTtl;
-                                                
+
                                                             // $product_name = $product->id;
                                                         }
-                                                
+
                                                         if ($product->category_id == '2') {
                                                             $frameinStockTotalQuantity += $openingStockQty;
                                                             $frameinStockTotalCost += $openingStockTtl;
-                                                
+
                                                             // $product_name = $product->id;
                                                         }
-                                                
+
                                                         if ($product->category_id > 2) {
                                                             $accessoriesinStockTotalQuantity += $openingStockQty;
                                                             $accessoriesinStockTotalCost += $openingStockTtl;
-                                                
+
                                                             // $product_name = $product->id;
                                                         }
                                                     }
-                                                
+
                                                     // Stock In
                                                     if ($productListing[$stockRecord]['current_stock']->operation == 'out' && $productListing[$stockRecord]['current_stock']->type == 'rm') {
                                                         $stockOutQty = $productListing[$stockRecord]['incoming'];
                                                         $stockOutTtl = $productListing[$stockRecord]['incoming'] * $product->cost;
-                                                
+
                                                         // if ($product_name == '' || $product_name != $product->id) {
                                                         $outStockTotalQuantity += $stockOutQty;
                                                         $outStockTotalCost += $stockOutTtl;
-                                                
+
                                                         $product_name = $product->id;
                                                         // }
                                                     }
-                                                
+
                                                     // Closing Stock
                                                     if ($productListing[$stockRecord]['current_stock']->type == 'rm') {
                                                         $stockClsQty = $productListing[$stockRecord]['current_stock']->current_stock - $productListing[$stockRecord]['incoming'];
@@ -390,6 +391,20 @@
                     <div class="tab-pane mt-4" id="finished-goods" role="tabpanel">
                         finished goods
                     </div>
+                </div>
+            </div>
+        </div>
+
+    @endif
+
+    @if ($searchFoundSomething == 'yes')
+        <div class="card">
+            <div class="card-body">
+                <div class="alert alert-warning alert-rounded ">
+                    Nothing Found from: <strong>{{ $start_date }}</strong> up to <strong>{{ $end_date }}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span
+                            aria-hidden="true">×</span>
+                    </button>
                 </div>
             </div>
         </div>
