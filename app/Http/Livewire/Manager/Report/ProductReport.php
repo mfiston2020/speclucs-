@@ -42,7 +42,7 @@ class ProductReport extends Component
             }
 
 
-            $this->products =   Product::where('company_id', userInfo()->company_id)->with('power')->get();
+            $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('category_id')->with('power')->get();
 
             foreach ($this->products as $key => $product) {
                 foreach ($this->dateList as $key => $date) {
