@@ -47,13 +47,13 @@ class ProductReport extends Component
             foreach ($this->products as $key => $product) {
                 foreach ($this->dateList as $key => $date) {
                     $incoming   =   TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->sum('incoming');
-                    if ($incoming != 0) {
+                    // if ($incoming != 0) {
                         $this->productListing[$date . '-' . $product->id] = [
                             'product' => $product,
                             'current_stock' => TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->first(),
                             'incoming' => number_format($incoming),
                         ];
-                    }
+                    // }
                 }
             }
 
@@ -63,7 +63,6 @@ class ProductReport extends Component
                 $this->searchFoundSomething = 'no';
             }
         }
-        // dd($this->productListing);
         $this->result   =   true;
     }
 

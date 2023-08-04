@@ -272,53 +272,53 @@
                                                 }
                                             @endphp
                                             {{-- {{ $product->id }} --}}
-                                            @if ($incoming != 0)
-                                                <tr>
-                                                    <td>{{ $ky + $key }}</td>
-                                                    <td>{{ date('Y-m-d', strtotime($rm)) }}</td>
-                                                    <td>{{ sprintf('%04d', $product->id) }}</td>
-                                                    <td>
-                                                        {{ $product->category_id == 1 ? '' : $product->product_name . ' | ' }}{{ $product->description }}
-                                                        @if ($product->power)
-                                                            @if (initials($product->product_name) == 'SV')
-                                                                <span>
-                                                                    {{ $product->power->sphere }} /
-                                                                    {{ $product->power->cylinder }}
-                                                                </span>
-                                                            @else
-                                                                <span>
-                                                                    {{ $product->power->sphere }} /
-                                                                    {{ $product->power->cylinder }}
-                                                                    *{{ $product->power->axis }}
-                                                                    {{ $product->power->add }}
-                                                                </span>
-                                                            @endif
+                                            {{-- @if ($incoming != 0) --}}
+                                            <tr>
+                                                <td>{{ $ky + $key }}</td>
+                                                <td>{{ date('Y-m-d', strtotime($rm)) }}</td>
+                                                <td>{{ sprintf('%04d', $product->id) }}</td>
+                                                <td>
+                                                    {{ $product->category_id == 1 ? '' : $product->product_name . ' | ' }}{{ $product->description }}
+                                                    @if ($product->power)
+                                                        @if (initials($product->product_name) == 'SV')
+                                                            <span>
+                                                                {{ $product->power->sphere }} /
+                                                                {{ $product->power->cylinder }}
+                                                            </span>
                                                         @else
-                                                            <span>-</span>
+                                                            <span>
+                                                                {{ $product->power->sphere }} /
+                                                                {{ $product->power->cylinder }}
+                                                                *{{ $product->power->axis }}
+                                                                {{ $product->power->add }}
+                                                            </span>
                                                         @endif
-                                                    </td>
-                                                    <td>{{ $product->supplier_id == null ? '-' : $product->supplier->name }}
-                                                    </td>
-                                                    <td>{{ $product->location == null ? '-' : $product->location }}
-                                                    </td>
-                                                    {{--  --}}
-                                                    <td>{{ $openingStockQty }}</td>
-                                                    <td>{{ format_money($product->cost) }}</td>
-                                                    <td>{{ format_money($openingStockTtl) }}</td>
-                                                    {{--  --}}
-                                                    <td>{{ $stockInQty }}</td>
-                                                    <td>{{ $stockInTtl == 0 ? 0 : format_money($product->cost) }}</td>
-                                                    <td>{{ format_money($stockInTtl) }}</td>
-                                                    {{--  --}}
-                                                    <td>{{ $stockOutQty }}</td>
-                                                    <td>{{ $stockOutTtl == 0 ? 0 : format_money($product->cost) }}</td>
-                                                    <td>{{ format_money($stockOutTtl) }}</td>
-                                                    {{--  --}}
-                                                    <td>{{ $stockClsQty }}</td>
-                                                    <td>{{ $stockClsQty == 0 ? 0 : format_money($product->cost) }}</td>
-                                                    <td>{{ format_money($stockClsTtl) }}</td>
-                                                </tr>
-                                            @endif
+                                                    @else
+                                                        <span>-</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $product->supplier_id == null ? '-' : $product->supplier->name }}
+                                                </td>
+                                                <td>{{ $product->location == null ? '-' : $product->location }}
+                                                </td>
+                                                {{--  --}}
+                                                <td>{{ $openingStockQty }}</td>
+                                                <td>{{ format_money($product->cost) }}</td>
+                                                <td>{{ format_money($openingStockTtl) }}</td>
+                                                {{--  --}}
+                                                <td>{{ $stockInQty }}</td>
+                                                <td>{{ $stockInTtl == 0 ? 0 : format_money($product->cost) }}</td>
+                                                <td>{{ format_money($stockInTtl) }}</td>
+                                                {{--  --}}
+                                                <td>{{ $stockOutQty }}</td>
+                                                <td>{{ $stockOutTtl == 0 ? 0 : format_money($product->cost) }}</td>
+                                                <td>{{ format_money($stockOutTtl) }}</td>
+                                                {{--  --}}
+                                                <td>{{ $stockClsQty }}</td>
+                                                <td>{{ $stockClsQty == 0 ? 0 : format_money($product->cost) }}</td>
+                                                <td>{{ format_money($stockClsTtl) }}</td>
+                                            </tr>
+                                            {{-- @endif --}}
                                         @endforeach
                                     @endforeach
 
