@@ -137,14 +137,14 @@
                                 </thead>
                                 @php
                                     // Lens total for all
-                                    $openingStockTotalQuantity = 0;
-                                    $openingStockTotalCost = 0;
+                                    $lensopeningStockTotalQuantity = 0;
+                                    $lensopeningStockTotalCost = 0;
                                     
                                     $inStockTotalQuantity = 0;
                                     $inStockTotalCost = 0;
                                     
-                                    $outStockTotalQuantity = 0;
-                                    $outStockTotalCost = 0;
+                                    $lensStockOutTtlQty = 0;
+                                    $lensStockOutTtlCost = 0;
                                     
                                     // Frames total for all
                                     $frameopeningStockTotalQuantity = 0;
@@ -163,11 +163,31 @@
                                     $accessoriesinStockTotalQuantity = 0;
                                     $accessoriesinStockTotalCost = 0;
                                     
+                                    $accinStockTotalQuantity = 0;
+                                    $accinStockTotalCost = 0;
+                                    
+                                    $accoutStockTotalQuantity = 0;
+                                    $accoutStockTotalCost = 0;
+                                    
                                     $accessoriesoutStockTotalQuantity = 0;
                                     $accessoriesoutStockTotalCost = 0;
                                     
                                     // counting product name
                                     $product_name = '';
+                                    $product_name_count = '';
+                                    
+                                    // Accessories total for all
+                                    $closingStockTotalQty = 0;
+                                    $closingStockTotalAmt = 0;
+                                    // ----------------------
+                                    $lensclosingStockTotalQty = 0;
+                                    $lensclosingStockTotalAmt = 0;
+                                    // ----------------------
+                                    $frameclosingStockTotalQty = 0;
+                                    $frameclosingStockTotalAmt = 0;
+                                    // ----------------------
+                                    $accessoryclosingStockTotalQty = 0;
+                                    $accessoryclosingStockTotalAmt = 0;
                                     
                                 @endphp
 
@@ -177,11 +197,6 @@
                                     @foreach ($products as $ky => $product)
                                         @foreach ($dateList as $key => $rm)
                                             @php
-                                                
-                                                $incoming = \App\Models\TrackStockRecord::where('product_id', $product->id)
-                                                    ->whereDate('created_at', $rm)
-                                                    ->where('type', 'rm')
-                                                    ->sum('incoming');
                                                 $stockRecord = $rm . '-' . $product->id;
                                                 
                                                 $openingStockQty = $product->stock;
@@ -196,15 +211,30 @@
                                                 $stockClsQty = $product->stock;
                                                 $stockClsTtl = $product->stock;
                                                 
-                                                if ($productListing[$stockRecord]['current_stock'] != null) {
-                                                    // opening stock
+                                                // closing caclulations
+                                                if ($productListing[$stockRecord]['closingStock'] != 0 && $product->category_id == '1') {
+                                                    $lensclosingStockTotalQty += $productListing[$stockRecord]['closingStock'];
+                                                    $lensclosingStockTotalAmt += $productListing[$stockRecord]['closingStock'] * $product->cost;
+                                                }
+                                                if ($productListing[$stockRecord]['closingStock'] != 0 && $product->category_id == '2') {
+                                                    $frameclosingStockTotalQty += $productListing[$stockRecord]['closingStock'];
+                                                    $frameclosingStockTotalAmt += $productListing[$stockRecord]['closingStock'] * $product->cost;
+                                                }
+                                                if ($productListing[$stockRecord]['closingStock'] != 0 && $product->category_id > 2) {
+                                                    $accessoryclosingStockTotalQty += $productListing[$stockRecord]['closingStock'];
+                                                    $accessoryclosingStockTotalAmt += $productListing[$stockRecord]['closingStock'] * $product->cost;
+                                                }
                                                 
+                                                if ($productListing[$stockRecord]['current_stock'] != null) {
+                                                    $closingStockTotalQty += $productListing[$stockRecord]['current_stock']['closingStock'];
+                                                
+                                                    // opening stock
                                                     $openingStockQty = $productListing[$stockRecord]['current_stock']->current_stock;
                                                     $openingStockTtl = $productListing[$stockRecord]['current_stock']->current_stock * $product->cost;
                                                 
                                                     if ($product_name == '' || ($product_name != $product->id && $product->category_id == '1')) {
-                                                        $openingStockTotalQuantity += $openingStockQty;
-                                                        $openingStockTotalCost += $openingStockTtl;
+                                                        $lensopeningStockTotalQuantity += $openingStockQty;
+                                                        $lensopeningStockTotalCost += $openingStockTtl;
                                                 
                                                         $product_name = $product->id;
                                                     }
@@ -229,38 +259,40 @@
                                                         $stockInTtl = $productListing[$stockRecord]['incoming'] * $product->cost;
                                                 
                                                         if ($product->category_id == '1') {
-                                                            $inStockTotalQuantity += $openingStockQty;
+                                                            $inStockTotalQuantity += $stockInQty;
                                                             $inStockTotalCost += $openingStockTtl;
-                                                
-                                                            // $product_name = $product->id;
                                                         }
                                                 
                                                         if ($product->category_id == '2') {
-                                                            $frameinStockTotalQuantity += $openingStockQty;
+                                                            $frameinStockTotalQuantity += $stockInQty;
                                                             $frameinStockTotalCost += $openingStockTtl;
-                                                
-                                                            // $product_name = $product->id;
                                                         }
                                                 
                                                         if ($product->category_id > 2) {
-                                                            $accessoriesinStockTotalQuantity += $openingStockQty;
-                                                            $accessoriesinStockTotalCost += $openingStockTtl;
-                                                
-                                                            // $product_name = $product->id;
+                                                            $accinStockTotalQuantity += $stockInQty;
+                                                            $accinStockTotalCost += $openingStockTtl;
                                                         }
                                                     }
                                                 
-                                                    // Stock In
+                                                    // Stock Out
                                                     if ($productListing[$stockRecord]['current_stock']->operation == 'out' && $productListing[$stockRecord]['current_stock']->type == 'rm') {
                                                         $stockOutQty = $productListing[$stockRecord]['incoming'];
                                                         $stockOutTtl = $productListing[$stockRecord]['incoming'] * $product->cost;
                                                 
-                                                        // if ($product_name == '' || $product_name != $product->id) {
-                                                        $outStockTotalQuantity += $stockOutQty;
-                                                        $outStockTotalCost += $stockOutTtl;
+                                                        if ($product->category_id == '1') {
+                                                            $lensStockOutTtlQty += $stockOutQty;
+                                                            $lensStockOutTtlCost += $stockOutTtl;
+                                                        }
                                                 
-                                                        $product_name = $product->id;
-                                                        // }
+                                                        if ($product->category_id == '2') {
+                                                            $frameoutStockTotalQuantity += $stockOutQty;
+                                                            $frameoutStockTotalCost += $stockOutTtl;
+                                                        }
+                                                
+                                                        if ($product->category_id > 2) {
+                                                            $accoutStockTotalQuantity += $stockOutQty;
+                                                            $accoutStockTotalCost += $stockOutTtl;
+                                                        }
                                                     }
                                                 
                                                     // Closing Stock
@@ -270,15 +302,22 @@
                                                         $stockClsTtl = $stockClsQty * $product->cost;
                                                     }
                                                 }
+                                                
                                             @endphp
-                                            {{-- {{ $product->id }} --}}
-                                            {{-- @if ($incoming != 0) --}}
+
                                             <tr>
                                                 <td>{{ $ky + $key }}</td>
                                                 <td>{{ date('Y-m-d', strtotime($rm)) }}</td>
-                                                <td>{{ sprintf('%04d', $product->id) }}</td>
-                                                <td>
-                                                    {{ $product->category_id == 1 ? '' : $product->product_name . ' | ' }}{{ $product->description }}
+                                                <td {{ $productListing[$stockRecord]['hide'] == true ? 'hidden' : '' }}
+                                                    rowspan="{{ $daysCount }}"
+                                                    style="vertical-align : middle;text-align:center;">
+                                                    <h6>SPCL #{{ sprintf('%04d', $product->id) }}</h6>
+                                                </td>
+                                                <td {{ $productListing[$stockRecord]['hide'] == true ? 'hidden' : '' }}
+                                                    rowspan="{{ $daysCount }}"
+                                                    style="vertical-align : middle;text-align:center;">
+                                                    <h6>{{ $product->category_id == 1 ? '' : $product->product_name . ' | ' }}{{ $product->description }}
+                                                    </h6>
                                                     @if ($product->power)
                                                         @if (initials($product->product_name) == 'SV')
                                                             <span>
@@ -297,12 +336,17 @@
                                                         <span>-</span>
                                                     @endif
                                                 </td>
+
                                                 <td>{{ $product->supplier_id == null ? '-' : $product->supplier->name }}
                                                 </td>
                                                 <td>{{ $product->location == null ? '-' : $product->location }}
                                                 </td>
                                                 {{--  --}}
-                                                <td>{{ $openingStockQty }}</td>
+                                                <td @class([
+                                                    'bg-warning' => $productListing[$stockRecord]['hide'] == false,
+                                                ])>
+                                                    {{ $openingStockQty }}
+                                                </td>
                                                 <td>{{ format_money($product->cost) }}</td>
                                                 <td>{{ format_money($openingStockTtl) }}</td>
                                                 {{--  --}}
@@ -318,7 +362,6 @@
                                                 <td>{{ $stockClsQty == 0 ? 0 : format_money($product->cost) }}</td>
                                                 <td>{{ format_money($stockClsTtl) }}</td>
                                             </tr>
-                                            {{-- @endif --}}
                                         @endforeach
                                     @endforeach
 
@@ -331,61 +374,100 @@
                                     <tr>
                                         <th colspan="6">Lens Total </th>
                                         {{--  --}}
-                                        <th>{{ $openingStockTotalQuantity }}</th>
+                                        <th>{{ $lensopeningStockTotalQuantity }}</th>
                                         <th>-</th>
-                                        <th>{{ format_money($openingStockTotalCost) }}</th>
+                                        <th>{{ format_money($lensopeningStockTotalCost) }}</th>
                                         {{--  --}}
                                         <th>{{ $inStockTotalQuantity }}</th>
-                                        <th>U Cost</th>
+                                        <th>-</th>
                                         <th>{{ format_money($inStockTotalCost) }}</th>
                                         {{--  --}}
-                                        <th>{{ $outStockTotalQuantity }}</th>
-                                        <th>U Cost</th>
-                                        <th>{{ format_money($outStockTotalCost) }}</th>
+                                        <th>{{ number_format($lensStockOutTtlQty) }}</th>
+                                        <th>-</th>
+                                        <th>{{ format_money($lensStockOutTtlCost) }}</th>
                                         {{--  --}}
-                                        <th>Qty</th>
-                                        <th>U Cost</th>
-                                        <th>T. Cost</th>
+                                        <th>{{ number_format($lensclosingStockTotalQty) }}</th>
+                                        <th>-</th>
+                                        <th>{{ format_money($lensclosingStockTotalAmt) }}</th>
                                     </tr>
 
                                     <tr>
                                         <th colspan="6">Frame Total </th>
-                                        {{--  --}}
-                                        <th>{{ $frameopeningStockTotalQuantity }}</th>
+                                        {{-- Opening stock  --}}
+                                        <th>{{ $frameinStockTotalQuantity }}</th>
                                         <th>-</th>
                                         <th>{{ format_money($frameopeningStockTotalCost) }}</th>
-                                        {{--  --}}
-                                        <th>{{ $frameinStockTotalQuantity }}</th>
-                                        <th>U Cost</th>
+                                        {{-- stock in --}}
+                                        <th>{{ number_format($frameinStockTotalQuantity) }}</th>
+                                        <th>-</th>
                                         <th>{{ format_money($frameinStockTotalCost) }}</th>
-                                        {{--  --}}
-                                        <th>{{ $outStockTotalQuantity }}</th>
-                                        <th>U Cost</th>
-                                        <th>{{ format_money($outStockTotalCost) }}</th>
-                                        {{--  --}}
-                                        <th>Qty</th>
-                                        <th>U Cost</th>
-                                        <th>T. Cost</th>
+                                        {{-- stock out --}}
+                                        <th>{{ number_format($frameoutStockTotalQuantity) }}</th>
+                                        <th>-</th>
+                                        <th>{{ format_money($frameoutStockTotalCost) }}</th>
+                                        {{-- closing --}}
+                                        <th>{{ number_format($frameclosingStockTotalQty) }}</th>
+                                        <th>-</th>
+                                        <th>{{ format_money($frameclosingStockTotalAmt) }}</th>
                                     </tr>
 
                                     <tr>
                                         <th colspan="6">Accessories Total </th>
-                                        {{--  --}}
+                                        {{-- Opening stock  --}}
                                         <th>{{ $accessoriesopeningStockTotalQuantity }}</th>
                                         <th>-</th>
                                         <th>{{ format_money($accessoriesopeningStockTotalCost) }}</th>
+                                        {{-- stock in --}}
+                                        <th>{{ number_format($accinStockTotalQuantity) }}</th>
+                                        <th>-</th>
+                                        <th>{{ format_money($accinStockTotalCost) }}</th>
+                                        {{-- stock out --}}
+                                        <th>{{ number_format($accoutStockTotalQuantity) }}</th>
+                                        <th>-</th>
+                                        <th>{{ format_money($accoutStockTotalCost) }}</th>
+                                        {{-- closing --}}
+                                        <th>{{ number_format($accessoryclosingStockTotalQty) }}</th>
+                                        <th>-</th>
+                                        <th>{{ format_money($accessoryclosingStockTotalAmt) }}</th>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="18"></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="6">Grand Total </th>
                                         {{--  --}}
-                                        <th>{{ $accessoriesinStockTotalQuantity }}</th>
-                                        <th>U Cost</th>
-                                        <th>{{ format_money($accessoriesinStockTotalCost) }}</th>
+                                        <th>
+                                            {{ number_format($lensopeningStockTotalQuantity + $frameopeningStockTotalQuantity + $accessoriesopeningStockTotalQuantity) }}
+                                        </th>
+                                        <th>-</th>
+                                        <th>
+                                            {{ format_money($openingStockQty + $frameopeningStockTotalCost + $accessoriesopeningStockTotalCost) }}
+                                        </th>
                                         {{--  --}}
-                                        <th>{{ $outStockTotalQuantity }}</th>
-                                        <th>U Cost</th>
-                                        <th>{{ format_money($outStockTotalCost) }}</th>
+                                        <th>
+                                            {{ number_format($inStockTotalQuantity + $frameinStockTotalQuantity + $accessoriesinStockTotalQuantity) }}
+                                        </th>
+                                        <th>-</th>
+                                        <th>
+                                            {{ format_money($inStockTotalCost + $frameinStockTotalCost + $accessoriesinStockTotalCost) }}
+                                        </th>
                                         {{--  --}}
-                                        <th>Qty</th>
-                                        <th>U Cost</th>
-                                        <th>T. Cost</th>
+                                        <th>
+                                            {{ number_format($lensStockOutTtlQty + $frameoutStockTotalQuantity + $accoutStockTotalQuantity) }}
+                                        </th>
+                                        <th>-</th>
+                                        <th>
+                                            {{ format_money($lensclosingStockTotalQty + $frameoutStockTotalQuantity + $accoutStockTotalQuantity) }}
+                                        </th>
+                                        {{--  --}}
+                                        <th>
+                                            {{ number_format($accessoryclosingStockTotalQty + $frameclosingStockTotalQty + $lensclosingStockTotalQty) }}
+                                        </th>
+                                        <th>-</th>
+                                        <th>
+                                            {{ format_money($accessoryclosingStockTotalAmt + $frameclosingStockTotalAmt + $lensclosingStockTotalAmt) }}
+                                        </th>
                                     </tr>
                                 </tfoot>
                             </table>

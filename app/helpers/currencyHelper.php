@@ -90,3 +90,12 @@ function getuserType()
 {
     return userInfo()->permissions;
 }
+
+function compareArrayValues($lastValue, $currentValue)
+{
+    if ($currentValue == $lastValue) {
+        dd (true);
+    } else {
+        return false;
+    }
+}
