@@ -238,17 +238,17 @@ class ProductRetail extends Component
             //     $this->insurance_payment_frame    =   $this->frame_total_amount;
             // }
 
-            if ($this->insurance_approved_frame < $this->frame_total_amount) {
+            // if ($this->insurance_approved_frame < $this->frame_total_amount) {
                 $this->insurance_payment_frame    =   ($this->insurance_approved_frame  *   $this->insurance_percentage_frame) / 100;
-            }
+            // }
 
-            if ($this->insurance_approved_lens >= $this->total_lens_amount) {
-                $this->insurance_payment_lens    =   $this->total_lens_amount;
-            }
+            // if ($this->insurance_approved_lens >= $this->total_lens_amount) {
+            //     $this->insurance_payment_lens    =   $this->total_lens_amount;
+            // }
 
-            if ($this->insurance_approved_lens < $this->total_lens_amount) {
+            // if ($this->in/surance_approved_lens < $this->total_lens_amount) {
                 $this->insurance_payment_lens    =   ($this->insurance_approved_lens  *   $this->insurance_percentage_lens) / 100;
-            }
+            // }
 
             $this->patient_payment_frame      =   (($this->frame_total_amount -   $this->insurance_payment_frame) < 0) ? 0 : $this->frame_total_amount -   $this->insurance_payment_frame;
 
