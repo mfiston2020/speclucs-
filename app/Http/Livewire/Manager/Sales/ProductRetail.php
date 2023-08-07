@@ -214,7 +214,7 @@ class ProductRetail extends Component
             $this->frame_total_amount   =   ($this->frame_unit_price + $this->frame_price_adjust) * $this->frame_quantity;
         }
         if ($this->accessory) {
-            $this->accessory_total_amount   =   $this->accessory_unit_price * $this->accessory_quantity;
+            $this->accessory_total_amount   =   ($this->accessory_unit_price - $this->accessory_price_adjust == null ? 0 : $this->accessory_price_adjust) * $this->accessory_quantity;
         }
 
         $this->showPaymentSection   =   true;
