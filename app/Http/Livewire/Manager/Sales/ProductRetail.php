@@ -55,18 +55,6 @@ class ProductRetail extends Component
     // frame variables for insurance calculations ======
     public $insurance_percentage_frame, $insurance_payment_frame, $insurance_approved_frame, $patient_payment_frame;
 
-
-    // protected $rules = [
-    //     'firstname'     => 'required',
-    //     'lastname'      => 'required',
-    //     'tin_number'    => 'required',
-    //     'phone'         => 'required',
-    //     'date_of_birth' => 'required',
-    //     'gender'        => 'required',
-    //     'insurance_type' => 'required',
-    //     'insurance_number' => 'requiredIf:insurance_type,<>,private'
-    // ];
-
     // searching for frame
     function updatedframe($val)
     {
@@ -223,7 +211,7 @@ class ProductRetail extends Component
             $this->accessory_total_amount   =   $this->accessory_quantity * ($this->accessory_unit_price - ($this->accessory_price_adjust == null ? 0 : $this->accessory_price_adjust));
         }
         if ($this->frame) {
-            $this->frame_total_amount   =   $this->frame_unit_price * $this->frame_quantity;
+            $this->frame_total_amount   =   ($this->frame_unit_price + $this->frame_price_adjust) * $this->frame_quantity;
         }
         if ($this->accessory) {
             $this->accessory_total_amount   =   $this->accessory_unit_price * $this->accessory_quantity;

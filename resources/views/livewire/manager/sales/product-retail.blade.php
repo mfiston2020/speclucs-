@@ -504,7 +504,8 @@
                                     <div class="form-group col-2">
                                         <label>Total Amount</label>
                                         <input type="text" class="form-control" id="frame_final_total"
-                                            placeholder="Total Amount" readonly>
+                                            placeholder="Total Amount"
+                                            value="{{ format_money($frame_total_amount) }}" readonly>
                                     </div>
 
                                     <div class="form-group col-2">
@@ -583,26 +584,26 @@
         })
 
         $('#frame_price_adjust').on('keyup', function() {
-            var total = $('#frame_quantity').val() * ($('#frame_unit_price').val() + $('#frame_price_adjust')
-                .val());
+            var total = parseInt($('#frame_quantity').val()) * (parseInt($('#frame_unit_price').val()) + parseInt($(
+                '#frame_price_adjust').val()));
             $('#frame_total_amount').val(total);
             $('#frame_final_total').val(total);
         })
 
         $('#frame_quantity').on('keyup', function() {
-            var total = $('#frame_quantity').val() * $('#frame_unit_price').val();
+            var total = parseInt($('#frame_quantity').val()) * parseInt($('#frame_unit_price').val());
             $('#frame_total_amount').val(total);
             $('#frame_final_total').val(total);
         });
         // ======================================================
         $('#accessory_price_adjust').on('keyup', function() {
-            var total = $('#accessory_quantity').val() * $('#accessory_unit_price').val() + $(
-                '#accessory_price_adjust').val();
+            var total = parseInt($('#accessory_quantity').val()) * (parseInt($('#accessory_unit_price').val()) +
+                parseInt($('#accessory_price_adjust').val()));
             $('#accessory_total_amount').val(total);
         });
 
         $('#accessory_quantity').on('keyup', function() {
-            var total = $('#accessory_quantity').val() * $('#accessory_unit_price').val();
+            var total = parseInt($('#accessory_quantity').val()) * parseInt($('#accessory_unit_price').val());
             $('#accessory_total_amount').val(total);
         });
     </script>

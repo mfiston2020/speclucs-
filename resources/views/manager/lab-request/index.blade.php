@@ -99,18 +99,18 @@
                                         <li class=" nav-item">
                                             <a href="#complete-orders" class="nav-link active" data-toggle="tab"
                                                 aria-expanded="false">
-                                                In Stock
+                                                Available Stock Order(s)
                                             </a>
                                         </li>
-                                        <li class="nav-item">
+                                        {{-- <li class="nav-item">
                                             <a href="#incomplete-orders" class="nav-link" data-toggle="tab"
                                                 aria-expanded="false">
                                                 Out of Stock
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         <li class="nav-item">
                                             <a href="#new-orders" class="nav-link" data-toggle="tab" aria-expanded="false">
-                                                New in Stock
+                                                N/A Stock Order(s)
                                             </a>
                                         </li>
                                     </ul>
