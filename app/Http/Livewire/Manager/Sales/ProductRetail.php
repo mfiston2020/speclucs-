@@ -40,10 +40,10 @@ class ProductRetail extends Component
     public $leftLenInfo, $rightLenInfo;
 
     // =========== frame variable management==========
-    public $frame, $frame_stock, $frame_unit_price, $frame_quantity, $frame_price_adjust, $frame_total_amount, $frame_location, $frameInfo;
+    public $frame, $frame_stock, $frame_unit_price, $frame_quantity, $frame_price_adjust = 0, $frame_total_amount, $frame_location, $frameInfo;
 
     // =========== accessories variables =============
-    public $accessory, $accessory_stock, $accessory_unit_price, $accessory_quantity, $accessory_price_adjust, $accessory_total_amount, $accessory_location, $accessoryInfo;
+    public $accessory, $accessory_stock, $accessory_unit_price, $accessory_quantity, $accessory_price_adjust = 0, $accessory_total_amount, $accessory_location, $accessoryInfo;
 
     //  lens calculation variables ==============
     public $total_lens_amount, $total_lens_stock;

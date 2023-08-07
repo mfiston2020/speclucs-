@@ -583,26 +583,42 @@
             $("#warningModal").modal('show');
         })
 
-        $('#frame_price_adjust').on('keyup', function() {
+        function frameAdjustment() {
             var total = parseInt($('#frame_quantity').val()) * (parseInt($('#frame_unit_price').val()) + parseInt($(
                 '#frame_price_adjust').val()));
             $('#frame_total_amount').val(total);
             $('#frame_final_total').val(total);
+        }
+
+        // frame changing
+        $('#frame_price_adjust').on('change', function() {
+            frameAdjustment();
+        })
+        $('#frame_price_adjust').on('keyup', function() {
+            frameAdjustment();
         })
 
-        $('#frame_quantity').on('keyup', function() {
-            var total = parseInt($('#frame_quantity').val()) * parseInt($('#frame_unit_price').val());
-            $('#frame_total_amount').val(total);
-            $('#frame_final_total').val(total);
-        });
+        // $('#frame_quantity').on('change', function() {
+        //     var total = parseInt($('#frame_quantity').val()) * parseInt($('#frame_unit_price').val());
+        //     $('#frame_total_amount').val(total);
+        //     $('#frame_final_total').val(total);
+        // });
+
         // ======================================================
-        $('#accessory_price_adjust').on('keyup', function() {
+
+        function accessoryAdjustment() {
             var total = parseInt($('#accessory_quantity').val()) * (parseInt($('#accessory_unit_price').val()) +
                 parseInt($('#accessory_price_adjust').val()));
             $('#accessory_total_amount').val(total);
+        }
+        $('#accessory_price_adjust').on('change', function() {
+            accessoryAdjustment();
+        });
+        $('#accessory_price_adjust').on('keyup', function() {
+            accessoryAdjustment();
         });
 
-        $('#accessory_quantity').on('keyup', function() {
+        $('#accessory_quantity').on('change', function() {
             var total = parseInt($('#accessory_quantity').val()) * parseInt($('#accessory_unit_price').val());
             $('#accessory_total_amount').val(total);
         });
