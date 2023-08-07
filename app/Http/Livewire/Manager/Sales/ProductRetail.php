@@ -250,14 +250,15 @@ class ProductRetail extends Component
             $this->insurance_payment_lens    =   ($this->insurance_approved_lens  *   $this->insurance_percentage_lens) / 100;
             // }
 
-            if ($this->insurance_percentage_frame > $this->total_lens_amount) {
+            if ($this->insurance_payment_lens > $this->total_lens_amount) {
                 $this->insurance_payment_lens    =   $this->total_lens_amount;
+                $this->patient_payment_frame = 0;
             } else {
 
                 $this->patient_payment_lens      =  round((($this->total_lens_amount -   $this->insurance_payment_lens) < 0) ? 0 : $this->total_lens_amount -   $this->insurance_payment_lens, 2);
             }
 
-            if ($this->insurance_approved_frame >= $this->frame_total_amount) {
+            if ($this->insurance_payment_frame >= $this->frame_total_amount) {
                 $this->insurance_payment_frame    =   $this->frame_total_amount;
             } else {
 
