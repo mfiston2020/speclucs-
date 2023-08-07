@@ -208,13 +208,13 @@ class ProductRetail extends Component
                 $this->total_lens_amount =    0;
             }
 
-            $this->accessory_total_amount   =   $this->accessory_quantity * ($this->accessory_unit_price - ($this->accessory_price_adjust == null ? 0 : $this->accessory_price_adjust));
+            // $this->accessory_total_amount   =   $this->accessory_quantity * ($this->accessory_unit_price - ($this->accessory_price_adjust == null ? 0 : $this->accessory_price_adjust));
         }
         if ($this->frame) {
             $this->frame_total_amount   =   ($this->frame_unit_price + $this->frame_price_adjust) * $this->frame_quantity;
         }
         if ($this->accessory) {
-            $this->accessory_total_amount   =   ($this->accessory_unit_price - $this->accessory_price_adjust == null ? 0 : $this->accessory_price_adjust) * $this->accessory_quantity;
+            $this->accessory_total_amount   =   ($this->accessory_unit_price + $this->accessory_price_adjust) * $this->accessory_quantity;
         }
 
         $this->showPaymentSection   =   true;
@@ -234,9 +234,9 @@ class ProductRetail extends Component
             return;
         } else {
 
-            if ($this->insurance_approved_frame >= $this->frame_total_amount) {
-                $this->insurance_payment_frame    =   $this->frame_total_amount;
-            }
+            // if ($this->insurance_approved_frame >= $this->frame_total_amount) {
+            //     $this->insurance_payment_frame    =   $this->frame_total_amount;
+            // }
 
             if ($this->insurance_approved_frame < $this->frame_total_amount) {
                 $this->insurance_payment_frame    =   ($this->insurance_approved_frame  *   $this->insurance_percentage_frame) / 100;

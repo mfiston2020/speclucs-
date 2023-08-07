@@ -384,7 +384,7 @@
                             <div class="form-group col-2">
                                 <label>T.Amount</label>
                                 <input type="number" class="form-control" id="accessory_total_amount"
-                                    placeholder="Total">
+                                    placeholder="Total" readonly>
                             </div>
 
                             <div class="form-group col-2">
@@ -583,11 +583,15 @@
             $("#warningModal").modal('show');
         })
 
+        $('#frame').on('change', function() {
+            frameAdjustment();
+        })
+
         function frameAdjustment() {
             var total = parseInt($('#frame_quantity').val()) * (parseInt($('#frame_unit_price').val()) + parseInt($(
                 '#frame_price_adjust').val()));
-            $('#frame_total_amount').val(total);
-            $('#frame_final_total').val(total);
+            $('#frame_total_amount').val(isNaN(total) ? 0 : total);
+            $('#frame_final_total').val(isNaN(total) ? 0 : total);
         }
 
         // frame changing
@@ -611,6 +615,7 @@
                 parseInt($('#accessory_price_adjust').val()));
             $('#accessory_total_amount').val(total);
         }
+
         $('#accessory_price_adjust').on('change', function() {
             accessoryAdjustment();
         });
@@ -618,9 +623,13 @@
             accessoryAdjustment();
         });
 
-        $('#accessory_quantity').on('change', function() {
-            var total = parseInt($('#accessory_quantity').val()) * parseInt($('#accessory_unit_price').val());
-            $('#accessory_total_amount').val(total);
+        $("#accessory").on('change', function() {
+            accessoryAdjustment();
         });
+
+        // $('#accessory_quantity').on('change', function() {
+        //     var total = parseInt($('#accessory_quantity').val()) * parseInt($('#accessory_unit_price').val());
+        //     $('#accessory_total_amount').val(total);
+        // });
     </script>
 @endpush
