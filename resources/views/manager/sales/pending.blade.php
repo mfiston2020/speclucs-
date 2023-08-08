@@ -295,6 +295,11 @@
                                                                     class="btn btn-info btn-sm">
                                                                     Approve
                                                                 </a>
+                                                                <a onclick="return confirm('Are you sure you want to cancel??')"
+                                                                    href="{{ route('manager.sent.request.cancel.payment', Crypt::encrypt($sale->id)) }}"
+                                                                    class="btn btn-danger btn-sm">
+                                                                    Cancel
+                                                                </a>
                                                             </td>
                                                             <td>{{ date('Y-m-d', strtotime($sale->created_at)) }}</td>
                                                             <td>

@@ -185,6 +185,8 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     Route::get('/request/confirmPayment/{id}', [\App\Http\Controllers\Manager\LabRequestController::class, 'requestConfirmPayment'])->name('sent.request.confirm.payment');
 
+    Route::get('/request/cancelayment/{id}', [\App\Http\Controllers\Manager\LabRequestController::class, 'requestCancelPayment'])->name('sent.request.cancel.payment');
+
     // order pending when not in stock
     Route::post('/request/sendToSupplier', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendRequestToSupplier'])->name('sent.request.send.to.supplier');
     Route::post('/request/sendTolab', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendRequestTolab'])->name('sent.request.send.to.lab');

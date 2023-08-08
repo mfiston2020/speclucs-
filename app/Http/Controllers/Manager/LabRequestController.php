@@ -30,9 +30,10 @@ class LabRequestController extends Controller
         $index  =   \App\Models\PhotoIndex::all();
         $chromatics  =   \App\Models\PhotoChromatics::all();
         $coatings  =   \App\Models\PhotoCoating::all();
+        $productUnvailable  =   UnavailableProduct::where('company_id', userInfo()->company_id)->get();
         // ==================
 
-        $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('client')->with('soldproduct')->get();
+        $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('created_at', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('client')->with('soldproduct')->get();
 
         $unavailableProducts    =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct')->get();
 
@@ -48,6 +49,8 @@ class LabRequestController extends Controller
 
         // sent to supplier
         $requests_lab  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('soldproduct')->with('client')->with('soldproduct')->get();
+
+        // return $requests->unavailableproducts_count;
 
         return view('manager.lab-request.index', compact('requests', 'products', 'unavailableProducts', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings'));
     }
@@ -254,6 +257,16 @@ class LabRequestController extends Controller
         ]);
 
         return redirect()->back()->with('successMsg', 'Order Payment confirmed');
+    }
+
+    function requestCancelPayment($id)
+    {
+        Invoice::find(Crypt::decrypt($id))->update([
+            'status' => 'Canceled',
+            'canceled' => now(),
+        ]);
+
+        return redirect()->back()->with('successMsg', 'Order Canceled!');
     }
 
     function sendRequestToSupplier(Request $request)

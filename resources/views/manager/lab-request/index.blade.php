@@ -100,6 +100,9 @@
                                             <a href="#complete-orders" class="nav-link active" data-toggle="tab"
                                                 aria-expanded="false">
                                                 Available Stock Order(s)
+                                                <span class="badge badge-danger badge-pill">
+                                                    {{ count($requests_priced) }}
+                                                </span>
                                             </a>
                                         </li>
                                         {{-- <li class="nav-item">
@@ -111,6 +114,9 @@
                                         <li class="nav-item">
                                             <a href="#new-orders" class="nav-link" data-toggle="tab" aria-expanded="false">
                                                 N/A Stock Order(s)
+                                                <span class="badge badge-danger badge-pill">
+                                                    {{ count($requests_priced) }}
+                                                </span>
                                             </a>
                                         </li>
                                     </ul>
@@ -783,6 +789,7 @@
                                                                             Close
                                                                         </button>
                                                                         <button type="button"
+                                                                            onclick="printDiv({{ $key }})"
                                                                             class="btn btn-success waves-effect text-left"
                                                                             id="print">Print</button>
                                                                         <button
@@ -1121,4 +1128,16 @@
 @push('scripts')
     <script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
+    <script>
+        function printDiv(divId) {
+            var divContents = document.getElementById("request-" + divId + "-detail").innerHTML;
+            var a = window.open('', '', 'height=500, width=500');
+            a.document.write('<html>');
+            a.document.write('<body > <h1>Div contents are <br>');
+            a.document.write(divContents);
+            a.document.write('</body></html>');
+            a.document.close();
+            a.print();
+        }
+    </script>
 @endpush
