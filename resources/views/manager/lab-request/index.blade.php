@@ -4,6 +4,13 @@
 
 @push('css')
     <link href="{{ asset('dashboard/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+    <style>
+        @media print {
+            .modal-footer {
+                display: none;
+            }
+        }
+    </style>
 @endpush
 
 {{-- ==== Breadcumb ======== --}}
@@ -100,9 +107,6 @@
                                             <a href="#complete-orders" class="nav-link active" data-toggle="tab"
                                                 aria-expanded="false">
                                                 Available Stock Order(s)
-                                                <span class="badge badge-danger badge-pill">
-                                                    {{ count($requests_priced) }}
-                                                </span>
                                             </a>
                                         </li>
                                         {{-- <li class="nav-item">
@@ -114,9 +118,6 @@
                                         <li class="nav-item">
                                             <a href="#new-orders" class="nav-link" data-toggle="tab" aria-expanded="false">
                                                 N/A Stock Order(s)
-                                                <span class="badge badge-danger badge-pill">
-                                                    {{ count($requests_priced) }}
-                                                </span>
                                             </a>
                                         </li>
                                     </ul>
@@ -460,7 +461,8 @@
                                                             role="dialog" aria-labelledby="myLargeModalLabel"
                                                             aria-hidden="true" style="display: none;">
                                                             <div class="modal-dialog modal-xl modal-dialog-centered">
-                                                                <div class="modal-content">
+                                                                <div class="modal-content"
+                                                                    id="request-{{ $key }}-contents">
                                                                     <div class="modal-header">
                                                                         <div>
                                                                             <h4 class="modal-title text-info">
@@ -789,7 +791,7 @@
                                                                             Close
                                                                         </button>
                                                                         <button type="button"
-                                                                            onclick="printDiv({{ $key }})"
+                                                                            onclick="printModal({{ $key }})"
                                                                             class="btn btn-success waves-effect text-left"
                                                                             id="print">Print</button>
                                                                         <button
@@ -829,6 +831,11 @@
                                             </button>
                                         </div>
                                     @else
+                                        <button onclick="exportAll('xls','Priced Lens');"
+                                            class="btn btn-success float-right mb-3">
+                                            <i class="fa fa-cloud-download-alt"></i>
+                                            Excel
+                                        </button>
                                         <div class="table-responsive mt-4">
                                             <table id="priced-table" class="table table-striped table-bordered nowrap"
                                                 style="width:100%">
@@ -964,7 +971,7 @@
                                                     </tbody>
                                             </table>
                                             <hr>
-                                            <button class="btn btn-success">Order from Supplier</button>
+                                            <button class="btn btn-primary">Order from Supplier</button>
                                             </form>
                                         </div>
                                     @endif
@@ -1128,16 +1135,27 @@
 @push('scripts')
     <script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
+
     <script>
-        function printDiv(divId) {
-            var divContents = document.getElementById("request-" + divId + "-detail").innerHTML;
-            var a = window.open('', '', 'height=500, width=500');
-            a.document.write('<html>');
-            a.document.write('<body > <h1>Div contents are <br>');
-            a.document.write(divContents);
-            a.document.write('</body></html>');
-            a.document.close();
-            a.print();
+        function exportAll(type, tableName) {
+
+            $('#priced-table').tableExport({
+                filename: tableName + '_%DD%-%mm%-%YY%',
+                format: type
+            });
         }
+
+        function printModal(key) {
+            var mode = 'iframe'; //popup
+            var close = mode == "popup";
+            var options = {
+                mode: mode,
+                popClose: close
+            };
+            $('.modal-footer').hide();
+            $("#request-" + key + "-contents").printArea(options);
+        };
     </script>
 @endpush

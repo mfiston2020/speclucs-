@@ -286,8 +286,9 @@
                                             @endif
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-info waves-effect">Complete
-                                                sale</button>
+                                            <button type="submit" class="btn btn-info waves-effect">
+                                                Complete sale
+                                            </button>
                                             <button type="button" class="btn btn-danger waves-effect"
                                                 data-dismiss="modal">No</button>
                                         </div>

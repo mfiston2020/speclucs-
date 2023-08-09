@@ -3,7 +3,19 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Invoice;
+use App\Models\LensType;
+use App\Models\PhotoChromatics;
+use App\Models\PhotoCoating;
+use App\Models\PhotoIndex;
+use App\Models\Power;
+use App\Models\Product;
+use App\Models\Receipt;
+use App\Models\ReceivedProduct;
+use App\Models\SoldProduct;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -12,13 +24,13 @@ class ReceiptsController extends Controller
 {
     public function index()
     {
-        $receipts   =   \App\Models\Receipt::where('company_id', Auth::user()->company_id)->orderBy('created_at', 'desc')->get();
+        $receipts   =   Receipt::where('company_id', Auth::user()->company_id)->orderBy('created_at', 'desc')->get();
         return view('manager.recu.index', compact('receipts'));
     }
 
     public function add()
     {
-        $provider   =   \App\Models\Supplier::where('company_id', Auth::user()->company_id)->get();
+        $provider   =   Supplier::where('company_id', Auth::user()->company_id)->get();
         return view('manager.recu.create', compact('provider'));
     }
 
@@ -28,7 +40,7 @@ class ReceiptsController extends Controller
             'title' => 'required',
             'provider' => 'required',
         ]);
-        $receipt   =   new \App\Models\Receipt();
+        $receipt   =   new Receipt();
 
         $receipt->title =   $request->title;
         $receipt->supplier_id =   $request->provider;
@@ -46,25 +58,25 @@ class ReceiptsController extends Controller
 
     public function detail($id)
     {
-        $receiptDetail  =   \App\Models\Receipt::find(Crypt::decrypt($id));
-        $products       =   \App\Models\ReceivedProduct::where(['receipt_id' => Crypt::decrypt($id)])->where('company_id', Auth::user()->company_id)->select('*')->get();
+        $receiptDetail  =   Receipt::find(Crypt::decrypt($id));
+        $products       =   ReceivedProduct::where(['receipt_id' => Crypt::decrypt($id)])->where('company_id', Auth::user()->company_id)->select('*')->get();
         return view('manager.recu.detail', compact('receiptDetail', 'products'));
     }
 
     public function addProdcut($id)
     {
-        $products   =   \App\Models\Product::where('company_id', Auth::user()->company_id)->get();
+        $products   =   Product::where('company_id', Auth::user()->company_id)->get();
 
         $id         =   Crypt::decrypt($id);
 
-        $products   =   \App\Models\Product::orderBy('product_name', 'DESC')->where('company_id', Auth::user()->company_id)->where('category_id', '<>', '1')->get();
+        $products   =   Product::orderBy('product_name', 'DESC')->where('company_id', Auth::user()->company_id)->where('category_id', '<>', '1')->get();
 
-        $categories =   \App\Models\Category::all();
-        $lens_types =   \App\Models\LensType::all();
-        $chromatics =   \App\Models\PhotoChromatics::all();
-        $coatings   =   \App\Models\PhotoCoating::all();
-        $index      =   \App\Models\PhotoIndex::all();
-        $categories =   \App\Models\Category::all();
+        $categories =   Category::all();
+        $lens_types =   LensType::all();
+        $chromatics =   PhotoChromatics::all();
+        $coatings   =   PhotoCoating::all();
+        $index      =   PhotoIndex::all();
+        $categories =   Category::all();
 
         // return view('manager.recu.addProduct',compact('products','id','categories','lens_types','chromatics','coatings','index'));
         return view('manager.recu.productAdd', compact('products', 'id', 'categories', 'lens_types', 'chromatics', 'coatings', 'index'));
@@ -80,7 +92,7 @@ class ReceiptsController extends Controller
         $id   =   0;
         $existing_product   =   0;
 
-        $_product   =   \App\Models\ReceivedProduct::where('company_id', Auth::user()->company_id)->get();
+        $_product   =   ReceivedProduct::where('company_id', Auth::user()->company_id)->get();
 
         foreach ($_product as $key => $item) {
             if ($request->product == $item->product_id && $request->receipt_id == $item->receipt_id) {
@@ -90,7 +102,7 @@ class ReceiptsController extends Controller
         }
 
         if ($existing_product == 0) {
-            $products   =   new \App\Models\ReceivedProduct();
+            $products   =   new ReceivedProduct();
 
             $products->receipt_id   =   $request->receipt_id;
             $products->product_id   =   $request->product;
@@ -106,7 +118,7 @@ class ReceiptsController extends Controller
                 return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }
         } else {
-            $product = \App\Models\ReceivedProduct::find($id);
+            $product = ReceivedProduct::find($id);
 
             $product->stock        =   $request->stock + $product->stock;
 
@@ -122,7 +134,7 @@ class ReceiptsController extends Controller
 
     public function editDetail($id)
     {
-        $product =   \App\Models\ReceivedProduct::find(Crypt::decrypt($id));
+        $product =   ReceivedProduct::find(Crypt::decrypt($id));
         return view('manager.recu.editProduct', compact('product'));
     }
 
@@ -132,7 +144,7 @@ class ReceiptsController extends Controller
             'stock' => 'required | integer',
         ]);
 
-        $product    =   \App\Models\ReceivedProduct::find(Crypt::decrypt($id));
+        $product    =   ReceivedProduct::find(Crypt::decrypt($id));
         $product->stock =   $request->stock;
         try {
             $product->save();
@@ -147,7 +159,7 @@ class ReceiptsController extends Controller
     {
         $id =   Crypt::decrypt($id);
         $quantity   =   0;
-        $allProducts    =   \App\Models\ReceivedProduct::where(['receipt_id' => $id])->where('company_id', Auth::user()->company_id)->select('*')->get();
+        $allProducts    =   ReceivedProduct::where(['receipt_id' => $id])->where('company_id', Auth::user()->company_id)->select('*')->get();
 
         if ($allProducts->isEmpty()) {
             return redirect()->back()->withInput()->with('warningMsg', 'Please add products first! ');
@@ -160,9 +172,9 @@ class ReceiptsController extends Controller
             $pro    =   array_unique($p);
 
             foreach ($pro as $product) {
-                $product_   =   \App\Models\ReceivedProduct::where(['product_id' => $product])->where('company_id', Auth::user()->company_id)->select('stock')->get();
+                $product_   =   ReceivedProduct::where(['product_id' => $product])->where('company_id', Auth::user()->company_id)->select('stock')->get();
                 foreach ($product_ as $all_quantity) {
-                    $product_stock  =   \App\Models\Product::find($product);
+                    $product_stock  =   Product::find($product);
 
                     // adding stock to all products
                     $quantity   =   $product_stock->stock + $all_quantity->stock;
@@ -174,7 +186,7 @@ class ReceiptsController extends Controller
             }
 
             // updating the contents of the reciept
-            $receipt    =   \App\Models\Receipt::find($id);
+            $receipt    =   Receipt::find($id);
 
             $receipt->total_cost    =   $request->total_cost;
             $receipt->status        =   'completed';
@@ -193,25 +205,28 @@ class ReceiptsController extends Controller
     public function invoiceDetail($id)
     {
         $id         =   Crypt::decrypt($id);
-        $invoice    =   \App\Models\Invoice::where(['id' => $id])->where('company_id', Auth::user()->company_id)->select("*")->first();
-        $products   =   \App\Models\SoldProduct::where(['invoice_id' => $id])->where('company_id', Auth::user()->company_id)->select('*')->get();
-        $clients_information    =   Customer::where('id', $invoice->client_id)->first();
-        // dd($clients_information);
+        $invoice    =   Invoice::where(['id' => $id])->where('company_id', Auth::user()->company_id)->with('soldproduct')->withsum('soldproduct', 'patient_payment')->withsum('unavailableProducts', 'price')->with('unavailableProducts')->first();
 
-        return view('manager.receipt.detail', compact('invoice', 'products', 'clients_information'));
+        $companyInfo    =   getuserCompanyInfo();
+
+        $products    =   Product::where('company_id', $companyInfo->id)->first();
+
+        // return $invoice;
+
+        return view('manager.receipt.detail', compact('invoice', 'companyInfo', 'products'));
     }
 
     public function newProduct(Request $request)
     {
         // return $request->all();
 
-        $product    =   new \App\Models\Product();
+        $product    =   new Product();
 
         // ========================================
-        $lens_type  =   \App\Models\LensType::find($request->lens_type);
-        $indx       =   \App\Models\PhotoIndex::find($request->index);
-        $chro       =   \App\Models\PhotoChromatics::find($request->chromatics);
-        $coat       =   \App\Models\PhotoCoating::find($request->coating);
+        $lens_type  =   LensType::find($request->lens_type);
+        $indx       =   PhotoIndex::find($request->index);
+        $chro       =   PhotoChromatics::find($request->chromatics);
+        $coat       =   PhotoCoating::find($request->coating);
         // ================================================================
 
         if (initials($lens_type->name) == 'SV') {
@@ -242,7 +257,7 @@ class ReceiptsController extends Controller
                 $product->save();
 
                 // ================ Saving lens power =================
-                $power  =   new \App\Models\Power();
+                $power  =   new Power();
                 $power->product_id        =   $product->id;
                 $power->type_id           =   $request->lens_type;
                 $power->index_id          =   $request->index;
@@ -261,7 +276,7 @@ class ReceiptsController extends Controller
                 $id   =   0;
                 $existing_product   =   0;
 
-                $_product   =   \App\Models\ReceivedProduct::where('company_id', Auth::user()->company_id)->get();
+                $_product   =   ReceivedProduct::where('company_id', Auth::user()->company_id)->get();
 
                 foreach ($_product as $key => $item) {
                     if ($product->id == $item->product_id && $request->receipt_id == $item->receipt_id) {
@@ -271,7 +286,7 @@ class ReceiptsController extends Controller
                 }
 
                 if ($existing_product == 0) {
-                    $products   =   new \App\Models\ReceivedProduct();
+                    $products   =   new ReceivedProduct();
 
                     $products->receipt_id   =   $request->receipt_id;
                     $products->product_id   =   $product->id;
@@ -287,7 +302,7 @@ class ReceiptsController extends Controller
                         return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
                     }
                 } else {
-                    $product = \App\Models\ReceivedProduct::find($id);
+                    $product = ReceivedProduct::find($id);
 
                     $product->stock        =   $request->lens_stock + $product->stock;
 
@@ -335,7 +350,7 @@ class ReceiptsController extends Controller
             try {
                 $product->save();
 
-                $power  =   new \App\Models\Power();
+                $power  =   new Power();
                 $power->product_id        =   $product->id;
                 $power->type_id           =   $request->lens_type;
                 $power->index_id          =   $request->index;
@@ -356,7 +371,7 @@ class ReceiptsController extends Controller
                 $id   =   0;
                 $existing_product   =   0;
 
-                $_product   =   \App\Models\ReceivedProduct::where('company_id', Auth::user()->company_id)->get();
+                $_product   =   ReceivedProduct::where('company_id', Auth::user()->company_id)->get();
 
                 foreach ($_product as $key => $item) {
                     if ($product->id == $item->product_id && $request->receipt_id == $item->receipt_id) {
@@ -366,7 +381,7 @@ class ReceiptsController extends Controller
                 }
 
                 if ($existing_product == 0) {
-                    $products   =   new \App\Models\ReceivedProduct();
+                    $products   =   new ReceivedProduct();
 
                     $products->receipt_id   =   $request->receipt_id;
                     $products->product_id   =   $product->id;
@@ -382,7 +397,7 @@ class ReceiptsController extends Controller
                         return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
                     }
                 } else {
-                    $product = \App\Models\ReceivedProduct::find($id);
+                    $product = ReceivedProduct::find($id);
 
                     $product->stock        =   $request->lens_stock + $product->stock;
 
@@ -404,7 +419,7 @@ class ReceiptsController extends Controller
 
     public function removeReceiptProduct($id)
     {
-        $product    =   \App\Models\ReceivedProduct::find(Crypt::decrypt($id));
+        $product    =   ReceivedProduct::find(Crypt::decrypt($id));
         // return $product;
         try {
             $product->delete();

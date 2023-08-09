@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\CompanyInformation;
+
 function format_money($money)
 {
     if (!$money) {
@@ -91,10 +93,15 @@ function getuserType()
     return userInfo()->permissions;
 }
 
+function getuserCompanyInfo()
+{
+    return CompanyInformation::find(userInfo()->company_id);
+}
+
 function compareArrayValues($lastValue, $currentValue)
 {
     if ($currentValue == $lastValue) {
-        dd (true);
+        dd(true);
     } else {
         return false;
     }

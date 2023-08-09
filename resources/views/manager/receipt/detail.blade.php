@@ -1,143 +1,186 @@
 @extends('manager.includes.app')
 
-@section('title','Admin Dashboard - Invoice Detail')
+@section('title', 'Admin Dashboard - Invoice Detail')
 
 @push('css')
-<style>
-    @media print {
-        .noprint
-        {
-            visibility: hidden !important;
+    <style>
+        @media print {
+            .noprint {
+                visibility: hidden !important;
+            }
         }
-    }
-</style>
+    </style>
 @endpush
 
 {{-- ==== Breadcumb ======== --}}
-@section('current','Invoice Detail')
-@section('page_name','Invoice Detail')
+@section('current', 'Invoice Detail')
+@section('page_name', 'Invoice Detail')
 {{-- === End of breadcumb == --}}
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card card-body printableArea">
-                <h3><b>INVOICE</b> <span class="pull-right">#{{sprintf('%04d',$invoice->reference_number)}}</span></h3>
-                <hr>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="pull-left">
-                            <address>
-                                <?php $company=\App\Models\CompanyInformation::where(['id'=>Auth::user()->company_id])->select('*')->first(); ?>
-                                <img src="{{ asset('documents/logos/'.$company->logo)}}" alt="" height="100px">
-                                @if (Auth::user()->company_id!=3)
-                                    <h3> &nbsp;<b class="text-danger">{{$company->company_name}}</b></h3>
-                                @endif
-                                <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong> {{$company->company_tin_number}}
-                                    {{-- <br /><span></span> {{$company->company_street}} --}}
-                                    <br /><strong class="text-black-50">Phone Number:</strong> {{$company->company_phone}}
-                                    <br /><strong class="text-black-50">Email:</strong> {{$company->company_email}}</p>
-                            </address>
-                        </div>
-                        <div class="pull-right text-right">
-                            @if ($clients_information)
-                            <address>
-                                <p class="m-t-30"><b>Name :</b> {{$clients_information->name}}</p>
-                                <p class="m-t-30"><b>Phone :</b> {{$clients_information->phone}}</p>
-                                <p class="m-t-30"><b>Email :</b> {{$clients_information->email}}</p>
-                                <p><b>Due Date :</b> <i class="fa fa-calendar"></i>
-                                    {{date('Y-m-d H:m:s',strtotime($invoice->updated_at))}}</p>
-                            </address>
-
-                            @else
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-body printableArea">
+                    <h3><b>INVOICE</b> <span class="pull-right">#{{ sprintf('%04d', $invoice->reference_number) }}</span>
+                    </h3>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="pull-left">
                                 <address>
-                                    <p class="m-t-30"><b>Name :</b> {{$invoice->client_name}}</p>
-                                    <p class="m-t-30"><b>Phone :</b> {{$invoice->phone}}</p>
-                                    <p class="m-t-30"><b>TIN Number :</b> {{$invoice->tin_number}}</p>
-                                    <p><b>Due Date :</b> <i class="fa fa-calendar"></i>
-                                        {{date('Y-m-d H:m:s',strtotime($invoice->updated_at))}}</p>
-                                </address>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="table-responsive m-t-40" style="clear: both;">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">#</th>
-                                        <th>Product Name</th>
-                                        <th class="text-right">Quantity</th>
-                                        <th class="text-right">Unit Cost</th>
-                                        <th class="text-right">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($products as $key=> $product)
-                                    <span
-                                        hidden>{{$prod=\App\Models\Product::where(['id'=>$product->product_id])->select('*')->first()}}</span>
-                                    <span
-                                        hidden>{{$power=\App\Models\Power::where(['product_id'=>$product->product_id])->where('company_id',Auth::user()->company_id)->select('*')->first()}}</span>
-                                    <tr>
-                                        <td class="text-center">{{$key+1}}</td>
-                                        <td>{{$prod->product_name }} | {{ $prod->description}}
-                                            @if ($power)
-                                            @if (initials($prod->product_name)=='SV')
-                                                <span> {{$power->sphere}} / {{$power->cylinder}}</span>
-                                            @else
-                                                <span>{{$power->sphere}} / {{$power->cylinder}} *{{$power->axis}}  {{$power->add}}</span>
-                                            @endif
-                                            @endif
-                                        </td>
-                                        <td class="text-right">{{($product->quantity)}} </td>
-                                        <td class="text-right"> {{format_money($product->unit_price)}} </td>
-                                        <td class="text-right"> {{format_money($product->total_amount)}} </td>
-                                    </tr>
-                                    @endforeach
 
-                                </tbody>
-                            </table>
+                                    <img src="{{ asset('documents/logos/' . $companyInfo->logo) }}" alt=""
+                                        height="100px">
+                                    {{-- @if (Auth::user()->company_id != 3) --}}
+                                    <h3> &nbsp;<b class="text-danger">{{ $companyInfo->company_name }}</b></h3>
+                                    {{-- @endif --}}
+                                    <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
+                                        {{ $companyInfo->company_tin_number }}
+                                        {{-- <br /><span></span> {{$companyInfo->company_street}} --}}
+                                        <br /><strong class="text-black-50">Phone Number:</strong>
+                                        {{ $companyInfo->company_phone }}
+                                        <br /><strong class="text-black-50">Email:</strong>
+                                        {{ $companyInfo->company_email }}
+                                    </p>
+                                </address>
+                            </div>
+                            <div class="pull-right text-right">
+                                @if ($invoice->client_id)
+                                    <address>
+                                        <p class="m-t-30"><b>Name :</b> {{ $clients_information->name }}</p>
+                                        <p class="m-t-30"><b>Phone :</b> {{ $clients_information->phone }}</p>
+                                        <p class="m-t-30"><b>Email :</b> {{ $clients_information->email }}</p>
+                                        <p><b>Due Date :</b> <i class="fa fa-calendar"></i>
+                                            {{ date('Y-m-d H:m:s', strtotime($invoice->updated_at)) }}</p>
+                                    </address>
+                                @else
+                                    <address>
+                                        <p class="m-t-30"><b>Name :</b> {{ $invoice->client_name }}</p>
+                                        <p class="m-t-30"><b>Phone :</b> {{ $invoice->phone }}</p>
+                                        <p class="m-t-30"><b>TIN Number :</b> {{ $invoice->tin_number }}</p>
+                                        <p><b>Due Date :</b> <i class="fa fa-calendar"></i>
+                                            {{ date('Y-m-d H:m:s', strtotime($invoice->updated_at)) }}</p>
+                                    </address>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="table-responsive m-t-40" style="clear: both;">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#</th>
+                                            <th>Product Name</th>
+                                            <th class="text-right">Quantity</th>
+                                            <th class="text-right">Unit Cost</th>
+                                            <th class="text-right">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($invoice->unavailableProducts as $key => $product)
+                                            @php
+                                                $type = \App\Models\LensType::where('id', $product->type_id)
+                                                    ->pluck('name')
+                                                    ->first();
+                                                $coating = \App\Models\PhotoCoating::where('id', $product->type_id)
+                                                    ->pluck('name')
+                                                    ->first();
+                                                $index = \App\Models\PhotoIndex::where('id', $product->index_id)
+                                                    ->pluck('name')
+                                                    ->first();
+                                                $chromatics = \App\Models\PhotoChromatics::where('id', $product->chromatic_id)
+                                                    ->pluck('name')
+                                                    ->first();
+                                            @endphp
+                                            <tr>
+                                                <td class="text-center">{{ $key + 1 }}</td>
+                                                <td>{{ initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
+                                                    @if (initials($type) == 'SV')
+                                                        <span> {{ $product->sphere }} /
+                                                            {{ $product->cylinder }}</span>
+                                                    @else
+                                                        <span>{{ $product->sphere }} /
+                                                            {{ $product->cylinder }}
+                                                            *{{ $product->axis }}
+                                                            {{ $product->add }}</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-right">{{ $product->quantity }} </td>
+                                                <td class="text-right"> {{ format_money($product->price) }} </td>
+                                                <td class="text-right"> {{ format_money($product->total_amount) }} </td>
+                                            </tr>
+                                        @endforeach
+                                        @foreach ($invoice->soldproduct as $key => $product)
+                                            @php
+                                                $prod = $products->where('id', $product->product_id)->first();
+                                            @endphp
+                                            <tr>
+                                                <td class="text-center">{{ $key + $key }}</td>
+                                                <td>{{ $prod->product_name }} | {{ $prod->description }}
+                                                    @if ($prod->power)
+                                                        @if (initials($prod->product_name) == 'SV')
+                                                            <span> {{ $prod->power->sphere }} /
+                                                                {{ $prod->power->cylinder }}</span>
+                                                        @else
+                                                            <span>{{ $prod->power->sphere }} /
+                                                                {{ $prod->power->cylinder }}
+                                                                *{{ $prod->power->axis }}
+                                                                {{ $prod->power->add }}</span>
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                                <td class="text-right">{{ $product->quantity }} </td>
+                                                <td class="text-right"> {{ format_money($product->unit_price) }} </td>
+                                                <td class="text-right"> {{ format_money($product->total_amount) }} </td>
+                                            </tr>
+                                        @endforeach
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="pull-right m-t-30 text-right">
+                                @php
+                                    // $vat = ($invoice->total_amount * 18) / 100;
+                                    $total_invoice_amount = $invoice->soldproduct_sum_patient_payment + $invoice->unavailable_products_sum_price;
+                                @endphp
+                                <p>Total amount: {{ format_money($total_invoice_amount) }}</p>
+                                <p>Total paid: {{ format_money($total_invoice_amount - $invoice->due) }}</p>
+                                <p>Due: {{ format_money($invoice->due) }}</p>
+                                <p>vat (18%) : {{ format_money(0) }} </p>
+                                <hr>
+                                <h3><b>Total :</b> {{ format_money($total_invoice_amount) }}</h3>
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="pull-right m-t-30 text-right">
-                            <span hidden>{{$vat=(($invoice->total_amount*18)/100)}}</span>
-                            <p>Total amount: {{format_money($invoice->total_amount)}}</p>
-                            <p>Total paid: {{format_money($invoice->total_amount-$invoice->due)}}</p>
-                            <p>Due: {{format_money($invoice->due)}}</p>
-                            <p>vat (18%) : {{format_money($vat*0)}} </p>
-                            <hr>
-                            <h3><b>Total :</b> {{format_money($invoice->total_amount)}}</h3>
-                        </div>
-                        <div class="clearfix"></div>
-                        <hr class="noprint">
-                        <div class="text-right noprint">
-                            <button id="print" class="btn btn-default btn-outline" type="button"> <span><i
-                                        class="fa fa-print"></i> Print</span> </button>
-                        </div>
-                    </div>
+                </div>
+                <hr class="noprint">
+                <div class="text-right noprint">
+                    <button id="print" class="btn btn-default btn-outline" type="button">
+                        <span><i class="fa fa-print"></i> Print</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('scripts')
-<script src="{{ asset('dashboard/assets/dist/js/pages/samplepages/jquery.PrintArea.js')}}"></script>
-<script>
-    $(function () {
-        $("#print").click(function () {
-            var mode = 'iframe'; //popup
-            var close = mode == "popup";
-            var options = {
-                mode: mode,
-                popClose: close
-            };
-            $("div.printableArea").printArea(options);
+    <script src="{{ asset('dashboard/assets/dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
+    <script>
+        $(function() {
+            $("#print").click(function() {
+                var mode = 'iframe'; //popup
+                var close = mode == "popup";
+                var options = {
+                    mode: mode,
+                    popClose: close
+                };
+                $("div.printableArea").printArea(options);
+            });
         });
-    });
-
-</script>
+    </script>
 @endpush
