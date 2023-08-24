@@ -22,7 +22,7 @@ class ProductRetail extends Component
 
     // client information variables
     public $firstname, $lastname, $tin_number, $phone;
-    public $date_of_birth, $gender, $insurance_number;
+    public $date_of_birth, $gender, $insurance_number, $affiliate;
 
     // control variables
     public $lensType, $lensIndex, $lensCoating, $lensChromaticAspect, $frameList, $accessoriesList, $insuranceList;
@@ -299,6 +299,7 @@ class ProductRetail extends Component
             $invoice->company_id        =   userInfo()->company_id;
             $invoice->client_id         =   null;
             $invoice->client_name       =   $this->firstname . ' ' . $this->lastname;
+            $invoice->affiliate_names   =   $this->affiliate;
             $invoice->phone             =   $this->phone;
             $invoice->tin_number        =   $this->tin_number;
             $invoice->gender            =   $this->gender;

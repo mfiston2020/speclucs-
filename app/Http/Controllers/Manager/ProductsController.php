@@ -15,7 +15,7 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        $products =   \App\Models\Product::where('company_id', Auth::user()->company_id)->get();
+        $products =   \App\Models\Product::where('company_id', userInfo()->company_id)->get();
         return view('manager.product.index', compact('products'));
     }
 

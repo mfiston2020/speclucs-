@@ -66,8 +66,7 @@ class PaymentsController extends Controller
                 return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
             }
         } catch (\Throwable $th) {
-            //throw $th;
-                return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
+            return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
         }
     }
 

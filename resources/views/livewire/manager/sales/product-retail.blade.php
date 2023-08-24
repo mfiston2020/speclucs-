@@ -93,6 +93,18 @@
 
                         <div class="col-sm-3">
                             <label for="cost">
+                                Patient Affiliate Name
+                            </label>
+                            <input type="text" class="form-control @error('affiliate')  is-invalid @enderror"
+                                id="affiliate" placeholder="ex: Fiston MUNYAMPETA"
+                                wire:model.debounce.500ms="affiliate">
+                            @error('affiliate')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="cost">
                                 Ins. Number
                             </label>
                             <input type="text" class="form-control @error('insurance_number')  is-invalid @enderror"
