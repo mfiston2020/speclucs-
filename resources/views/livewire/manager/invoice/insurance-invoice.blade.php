@@ -48,7 +48,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    <span wire:loading.remove>Search</span>
+                    <span wire:loading.remove wire:target="searchInformation">Search</span>
                     <span wire:loading wire:target='searchInformation'>Searching...</span>
                 </button>
 
@@ -98,8 +98,14 @@
                 <div class="card">
                     <div class="card-body">
 
-                        {{-- <h4 class="card-title">{{ numberToWord(90007895) }}</h4> --}}
+                        {{-- <h4 class="card-title">{{ numbsserToWord(90007895) }}</h4> --}}
                         {{-- <hr> --}}
+                        <a href="#"
+                            class="ml-2 btn btn-sm waves-effect waves-light btn-rounded btn-outline-success"
+                            style="align-items: right;">
+                            <i class="fa fa-download"></i> Download
+                        </a>
+                        <hr>
                         <div class="table-responsive">
                             <table id="zero_config" class="table table-striped table-bordered nowrap"
                                 style="width:100%">
@@ -147,8 +153,7 @@
                                 </tbody>
                             </table>
                             <hr>
-                            <button class="btn btn-success">Print</button>
-                            <button class="btn btn-success">Invoice</button>
+                            <button class="btn btn-success">Create Invoice</button>
                         </div>
                     </div>
                 </div>

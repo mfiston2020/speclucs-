@@ -25,7 +25,7 @@ class ReceiptsController extends Controller
     public function index()
     {
         $receipts   =   Receipt::where('company_id', Auth::user()->company_id)->orderBy('created_at', 'desc')->get();
-        return view('manager.recu.index', compact('receipts'));
+        return view('ma`    qert783qnmnager.recu.index', compact('receipts'));
     }
 
     public function add()
