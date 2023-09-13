@@ -107,58 +107,66 @@
                         </a>
                         <hr>
                         <div class="table-responsive">
-                            <table id="zero_config" class="table table-striped table-bordered nowrap"
-                                style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>S/N</th>
-                                        <th>Date</th>
-                                        <th>Ins. Number</th>
-                                        <th>DoB</th>
-                                        <th>Sex</th>
-                                        <th>Beneficiary Names</th>
-                                        <th>Affiliate Names</th>
-                                        <th>T. Amnt</th>
-                                        <th>Ins Amnt </th>
-                                        <th>Credit </th>
-                                        <th>Tt. Credit </th>
-                                        <th>Final Tt. </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($invoices as $key => $invoice)
+                            <form wire:submit.prevent="addInvoiceCredit">
+                                <table id="zero_config" class="table table-striped table-bordered nowrap"
+                                    style="width:100%">
+                                    <thead>
                                         <tr>
-                                            <th>
-                                                <input type="checkbox" name="requestid[]" value="{{ $invoice->id }}" />
-                                            </th>
-                                            <th>{{ $key + 1 }}</th>
-                                            <th>{{ date('Y-m-d', strtotime($invoice->created_at)) }}</th>
-                                            <th>{{ $invoice->insurance_card_number }} </th>
-                                            <th>{{ $invoice->dateOfBirth }}</th>
-                                            <th>{{ Oneinitials($invoice->gender) }}</th>
-                                            <th>{{ $invoice->client_name }}</th>
-                                            <th class="text-center">{{ $invoice->affiliate_names ?? '-' }}</th>
-                                            <th>{{ format_money($invoice->soldproduct_sum_total_amount) }}</th>
-                                            <th>{{ format_money($invoice->soldproduct_sum_insurance_payment) }}</th>
-                                            <th>
-                                                <input type="text" name="" id="">
-                                            </th>
-                                            <th>
-                                                {{ format_money($invoice->soldproduct_sum_insurance_payment) }}
-                                            </th>
-                                            <th>{{ format_money($invoice->soldproduct_sum_insurance_payment) }}</th>
+                                            <th>#</th>
+                                            <th>S/N</th>
+                                            <th>Date</th>
+                                            <th>Ins. Number</th>
+                                            <th>DoB</th>
+                                            <th>Sex</th>
+                                            <th>Beneficiary Names</th>
+                                            <th>Affiliate Names</th>
+                                            <th>T. Amnt</th>
+                                            <th>Ins Amnt </th>
+                                            <th>Credit </th>
+                                            <th>Tt. Credit </th>
+                                            <th>Final Tt. </th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <hr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($invoices as $key => $invoice)
+                                            <tr>
+                                                <th>
+                                                    <input type="checkbox" name="requestid[]"
+                                                        value="{{ $invoice->id }}" />
+                                                </th>
+                                                <th>{{ $key + 1 }}</th>
+                                                <th>{{ date('Y-m-d', strtotime($invoice->created_at)) }}</th>
+                                                <th>{{ $invoice->insurance_card_number }} </th>
+                                                <th>{{ $invoice->dateOfBirth }}</th>
+                                                <th>{{ Oneinitials($invoice->gender) }}</th>
+                                                <th>{{ $invoice->client_name }}</th>
+                                                <th class="text-center">{{ $invoice->affiliate_names ?? '-' }}</th>
+                                                <th>{{ format_money($invoice->soldproduct_sum_total_amount) }}</th>
+                                                <th>{{ format_money($invoice->soldproduct_sum_insurance_payment) }}
+                                                </th>
+                                                <th>
+                                                    <input type="text" wire:changed="addInvoiceCredit"
+                                                        id="">
+                                                </th>
+                                                <th>
+                                                    {{ format_money($invoice->soldproduct_sum_insurance_payment) }}
+                                                </th>
+                                                <th>{{ format_money($invoice->soldproduct_sum_insurance_payment) }}
+                                                </th>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <hr>
+                                <button class="btn btn-primary mr-3" type="submit">
+                                    Submit Invoice Credit(s)
+                                </button>
+                            </form>
                             <button class="btn btn-success">Create Invoice</button>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <div class="tab-pane" id="summarized-invoices">
                 <div class="card">

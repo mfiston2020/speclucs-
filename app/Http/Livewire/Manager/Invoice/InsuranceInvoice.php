@@ -9,7 +9,7 @@ use Livewire\Component;
 
 class InsuranceInvoice extends Component
 {
-    public $insurances, $insurance, $invoices, $allData, $showData = false, $start_date, $end_date;
+    public $insurances, $insurance, $invoices, $invoicesIds, $credits = array(), $allData, $showData = false, $start_date, $end_date;
 
 
     protected $rules    =   [
@@ -33,6 +33,11 @@ class InsuranceInvoice extends Component
             ->orderBy('created_at', 'DESC')->get();
 
         $this->showData =   true;
+    }
+
+    function addInvoiceCredit()
+    {
+        dd($this->credits);
     }
 
     function mount()
