@@ -177,3 +177,13 @@ function numberToWord($num)
     }
     return '';
 }
+
+function dateDiffInDays($date1, $date2)
+{
+
+    $date1 = strtotime($date1);
+    $date2 = strtotime($date2);
+    $datediff = $date1 - $date2;
+
+    return round($datediff / (60 * 60 * 24));
+}

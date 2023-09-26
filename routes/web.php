@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Livewire\Manager\Report\ClosingReport;
 use App\Http\Livewire\Manager\Report\ProductReport;
 use App\Http\Livewire\Manager\Sales\ProductRetail;
 use Illuminate\Support\Facades\Auth;
@@ -284,6 +285,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/statement/detail/{id}', [\App\Http\Controllers\Manager\CustomerInvoice::class, 'statementInvoice_detail'])->name('statementInvoice.details');
 
     // ====================== Routes about Reporting ==========================
+    Route::get('/report/closing', ClosingReport::class)->name('closing.report');
     Route::get('/report', [\App\Http\Controllers\Manager\ReportingController::class, 'index'])->name('report');
 
     // ====================== Routes about Users management ==========================

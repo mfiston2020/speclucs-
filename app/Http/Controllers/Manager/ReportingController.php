@@ -30,4 +30,8 @@ class ReportingController extends Controller
 
         return view('manager.report.index',compact('product','expenses','payment_method','expenses_count','customerInvoices'));
     }
+
+    function closing(){
+        date_diff()
+    }
 }
