@@ -32,6 +32,6 @@ class ReportingController extends Controller
     }
 
     function closing(){
-        date_diff()
+        // date_diff()
     }
 }

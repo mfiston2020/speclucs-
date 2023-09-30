@@ -85,7 +85,7 @@ class LabRequestController extends Controller
             'sent_to_lab' => now(),
         ]);
 
-        return redirect()->back()->with('successMsg', 'Request sent to Lab!');
+        return redirect()->back()->with('successMsg', 'Order sent to Lab!');
     }
 
     // ====================

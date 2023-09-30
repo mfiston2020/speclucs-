@@ -79,8 +79,20 @@
                                 </a>
                             </li>
 
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#order-status" role="tab">
+                                    <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                                    <span class="hidden-xs-down">
+                                        Order Status
+                                        <span class="badge badge-danger badge-pill">
+                                            {{ count($other_orders) }}
+                                        </span>
+                                    </span>
+                                </a>
+                            </li>
+
                         </ul>
-                        
+
                     </div>
                 </div>
             </div>
@@ -122,12 +134,12 @@
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->pluck('name')
                                                                     ->first();
-                                                                
+
                                                                 $product = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->select('product_id', 'insurance_id', 'insurance_payment', 'patient_payment')
                                                                     ->first();
-                                                                
+
                                                                 $amount_paid = \App\Models\Transactions::where('invoice_id', $sale->id)
                                                                     ->select('amount')
                                                                     ->sum('amount');
@@ -266,12 +278,12 @@
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->pluck('name')
                                                                     ->first();
-                                                                
+
                                                                 $product = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->select('product_id', 'insurance_id', 'insurance_payment', 'patient_payment')
                                                                     ->first();
-                                                                
+
                                                                 $amount_paid = \App\Models\Transactions::where('invoice_id', $sale->id)
                                                                     ->select('amount')
                                                                     ->sum('amount');
@@ -405,12 +417,12 @@
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->pluck('name')
                                                                     ->first();
-                                                                
+
                                                                 $product = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->select('product_id', 'insurance_id', 'insurance_payment', 'patient_payment')
                                                                     ->first();
-                                                                
+
                                                                 $amount_paid = \App\Models\Transactions::where('invoice_id', $sale->id)
                                                                     ->select('amount')
                                                                     ->sum('amount');
@@ -532,12 +544,12 @@
                                                                 ->where('company_id', Auth::user()->company_id)
                                                                 ->pluck('name')
                                                                 ->first();
-                                                            
+
                                                             $product = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
                                                                 ->where('company_id', Auth::user()->company_id)
                                                                 ->select('product_id', 'insurance_id', 'insurance_payment', 'patient_payment')
                                                                 ->first();
-                                                            
+
                                                             $amount_paid = \App\Models\Transactions::where('invoice_id', $sale->id)
                                                                 ->select('amount')
                                                                 ->sum('amount');
@@ -612,6 +624,68 @@
                                                     </tr>
                                                 @endforeach
 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="order-status" role="tabpanel">
+                <div class="tab-pane  p-20" id="profile2" role="tabpanel">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="zero_config" class="table table-striped table-bordered nowrap"
+                                        style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Request # </th>
+                                                    <th>Patient Name</th>
+                                                    <th>Request Date</th>
+                                                    <th>Request Age</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                @foreach ($other_orders as $key => $request)
+                                                    <tr>
+                                                        <td>{{ $key + 1 }}</td>
+                                                        <td>
+                                                            <a href="#!" data-toggle="modal"
+                                                                data-target="#request-{{ $key }}-detail">
+                                                                Request #{{ sprintf('SPCL-%04d', $request->id) }}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                        </td>
+                                                        {{-- <td>
+                                                            -
+                                                        </td> --}}
+                                                        <td>
+                                                            {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
+                                                        </td>
+                                                        <td>
+                                                            {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <span @class([
+                                                                'text-warning' => $request->status == 'requested',
+                                                            ])>
+                                                                {{ $request->status }}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>

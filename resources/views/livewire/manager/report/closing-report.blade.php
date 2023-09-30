@@ -26,9 +26,7 @@
                             <div class="input-group">
                                 <input type="date" class="form-control" placeholder="mm/dd/yyyy"
                                     wire:model.lazy='closing_date'>
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="icon-calender"></i></span>
-                                </div>
+                                <img src="{{asset('dashboard/assets/images/loading.gif')}}" width="40" wire:loading wire:target='searchInformation'/>
                             </div>
                             @error('closing_date')
                                 <span class="text-danger">{{ $message }}</span>
@@ -51,9 +49,9 @@
 
         <div class="card">
             @php
-            $dateNow = now();
+                $dateNow = now();
                 $stockTracker   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($closing_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($dateNow)))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
-                // dd($stockTracker);
+                // dd(date('Y-m-d',strtotime($dateNow)));
             @endphp
             <div class="card-body">
                 <div class="table-responsive">
@@ -84,12 +82,11 @@
                                         $closingStock   =   $product->stock;
                                     }
                                     else{
+                                        // dd($stockTracker->where('product_id',$product->id)->all());
                                         $instock    =   $stockTracker->where('product_id',$product->id)->where('operation','in')->sum('incoming');
                                         $outstock    =   $stockTracker->where('product_id',$product->id)->where('operation','out')->sum('incoming');
 
-                                        // dd($outstock);
-
-                                        $closingStock=  $product->stock +($instock-$outstock);
+                                        $closingStock=  $product->stock - $instock + $outstock;
                                     }
 
                                 @endphp

@@ -158,10 +158,10 @@
                         <div class="row m-b-0">
                             <!-- col -->
 
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-6 col-md-6">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <div class="m-r-10"><span class="text-orange display-5"><i
-                                                class="mdi mdi-wallet"></i></span></div>
+                                    {{-- <div class="m-r-10"><span class="text-orange display-5"><i
+                                                class="mdi mdi-wallet"></i></span></div> --}}
                                     <span hidden
                                         >{{$pro  =   \App\Models\Transactions::where('company_id',Auth::user()->company_id)->
                                                             whereYear('created_at',date('Y'))->select('*')->get()}}</span>
@@ -180,10 +180,10 @@
                             </div>
                             <!-- col -->
                             <!-- col -->
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-6 col-md-6">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <div class="m-r-10"><span class="text-cyan display-5"><i
-                                                class="mdi mdi-star-circle"></i></span></div>
+                                    {{-- <div class="m-r-10"><span class="text-cyan display-5"><i
+                                                class="mdi mdi-star-circle"></i></span></div> --}}
                                     <div>
                                         <span>{{__('manager/dashboard.cost_of_good_sold')}}</span>
                                         <h3 class="font-medium m-b-0">
@@ -204,7 +204,7 @@
                             </div>
                             <!-- col -->
                             <!-- col -->
-                            <div class="col-lg-3 col-md-6">
+                            {{-- <div class="col-lg-3 col-md-6">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="m-r-10"><span class="text-info display-5"><i
                                                 class="mdi mdi-shopping"></i></span></div>
@@ -216,10 +216,10 @@
                                         </h3>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!-- col -->
                             <!-- col -->
-                            <div class="col-lg-3 col-md-6">
+                            {{-- <div class="col-lg-3 col-md-6">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="m-r-10">
                                         <span class="text-primary display-5"><i
@@ -231,7 +231,7 @@
                                         </h3>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!-- col -->
                         </div>
                     </div>
@@ -244,7 +244,7 @@
             <div class="col-sm-12 col-lg-4">
                 <div class="card card-hover">
                     <div class="card-body">
-                        <h4 class="card-title">{{__('manager/dashboard.product_sales')}}</h4>
+                        <h4 class="card-title">{{__('manager/dashboard.top_product')}}</h4>
                         <div class="d-flex">
                             <h2>{{format_numbers(\App\Models\SoldProduct::where('company_id',Auth::user()->company_id)->select()->sum('quantity'))}}
                                 <small><i class="ti-arrow-up text-success"></i></small></h2>

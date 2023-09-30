@@ -27,11 +27,11 @@
                                 <i class="fa fa-plus"></i> Retail
                             </a>
 
-                            <a href="{{ route('manager.new.order') }}" type="button"
+                            {{-- <a href="{{ route('manager.new.order') }}" type="button"
                                 class="btn waves-effect waves-light btn-rounded btn-outline-primary mr-3 text-capitalize"
                                 style="align-items: right;">
                                 <i class="fa fa-plus"></i> Wholesale
-                            </a>
+                            </a> --}}
 
                             <a href="{{ route('manager.pending.orders') }}" type="button"
                                 class="btn waves-effect waves-light btn-rounded btn-outline-secondary mr-3 text-capitalize"
@@ -78,12 +78,12 @@
                                                         ->where('company_id', Auth::user()->company_id)
                                                         ->pluck('name')
                                                         ->first();
-                                                    
+
                                                     $product = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
                                                         ->where('company_id', Auth::user()->company_id)
                                                         ->select('product_id', 'insurance_id', 'insurance_payment', 'patient_payment')
                                                         ->first();
-                                                    
+
                                                     $amount_paid = \App\Models\Transactions::where('invoice_id', $sale->id)
                                                         ->select('amount')
                                                         ->sum('amount');
