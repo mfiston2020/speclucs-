@@ -20,6 +20,9 @@ class ProductRetail extends Component
     // repository
     public $informationMessage;
 
+    // variables for cloud
+    public $cloud_id, $hospital_name;
+
     // client information variables
     public $firstname, $lastname, $tin_number, $phone;
     public $date_of_birth, $gender, $insurance_number, $affiliate;
@@ -27,7 +30,7 @@ class ProductRetail extends Component
     // control variables
     public $lensType, $lensIndex, $lensCoating, $lensChromaticAspect, $frameList, $accessoriesList, $insuranceList;
 
-    public $rightEye = false, $leftEye = false, $showPaymentSection = false, $leftLen = false, $rightLen = false, $leftLenFound = true, $rightLenFound = false, $searchProduct = false, $showsubmit = false;
+    public $rightEye = false, $leftEye = false, $showPaymentSection = false, $leftLen = false, $rightLen = false, $leftLenFound = true, $rightLenFound = false, $searchProduct = false, $showsubmit = false, $isCloudOrder = 'no';
 
     // ============== lens selection variables ========
     public $lens_type, $lens_index, $lens_coating, $lens_chromatic;
@@ -54,6 +57,12 @@ class ProductRetail extends Component
 
     // frame variables for insurance calculations ======
     public $insurance_percentage_frame, $insurance_payment_frame, $insurance_approved_frame, $patient_payment_frame;
+
+    // showing cloud form and hidding it
+    function hideCloud($value)
+    {
+        $this->isCloudOrder =   $value;
+    }
 
     // searching for frame
     function updatedframe($val)
@@ -354,6 +363,8 @@ class ProductRetail extends Component
 
             $sold->company_id   =   userInfo()->company_id;
             $sold->product_id   =   $eye == 'right' ? $this->rightLenInfo[0]->id : $this->leftLenInfo[0]->id;
+            $sold->cloud_id     =   $this->cloud_id;
+            $sold->hospital_name =   $this->hospital_name;
             $sold->invoice_id   =   $invoiceId;
             $sold->quantity     =   '1';
             $sold->discount     =   '0';

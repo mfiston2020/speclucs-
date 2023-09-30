@@ -3,6 +3,80 @@
     <form wire:submit.prevent="saveOrder">
         <div class="col-md-12 col-sm-12 mt-2">
 
+            {{-- <div class="col-12"> --}}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <h4 class="card-title">
+                                <a wire:click="hideCloud('no')" class="btn btn-primary btn-rounded text-white">
+                                    <i @class(['badge badge-pill badge-danger'=>$isCloudOrder=='no'])> {{$isCloudOrder=='no'?'-':''}}</i>
+                                    <i class="mdi mdi-cart-plus"></i> Customer Order
+                                </a>
+                                <a wire:click="hideCloud('yes')" class="btn btn-success btn-rounded text-white">
+                                    <i @class(['badge badge-pill badge-danger'=>$isCloudOrder=='yes'])>{{$isCloudOrder=='yes'?'-':''}}</i>
+                                    <i class="mdi mdi-clock-fast"></i> Cloud Order
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            {{-- </div> --}}
+
+            @if ($isCloudOrder=='yes')
+                {{-- personal information --}}
+                <div class="card">
+                    <div class="card-header">
+                        Cloud Information
+                        {{-- <button wire:click=showModal>shwi</button> --}}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Cloud ID</label>
+                                    <input type="text" wire:model.lazy="cloud_id" class="form-control">
+                                </div>
+                            </div>
+
+                            <!--/span-->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Hospital Name</label>
+                                    <input type="text" wire:model.lazy="hospital_name" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Insurance</label>
+                                    <select class="form-control @error('insurance_type') is-invalid @enderror custom-select"
+                                        wire:model.lazy='insurance_type' required>
+                                        <option value="">** Select Type **</option>
+                                        <option value="private" selected>private</option>
+                                        @if (count($insuranceList) > 0)
+
+                                            @foreach ($insuranceList as $insurance)
+                                                <option value="{{ $insurance->id }}">{{ $insurance->insurance_name }}
+                                                </option>
+                                            @endforeach
+
+                                        @endif
+                                    </select>
+                                    @error('insurance_type')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            @else
+
             {{-- personal information --}}
             <div class="card">
                 <div class="card-header">
@@ -17,7 +91,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Firstname</label>
-                                <input type="text" wire:model.lazy="firstname" class="form-control" required="">
+                                <input type="text" wire:model.lazy="firstname" class="form-control" {{$isCloudOrder=='no'?'required':''}}>
                             </div>
                         </div>
 
@@ -25,7 +99,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Lastname</label>
-                                <input type="text" wire:model.lazy="lastname" class="form-control" required="">
+                                <input type="text" wire:model.lazy="lastname" class="form-control" {{$isCloudOrder=='no'?'required':''}}>
                             </div>
                         </div>
 
@@ -33,7 +107,7 @@
                             <div class="form-group">
                                 <label>Gender</label>
                                 <select class="form-control @error('gender') is-invalid @enderror custom-select"
-                                    wire:model.lazy='gender' required>
+                                    wire:model.lazy='gender'  {{$isCloudOrder=='no'?'required':''}}>
                                     <option value="">--Select your Gender--</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
@@ -49,7 +123,7 @@
                             <div class="form-group">
                                 <label>Date Of Birth</label>
                                 <input type="date" max="{{ date('Y-m-d') }}" wire:model.lazy="date_of_birth"
-                                    class="form-control" required="">
+                                    class="form-control" {{$isCloudOrder=='no'?'required':''}}>
                             </div>
                         </div>
 
@@ -65,7 +139,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Phone Number</label>
-                                <input type="text" wire:model.lazy="phone" class="form-control" required="">
+                                <input type="text" wire:model.lazy="phone" class="form-control" {{$isCloudOrder=='no'?'required':''}}>
                             </div>
                         </div>
 
@@ -117,6 +191,8 @@
 
                 </div>
             </div>
+
+            @endif
 
             {{-- lens --}}
             <div class="col-md-12 col-sm-12 mt-2">

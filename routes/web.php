@@ -176,11 +176,11 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/request/labRequest', [\App\Http\Controllers\Manager\LabRequestController::class, 'index'])->name('lab.requests');
     Route::get('/request/sendToLab/{id}', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendToLab'])->name('send.request.lab');
     Route::get('/request/receive-order', [\App\Http\Controllers\Manager\LabRequestController::class, 'receiveOrder'])->name('receive.order.from');
-    Route::post('/request/send-to-production', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendToProduction'])->name('sent.request.to.production');
     Route::post('/request/completed', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendToCompleted'])->name('sent.request.to.complete');
     Route::post('/request/deliver', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendToDelivered'])->name('sent.request.to.delivery');
     Route::post('/request/inStock-receive', [\App\Http\Controllers\Manager\LabRequestController::class, 'receiveRequest'])->name('sent.request.to.receive');
     Route::post('/request/inStock-dispense', [\App\Http\Controllers\Manager\LabRequestController::class, 'dispenseRequest'])->name('sent.request.to.dispense');
+    Route::post('/request/send-to-production', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendToProduction'])->name('sent.request.to.production');
 
     Route::post('/request/addPricing', [\App\Http\Controllers\Manager\LabRequestController::class, 'addpriceRequest'])->name('sent.request.to.addprice');
 
