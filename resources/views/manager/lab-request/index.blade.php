@@ -187,6 +187,9 @@
                                                                         tabindex="-1" role="dialog"
                                                                         aria-labelledby="myLargeModalLabel"
                                                                         aria-hidden="true" style="display: none;">
+                                                                        @php
+                                                                            $isOutOfStock='no';
+                                                                        @endphp
                                                                         <div
                                                                             class="modal-dialog modal-xl modal-dialog-centered">
                                                                             <div class="modal-content">
@@ -222,10 +225,16 @@
                                                                                     @foreach ($request->soldproduct as $product)
                                                                                         @php
                                                                                             $invoice_product = $products->where('id', $product->product_id)->first();
+
+                                                                                            if ($invoice_product->stock==0){
+                                                                                                $isOutOfStock='yes';
+                                                                                            }
+
                                                                                         @endphp
 
                                                                                         {{-- for lens --}}
                                                                                         @if ($invoice_product->category_id == 1)
+
                                                                                             <div class="row mb-2">
                                                                                                 <div class="col-1">
                                                                                                     <h4
@@ -382,19 +391,25 @@
                                                                                 </div>
                                                                                 <div
                                                                                     class="modal-footer d-flex justify-content-between">
-                                                                                    <button type="button"
-                                                                                        class="btn btn-danger waves-effect text-left"
-                                                                                        data-dismiss="modal">
-                                                                                        Close
-                                                                                    </button>
-                                                                                    <button type="button"
-                                                                                        class="btn btn-success waves-effect text-left"
-                                                                                        id="print">Print</button>
-                                                                                    <a href="{{ route('manager.send.request.lab', Crypt::encrypt($request->id)) }}"
-                                                                                        onclick="return confirm('are you sure?')"
-                                                                                        class="btn btn-info waves-effect text-left">
-                                                                                        Send to Lab
-                                                                                    </a>
+
+                                                                                        @if ($isOutOfStock=='yes')
+                                                                                            <center><h4 class="text-danger">Product out of stock</h4></center>
+                                                                                        @else
+                                                                                            <button type="button"
+                                                                                                class="btn btn-danger waves-effect text-left"
+                                                                                                data-dismiss="modal">
+                                                                                                Close
+                                                                                            </button>
+                                                                                            <button type="button"
+                                                                                                class="btn btn-success waves-effect text-left"
+                                                                                                id="print">Print</button>
+                                                                                            <a href="{{ route('manager.send.request.lab', Crypt::encrypt($request->id)) }}"
+                                                                                                onclick="return confirm('are you sure?')"
+                                                                                                class="btn btn-info waves-effect text-left">
+                                                                                                Send to Lab
+                                                                                            </a>
+
+                                                                                        @endif
                                                                                 </div>
                                                                             </div>
                                                                             <!-- /.modal-content -->
@@ -1066,8 +1081,7 @@
                                                                         value={{ $request->id }} />
                                                                 </td>
                                                                 <td>
-                                                                    <a href="#!" data-toggle="modal"
-                                                                        data-target="#request-{{ $key }}-detail">
+                                                                    <a href="#!">
                                                                         Request
                                                                         #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                     </a>

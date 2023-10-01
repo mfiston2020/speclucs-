@@ -8,14 +8,18 @@
                     <div class="card-body">
                         <div class="row">
                             <h4 class="card-title">
-                                <a wire:click="hideCloud('no')" class="btn btn-primary btn-rounded text-white">
-                                    <i @class(['badge badge-pill badge-danger'=>$isCloudOrder=='no'])> {{$isCloudOrder=='no'?'-':''}}</i>
-                                    <i class="mdi mdi-cart-plus"></i> Customer Order
-                                </a>
-                                <a wire:click="hideCloud('yes')" class="btn btn-success btn-rounded text-white">
-                                    <i @class(['badge badge-pill badge-danger'=>$isCloudOrder=='yes'])>{{$isCloudOrder=='yes'?'-':''}}</i>
-                                    <i class="mdi mdi-clock-fast"></i> Cloud Order
-                                </a>
+                                @if (userInfo()->permissions=='seller' || userInfo()->permissions=='manager')
+                                    <a wire:click="hideCloud('no')" class="btn btn-primary btn-rounded text-white">
+                                        <i @class(['badge badge-pill badge-danger'=>$isCloudOrder=='no'])> {{$isCloudOrder=='no'?'-':''}}</i>
+                                        <i class="mdi mdi-cart-plus"></i> Customer Order
+                                    </a>
+                                @endif
+                                @if (userInfo()->permissions=='lab' || userInfo()->permissions=='manager')
+                                    <a wire:click="hideCloud('yes')" class="btn btn-success btn-rounded text-white">
+                                        <i @class(['badge badge-pill badge-danger'=>$isCloudOrder=='yes'])>{{$isCloudOrder=='yes'?'-':''}}</i>
+                                        <i class="mdi mdi-clock-fast"></i> Cloud Order
+                                    </a>
+                                @endif
                             </h4>
                         </div>
                     </div>

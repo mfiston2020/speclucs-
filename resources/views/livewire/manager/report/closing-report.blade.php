@@ -68,7 +68,6 @@
                                 <th>Power</th>
                                 <th>Price</th>
                                 <th>cost</th>
-                                <th>Opening Stock</th>
                                 <th>Closing Stock</th>
                             </tr>
                         </thead>
@@ -77,7 +76,6 @@
                                 @php
 
                                     $closingStock   =   0;
-                                    $openingStock   =   0;
 
                                     $date2=($closing_date);
                                     $date1=now();
@@ -95,12 +93,7 @@
                                         $instock    =   $stockTracker->where('product_id',$product->id)->where('operation','in')->sum('incoming');
                                         $outstock    =   $stockTracker->where('product_id',$product->id)->where('operation','out')->sum('incoming');
 
-
-                                        $instock2    =   $stockTracker2->where('product_id',$product->id)->where('operation','in')->sum('incoming');
-                                        $outstock2    =   $stockTracker2->where('product_id',$product->id)->where('operation','out')->sum('incoming');
-
                                         $closingStock   =  $product->stock - $instock + $outstock;
-                                        $openingStock   =  $product->stock - $instock2 + $outstock2;
                                     }
 
                                 @endphp
@@ -133,13 +126,6 @@
                                     <td>
                                         <a href="" class="update" data-name="stock" data-type="text"
                                             data-pk="{{ $product->id }}"
-                                            data-title="Enter Product Name">{{ $openingStock }}</a>
-
-                                    </td>
-
-                                    <td>
-                                        <a href="" class="update" data-name="stock" data-type="text"
-                                            data-pk="{{ $product->id }}"
                                             data-title="Enter Product Name">{{ $closingStock }}</a>
 
                                     </td>
@@ -157,7 +143,6 @@
                                 <th>Power</th>
                                 <th>Price</th>
                                 <th>cost</th>
-                                <th>Opening Stock</th>
                                 <th>Closing Stock</th>
                             </tr>
                         </tfoot>

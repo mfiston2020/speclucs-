@@ -58,6 +58,10 @@ class ProductRetail extends Component
     // frame variables for insurance calculations ======
     public $insurance_percentage_frame, $insurance_payment_frame, $insurance_approved_frame, $patient_payment_frame;
 
+    protected $rules = [
+        'cloud_id' => 'required_if:isCloudOrder,==,yes'
+    ];
+
     // showing cloud form and hidding it
     function hideCloud($value)
     {
@@ -280,7 +284,7 @@ class ProductRetail extends Component
     // function to handle form submit
     function saveOrder()
     {
-        // $this->validate();
+        $this->validate();
 
 
         $this->checkAvailability();
@@ -466,10 +470,11 @@ class ProductRetail extends Component
         $this->lensIndex            =   PhotoIndex::all();
         $this->lensCoating          =   PhotoCoating::all();
         $this->lensChromaticAspect  =   PhotoChromatics::all();
+        $this->isCloudOrder         =   userInfo()->permissions == 'lab' ? 'yes' : 'no';
         $this->insuranceList        =   Insurance::where('company_id', userInfo()->company_id)->get();
 
         // non lens products
-        $this->frameList  =   Product::where('company_id', userInfo()->company_id)->where('category_id', '2')->get();
+        $this->frameList  =   Product::where('company_id', userInfo()->company_id)->where('category_id', '2')->orderBy('product_name', 'ASC')->get();
 
         $this->accessoriesList  =   Product::where('company_id', userInfo()->company_id)->whereNotIn('category_id', ['1', '2'])->get();
     }

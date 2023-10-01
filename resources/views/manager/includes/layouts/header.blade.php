@@ -360,6 +360,10 @@
                                 class="mdi mdi-flask"></i><span class="hide-menu"> {{ __('navigation.laboratory') }}
                             </span></a>
                     </li>
+                    <li class="sidebar-item"><a href="{{ route('manager.retail') }}" class="sidebar-link"><i
+                                class="mdi mdi-adjust"></i><span class="hide-menu">
+                                {{ __('navigation.lab_request') }} </span></a>
+                    </li>
                     {{-- <li class="sidebar-item"><a href="{{ route('manager.cutomerInvoice')}}" class="sidebar-link"><i
                         class="mdi mdi-archive"></i><span class="hide-menu"> Statement Invoice </span></a>
                     </li> --}}

@@ -86,16 +86,20 @@
                                         <th>Stock</th>
                                         <th>Location</th>
                                         <th>Supplier</th>
-                                        <th>Total Sold</th>
+                                        {{-- <th>Total Sold</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $key => $product)
-                                        <span
-                                            hidden>{{ $quantity = \App\Models\SoldProduct::where(['product_id' => $product->id])->where('company_id', Auth::user()->company_id)->select('quantity')->get() }}</span>
-                                        @foreach ($quantity as $item)
-                                            <span hidden>{{ $product_sold = $product_sold + $item->quantity }}</span>
-                                        @endforeach
+                                    @php
+                                        $quantity = \App\Models\SoldProduct::where(['product_id' => $product->id])->where('company_id', Auth::user()->company_id)->select('quantity')->get();
+
+                                        $unAvailableProduct = count(\App\Models\UnavailableProduct::where('product_id',$product->id)->get());
+
+                                        foreach ($quantity as $item){
+                                            $product_sold = $product_sold + $item->quantity + $unAvailableProduct;
+                                        }
+                                    @endphp
                                         <tr>
                                             <td>{{ $product->id }}</td>
                                             <td>{{ \App\Models\Category::where(['id' => $product->category_id])->pluck('name')->first() }}
@@ -137,9 +141,9 @@
                                                     {{ $product->supplier_id == null? '-': \App\Models\Supplier::where('id', $product->supplier_id)->pluck('name')->first() }}
                                                 </center>
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 {{ number_format($product_sold) }}
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                         <span hidden>{{ $product_sold = 0 }}</span>
                                     @endforeach
@@ -156,7 +160,7 @@
                                         <th>Stock</th>
                                         <th>Location</th>
                                         <th>Supplier</th>
-                                        <th>Total Sold</th>
+                                        {{-- <th>Total Sold</th> --}}
                                     </tr>
                                 </tfoot>
                             </table>

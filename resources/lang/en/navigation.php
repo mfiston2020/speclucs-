@@ -30,6 +30,7 @@ return
 
         'laboratory_department' => 'Laboratory Deprtment',
         'laboratory' => 'Laboratory',
+        'lab_request' => 'Request',
 
         'clinic_department' => 'Clinic Department',
         'patient' => 'Patients',

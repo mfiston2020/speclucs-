@@ -21,7 +21,7 @@
                     <center class="m-t-30"> <img src="{{ asset('dashboard/assets/images/users/1.jpg')}}"
                             class="rounded-circle" width="150" />
                         <h4 class="card-title m-t-10">{{$user_info->name}}</h4>
-                        <h6 class="card-subtitle" style="text-transform: uppercase">{{Auth::user()->role}}</h6>
+                        <h6 class="card-subtitle" style="text-transform: uppercase">{{Auth::user()->permissions}}</h6>
                         {{-- <div class="row text-center justify-content-md-center">
                             <div class="col-4"><a href="javascript:void(0)" class="link"><i
                                         class="fas fa-shopping-cart"></i>

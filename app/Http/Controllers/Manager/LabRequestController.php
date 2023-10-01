@@ -227,6 +227,8 @@ class LabRequestController extends Controller
 
     function addpriceRequest(Request $request)
     {
+        // return $request->all();
+        $invoice    =   Invoice::where('id', $request->invoiceID)->pluck('hospital_name')->first();
         foreach ($request->prodId as $key => $value) {
             $newProduct  =   UnavailableProduct::find($value)->update([
                 'cost'      =>  $request->cost[$key],
@@ -243,7 +245,7 @@ class LabRequestController extends Controller
         }
 
         Invoice::find($request->invoiceID)->update([
-            'status' => 'priced',
+            'status' => $invoice != null ? 'Confirmed' : 'priced',
             'set_price' => now(),
         ]);
 
@@ -301,22 +303,15 @@ class LabRequestController extends Controller
 
                     $prdt    =   Product::find($newProduct->id);
 
-                    $prdt->stock = 1;
+                    $prdt->stock = 0;
                     $prdt->save();
 
                     $sold->update([
                         'product_id' => $prdt->id,
                     ]);
 
-                    $stockVariation = $prdt->stock + 1;
-
-                    $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock, '1', $stockVariation, 'received from supplier', 'rm', 'in');
-
-                    $stockVariation = $prdt->stock + 1;
-                    $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock - 1, '1', $stockVariation, 'sent to lab', 'rm', 'out');
-
-                    $prdt->stock = 0;
-                    $prdt->save();
+                    $this->stocktrackRepo->saveTrackRecord($prdt->id, 1, '1', 0, 'sent to lab', 'rm', 'out');
+                    $this->stocktrackRepo->saveTrackRecord($prdt->id, 0, '1', 1, 'received from supplier', 'rm', 'in');
 
                 }
 
