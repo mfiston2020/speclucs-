@@ -78,7 +78,7 @@ class LabRequestController extends Controller
             $prdt->save();
 
             // $stockVariation = $product->stock - 1;
-            $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock+1, '1', $prdt->stock, 'sent to lab', 'rm', 'out');
+            $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock + 1, '1', $prdt->stock, 'sent to lab', 'rm', 'out');
         }
 
         Invoice::find(Crypt::decrypt($id))->update([
@@ -236,10 +236,10 @@ class LabRequestController extends Controller
                 'lens_stock' => 0
             ]);
 
-            $order      =   UnavailableProduct::find($value);
+            // $order      =   UnavailableProduct::find($value);
 
-            $productRepo =   new ProductRepo();
-            $newProduct = $productRepo->saveProduct($order->toArray(), '1', $order->toArray(), true);
+            // $productRepo =   new ProductRepo();
+            // $newProduct = $productRepo->saveProduct($order->toArray(), '1', $order->toArray(), true);
         }
 
         Invoice::find($request->invoiceID)->update([
@@ -290,7 +290,7 @@ class LabRequestController extends Controller
         $productRepo    =   new ProductRepo();
 
         if ($request->requestId == null) {
-            return redirect()->back()->with('warningMsg', 'Select at least sasddfsfd Order!');
+            return redirect()->back()->with('warningMsg', 'Select at least one Order!');
         } else {
             foreach ($request->requestId as $key => $value) {
 
@@ -301,7 +301,8 @@ class LabRequestController extends Controller
 
                     $prdt    =   Product::find($newProduct->id);
 
-                    $prdt->update(['stock' => 1]);
+                    $prdt->stock = 1;
+                    $prdt->save();
 
                     $sold->update([
                         'product_id' => $prdt->id,
@@ -311,23 +312,32 @@ class LabRequestController extends Controller
 
                     $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock, '1', $stockVariation, 'received from supplier', 'rm', 'in');
 
-                    $stockVariation = $prdt->stock - 1;
-                    $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock, '1', $stockVariation, 'sent to lab', 'rm', 'out');
+                    $stockVariation = $prdt->stock + 1;
+                    $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock - 1, '1', $stockVariation, 'sent to lab', 'rm', 'out');
+
+                    $prdt->stock = 0;
+                    $prdt->save();
+
                 }
 
-                foreach ($products->soldproduct as  $sold) {
-                    $product    =   $this->allProduct->where('id', $sold->product_id)->first();
+                $this->sendToLab(Crypt::encrypt($value));
 
-                    if ($product->stock <= 0) {
-                        return redirect()->back()->with('warningMsg', $product->product_name . ' | ' . $product->description . ' is out of Stock!');
-                    }
-                }
+                // foreach ($products->soldproduct as  $sold) {
+                //     $product    =   $this->allProduct->where('id', $sold->product_id)->first();
 
-                Invoice::find($value)->update([
-                    'status' => 'sent to lab',
-                    'sent_to_lab' => now(),
-                    'receive_from_supplier' => now(),
-                ]);
+                //     if ($product->stock <= 0) {
+                //         return redirect()->back()->with('warningMsg', $product->product_name . ' | ' . $product->description . ' is out of Stock!');
+                //     }
+                //     else{
+                //         $this->sendToLab();
+                //     }
+                // }
+
+                // Invoice::find($value)->update([
+                //     'status' => 'sent to lab',
+                //     'sent_to_lab' => now(),
+                //     'receive_from_supplier' => now(),
+                // ]);
             }
             return redirect()->back()->with('successMsg', 'Request sent to Lab!');
         }
