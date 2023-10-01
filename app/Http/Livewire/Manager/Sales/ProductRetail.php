@@ -305,6 +305,8 @@ class ProductRetail extends Component
             $invoice->status            =   'pending';
             $invoice->user_id           =   userInfo()->id;
             $invoice->total_amount      =   '0';
+            $invoice->cloud_id          =   $this->cloud_id;
+            $invoice->hospital_name     =   $this->hospital_name;
             $invoice->company_id        =   userInfo()->company_id;
             $invoice->client_id         =   null;
             $invoice->client_name       =   $this->firstname . ' ' . $this->lastname;
@@ -363,8 +365,6 @@ class ProductRetail extends Component
 
             $sold->company_id   =   userInfo()->company_id;
             $sold->product_id   =   $eye == 'right' ? $this->rightLenInfo[0]->id : $this->leftLenInfo[0]->id;
-            $sold->cloud_id     =   $this->cloud_id;
-            $sold->hospital_name =   $this->hospital_name;
             $sold->invoice_id   =   $invoiceId;
             $sold->quantity     =   '1';
             $sold->discount     =   '0';

@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('sold_products', function (Blueprint $table) {
-            $table->string('cloud_id')->nullable();
-            $table->string('hospital_name')->nullable();
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->string('cloud_id')->after('statement_id')->nullable();
+            $table->string('hospital_name')->after('statement_id')->nullable();
         });
     }
 
@@ -26,8 +26,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('sold_products', function (Blueprint $table) {
+        Schema::table('invoices', function (Blueprint $table) {
             //
+            $table->dropColumn('cloud_id');
+            $table->dropColumn('hospital_name');
         });
     }
 };

@@ -153,7 +153,16 @@
                                                                             </a>
                                                                         </td>
                                                                         <td>
-                                                                            {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                                            @if ($request->client_id != null)
+                                                                                {{$request->client->name}}
+                                                                            @else
+                                                                                @if ($request->hospital_name!=null)
+                                                                                    {{$request->hospital_name}}
+                                                                                @else
+                                                                                    {{$request->client_name}}
+                                                                                @endif
+                                                                            @endif
+                                                                            {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                         </td>
                                                                         <td>
                                                                             {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
@@ -184,7 +193,16 @@
                                                                                 <div class="modal-header">
                                                                                     <div>
                                                                                         <h4 class="modal-title text-info">
-                                                                                            {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                                                            @if ($request->client_id != null)
+                                                                                                {{$request->client->name}}
+                                                                                            @else
+                                                                                                @if ($request->hospital_name!=null)
+                                                                                                    {{$request->hospital_name}}
+                                                                                                @else
+                                                                                                    {{$request->client_name}}
+                                                                                                @endif
+                                                                                            @endif
+                                                                                            {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                                         </h4>
                                                                                         <br>
 
@@ -431,7 +449,16 @@
                                                                             </a>
                                                                         </td>
                                                                         <td>
-                                                                            {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                                            @if ($request->client_id != null)
+                                                                                {{$request->client->name}}
+                                                                            @else
+                                                                                @if ($request->hospital_name!=null)
+                                                                                    {{$request->hospital_name}}
+                                                                                @else
+                                                                                    {{$request->client_name}}
+                                                                                @endif
+                                                                            @endif
+                                                                            {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                         </td>
                                                                         <td>
                                                                             {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
@@ -466,7 +493,16 @@
                                                                     <div class="modal-header">
                                                                         <div>
                                                                             <h4 class="modal-title text-info">
-                                                                                {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                                                @if ($request->client_id != null)
+                                                                                    {{$request->client->name}}
+                                                                                @else
+                                                                                    @if ($request->hospital_name!=null)
+                                                                                        {{$request->hospital_name}}
+                                                                                    @else
+                                                                                        {{$request->client_name}}
+                                                                                    @endif
+                                                                                @endif
+                                                                                {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                             </h4>
                                                                             <br>
 
@@ -559,17 +595,17 @@
                                                                                                     ->where('id', $right_len->type_id)
                                                                                                     ->pluck('name')
                                                                                                     ->first();
-                                                                                            
+
                                                                                                 $indx = $index
                                                                                                     ->where('id', $right_len->index_id)
                                                                                                     ->pluck('name')
                                                                                                     ->first();
-                                                                                            
+
                                                                                                 $ct = $coatings
                                                                                                     ->where('id', $right_len->coating_id)
                                                                                                     ->pluck('name')
                                                                                                     ->first();
-                                                                                            
+
                                                                                                 $chrm = $chromatics
                                                                                                     ->where('id', $right_len->chromatic_id)
                                                                                                     ->pluck('name')
@@ -580,7 +616,7 @@
                                                                                                     ->pluck('description')
                                                                                                     ->first();
                                                                                             }
-                                                                                            
+
                                                                                             $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                                             if (!$left_len) {
                                                                                                 $left_len = $request->soldproduct->where('eye', 'left')->first();
@@ -875,7 +911,16 @@
                                                                     </a>
                                                                 </td>
                                                                 <td>
-                                                                    {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                                    @if ($request->client_id != null)
+                                                                        {{$request->client->name}}
+                                                                    @else
+                                                                        @if ($request->hospital_name!=null)
+                                                                            {{$request->hospital_name}}
+                                                                        @else
+                                                                            {{$request->client_name}}
+                                                                        @endif
+                                                                    @endif
+                                                                    {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                 </td>
 
                                                                 @php
@@ -886,23 +931,23 @@
                                                                         $right_len = $request->soldproduct->where('eye', 'right')->first();
                                                                         $availability = false;
                                                                     }
-                                                                    
+
                                                                     if ($availability == true) {
                                                                         $type = $lens_type
                                                                             ->where('id', $right_len->type_id)
                                                                             ->pluck('name')
                                                                             ->first();
-                                                                    
+
                                                                         $indx = $index
                                                                             ->where('id', $right_len->index_id)
                                                                             ->pluck('name')
                                                                             ->first();
-                                                                    
+
                                                                         $ct = $coatings
                                                                             ->where('id', $right_len->coating_id)
                                                                             ->pluck('name')
                                                                             ->first();
-                                                                    
+
                                                                         $chrm = $chromatics
                                                                             ->where('id', $right_len->chromatic_id)
                                                                             ->pluck('name')
@@ -913,7 +958,7 @@
                                                                             ->pluck('description')
                                                                             ->first();
                                                                     }
-                                                                    
+
                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                     if (!$left_len) {
                                                                         $left_len = $request->soldproduct->where('eye', 'left')->first();
@@ -1028,7 +1073,16 @@
                                                                     </a>
                                                                 </td>
                                                                 <td>
-                                                                    {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                                    @if ($request->client_id != null)
+                                                                        {{$request->client->name}}
+                                                                    @else
+                                                                        @if ($request->hospital_name!=null)
+                                                                            {{$request->hospital_name}}
+                                                                        @else
+                                                                            {{$request->client_name}}
+                                                                        @endif
+                                                                    @endif
+                                                                    {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                 </td>
                                                                 <td>
                                                                     {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
@@ -1099,7 +1153,16 @@
                                                                 </a>
                                                             </td>
                                                             <td>
-                                                                {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                                @if ($request->client_id != null)
+                                                                    {{$request->client->name}}
+                                                                @else
+                                                                    @if ($request->hospital_name!=null)
+                                                                        {{$request->hospital_name}}
+                                                                    @else
+                                                                        {{$request->client_name}}
+                                                                    @endif
+                                                                @endif
+                                                                {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                             </td>
                                                             <td>
                                                                 {{ date('Y-m-d H:i', strtotime($request->created_at)) }}

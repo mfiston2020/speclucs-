@@ -174,7 +174,11 @@
                                                                     <center><span>{{ $client }}</span></center>
                                                                 @else
                                                                     <center>
-                                                                        <span>{{ $sale->client_name }}</span>
+                                                                        @if ($sale->hospital_name)
+                                                                            <span>{{ $sale->hospital_name }}</span>
+                                                                        @else
+                                                                            <span>{{ $sale->client_name }}</span>
+                                                                        @endif
                                                                     </center>
                                                                 @endif
                                                             </td>
@@ -331,7 +335,11 @@
                                                                     <center><span>{{ $client }}</span></center>
                                                                 @else
                                                                     <center>
-                                                                        <span>{{ $sale->client_name }}</span>
+                                                                        @if ($sale->hospital_name)
+                                                                            <span>{{ $sale->hospital_name }}</span>
+                                                                        @else
+                                                                            <span>{{ $sale->client_name }}</span>
+                                                                        @endif
                                                                     </center>
                                                                 @endif
                                                             </td>
@@ -458,7 +466,11 @@
                                                                     <center><span>{{ $client }}</span></center>
                                                                 @else
                                                                     <center>
-                                                                        <span>{{ $sale->client_name }}</span>
+                                                                        @if ($sale->hospital_name)
+                                                                            <span>{{ $sale->hospital_name }}</span>
+                                                                        @else
+                                                                            <span>{{ $sale->client_name }}</span>
+                                                                        @endif
                                                                     </center>
                                                                 @endif
                                                             </td>
@@ -582,7 +594,11 @@
                                                                 <center><span>{{ $client }}</span></center>
                                                             @else
                                                                 <center>
-                                                                    <span>{{ $sale->client_name }}</span>
+                                                                    @if ($sale->hospital_name)
+                                                                        <span>{{ $sale->hospital_name }}</span>
+                                                                    @else
+                                                                        <span>{{ $sale->client_name }}</span>
+                                                                    @endif
                                                                 </center>
                                                             @endif
                                                         </td>
@@ -665,7 +681,16 @@
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                            @if ($request->client_id != null)
+                                                                {{$request->client->name}}
+                                                            @else
+                                                                @if ($request->hospital_name!=null)
+                                                                    {{$request->hospital_name}}
+                                                                @else
+                                                                    {{$request->client_name}}
+                                                                @endif
+                                                            @endif
+
                                                         </td>
                                                         {{-- <td>
                                                             -
