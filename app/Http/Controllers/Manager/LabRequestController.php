@@ -73,13 +73,12 @@ class LabRequestController extends Controller
         foreach ($soldProducts->soldproduct as $key => $sold) {
             $product    =   $this->allProduct->where('id', $sold->product_id)->first();
 
-            Product::where('id', $sold->product_id)->update([
-                'stock' => $product->stock - 1,
-            ]);
+            $prdt = Product::where('id', $sold->product_id)->first();
+            $prdt->stock    =   $prdt->stock - 1;
+            $prdt->save();
 
-            $stockVariation = $product->stock - 1;
-
-            $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', $stockVariation, 'sent to lab', 'rm', 'out');
+            // $stockVariation = $product->stock - 1;
+            $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock+1, '1', $prdt->stock, 'sent to lab', 'rm', 'out');
         }
 
         Invoice::find(Crypt::decrypt($id))->update([

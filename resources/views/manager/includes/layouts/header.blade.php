@@ -307,10 +307,10 @@
                                 {{ __('navigation.suppliers') }} </span></a>
                     </li>
 
-                    <li class="sidebar-item"><a href="{{ route('manager.clients') }}" class="sidebar-link"><i
+                    {{-- <li class="sidebar-item"><a href="{{ route('manager.clients') }}" class="sidebar-link"><i
                                 class="mdi mdi-account-circle"></i><span class="hide-menu">
                                 {{ __('navigation.clients') }} </span></a>
-                    </li>
+                    </li> --}}
 
                     <li class="sidebar-item"><a href="{{ route('manager.expenses') }}" class="sidebar-link"><i
                                 class="mdi mdi-adjust"></i><span

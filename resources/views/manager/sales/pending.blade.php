@@ -299,6 +299,9 @@
                                                                     ->where('company_id', Auth::user()->company_id)
                                                                     ->select('patient_payment')
                                                                     ->sum('patient_payment');
+
+                                                                $unavailablePayment = \App\Models\UnavailableProduct::where('invoice_id',$sale->id)->sum('price');
+
                                                             @endphp
                                                             <td>
                                                                 <input type="checkbox" name="requestid[]"
@@ -357,9 +360,9 @@
                                                             </td>
                                                             <td>
                                                                 @if ($product && $product->insurance_id != null)
-                                                                    {{ format_money($pt_due_amount - $amount_paid) }}
+                                                                    {{ format_money($pt_due_amount - $amount_paid + $unavailablePayment) }}
                                                                 @else
-                                                                    {{ format_money($pt_due_amount - $amount_paid) }}
+                                                                    {{ format_money($pt_due_amount - $amount_paid + $unavailablePayment) }}
                                                                 @endif
                                                             </td>
                                                             {{-- <td >{{format_money($sale->due)}}</td> --}}

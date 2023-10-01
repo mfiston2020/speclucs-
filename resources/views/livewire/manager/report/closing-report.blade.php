@@ -50,8 +50,10 @@
         <div class="card">
             @php
                 $dateNow = now();
-                $stockTracker   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($closing_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($dateNow)))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
-                // dd(date('Y-m-d',strtotime($dateNow)));
+            // dd(date('Y-m-d',strtotime($dateNow.'+1 day')));
+                $stockTracker   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($closing_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($dateNow.'-1day')))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
+
+                $stockTracker2   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($closing_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($dateNow)))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
             @endphp
             <div class="card-body">
                 <div class="table-responsive">
@@ -66,27 +68,39 @@
                                 <th>Power</th>
                                 <th>Price</th>
                                 <th>cost</th>
+                                <th>Opening Stock</th>
                                 <th>Closing Stock</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($products as $key => $product)
                                 @php
+
                                     $closingStock   =   0;
+                                    $openingStock   =   0;
 
                                     $date2=($closing_date);
                                     $date1=now();
                                     $diff=dateDiffInDays($date1,$date2);
 
-                                    if ($diff-1==0) {
-                                        $closingStock   =   $product->stock;
+                                    // if ($diff-1==0) {
+                                    //     $closingStock   =   $product->stock;
+                                    // }
+                                    if(date('Y-m-d',strtotime($closing_date))<date('Y-m-d',strtotime($product->created_at))){
+                                        $closingStock   =   0;
+                                        $openingStock   =   0;
                                     }
                                     else{
                                         // dd($stockTracker->where('product_id',$product->id)->all());
                                         $instock    =   $stockTracker->where('product_id',$product->id)->where('operation','in')->sum('incoming');
                                         $outstock    =   $stockTracker->where('product_id',$product->id)->where('operation','out')->sum('incoming');
 
-                                        $closingStock=  $product->stock - $instock + $outstock;
+
+                                        $instock2    =   $stockTracker2->where('product_id',$product->id)->where('operation','in')->sum('incoming');
+                                        $outstock2    =   $stockTracker2->where('product_id',$product->id)->where('operation','out')->sum('incoming');
+
+                                        $closingStock   =  $product->stock - $instock + $outstock;
+                                        $openingStock   =  $product->stock - $instock2 + $outstock2;
                                     }
 
                                 @endphp
@@ -119,6 +133,13 @@
                                     <td>
                                         <a href="" class="update" data-name="stock" data-type="text"
                                             data-pk="{{ $product->id }}"
+                                            data-title="Enter Product Name">{{ $openingStock }}</a>
+
+                                    </td>
+
+                                    <td>
+                                        <a href="" class="update" data-name="stock" data-type="text"
+                                            data-pk="{{ $product->id }}"
                                             data-title="Enter Product Name">{{ $closingStock }}</a>
 
                                     </td>
@@ -136,6 +157,7 @@
                                 <th>Power</th>
                                 <th>Price</th>
                                 <th>cost</th>
+                                <th>Opening Stock</th>
                                 <th>Closing Stock</th>
                             </tr>
                         </tfoot>
@@ -150,8 +172,8 @@
         <div class="card">
             <div class="card-body">
                 <div class="alert alert-warning alert-rounded ">
-                    Nothing Found from: <strong>{{ $start_date }}</strong> up to
-                    <strong>{{ $end_date }}</strong>
+                    Nothing Found from: <strong>{{ $closing_date }}</strong> up to
+                    <strong>{{ date('Y-m-d',strtotime(now())) }}</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span
                             aria-hidden="true">×</span>
                     </button>

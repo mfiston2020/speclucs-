@@ -11,7 +11,7 @@ class PaymentsController extends Controller
 {
     public function index()
     {
-        $payments   =   \App\Models\Payment::all();
+        $payments   =   \App\Models\Payment::where('company_id',userInfo()->company_id)->get();
         return view('manager.payments.index',compact('payments'));
     }
 

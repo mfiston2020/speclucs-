@@ -16,16 +16,25 @@ use App\Models\Receipt;
 use App\Models\ReceivedProduct;
 use App\Models\SoldProduct;
 use App\Models\Supplier;
+use App\Repositories\StockTrackRepo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
 class ReceiptsController extends Controller
 {
+    private $stocktrackRepo, $allProduct;
+
+    public function __construct()
+    {
+        $this->stocktrackRepo = new StockTrackRepo();
+        $this->allProduct   =   Product::all();
+    }
+
     public function index()
     {
         $receipts   =   Receipt::where('company_id', Auth::user()->company_id)->orderBy('created_at', 'desc')->get();
-        return view('ma`    qert783qnmnager.recu.index', compact('receipts'));
+        return view('manager.recu.index', compact('receipts'));
     }
 
     public function add()
@@ -160,6 +169,7 @@ class ReceiptsController extends Controller
         $id =   Crypt::decrypt($id);
         $quantity   =   0;
         $allProducts    =   ReceivedProduct::where(['receipt_id' => $id])->where('company_id', Auth::user()->company_id)->select('*')->get();
+        // dd($allProducts);
 
         if ($allProducts->isEmpty()) {
             return redirect()->back()->withInput()->with('warningMsg', 'Please add products first! ');
@@ -172,16 +182,22 @@ class ReceiptsController extends Controller
             $pro    =   array_unique($p);
 
             foreach ($pro as $product) {
-                $product_   =   ReceivedProduct::where(['product_id' => $product])->where('company_id', Auth::user()->company_id)->select('stock')->get();
+                $product_   =   ReceivedProduct::where(['product_id' => $product])->where('receipt_id',$id)->where('company_id', Auth::user()->company_id)->select('stock')->get();
+
                 foreach ($product_ as $all_quantity) {
                     $product_stock  =   Product::find($product);
 
                     // adding stock to all products
                     $quantity   =   $product_stock->stock + $all_quantity->stock;
+
+                    // ================================================================================================================
+                    $this->stocktrackRepo->saveTrackRecord($product_stock->id, $product_stock->stock, $all_quantity->stock, $quantity, 'receipt', 'rm', 'in');
+                    // ================================================================================================================
                     $product_stock->stock   =   $quantity;
                     $product_stock->save();
 
                     $quantity   =   0;
+
                 }
             }
 
@@ -219,6 +235,7 @@ class ReceiptsController extends Controller
     public function newProduct(Request $request)
     {
         // return $request->all();
+        $supplierID = Receipt::find($request->receipt_id);
 
         $product    =   new Product();
 
@@ -252,6 +269,8 @@ class ReceiptsController extends Controller
             $product->deffective_stock  =   '0';
             $product->price             =   $request->lens_price;
             $product->cost              =   $request->lens_cost;
+            $product->location           =   $request->location;
+            $product->supplier_id       =   $supplierID->supplier_id;
             $product->company_id        =   Auth::user()->company_id;
             try {
                 $product->save();
@@ -346,6 +365,8 @@ class ReceiptsController extends Controller
             $product->deffective_stock  =   '0';
             $product->price             =   $request->lens_price;
             $product->cost              =   $request->lens_cost;
+            $product->location          =   $request->location;
+            $product->supplier_id       =   $supplierID->supplier_id;
             $product->company_id        =   Auth::user()->company_id;
             try {
                 $product->save();

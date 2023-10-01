@@ -384,6 +384,14 @@
                                     value="{{ old('lens_cost') }}" required>
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label for="cost" class="col-sm-3 text-right control-label col-form-label">Location</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="location"
+                                    value="{{ old('location') }}" required>
+                            </div>
+                        </div>
                     </div>
                     <hr>
                     <div class="card-body">

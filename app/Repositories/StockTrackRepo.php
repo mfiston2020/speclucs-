@@ -26,7 +26,7 @@ class StockTrackRepo implements StockTrackInterface
             'company_id'    => userInfo()->company_id,
             'current_stock' => $currentStock,
             'incoming'      => $incoming,
-            'change'        => $currentStock - $incoming,
+            'change'        => $operation == 'in' ? $currentStock + $incoming : $currentStock - $incoming,
             'operation'     => $operation,
             'reason'        => $reason,
             'type'          => $type,

@@ -8,11 +8,19 @@ use App\Imports\ProductImport;
 use App\Models\Power;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Repositories\StockTrackRepo;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductsController extends Controller
 {
+    private $stocktrackRepo;
+
+    public function __construct()
+    {
+        $this->stocktrackRepo = new StockTrackRepo();
+    }
+
     public function index()
     {
         $products =   \App\Models\Product::where('company_id', userInfo()->company_id)->get();
@@ -80,6 +88,7 @@ class ProductsController extends Controller
                         $product->company_id        =   Auth::user()->company_id;
                         try {
                             $product->save();
+                            $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
 
                             $power                    =   new \App\Models\Power();
                             $power->product_id        =   $product->id;
@@ -110,6 +119,7 @@ class ProductsController extends Controller
                         $product->company_id        =   Auth::user()->company_id;
 
                         $product->save();
+                        $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
 
                         $power  =   new \App\Models\Power();
                         $power->product_id        =   $product->id;
@@ -154,6 +164,8 @@ class ProductsController extends Controller
 
             try {
                 $product->save();
+                $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
+
                 return redirect()->route('manager.product')->with('successMsg', 'Product Created Successfully');
             } catch (\Throwable $th) {
                 return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');

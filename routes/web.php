@@ -143,8 +143,10 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     // ============= All suppliers routes =========================
     Route::get('/suppliers', [\App\Http\Controllers\Manager\SuppliersController::class, 'index'])->name('suppliers');
-    Route::get('/createSupplier', [\App\Http\Controllers\Manager\SuppliersController::class, 'create'])->name('supplier.create');
     Route::post('/saveSupplier', [\App\Http\Controllers\Manager\SuppliersController::class, 'save'])->name('supplier.save');
+    Route::get('/editSupplier/{id}', [\App\Http\Controllers\Manager\SuppliersController::class, 'edit'])->name('supplier.edit');
+    Route::get('/createSupplier', [\App\Http\Controllers\Manager\SuppliersController::class, 'create'])->name('supplier.create');
+    Route::post('/updateSupplier', [\App\Http\Controllers\Manager\SuppliersController::class, 'update'])->name('supplier.update');
 
     // ============= All sales routes =========================
     Route::get('/sales', [\App\Http\Controllers\Manager\SalesController::class, 'index'])->name('sales');

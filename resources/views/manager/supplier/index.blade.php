@@ -43,16 +43,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($suppliers as $key=> $suppliers)
+                                @foreach ($suppliers as $key=> $supplier)
                                     <tr>
                                         <td>{{$key+1}}</td>
-                                        <td>{{$suppliers->name}}</td>
-                                        <td>{{$suppliers->description}}</td>
-                                        <td>{{$suppliers->email}}</td>
-                                        <td>{{$suppliers->phone}}</td>
+                                        <td>{{$supplier->name}}</td>
+                                        <td>{{$supplier->description}}</td>
+                                        <td>{{$supplier->email}}</td>
+                                        <td>{{$supplier->phone}}</td>
                                         <td>0</td>
                                         <td>{{format_money(0)}}</td>
-                                        <td>t.nixon@datatables.net</td>
+                                        <td>
+                                            <a href="{{ route('manager.supplier.edit',Crypt::encrypt($supplier->id))}}">Edit</a>
+                                        </td>
                                     </tr>
                                 @endforeach
 
