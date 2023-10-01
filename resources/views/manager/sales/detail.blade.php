@@ -189,7 +189,17 @@
                     <div class="card-body">
                         <span
                             hidden>{{ $client = \App\Models\Customer::where(['id' => $invoice->client_id])->where('company_id', Auth::user()->company_id)->pluck('name')->first() }}</span>
-                        <h4 class="card-title">Order #{{ sprintf('%04d', $invoice->id) }}
+                        <h4 class="card-title">
+                            {{-- Order #{{ sprintf('%04d', $invoice->id) }} --}}
+                                @if ($invoice->client_id != null)
+                                    {{$invoice->client->name}}
+                                @else
+                                    @if ($invoice->hospital_name!=null)
+                                    [{{$invoice->cloud_id}}] {{$invoice->hospital_name}}
+                                    @else
+                                        {{$invoice->client_name}}
+                                    @endif
+                                @endif
                             @if ($client)
                                 for: {{ $client }}
                             @else

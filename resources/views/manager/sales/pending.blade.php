@@ -175,7 +175,7 @@
                                                                 @else
                                                                     <center>
                                                                         @if ($sale->hospital_name)
-                                                                            <span>{{ $sale->hospital_name }}</span>
+                                                                            <span>[{{$sale->cloud_id}}] {{ $sale->hospital_name }}</span>
                                                                         @else
                                                                             <span>{{ $sale->client_name }}</span>
                                                                         @endif
@@ -336,7 +336,7 @@
                                                                 @else
                                                                     <center>
                                                                         @if ($sale->hospital_name)
-                                                                            <span>{{ $sale->hospital_name }}</span>
+                                                                            <span>[{{$sale->cloud_id}}] {{ $sale->hospital_name }}</span>
                                                                         @else
                                                                             <span>{{ $sale->client_name }}</span>
                                                                         @endif
@@ -467,7 +467,7 @@
                                                                 @else
                                                                     <center>
                                                                         @if ($sale->hospital_name)
-                                                                            <span>{{ $sale->hospital_name }}</span>
+                                                                            <span>[{{$sale->cloud_id}}] {{ $sale->hospital_name }}</span>
                                                                         @else
                                                                             <span>{{ $sale->client_name }}</span>
                                                                         @endif
@@ -595,7 +595,7 @@
                                                             @else
                                                                 <center>
                                                                     @if ($sale->hospital_name)
-                                                                        <span>{{ $sale->hospital_name }}</span>
+                                                                        <span>[{{$sale->cloud_id}}] {{ $sale->hospital_name }}</span>
                                                                     @else
                                                                         <span>{{ $sale->client_name }}</span>
                                                                     @endif
@@ -685,7 +685,7 @@
                                                                 {{$request->client->name}}
                                                             @else
                                                                 @if ($request->hospital_name!=null)
-                                                                    {{$request->hospital_name}}
+                                                                [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                 @else
                                                                     {{$request->client_name}}
                                                                 @endif

@@ -157,7 +157,7 @@
                                                                                 {{$request->client->name}}
                                                                             @else
                                                                                 @if ($request->hospital_name!=null)
-                                                                                    {{$request->hospital_name}}
+                                                                                [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                                 @else
                                                                                     {{$request->client_name}}
                                                                                 @endif
@@ -197,7 +197,7 @@
                                                                                                 {{$request->client->name}}
                                                                                             @else
                                                                                                 @if ($request->hospital_name!=null)
-                                                                                                    {{$request->hospital_name}}
+                                                                                                    [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                                                 @else
                                                                                                     {{$request->client_name}}
                                                                                                 @endif
@@ -453,7 +453,7 @@
                                                                                 {{$request->client->name}}
                                                                             @else
                                                                                 @if ($request->hospital_name!=null)
-                                                                                    {{$request->hospital_name}}
+                                                                                [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                                 @else
                                                                                     {{$request->client_name}}
                                                                                 @endif
@@ -497,7 +497,7 @@
                                                                                     {{$request->client->name}}
                                                                                 @else
                                                                                     @if ($request->hospital_name!=null)
-                                                                                        {{$request->hospital_name}}
+                                                                                    [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                                     @else
                                                                                         {{$request->client_name}}
                                                                                     @endif
@@ -915,7 +915,7 @@
                                                                         {{$request->client->name}}
                                                                     @else
                                                                         @if ($request->hospital_name!=null)
-                                                                            {{$request->hospital_name}}
+                                                                            [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                         @else
                                                                             {{$request->client_name}}
                                                                         @endif
@@ -1077,7 +1077,7 @@
                                                                         {{$request->client->name}}
                                                                     @else
                                                                         @if ($request->hospital_name!=null)
-                                                                            {{$request->hospital_name}}
+                                                                            [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                         @else
                                                                             {{$request->client_name}}
                                                                         @endif
@@ -1157,7 +1157,7 @@
                                                                     {{$request->client->name}}
                                                                 @else
                                                                     @if ($request->hospital_name!=null)
-                                                                        {{$request->hospital_name}}
+                                                                        [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                     @else
                                                                         {{$request->client_name}}
                                                                     @endif
