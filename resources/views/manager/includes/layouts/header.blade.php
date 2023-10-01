@@ -232,10 +232,10 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-item"><a href="{{ route('manager.order') }}" class="sidebar-link"><i
+                    {{-- <li class="sidebar-item"><a href="{{ route('manager.order') }}" class="sidebar-link"><i
                                 class="mdi mdi-cart-plus"></i><span class="hide-menu">
                                 {{ __('navigation.lab_orders') }} </span></a>
-                    </li>
+                    </li> --}}
 
                     <li class="sidebar-item">
                         <a href="{{ route('manager.proforma') }}" class="sidebar-link">

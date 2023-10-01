@@ -53,7 +53,7 @@
                         <div class="card-body">
                             <div class="d-flex no-block align-items-center">
                                 <div>
-                                    <h2>{{$products}}</h2>
+                                    <h2>{{number_format($products)}}</h2>
                                     <h6 class="text-info">Products</h6>
                                 </div>
                                 <div class="ml-auto">

@@ -68,6 +68,8 @@ class LabRequestController extends Controller
             }
         }
 
+        // dd($soldProducts->soldproduct);
+
         foreach ($soldProducts->soldproduct as $key => $sold) {
             $product    =   $this->allProduct->where('id', $sold->product_id)->first();
 
