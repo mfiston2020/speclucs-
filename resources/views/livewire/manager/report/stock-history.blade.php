@@ -112,7 +112,7 @@
                                         <a href="#!" class="update" data-name="stock" data-type="text"
                                             data-pk="{{ $product->id }}"
                                             data-title="Enter Product Name">
-                                            {{$soldProducts->where('product_id',$product->id)->where('operation','out')->sum('incoming')}}
+                                            {{$soldProducts->where('product_id',$product->id)->where('operation','in')->sum('incoming')}}
                                         </a>
                                     </td>
 
@@ -123,7 +123,7 @@
                                         <a href="#!" class="update" data-name="stock" data-type="text"
                                             data-pk="{{ $product->id }}"
                                             data-title="Enter Product Name">
-                                            {{$soldProducts->where('product_id',$product->id)->where('operation','in')->sum('incoming')}}
+                                            {{$soldProducts->where('product_id',$product->id)->where('operation','out')->sum('incoming')}}
                                         </a>
 
                                     </td>
