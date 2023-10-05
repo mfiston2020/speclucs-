@@ -13,21 +13,21 @@ class PurchaseOrderController extends Controller
     public function index()
     {
         $categories =   \App\Models\Category::all();
-        return view('manager.purchaseOrder.index',compact('categories'));
+        return view('manager.purchaseOrder.index', compact('categories'));
     }
 
     public function proceed(Request $request)
     {
-        $this->validate($request,[
-            'category'=>'required',
-            'from'=>'required',
-            'to'=>'required',
+        $this->validate($request, [
+            'category' => 'required',
+            'from' => 'required',
+            'to' => 'required',
         ]);
 
         // $suppliers  =   \App\Models\Supplier::where('company_id',Auth::user()->company_id)->get();
-        $suppliers  =   \App\Models\User::where('role','manager')->where('supplier_state','1')
-                        ->where('status','active')->where('id','<>',Auth::user()->id)->get();
-        $products   =   \App\Models\Product::where('category_id',$request->category)->where('company_id',Auth::user()->company_id)->get();
+        $suppliers  =   \App\Models\User::where('role', 'manager')->where('supplier_state', '1')
+            ->where('status', 'active')->where('id', '<>', Auth::user()->id)->get();
+        $products   =   \App\Models\Product::where('category_id', $request->category)->where('company_id', Auth::user()->company_id)->get();
         $category   =   $request->category;
         $from   =   $request->from;
         $to     =   $request->to;
@@ -35,36 +35,32 @@ class PurchaseOrderController extends Controller
         $products_array =   array();
         $pro_array =   array();
 
-        foreach($products as $product)
-        {
+        foreach ($products as $product) {
             // array_push($pro_array,$product->id);
-            $sold   =   \App\Models\SoldProduct::where('product_id',$product->id)
-                        ->orwhereDate('created_at','>=',date('Y-m-d',strtotime($request->from)))
-                        // ->whereDate('created_at','<=',date('Y-m-d',strtotime($request->to)))
-                        ->get();
+            $sold   =   \App\Models\SoldProduct::where('product_id', $product->id)->where('company_id', userInfo()->company_id)
+                ->whereDate('created_at', '>=', date('Y-m-d', strtotime($request->from . '-1day')))
+                ->whereDate('created_at', '<=', date('Y-m-d', strtotime($request->to . '+1day')))
+                ->get();
 
             foreach ($sold as $key => $value) {
-                array_push($pro_array,$value->product_id);
+                array_push($pro_array, $value->product_id);
             }
         }
         $products_array =   array_unique($pro_array);
 
-        return view('manager.purchaseOrder.results',compact('products_array','suppliers','category','from','to'));
+        return view('manager.purchaseOrder.results', compact('products_array', 'suppliers', 'category', 'from', 'to'));
     }
 
     public function quotation(Request $request)
     {
         $quotation_number_   =   0;
 
-        $quotation_number   =   \App\Models\PurchaseOrder::latest('quotation_number')->where('company_id',Auth::user()->company_id)->first();
+        $quotation_number   =   \App\Models\PurchaseOrder::latest('quotation_number')->where('company_id', Auth::user()->company_id)->first();
 
-        foreach ($request->product_id as $key => $product)
-        {
-            if ($quotation_number!=null) {
+        foreach ($request->product_id as $key => $product) {
+            if ($quotation_number != null) {
                 $quotation_number_   =   $quotation_number_   +   1;
-            }
-            else
-            {
+            } else {
                 $quotation_number_   =   $quotation_number_   +   1;
             }
             $purchase_order     =   new \App\Models\PurchaseOrder();
@@ -78,13 +74,13 @@ class PurchaseOrderController extends Controller
             $purchase_order->addition           =   $request->addition[$key];
             $purchase_order->model_stock        =   $request->modal_stock[$key];
             $purchase_order->forecast           =   $request->forecast[$key];
-            $purchase_order->from_date          =   date('Y-m-d',strtotime($request->from));
-            $purchase_order->to_date            =   date('Y-m-d',strtotime($request->to));
+            $purchase_order->from_date          =   date('Y-m-d', strtotime($request->from));
+            $purchase_order->to_date            =   date('Y-m-d', strtotime($request->to));
 
             try {
                 $purchase_order->save();
             } catch (\Throwable $th) {
-                return redirect()->back()->with('errorMsg','Something Went Wrong!');
+                return redirect()->back()->with('errorMsg', 'Something Went Wrong!');
             }
         }
 
@@ -94,8 +90,7 @@ class PurchaseOrderController extends Controller
         $quotation->supplier_id         =   $request->supplier;
         $quotation->status              =   'request';
 
-        try
-        {
+        try {
 
             $comp               =   \App\Models\CompanyInformation::find(Auth::user()->company_id);
             // $supplier        =   \App\Models\Supplier::find($request->supplier);
@@ -113,9 +108,9 @@ class PurchaseOrderController extends Controller
             // $notification->notification  =   'New Quotation Request Received';
             // $notification->save();
 
-            return redirect()->route('manager.quations')->with('successMsg',' Your Purchase order successfully sent to Supplier');
+            return redirect()->route('manager.quations')->with('successMsg', ' Your Purchase order successfully sent to Supplier');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('errorMsg','Something Went Wrong!');
+            return redirect()->back()->with('errorMsg', 'Something Went Wrong!');
         }
     }
 }

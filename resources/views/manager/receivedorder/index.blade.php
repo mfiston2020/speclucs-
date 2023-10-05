@@ -26,7 +26,7 @@
                             <h4 class="card-title">
                                 <a href="{{ route('manager.receive.order.from') }}" class="btn btn-info btn-rounded">
                                     <i class="mdi mdi-cart-plus"></i> Receive Order(s)</a>
-                                <a href="{{ route('manager.received.order.new') }}" class="btn btn-primary btn-rounded"><i
+                                {{-- <a href="{{ route('manager.received.order.new') }}" class="btn btn-primary btn-rounded"><i
                                         class="mdi mdi-cart-plus"></i> New Orders</a>
                                 <a href="{{ route('manager.received.order.inProduction') }}"
                                     class="btn btn-primary btn-rounded"><i class="mdi mdi-cart-plus"></i> In Production</a>
@@ -35,7 +35,7 @@
                                     Orders</a>
                                 <a href="{{ route('manager.received.order.indelivery') }}"
                                     class="btn btn-primary btn-rounded"><i class="mdi mdi-cart-plus"></i> delivery
-                                    Orders</a>
+                                    Orders</a> --}}
                             </h4>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
             </div>
 
             <!-- Column -->
-            <div class="col-sm-12 col-lg-4">
+            {{-- <div class="col-sm-12 col-lg-4">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Orders</h4>
@@ -56,9 +56,9 @@
                         <h2 class="font-medium">{{ $orders_new }}</h2>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
-            <!-- Column -->
+            {{-- <!-- Column -->
             <div class="col-sm-12 col-lg-8">
                 <div class="card">
                     <div class="card-body border-bottom">
@@ -114,7 +114,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection

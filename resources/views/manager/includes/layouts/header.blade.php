@@ -280,10 +280,10 @@
                                 {{ __('navigation.purchase_order') }} </span></a>
                     </li>
 
-                    <li class="sidebar-item"><a href="{{ route('manager.quations') }}" class="sidebar-link"><i
+                    {{-- <li class="sidebar-item"><a href="{{ route('manager.quations') }}" class="sidebar-link"><i
                                 class="mdi mdi-account-convert"></i><span class="hide-menu">
                                 {{ __('navigation.quotation') }}</span></a>
-                    </li>
+                    </li> --}}
                 @endif
 
 

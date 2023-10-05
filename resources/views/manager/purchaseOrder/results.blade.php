@@ -97,7 +97,7 @@
 
                 <div class="card">
                     {{-- <form action="{{route('manager.supplier.list')}}" method="get"> --}}
-                        <div class="card-body">
+                        {{-- <div class="card-body">
                             <div class="form-group row">
                                 <label for="pname" class="col-sm-3 text-right control-label col-form-label">Select supplier</label>
                                 <div class="col-sm-9">
@@ -119,10 +119,10 @@
 
                             <div class="form-group m-b-0 text-center">
                                 <button type="submit" class="btn btn-info waves-effect waves-light">Request for Quotation</button>
-                                {{-- <a href="#" type="reset" class="btn btn-success waves-effect waves-light">Save Purchase Order</a> --}}
+                                {{-- <a href="#" type="reset" class="btn btn-success waves-effect waves-light">Save Purchase Order</a> --}
                                 <a href="{{url()->previous()}}" type="reset" class="btn btn-dark waves-effect waves-light">Cancel</a>
                             </div>
-                        </div>
+                        </div> --}}
                     {{-- </form> --}}
                 </div>
             </form>
