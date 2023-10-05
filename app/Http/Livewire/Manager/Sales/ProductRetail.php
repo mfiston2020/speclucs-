@@ -40,7 +40,7 @@ class ProductRetail extends Component
 
     public $l_sphere, $l_cylinder, $l_axis, $l_addition, $l_segment_height, $l_mono_pd;
 
-    public $leftLenInfo, $rightLenInfo;
+    public $leftLenInfo, $leftLenQty, $rightLenInfo, $rightLenQty;
 
     // =========== frame variable management==========
     public $frame, $frame_stock, $frame_unit_price, $frame_quantity, $frame_price_adjust = 0, $frame_total_amount, $frame_location, $frameInfo;
@@ -190,9 +190,12 @@ class ProductRetail extends Component
 
             $this->rightLenFound    =   $right_len_Results == 'product-not-found' ? false : true;
             $this->rightLen         =   $right_len_Results == 'product-not-found' ? false : true;
+            $this->rightLenQty      =   $right_len_Results == 'product-not-found' ? '-' : $right_len_Results[0]->stock;
 
             $this->leftLenFound     =   $left_len_Results == 'product-not-found' ? false : true;
             $this->leftLen          =   $left_len_Results == 'product-not-found' ? false : true;
+            $this->leftLenQty       =   $left_len_Results == 'product-not-found' ? '-' : $left_len_Results[0]->stock;
+
 
 
             // if both products are found
@@ -202,8 +205,8 @@ class ProductRetail extends Component
                 //     $this->total_lens_amount =    $right_len_Results[0]->price;
                 // } else {
 
-                $leftPrice  =   $left_len_Results == 'product-not-found' ? 0 : $left_len_Results[0]->price;
-                $rightPrice  =   $right_len_Results == 'product-not-found' ? 0 : $right_len_Results[0]->price;
+                $leftPrice      =   $left_len_Results   == 'product-not-found' ? 0 : $left_len_Results[0]->price;
+                $rightPrice     =   $right_len_Results  == 'product-not-found' ? 0 : $right_len_Results[0]->price;
 
                 $this->total_lens_amount =    $leftPrice + $rightPrice;
                 // }

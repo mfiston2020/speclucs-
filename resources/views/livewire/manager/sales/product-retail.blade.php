@@ -534,14 +534,29 @@
                                             <br>
                                             <span>R</span>
                                             @if ($rightLen)
-                                                <label class="badge badge-success badge-pill ml-2">Available</label>
+                                            <label @class(['badge badge-pill ml-2', 'badge-success' => $rightLenQty>=10,'badge-warning' => $rightLenQty<10,'badge-danger' => $rightLenQty==0,])>
+                                                @if ($rightLenQty==0)
+                                                    Out Of Stock
+                                                @else
+                                                    Available [Qty: {{$rightLenQty}}]
+                                                @endif
+                                            </label>
+                                                {{-- <label class="badge badge-success badge-pill ml-2">
+                                                    Available [Qty: {{$rightLenQty}}]
+                                                </label> --}}
                                             @else
                                                 <label class="badge badge-danger badge-pill ml-2">N/A</label>
                                             @endif
                                             <br>
                                             <span>L</span>
                                             @if ($leftLen)
-                                                <label class="badge badge-success badge-pill ml-2">Available</label>
+                                                <label @class(['badge badge-pill ml-2', 'badge-success' => $leftLenQty>=10,'badge-warning' => $leftLenQty<10,'badge-danger' => $leftLenQty==0,])>
+                                                    @if ($leftLenQty==0)
+                                                        Out Of Stock
+                                                    @else
+                                                        Available [Qty: {{$leftLenQty}}]
+                                                    @endif
+                                                </label>
                                             @else
                                                 <label class="badge badge-danger badge-pill ml-2">N/A</label>
                                             @endif
