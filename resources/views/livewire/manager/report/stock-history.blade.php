@@ -114,7 +114,6 @@
                                             data-title="Enter Product Name">
                                             {{$soldProducts->where('product_id',$product->id)->where('operation','out')->sum('incoming')}}
                                         </a>
-
                                     </td>
 
                                     <td>
