@@ -48,7 +48,7 @@ class StockHistory extends Component
 
             $this->products =   Product::where('company_id', userInfo()->company_id)->get();
 
-            $this->soldProducts =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date.'-1day')))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date.'+1day')))->get();
+            $this->soldProducts =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date)))->where('type', 'rm')->get();
 
             // $this->receivedProducts =   ReceivedProduct::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date)))->get();
 
