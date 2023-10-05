@@ -805,61 +805,63 @@
                                                                                 $left_len = $request->soldproduct->where('eye', 'left')->first();
                                                                             }
                                                                         @endphp
+                                                                        @if (!$request->unavailableproducts->isEmpty())
                                                                         @foreach ($request->unavailableproducts as $unavail)
-                                                                            <div class="row mb-4">
-                                                                                <div class="col-3 row">
-                                                                                    <h4 class="text-capitalize">
-                                                                                        {{ $unavail->eye == null ? '' : Oneinitials($unavail->eye) }}
-                                                                                    </h4>
-                                                                                    <span class="ml-3">
-                                                                                        @if ($availability)
-                                                                                            {{ initials($type) }}
-                                                                                            {{ $chrm }}
-                                                                                            {{ $ct }}
-                                                                                            {{ $indx }}
-                                                                                        @else
-                                                                                            {{ $description }}
-                                                                                        @endif
-                                                                                    </span>
-                                                                                </div>
-                                                                                <div class="col-2">
-
-                                                                                    <span>{{ format_values($unavail->sphere) }}
-                                                                                        /
-                                                                                        {{ format_values($unavail->cylinder) }}
-                                                                                        *{{ $unavail->axis }}
-                                                                                        {{ $unavail->addition }}</span>
-                                                                                </div>
-                                                                                <div class="col-2 row">
-                                                                                    <span>
-                                                                                        <h6>Location: </h6>
-                                                                                    </span>
-                                                                                    {{ $unavail->location == null ? '-' : $unavail->location }}
-                                                                                </div>
-                                                                                <div class="col-2 ">
-                                                                                    <span
-                                                                                        class="text-capitalize d-flex justify-content-around items-center">
-                                                                                        <h6 class="text-dark">Mono
-                                                                                            PD:
-                                                                                        </h6>
-                                                                                        <span class="text-capitalize">
-                                                                                            {{ $unavail->mono_pd }}
-                                                                                        </span>
-                                                                                    </span>
-                                                                                </div>
-                                                                                <div class="col-2 ">
-                                                                                    <span
-                                                                                        class="text-capitalize d-flex justify-content-around items-center">
-                                                                                        <h6 class="text-dark">Seg
-                                                                                            H:
-                                                                                        </h6>
-                                                                                        <span class="text-capitalize">
-                                                                                            {{ $unavail->segment_h }}
-                                                                                        </span>
-                                                                                    </span>
-                                                                                </div>
+                                                                        <div class="row mb-4">
+                                                                            <div class="col-3 row">
+                                                                                <h4 class="text-capitalize">
+                                                                                    {{ $unavail->eye == null ? '' : Oneinitials($unavail->eye) }}
+                                                                                </h4>
+                                                                                <span class="ml-3">
+                                                                                    @if ($availability)
+                                                                                        {{ initials($type) }}
+                                                                                        {{ $chrm }}
+                                                                                        {{ $ct }}
+                                                                                        {{ $indx }}
+                                                                                    @else
+                                                                                        {{ $description }}
+                                                                                    @endif
+                                                                                </span>
                                                                             </div>
-                                                                        @endforeach
+                                                                            <div class="col-2">
+
+                                                                                <span>{{ format_values($unavail->sphere) }}
+                                                                                    /
+                                                                                    {{ format_values($unavail->cylinder) }}
+                                                                                    *{{ $unavail->axis }}
+                                                                                    {{ $unavail->addition }}</span>
+                                                                            </div>
+                                                                            <div class="col-2 row">
+                                                                                <span>
+                                                                                    <h6>Location: </h6>
+                                                                                </span>
+                                                                                {{ $unavail->location == null ? '-' : $unavail->location }}
+                                                                            </div>
+                                                                            <div class="col-2 ">
+                                                                                <span
+                                                                                    class="text-capitalize d-flex justify-content-around items-center">
+                                                                                    <h6 class="text-dark">Mono
+                                                                                        PD:
+                                                                                    </h6>
+                                                                                    <span class="text-capitalize">
+                                                                                        {{ $unavail->mono_pd }}
+                                                                                    </span>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="col-2 ">
+                                                                                <span
+                                                                                    class="text-capitalize d-flex justify-content-around items-center">
+                                                                                    <h6 class="text-dark">Seg
+                                                                                        H:
+                                                                                    </h6>
+                                                                                    <span class="text-capitalize">
+                                                                                        {{ $unavail->segment_h }}
+                                                                                    </span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                        @endif
                                                                     @endif
 
                                                                     @if (!$request->soldproduct->isEmpty())
