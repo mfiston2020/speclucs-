@@ -3,8 +3,7 @@
 namespace App\Http\Livewire\Manager\Report;
 
 use App\Models\Product;
-use App\Models\ReceivedProduct;
-use App\Models\SoldProduct;
+use App\Models\TrackStockRecord;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -49,9 +48,9 @@ class StockHistory extends Component
 
             $this->products =   Product::where('company_id', userInfo()->company_id)->get();
 
-            $this->soldProducts =   SoldProduct::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date)))->get();
+            $this->soldProducts =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date.'-1day')))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date.'+1day')))->get();
 
-            $this->receivedProducts =   ReceivedProduct::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date)))->get();
+            // $this->receivedProducts =   ReceivedProduct::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date)))->get();
 
 
             if (count($this->products) <= 0) {
