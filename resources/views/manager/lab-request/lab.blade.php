@@ -329,7 +329,7 @@
                                                                         <hr>
                                                                         <h4 class="text-info">Frame</h4>
                                                                         <hr>
-                                                                        @if ($product)
+                                                                        @if ($products)
                                                                             @foreach ($request->soldproduct as $product)
                                                                                 @php
                                                                                     $invoice_product = $products->where('id', $product->product_id)->first();
@@ -362,7 +362,7 @@
                                                                         <h4 class="text-info">Accessories & Others</h4>
                                                                         <hr>
                                                                         {{-- for accessories --}}
-                                                                        @if ($product)
+                                                                        @if ($products)
                                                                             @foreach ($request->soldproduct as $product)
                                                                                 @php
                                                                                     $invoice_product = $products->where('id', $product->product_id)->first();
