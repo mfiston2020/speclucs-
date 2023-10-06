@@ -536,11 +536,11 @@
                                             @if ($rightLen)
                                             <label @class(['badge badge-pill ml-2', 'badge-success' => $rightLenQty>=10,'badge-warning' => $rightLenQty<10,'badge-danger' => $rightLenQty<=1,])>
                                                 @if ($rightLenQty<=1)
-                                                    @if ($rightLenID == $leftLenID)
+                                                    {{-- @if ($rightLenID == $leftLenID) --}}
                                                         Out Of Stock
-                                                    @else
+                                                    {{-- @else
                                                         Out Of Stock
-                                                    @endif
+                                                    @endif --}}
                                                 @else
                                                     Available [Qty: {{$rightLenQty}}]
                                                 @endif
@@ -551,13 +551,13 @@
                                             <br>
                                             <span>L</span>
                                             @if ($leftLen)
-                                                <label @class(['badge badge-pill ml-2', 'badge-success' => $leftLenQty>=10,'badge-warning' => $leftLenQty<10,'badge-danger' => $leftLenQty==0,])>
-                                                    @if ($leftLenQty==0)
-                                                        @if ($rightLenID == $leftLenID)
+                                                <label @class(['badge badge-pill ml-2', 'badge-success' => $leftLenQty>=10,'badge-warning' => $leftLenQty<10,'badge-danger' => $leftLenQty<=1,])>
+                                                    @if ($leftLenQty<=1)
+                                                        {{-- @if ($rightLenID == $leftLenID) --}}
                                                             Out Of Stock
-                                                        @else
+                                                        {{-- @else
                                                             Out Of Stock
-                                                        @endif
+                                                        @endif --}}
                                                     @else
                                                         Available [Qty: {{$leftLenQty}}]
                                                     @endif
