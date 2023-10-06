@@ -652,22 +652,22 @@
                             <div class="row d-flex justify-content-around items-center mt-4">
                                 @if ($showsubmit)
 
-                                    @if ($accessory_stock<=0)
+                                    @if ($accessory_stock<=0 && $accessory_stock !=null)
                                         <h5 @class(['text-danger'])>Accessory is out of stock</h5>
                                     @else
-                                        @if ($frame_stock<=0)
+                                        @if ($frame_stock<=0 && $frame_stock !=null)
                                             <h5 @class(['text-danger'])>Frame is out of stock</h5>
                                         @else
                                             <button class="btn btn-sm btn-success">
                                                 Submit
                                             </button>
-                                            <button class="btn btn-sm btn-info" type="button" wire:click=calculateInsurance>
-                                                Calculate
-                                            </button>
                                         @endif
                                     @endif
 
                                 @endif
+                                <button class="btn btn-sm btn-info" type="button" wire:click=calculateInsurance>
+                                    Calculate
+                                </button>
                             </div>
 
                         </div>
