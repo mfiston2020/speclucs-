@@ -29,12 +29,11 @@ return
         'report' => 'Report',
 
         'laboratory_department' => 'Laboratory Deprtment',
-        'laboratory' => 'Laboratory',
+        'laboratory' => 'Order(s)',
         'lab_request' => 'Request',
 
         'clinic_department' => 'Clinic Department',
         'patient' => 'Patients',
-
 
         'my_profile' => 'My Profile',
         'settings' => 'Settings',
