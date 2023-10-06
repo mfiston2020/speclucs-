@@ -534,16 +534,17 @@
                                             <br>
                                             <span>R</span>
                                             @if ($rightLen)
-                                            <label @class(['badge badge-pill ml-2', 'badge-success' => $rightLenQty>=10,'badge-warning' => $rightLenQty<10,'badge-danger' => $rightLenQty==0,])>
-                                                @if ($rightLenQty==0)
-                                                    Out Of Stock
+                                            <label @class(['badge badge-pill ml-2', 'badge-success' => $rightLenQty>=10,'badge-warning' => $rightLenQty<10,'badge-danger' => $rightLenQty<=1,])>
+                                                @if ($rightLenQty<=1)
+                                                    @if ($rightLenID == $leftLenID)
+                                                        Out Of Stock
+                                                    @else
+                                                        Out Of Stock
+                                                    @endif
                                                 @else
                                                     Available [Qty: {{$rightLenQty}}]
                                                 @endif
                                             </label>
-                                                {{-- <label class="badge badge-success badge-pill ml-2">
-                                                    Available [Qty: {{$rightLenQty}}]
-                                                </label> --}}
                                             @else
                                                 <label class="badge badge-danger badge-pill ml-2">N/A</label>
                                             @endif
@@ -552,7 +553,11 @@
                                             @if ($leftLen)
                                                 <label @class(['badge badge-pill ml-2', 'badge-success' => $leftLenQty>=10,'badge-warning' => $leftLenQty<10,'badge-danger' => $leftLenQty==0,])>
                                                     @if ($leftLenQty==0)
-                                                        Out Of Stock
+                                                        @if ($rightLenID == $leftLenID)
+                                                            Out Of Stock
+                                                        @else
+                                                            Out Of Stock
+                                                        @endif
                                                     @else
                                                         Available [Qty: {{$leftLenQty}}]
                                                     @endif

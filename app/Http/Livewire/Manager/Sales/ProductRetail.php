@@ -40,7 +40,7 @@ class ProductRetail extends Component
 
     public $l_sphere, $l_cylinder, $l_axis, $l_addition, $l_segment_height, $l_mono_pd;
 
-    public $leftLenInfo, $leftLenQty, $rightLenInfo, $rightLenQty;
+    public $leftLenInfo, $leftLenQty, $leftLenID, $rightLenInfo, $rightLenQty, $rightLenID;
 
     // =========== frame variable management==========
     public $frame, $frame_stock, $frame_unit_price, $frame_quantity, $frame_price_adjust = 0, $frame_total_amount, $frame_location, $frameInfo;
@@ -186,15 +186,17 @@ class ProductRetail extends Component
             $this->rightLenInfo =   $right_len_Results;
             $this->leftLenInfo =   $left_len_Results;
 
-            // dd($left_len_Results[0]->stock);
+            // dd($left_len_Results[0]->id);
 
             $this->rightLenFound    =   $right_len_Results == 'product-not-found' ? false : true;
             $this->rightLen         =   $right_len_Results == 'product-not-found' ? false : true;
             $this->rightLenQty      =   $right_len_Results == 'product-not-found' ? '-' : $right_len_Results[0]->stock;
+            $this->rightLenID       =   $right_len_Results == 'product-not-found' ? 'r-' : $right_len_Results[0]->id;
 
             $this->leftLenFound     =   $left_len_Results == 'product-not-found' ? false : true;
             $this->leftLen          =   $left_len_Results == 'product-not-found' ? false : true;
             $this->leftLenQty       =   $left_len_Results == 'product-not-found' ? '-' : $left_len_Results[0]->stock;
+            $this->leftLenID        =   $left_len_Results == 'product-not-found' ? 'l-' : $left_len_Results[0]->id;
 
 
 
