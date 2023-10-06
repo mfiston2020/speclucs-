@@ -303,14 +303,14 @@ class LabRequestController extends Controller
 
                     $prdt    =   Product::find($newProduct->id);
 
-                    $prdt->stock = 0;
+                    $prdt->stock = 1;
                     $prdt->save();
 
                     $sold->update([
                         'product_id' => $prdt->id,
                     ]);
 
-                    $this->stocktrackRepo->saveTrackRecord($prdt->id, 1, '1', 0, 'sent to lab', 'rm', 'out');
+                    // $this->stocktrackRepo->saveTrackRecord($prdt->id, 1, '1', 0, 'sent to lab', 'rm', 'out');
                     $this->stocktrackRepo->saveTrackRecord($prdt->id, 0, '1', 1, 'received from supplier', 'rm', 'in');
 
                 }
