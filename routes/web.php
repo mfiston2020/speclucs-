@@ -113,6 +113,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/createProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'create'])->name('product.create');
     Route::get('/importProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'importProduct'])->name('product.import');
     Route::post('/saveImportProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'saveImport'])->name('product.import.save');
+    Route::post('/importOtherProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'importOtherProducts'])->name('product.import.other.product');
 
     // ============================== all routes for user settings =============================
     Route::get('/settings', [\App\Http\Controllers\Manager\SettingsController::class, 'index'])->name('settings');

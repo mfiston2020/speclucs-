@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Imports\Product\ImportOtherProduct;
 use App\Imports\ProductImport;
 use App\Models\Power;
 use App\Models\Product;
@@ -186,6 +187,27 @@ class ProductsController extends Controller
 
         try {
             Excel::import(new ProductImport(), $request->excelFile);
+
+            $count  =   session('countSkippedImport');
+
+            if ($count > 0) {
+                return redirect()->route('manager.product')->with('successMsg', 'Importing successful skipped ' . $count . ' Duplicates');
+            } else {
+                return redirect()->route('manager.product')->with('successMsg', 'Importing successful');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errorMsg', 'Oops! something Went Wrong!');
+        }
+    }
+
+    function importOtherProducts(Request $request)
+    {
+        $this->validate($request, [
+            'other_product_file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        try {
+            Excel::import(new ImportOtherProduct(), $request->other_product_file);
 
             $count  =   session('countSkippedImport');
 

@@ -62,7 +62,6 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                         ->where('eye', initials($data['lens_type']) == 'SV' ? 'any' : $data['eye'])
                         ->exists();
 
-
                     // =====================================================================
 
                     if (!$product_exists) {

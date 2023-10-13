@@ -60,13 +60,13 @@ class LabRequestController extends Controller
         $soldProducts   =   Invoice::where('id', Crypt::decrypt($id))->with('soldproduct')->first();
         $products       =   Product::where('company_id', userInfo()->company_id)->get();
 
-        foreach ($soldProducts->soldproduct as  $sold) {
-            $product    =   $products->where('id', $sold->product_id)->first();
+        // foreach ($soldProducts->soldproduct as  $sold) {
+        //     $product    =   $products->where('id', $sold->product_id)->first();
 
-            if ($product->stock <= 0) {
-                return redirect()->back()->with('warningMsg', $product->product_name . ' | ' . $product->description . ' is out of Stock!');
-            }
-        }
+        //     if ($product->stock <= 0) {
+        //         return redirect()->back()->with('warningMsg', $product->product_name . ' | ' . $product->description . ' is out of Stock!');
+        //     }
+        // }
 
         // dd($soldProducts->soldproduct);
 
@@ -74,7 +74,7 @@ class LabRequestController extends Controller
             $product    =   $this->allProduct->where('id', $sold->product_id)->first();
 
             $prdt = Product::where('id', $sold->product_id)->first();
-            $prdt->stock    =   $prdt->stock - 1;
+            $prdt->stock    =   $prdt->stock < 1 ? 0 : $prdt->stock - 1;
             $prdt->save();
 
             // $stockVariation = $product->stock - 1;
@@ -312,7 +312,6 @@ class LabRequestController extends Controller
 
                     // $this->stocktrackRepo->saveTrackRecord($prdt->id, 1, '1', 0, 'sent to lab', 'rm', 'out');
                     $this->stocktrackRepo->saveTrackRecord($prdt->id, 0, '1', 1, 'received from supplier', 'rm', 'in');
-
                 }
 
                 $this->sendToLab(Crypt::encrypt($value));

@@ -58,6 +58,8 @@ class ProductRetail extends Component
     // frame variables for insurance calculations ======
     public $insurance_percentage_frame, $insurance_payment_frame, $insurance_approved_frame, $patient_payment_frame;
 
+    public $invoiceStatus   =   'requested';
+
     protected $rules = [
         'cloud_id' => 'required_if:isCloudOrder,==,yes'
     ];
@@ -308,6 +310,13 @@ class ProductRetail extends Component
             return;
         } else {
             $reference  =   count(DB::table('invoices')->select('reference_number')->where('company_id', userInfo()->company_id)->get());
+
+            if ($this->rightLenQty < 1 || $this->leftLenQty < 1) {
+                $this->invoiceStatus  =   'Confirmed';
+            } else {
+                $this->invoiceStatus  =   'requested';
+            }
+
             $invoice    =   new Invoice();
 
             $invoice->reference_number  =   $reference + 1;
@@ -325,7 +334,7 @@ class ProductRetail extends Component
             $invoice->gender            =   $this->gender;
             $invoice->dateOfBirth       =   $this->date_of_birth;
             $invoice->insurance_id      =   $this->insurance_type == 'private' ? null : $this->insurance_type;
-            $invoice->status            =   'requested';
+            $invoice->status            =   $this->invoiceStatus;
             $invoice->total_amount      =   0;
             $invoice->insurance_card_number =   $this->insurance_number;
 
