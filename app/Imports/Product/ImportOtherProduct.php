@@ -60,9 +60,9 @@ class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
                             'product_name'      =>  $product_name,
                             'deffective_stock'  =>  '0',
                         ]);
+                        $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
                     }
 
-                    $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
                 }
             }
         } catch (\Throwable $th) {
