@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Livewire\Manager\Report\AdjustMentReport;
 use App\Http\Livewire\Manager\Report\ClosingReport;
 use App\Http\Livewire\Manager\Report\ProductReport;
 use App\Http\Livewire\Manager\Report\StockHistory;
@@ -290,6 +291,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     // ====================== Routes about Reporting ==========================
     Route::get('/report/closing', ClosingReport::class)->name('closing.report');
+    Route::get('/report/adjusted', AdjustMentReport::class)->name('adjustment.report');
     Route::get('/report', [\App\Http\Controllers\Manager\ReportingController::class, 'index'])->name('report');
 
     // ====================== Routes about Users management ==========================

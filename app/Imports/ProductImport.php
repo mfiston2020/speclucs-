@@ -76,7 +76,7 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
                             'stock'         =>  $data['quantity_on_hand'],
                             'price'         =>  $data['retail_price'],
-                            'cost'          =>  $data['whole_seller_price'],
+                            'cost'          =>  $data['supplier_cost'],
                             'fitting_cost'  =>  '0',
                             'company_id'    =>  Auth::user()->company_id,
                             'deffective_stock' =>  '0',
