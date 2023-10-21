@@ -44,6 +44,8 @@ class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     $description   = $data['description'];
                     $product_name   = $data['product_name'];
 
+                    dd($data['location']);
+
                     if (!Product::where('product_name', $product_name)->exists()) {
                         $product    =   Product::create([
                             'cost'              =>  $cost,

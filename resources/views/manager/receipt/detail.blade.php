@@ -56,9 +56,15 @@
                                     </address>
                                 @else
                                     <address>
-                                        <p class="m-t-30"><b>Name :</b> {{ $invoice->client_name }}</p>
-                                        <p class="m-t-30"><b>Phone :</b> {{ $invoice->phone }}</p>
-                                        <p class="m-t-30"><b>TIN Number :</b> {{ $invoice->tin_number }}</p>
+                                        <p class="m-t-30"><b>Name :</b>
+                                            @if ($invoice->hospital_name)
+                                                {{ $invoice->hospital_name }}
+                                            @else
+                                                {{ $invoice->client_name }}
+                                            @endif
+                                        </p>
+                                        <p class="m-t-30"><b>Phone :</b> {{ $invoice->phone??'-' }}</p>
+                                        <p class="m-t-30"><b>TIN Number :</b> {{ $invoice->tin_number??'-' }}</p>
                                         <p><b>Due Date :</b> <i class="fa fa-calendar"></i>
                                             {{ date('Y-m-d H:m:s', strtotime($invoice->updated_at)) }}</p>
                                     </address>
@@ -77,6 +83,11 @@
                                             <th class="text-right">Total</th>
                                         </tr>
                                     </thead>
+                                    @php
+                                        $total_=0;
+                                        $Instotal_=0;
+                                        $Pttotal_=0;
+                                    @endphp
                                     <tbody>
                                         @foreach ($invoice->unavailableProducts as $key => $product)
                                             @php
@@ -106,6 +117,9 @@
                                                             {{ $product->add }}</span>
                                                     @endif
                                                 </td>
+                                                @php
+                                                    $total_+=$product->total_amount;
+                                                @endphp
                                                 <td class="text-right">{{ $product->quantity }} </td>
                                                 <td class="text-right"> {{ format_money($product->price) }} </td>
                                                 <td class="text-right"> {{ format_money($product->total_amount) }} </td>
@@ -130,6 +144,14 @@
                                                         @endif
                                                     @endif
                                                 </td>
+                                                @php
+                                                    $total_+=$product->quantity*$product->unit_price;
+                                                    if ($invoice->insurance_id) {
+                                                        $percentage     =   ($total_*$product->percentage)/100;
+                                                        $Pttotal_       =   $total_-$percentage;
+                                                        $Instotal_      =   $percentage;
+                                                    }
+                                                @endphp
                                                 <td class="text-right">{{ $product->quantity }} </td>
                                                 <td class="text-right"> {{ format_money($product->unit_price) }} </td>
                                                 <td class="text-right"> {{ format_money($product->total_amount) }} </td>
@@ -143,18 +165,32 @@
                         <div class="col-md-12">
                             <div class="pull-right m-t-30 text-right">
                                 @php
-                                    // $vat = ($invoice->total_amount * 18) / 100;
-                                    $total_invoice_amount = $invoice->soldproduct_sum_patient_payment + $invoice->unavailable_products_sum_price;
+                                    $total_invoice_amount = $total_;
                                 @endphp
                                 <p>Total amount: {{ format_money($total_invoice_amount) }}</p>
+                                @if ($invoice->insurance_id)
+                                    <p>Ins amount: {{ format_money($Instotal_) }}</p>
+                                    <p>Pt amount: {{ format_money($Pttotal_) }}</p>
+                                @endif
                                 <p>Total paid: {{ format_money($total_invoice_amount - $invoice->due) }}</p>
                                 <p>Due: {{ format_money($invoice->due) }}</p>
                                 <p>vat (18%) : {{ format_money(0) }} </p>
                                 <hr>
-                                <h3><b>Total :</b> {{ format_money($total_invoice_amount) }}</h3>
+                                <h3><b>Total :</b>
+                                    @if ($invoice->insurance_id)
+                                        {{ format_money($Pttotal_) }}
+                                    @else
+                                        {{ format_money($total_invoice_amount) }}
+                                    @endif
+                                </h3>
                             </div>
                             <div class="clearfix"></div>
                         </div>
+                                    @php
+                                        $total_=0;
+                                        $Instotal_=0;
+                                        $Pttotal_=0;
+                                    @endphp
                     </div>
                 </div>
                 <hr class="noprint">
