@@ -10,6 +10,7 @@ class TrackStockRecord extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'product_id',
         'current_stock',
         'incoming',

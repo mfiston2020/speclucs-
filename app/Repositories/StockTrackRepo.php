@@ -23,6 +23,7 @@ class StockTrackRepo implements StockTrackInterface
     {
         TrackStockRecord::create([
             'product_id'    => $productId,
+            'user_id'       => userInfo()->id,
             'company_id'    => userInfo()->company_id,
             'current_stock' => $currentStock,
             'incoming'      => $incoming,
