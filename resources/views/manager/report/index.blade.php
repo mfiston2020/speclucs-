@@ -35,7 +35,7 @@
 
 
             {{-- Stock Adjustment report --}}
-            <a href="{{ route('manager.product.adjustment.report')}}" class="col-lg-4 col-md-6 text-secondary">
+            <a href="{{ route('manager.adjustment.report')}}" class="col-lg-4 col-md-6 text-secondary">
                 <div class="">
                     <div class="card border-right border-secondary">
                         <div class="card-body">
