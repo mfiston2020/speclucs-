@@ -464,7 +464,7 @@
                             <div class="form-group col-1">
                                 <label>Quantity</label>
                                 <input type="number" class="form-control" id="accessory_quantity" placeholder="Qty"
-                                    wire:model="accessory_quantity">
+                                    wire:model="accessory_quantity" max="accessory_quantity" min="1">
                             </div>
 
                             <div class="form-group col-2">
