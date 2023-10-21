@@ -29,6 +29,7 @@ class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
     public function collection(Collection $collection)
     {
         $count  =   0;
+        $product=null;
         try {
 
             foreach ($collection as $un_filtered_data) {
