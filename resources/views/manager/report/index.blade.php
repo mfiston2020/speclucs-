@@ -34,6 +34,26 @@
             </a>
 
 
+            {{-- Stock Adjustment report --}}
+            <a href="{{ route('manager.product.stock.report')}}" class="col-lg-4 col-md-6 text-secondary">
+                <div class="">
+                    <div class="card border-right border-secondary">
+                        <div class="card-body">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <span class="text-secondary display-6"><i class="ti-layout-slider-alt"></i></span>
+                                </div>
+                                <div class="ml-auto">
+                                    <h3>Stock Adjustment</h3>
+                                    <small class="text-dark">Get Stock History on adjustments</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+
             {{-- Stock History report --}}
             <a href="{{ route('manager.product.stock.report')}}" class="col-lg-4 col-md-6 text-primary">
                 <div class="">
@@ -45,7 +65,7 @@
                                 </div>
                                 <div class="ml-auto">
                                     <h3>Stock History</h3>
-                                    <small class="text-dark">Get Stock History regardin in/out</small>
+                                    <small class="text-dark">Get Stock History regarding in/out</small>
                                 </div>
                             </div>
                         </div>

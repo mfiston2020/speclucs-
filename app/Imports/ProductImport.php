@@ -67,6 +67,7 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     if (!$product_exists) {
                         $product    =   Product::create([
                             'category_id'   =>  '1',
+                            'locaiton'   =>  $data['location'],
                             'product_name'  =>  $data['lens_type'],
                             'description'   =>  initials(strtoupper($data['lens_type'])) . " "
                                 . strtoupper($data['index']) . " "
