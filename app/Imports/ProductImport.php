@@ -53,7 +53,7 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 if ($un_filtered_data->filter()->isNotEmpty()) {
                     $data   =   $un_filtered_data->filter();
 
-                    if ($type) {
+                    if ($type && $indx && $chr && $ctng) {
                         // checkin the availability of the product
                     $product_exists =   Power::where('type_id', $type->id)
                         ->where('index_id', $indx->id)
