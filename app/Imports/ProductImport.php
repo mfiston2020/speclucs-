@@ -41,11 +41,14 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
         $count  =   0;
 
         foreach ($collection as $un_filtered_data) {
+            // dd($un_filtered_data);
             try {
                 $indx   =   $this->index->where('name', strtoupper($un_filtered_data['index']))->first();
                 $ctng   =   $this->coating->where('name', strtoupper($un_filtered_data['coating']))->first();
                 $type   =   $this->lens_type->where('name', strtoupper($un_filtered_data['lens_type']))->first();
                 $chr    =   $this->chromatics->where('name', ucfirst($un_filtered_data['chromatics_aspects']))->first();
+
+                // dd($indx);
 
                 if ($un_filtered_data->filter()->isNotEmpty()) {
                     $data   =   $un_filtered_data->filter();
@@ -70,7 +73,7 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                             'location'   =>  $data['location'],
                             'product_name'  =>  $data['lens_type'],
                             'description'   =>  initials(strtoupper($data['lens_type'])) . " "
-                                . strtoupper($data['index']) . " "
+                                . strtoupper($un_filtered_data['index']) . " "
                                 . ucfirst($data['chromatics_aspects']) . " "
                                 . strtoupper($data['coating']),
 
@@ -81,9 +84,6 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                             'company_id'    =>  Auth::user()->company_id,
                             'deffective_stock' =>  '0',
                         ]);
-
-
-                        $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
 
                         Power::create([
                             'product_id'    =>  $product->id,
@@ -98,6 +98,7 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                             'eye'           =>  strtoupper($data['lens_type']) == 'SINGLE VISION' ?   'any'   :   $data['eye'],
                             'company_id'    =>  Auth::user()->company_id,
                         ]);
+                        $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
                     } else {
                         $count++;
                     }
