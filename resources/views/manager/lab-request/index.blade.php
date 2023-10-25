@@ -940,7 +940,7 @@
 
                                                                 @php
                                                                     $availability = true;
-                                                                    $descripition = null;
+                                                                    $description = null;
                                                                     $right_len = $request->unavailableproducts->where('eye', 'right')->first();
                                                                     if (!$right_len) {
                                                                         $right_len = $request->soldproduct->where('eye', 'right')->first();
@@ -968,10 +968,12 @@
                                                                             ->pluck('name')
                                                                             ->first();
                                                                     } else {
-                                                                        // $description = $products
-                                                                        //     ->where('id', $right_len->product_id)
-                                                                        //     ->pluck('description')
-                                                                        //     ->first();
+                                                                        if ($right_len) {
+                                                                            $description = $products
+                                                                            ->where('id', $right_len->product_id)
+                                                                            ->pluck('description')
+                                                                            ->first();
+                                                                        }
                                                                     }
 
                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
