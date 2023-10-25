@@ -108,7 +108,7 @@
                                             <span
                                                 hidden>{{ $power = \App\Models\Power::where(['product_id' => $product->id])->where('company_id', Auth::user()->company_id)->select('*')->first() }}</span>
 
-                                            <td>{{ $product->description }}</td>
+                                            <td>{{ $product->description }} {{$power?'- '.$power->eye:''}}</td>
                                             <td>
                                                 @if ($power)
                                                     @if (initials($product->product_name) == 'SV')
