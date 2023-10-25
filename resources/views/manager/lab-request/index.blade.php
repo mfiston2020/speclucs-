@@ -900,6 +900,7 @@
                                                         <th>Left Eye</th>
                                                         <th>Request Date</th>
                                                         <th>Request Age</th>
+                                                        <th>Cost</th>
                                                         <th>Payment</th>
                                                     </tr>
                                                 </thead>
@@ -1019,6 +1020,9 @@
                                                                 </td>
                                                                 <td>
                                                                     {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $request->cost }}
                                                                 </td>
                                                                 <td class="text-start">
                                                                     <span @class([
