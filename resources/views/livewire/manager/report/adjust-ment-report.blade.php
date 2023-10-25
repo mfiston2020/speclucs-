@@ -64,7 +64,6 @@
         <div class="card">
             @php
                 $dateNow = now();
-            // dd(date('Y-m-d',strtotime($dateNow.'+1 day')));
                 $stockTracker   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($start_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($end_date)))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
             @endphp
             <div class="card-body">
