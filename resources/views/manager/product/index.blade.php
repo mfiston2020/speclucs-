@@ -108,7 +108,13 @@
                                             <span
                                                 hidden>{{ $power = \App\Models\Power::where(['product_id' => $product->id])->where('company_id', Auth::user()->company_id)->select('*')->first() }}</span>
 
-                                            <td>{{ $product->description }} {{$power?'- '.$power->eye:''}}</td>
+                                            <td>
+                                                @if (initials($product->product_name) == 'SV')
+                                                    {{ $product->description }}
+                                                @else
+                                                    {{ $product->description }} {{$power?'- '.$power->eye:''}}
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if ($power)
                                                     @if (initials($product->product_name) == 'SV')
@@ -176,7 +182,7 @@
     <script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js">
+    <script src="{{asset('dashboard/assets/dist/js/editable.min.js')}}">
     </script>
     <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
 
