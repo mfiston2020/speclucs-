@@ -53,7 +53,8 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 if ($un_filtered_data->filter()->isNotEmpty()) {
                     $data   =   $un_filtered_data->filter();
 
-                    // checkin the availability of the product
+                    if ($type) {
+                        // checkin the availability of the product
                     $product_exists =   Power::where('type_id', $type->id)
                         ->where('index_id', $indx->id)
                         ->where('chromatics_id', $chr->id)
@@ -101,6 +102,7 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                         $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
                     } else {
                         $count++;
+                    }
                     }
                 }
             } catch (\Throwable $th) {
