@@ -9,9 +9,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
+class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows,WithCalculatedFormulas
 {
     /**
      * @param Collection $collection
@@ -29,23 +30,20 @@ class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
     public function collection(Collection $collection)
     {
         $count  =   0;
-        $product=null;
         try {
 
-            foreach ($collection as $un_filtered_data) {
+            foreach ($collection as $key=> $un_filtered_data) {
 
                 if ($un_filtered_data->filter()->isNotEmpty()) {
 
                     $data   =   $un_filtered_data->filter();
 
                     $cost   = $data['cost'];
-                    $on_hand_quantity   = $data['on_hand_quantity'];
+                    $on_hand_quantity   = $un_filtered_data['stock'];
                     $price   = $data['price'];
                     $location   = $data['location'];
                     $description   = $data['description'];
                     $product_name   = $data['product_name'];
-
-                    // dd($data['location']);
 
                     if (!Product::where('product_name', $product_name)->exists()) {
                         $product    =   Product::create([
@@ -62,7 +60,6 @@ class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
                         ]);
                         $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
                     }
-
                 }
             }
         } catch (\Throwable $th) {
