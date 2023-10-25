@@ -63,6 +63,8 @@
 
         <div class="card">
             @php
+                $instock=0;
+                $outstock=0;
                 $dateNow = now();
                 $stockTracker   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($start_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($end_date)))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
             @endphp
