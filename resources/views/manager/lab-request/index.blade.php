@@ -968,10 +968,10 @@
                                                                             ->pluck('name')
                                                                             ->first();
                                                                     } else {
-                                                                        $description = $products
-                                                                            ->where('id', $right_len->product_id)
-                                                                            ->pluck('description')
-                                                                            ->first();
+                                                                        // $description = $products
+                                                                        //     ->where('id', $right_len->product_id)
+                                                                        //     ->pluck('description')
+                                                                        //     ->first();
                                                                     }
 
                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
@@ -1174,7 +1174,7 @@
                                                                     </tr>
                                                                     <tbody>
                                                                         {{-- looping through available products --}}
-                                                                        {{-- @if ($request->soldproduct->isNotEmpty())
+                                                                        @if ($request->soldproduct->isNotEmpty())
                                                                             @foreach ($request->soldproduct as $productsold)
                                                                                 @php
                                                                                     $invoice_product = $products->where('id', $productsold->product_id)->first();
@@ -1219,7 +1219,7 @@
                                                                                     </tr>
                                                                                 @endif
                                                                             @endforeach
-                                                                        @endif --}}
+                                                                        @endif
 
                                                                         {{-- looping through unavailable products --}}
                                                                         @if (!$request->unavailableproducts->isEmpty())
