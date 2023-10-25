@@ -72,9 +72,9 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                             'description'   =>  initials(strtoupper($data['lens_type'])) . " "
                                 . strtoupper($data['index']) . " "
                                 . ucfirst($data['chromatics_aspects']) . " "
-                                . strtoupper($data['coating'].'|'.$data['eye']),
+                                . strtoupper($data['coating'].'-'.$data['eye']),
 
-                            'stock'         =>  $data['quantity_on_hand'],
+                            'stock'         =>  $un_filtered_data['quantity_on_hand'],
                             'price'         =>  $data['retail_price'],
                             'cost'          =>  $data['supplier_cost'],
                             'fitting_cost'  =>  '0',
