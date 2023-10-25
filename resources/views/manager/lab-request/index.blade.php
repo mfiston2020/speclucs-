@@ -1174,7 +1174,7 @@
                                                                     </tr>
                                                                     <tbody>
                                                                         {{-- looping through available products --}}
-                                                                        @if (!$request->soldproduct->isEmpty())
+                                                                        @if ($request->soldproduct->isNotEmpty())
                                                                             @foreach ($request->soldproduct as $productsold)
                                                                                 @php
                                                                                     $invoice_product = $products->where('id', $productsold->product_id)->first();
@@ -1541,7 +1541,7 @@
                                                                     </tr>
                                                                     <tbody>
                                                                         {{-- looping through available products --}}
-                                                                        @if (!$request->soldproduct->isEmpty())
+                                                                        @if ($request->soldproduct->isNotEmpty())
                                                                             @foreach ($request->soldproduct as $productsold)
                                                                                 @php
                                                                                     $invoice_product = $products->where('id', $productsold->product_id)->first();
