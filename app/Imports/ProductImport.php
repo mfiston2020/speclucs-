@@ -48,8 +48,6 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 $type   =   $this->lens_type->where('name', strtoupper($un_filtered_data['lens_type']))->first();
                 $chr    =   $this->chromatics->where('name', ucfirst($un_filtered_data['chromatics_aspects']))->first();
 
-                // dd($indx);
-
                 if ($un_filtered_data->filter()->isNotEmpty()) {
                     $data   =   $un_filtered_data->filter();
 

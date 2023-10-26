@@ -64,10 +64,10 @@ class ProductRepo implements ProductInterface
                     }
                 } else {
                     if (
-                        $productDescription['type'] && $productDescription['index'] &&
-                        $productDescription['chromatic'] && $productDescription['coating'] &&
-                        $productDescription['sphere'] && $productDescription['cylinder'] &&
-                        $productDescription['axis'] && $productDescription['addition'] && $productDescription['eye']
+                        $productDescription['type']!=null && $productDescription['index']!=null &&
+                        $productDescription['chromatic']!=null && $productDescription['coating']!=null &&
+                        $productDescription['sphere']!=null && $productDescription['cylinder']!=null &&
+                        $productDescription['axis']!=null && $productDescription['addition']!=null && $productDescription['eye']!=null
                     ) {
                         $product_id     =   \App\Models\Power::where('type_id', $productDescription['type'])
                             ->where('index_id', $productDescription['index'])
