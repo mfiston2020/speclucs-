@@ -27,9 +27,9 @@ class LabRequestController extends Controller
     function index()
     {
         $lens_type  =   \App\Models\LensType::all();
-        $index  =   \App\Models\PhotoIndex::all();
-        $chromatics  =   \App\Models\PhotoChromatics::all();
-        $coatings  =   \App\Models\PhotoCoating::all();
+        $index      =   \App\Models\PhotoIndex::all();
+        $chromatics =   \App\Models\PhotoChromatics::all();
+        $coatings   =   \App\Models\PhotoCoating::all();
         $productUnvailable  =   UnavailableProduct::where('company_id', userInfo()->company_id)->get();
         // ==================
 

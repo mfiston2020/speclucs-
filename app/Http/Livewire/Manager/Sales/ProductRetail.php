@@ -311,11 +311,17 @@ class ProductRetail extends Component
         } else {
             $reference  =   count(DB::table('invoices')->select('reference_number')->where('company_id', userInfo()->company_id)->get());
 
-            if ($this->rightLenQty < 1 || $this->leftLenQty < 1) {
-                $this->invoiceStatus  =   'Confirmed';
+
+
+            if ($this->leftLenFound || $this->rightLenFound) {
+                if ($this->rightLenQty < 1 || $this->leftLenQty < 1) {
+                    $this->invoiceStatus  =   'Confirmed';
+                } else {
+                    $this->invoiceStatus  =   'requested';
+                }
             } else {
-                $this->invoiceStatus  =   'requested';
-            }
+                    $this->invoiceStatus  =   'requested';
+                }
 
             $invoice    =   new Invoice();
 
