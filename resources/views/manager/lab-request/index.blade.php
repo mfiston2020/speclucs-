@@ -904,6 +904,9 @@
                                                         <th>Payment</th>
                                                     </tr>
                                                 </thead>
+                                                @php
+                                                    $powers=\App\Models\Power::where('company_id',userInfo()->company_id)->get();
+                                                @endphp
 
                                                 <form method="post"
                                                     action="{{ route('manager.sent.request.send.to.supplier') }}">
@@ -945,7 +948,9 @@
                                                                     $right_len = $request->unavailableproducts->where('eye', 'right')->first();
                                                                     if (!$right_len) {
                                                                         $right_len = $request->soldproduct->where('eye', 'right')->first();
+                                                                        $right_len = $powers->where('product_id',$right_len->product_id)->first();
                                                                         $availability = false;
+                                                                        // dd($right_len);
                                                                     }
 
                                                                     if ($availability == true) {
@@ -980,6 +985,7 @@
                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                     if (!$left_len) {
                                                                         $left_len = $request->soldproduct->where('eye', 'left')->first();
+                                                                        $left_len = $powers->where('product_id',$right_len->product_id)->first();
                                                                     }
                                                                 @endphp
                                                                 <td>
@@ -993,24 +999,42 @@
                                                                 <td>
 
                                                                     @if ($right_len)
-                                                                        <span>
-                                                                            {{ format_values($right_len->sphere) }}
-                                                                            /
-                                                                            {{ format_values($right_len->cylinder) }}
-                                                                            *{{ format_values($right_len->axis) }}
-                                                                            {{ format_values($right_len->addition) }}
-                                                                        </span>
+                                                                        @if ($availability)
+                                                                            <span>
+                                                                                {{ format_values($right_len->sphere) }}
+                                                                                /
+                                                                                {{ format_values($right_len->cylinder) }}
+                                                                                *{{ format_values($right_len->axis) }}
+                                                                                {{ format_values($right_len->addition) }}
+                                                                            </span>
+                                                                        @else
+                                                                            <span>
+                                                                                {{ format_values($right_len->sphere) }}
+                                                                                /
+                                                                                {{ format_values($right_len->cylinder) }}
+                                                                                *{{ format_values($right_len->axis) }}
+                                                                                {{ format_values($right_len->add) }}
+                                                                            </span>
+                                                                        @endif
                                                                     @else
                                                                         <span>-</span>
                                                                     @endif
                                                                 </td>
                                                                 <td>
                                                                     @if ($left_len)
-                                                                        {{ format_values($left_len->sphere) }}
-                                                                        /
-                                                                        {{ format_values($left_len->cylinder) }}
-                                                                        *{{ format_values($left_len->axis) }}
-                                                                        {{ format_values($left_len->addition) }}
+                                                                        @if ($availability)
+                                                                            {{ format_values($left_len->sphere) }}
+                                                                            /
+                                                                            {{ format_values($left_len->cylinder) }}
+                                                                            *{{ format_values($left_len->axis) }}
+                                                                            {{ format_values($left_len->addition) }}
+                                                                        @else
+                                                                            {{ format_values($left_len->sphere) }}
+                                                                            /
+                                                                            {{ format_values($left_len->cylinder) }}
+                                                                            *{{ format_values($left_len->axis) }}
+                                                                            {{ format_values($left_len->add) }}
+                                                                        @endif
                                                                     @else
                                                                         <span class="text-center">-</span>
                                                                     @endif
