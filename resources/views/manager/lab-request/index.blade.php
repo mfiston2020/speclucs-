@@ -948,7 +948,7 @@
                                                                     $right_len = $request->unavailableproducts->where('eye', 'right')->first();
                                                                     if (!$right_len) {
                                                                         $right_len = $request->soldproduct->where('eye', 'right')->first();
-                                                                        if ($right_len) {
+                                                                        if ($right_len==null) {
                                                                             dd($key);
                                                                         }
                                                                         $right_len = $powers->where('product_id',$right_len->product_id)->first();
