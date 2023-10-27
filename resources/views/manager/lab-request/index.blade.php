@@ -946,10 +946,11 @@
                                                                     $availability = true;
                                                                     $description = null;
                                                                     $right_len = $request->unavailableproducts->where('eye', 'right')->first();
-                                                                    
                                                                     if (!$right_len) {
                                                                         $right_len = $request->soldproduct->where('eye', 'right')->first();
-
+                                                                        if ($right_len) {
+                                                                            dd($right_len);
+                                                                        }
                                                                         $right_len = $powers->where('product_id',$right_len->product_id)->first();
                                                                         $availability = false;
                                                                     }
