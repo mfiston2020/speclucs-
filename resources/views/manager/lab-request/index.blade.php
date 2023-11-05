@@ -440,7 +440,9 @@
                                                         style="width:100%">
                                                         <thead>
                                                             <tr>
-                                                                <th>#</th>
+                                                                <th>
+                                                                    <input type="checkbox" onclick="for(c in document.getElementsByName('requestId')) document.getElementsByName('requestId').item(c).checked = this.checked">
+                                                                </th>
                                                                 <th>Request # </th>
                                                                 <th>Patient Name</th>
                                                                 <th>Request Date</th>
