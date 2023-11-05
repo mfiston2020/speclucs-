@@ -82,7 +82,7 @@ class LabRequestController extends Controller
         // dd($soldProducts->soldproduct);
 
         foreach ($soldProducts->soldproduct as $key => $sold) {
-            $allProduct =   Product::where('company_id',$this->userDatail->company_id)->get();
+            $allProduct =   Product::where('company_id',, userInfo()->company_id)->get();
             $product    =   $allProduct->where('id', $sold->product_id)->first();
 
             $prdt = Product::where('id', $sold->product_id)->first();
@@ -134,7 +134,7 @@ class LabRequestController extends Controller
     // ========================================
     function sendToProduction(Request $request)
     {
-        $allProduct =   Product::where('company_id',$this->userDatail->company_id)->get();
+        $allProduct =   Product::where('company_id',userInfo()->company_id)->get();
         $invoice    =   Invoice::where('id', Crypt::decrypt($request->idsalfjei))->with('soldproduct')->first();
 
         $invoice->update([
@@ -171,7 +171,7 @@ class LabRequestController extends Controller
     // ==============
     function sendToDelivered(Request $request)
     {
-        $allProduct =   Product::where('company_id',$this->userDatail->company_id)->get();
+        $allProduct =   Product::where('company_id', userInfo()->company_id)->get();
         if ($request->requestid == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
         } else {
@@ -195,7 +195,7 @@ class LabRequestController extends Controller
 
     function receiveRequest(Request $request)
     {
-        $allProduct =   Product::where('company_id',$this->userDatail->company_id)->get();
+        $allProduct =   Product::where('company_id', userInfo()->company_id)->get();
         if ($request->requestid == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
         } else {
@@ -219,7 +219,7 @@ class LabRequestController extends Controller
 
     function dispenseRequest(Request $request)
     {
-        $allProduct =   Product::where('company_id',$this->userDatail->company_id)->get();
+        $allProduct =   Product::where('company_id', userInfo()->company_id)->get();
         if ($request->requestid == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
         } else {
