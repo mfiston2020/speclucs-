@@ -35,6 +35,10 @@
 {{-- === End of breadcumb == --}}
 
 @section('content')
+    @php
+        $powers     =   \App\Models\Power::where('company_id', Auth::user()->company_id)->get();
+        $categories =   \App\Models\Category::get();
+    @endphp
     <div class="container-fluid">
         <!-- Sales chart -->
         <div class="row">
@@ -91,22 +95,13 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $key => $product)
-                                    @php
-                                        $quantity = \App\Models\SoldProduct::where(['product_id' => $product->id])->where('company_id', Auth::user()->company_id)->select('quantity')->get();
-
-                                        $unAvailableProduct = count(\App\Models\UnavailableProduct::where('product_id',$product->id)->get());
-
-                                        foreach ($quantity as $item){
-                                            $product_sold = $product_sold + $item->quantity + $unAvailableProduct;
-                                        }
-                                    @endphp
                                         <tr>
                                             <td>{{ $product->id }}</td>
-                                            <td>{{ \App\Models\Category::where(['id' => $product->category_id])->pluck('name')->first() }}
+                                            <td>{{ $categories->where('id',$product->category_id)->pluck('name')->first() }}
                                             </td>
                                             <td>{{ $product->product_name }}</td>
                                             <span
-                                                hidden>{{ $power = \App\Models\Power::where(['product_id' => $product->id])->where('company_id', Auth::user()->company_id)->select('*')->first() }}</span>
+                                                hidden>{{ $power = $powers->where('product_id',$product->id)->first() }}</span>
 
                                             <td>
                                                 @if (initials($product->product_name) == 'SV' || initials($product->product_name) == 'BT')
