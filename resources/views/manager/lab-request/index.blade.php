@@ -446,7 +446,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>
-                                                                    <input type="checkbox" onclick="checkUncheck(this)">
+                                                                    <input type="checkbox" onclick="checkUncheckrequestId(this)">
                                                                 </th>
                                                                 <th>Request # </th>
                                                                 <th>Patient Name</th>
@@ -1325,7 +1325,7 @@
                                                 style="width:100%">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
+                                                        <th> <input type="checkbox" onclick="checkUncheckrequestId(this)"> </th>
                                                         <th>Request # </th>
                                                         <th>Patient Name</th>
                                                         <th>Description</th>
@@ -2263,7 +2263,16 @@
     <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
 
     <script>
-        function checkUncheck(checkBox) {
+        function checkUncheckpriced(checkBox) {
+
+            get = document.getElementsByName('requestId[]');
+
+            for(var i=0; i<get.length; i++) {
+
+            get[i].checked = checkBox.checked;}
+
+        }
+        function checkUncheckrequestId(checkBox) {
 
             get = document.getElementsByName('requestId[]');
 
