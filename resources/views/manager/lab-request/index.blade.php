@@ -22,6 +22,7 @@
 
 
     @php
+        $isOutOfStock==null;
         $powers =   \App\Models\Power::where('company_id',userInfo()->company_id)->get();
     @endphp
     <div class="container-fluid">
