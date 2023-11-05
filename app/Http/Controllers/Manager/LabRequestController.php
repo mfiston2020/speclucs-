@@ -82,7 +82,7 @@ class LabRequestController extends Controller
         // dd($soldProducts->soldproduct);
 
         foreach ($soldProducts->soldproduct as $key => $sold) {
-            $allProduct =   Product::where('company_id',, userInfo()->company_id)->get();
+            $allProduct =   Product::where('company_id', userInfo()->company_id)->get();
             $product    =   $allProduct->where('id', $sold->product_id)->first();
 
             $prdt = Product::where('id', $sold->product_id)->first();
