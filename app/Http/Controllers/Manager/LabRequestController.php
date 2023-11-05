@@ -36,6 +36,7 @@ class LabRequestController extends Controller
 
     function index()
     {
+        $isOutOfStock=null;
         $lens_type  =   \App\Models\LensType::all();
         $index      =   \App\Models\PhotoIndex::all();
         $chromatics =   \App\Models\PhotoChromatics::all();
@@ -62,7 +63,7 @@ class LabRequestController extends Controller
 
         // return $requests->unavailableproducts_count;
 
-        return view('manager.lab-request.index', compact('requests', 'products', 'unavailableProducts', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings'));
+        return view('manager.lab-request.index', compact('requests', 'products', 'unavailableProducts', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
     }
 
     function sendToLab($id)
