@@ -445,6 +445,7 @@
                                                                 <th>Patient Name</th>
                                                                 <th>Request Date</th>
                                                                 <th>Request Age</th>
+                                                                <th>Description</th>
                                                                 <th>Right Eye</th>
                                                                 <th>Left Eye</th>
                                                                 <th>Status</th>
@@ -545,6 +546,14 @@
                                                                                     $left_len = $powers->where('product_id',$right_len->product_id)->first();
                                                                                 }
                                                                             @endphp
+                                                                            <td>
+                                                                                @if ($availability)
+                                                                                    {{ initials($type) }} {{ $chrm }}
+                                                                                    {{ $ct }} {{ $indx }}
+                                                                                @else
+                                                                                    {{ $description }}
+                                                                                @endif
+                                                                            </td>
                                                                             <td>
                                                                                 @if ($right_len)
                                                                                     @if ($availability)
