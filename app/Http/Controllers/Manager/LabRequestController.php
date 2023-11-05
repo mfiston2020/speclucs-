@@ -8,19 +8,29 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\TrackStockRecord;
 use App\Models\UnavailableProduct;
+use App\Models\User;
 use App\Repositories\ProductRepo;
 use App\Repositories\StockTrackRepo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
 class LabRequestController extends Controller
 {
-    private $stocktrackRepo, $allProduct;
+    private $stocktrackRepo, $allProduct,$userDatail;
 
     public function __construct()
     {
         $this->stocktrackRepo = new StockTrackRepo();
-        $this->allProduct   =   Product::all();
+        // dd($this->userDatail);
+        // $this->middleware('auth');
+        // $this->middleware(function ($request, $next) {
+        //     $this->userDatail = Auth::user();
+        //     // dd($this->userDatail);
+        //     $this->allProduct   =   Product::where('company_id',$this->userDatail->company_id)->get();
+
+        //     return $next($request);
+        // });
     }
     // ===============
 
@@ -71,7 +81,8 @@ class LabRequestController extends Controller
         // dd($soldProducts->soldproduct);
 
         foreach ($soldProducts->soldproduct as $key => $sold) {
-            $product    =   $this->allProduct->where('id', $sold->product_id)->first();
+            $allProduct =   Product::where('company_id',$this->userDatail->company_id)->get();
+            $product    =   $allProduct->where('id', $sold->product_id)->first();
 
             $prdt = Product::where('id', $sold->product_id)->first();
             $prdt->stock    =   $prdt->stock < 1 ? 0 : $prdt->stock - 1;
@@ -122,6 +133,7 @@ class LabRequestController extends Controller
     // ========================================
     function sendToProduction(Request $request)
     {
+        $allProduct =   Product::where('company_id',$this->userDatail->company_id)->get();
         $invoice    =   Invoice::where('id', Crypt::decrypt($request->idsalfjei))->with('soldproduct')->first();
 
         $invoice->update([
@@ -131,7 +143,7 @@ class LabRequestController extends Controller
 
         // recording work in progress stock in
         foreach ($invoice->soldproduct as $key => $sold) {
-            $product    =   $this->allProduct->where('id', $sold->product_id)->first();
+            $product    =   $allProduct->where('id', $sold->product_id)->first();
             $stockVariation = $product->stock - 1;
 
             $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', '0', 'in production', 'wip', 'in');
@@ -158,6 +170,7 @@ class LabRequestController extends Controller
     // ==============
     function sendToDelivered(Request $request)
     {
+        $allProduct =   Product::where('company_id',$this->userDatail->company_id)->get();
         if ($request->requestid == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
         } else {
@@ -169,7 +182,7 @@ class LabRequestController extends Controller
                 ]);
 
                 foreach ($invoice->soldproduct as $key => $sold) {
-                    $product    =   $this->allProduct->where('id', $sold->product_id)->first();
+                    $product    =   $allProduct->where('id', $sold->product_id)->first();
                     // $stockVariation = $product->stock - 1;
 
                     $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', '0', 'delivered', 'wip', 'out');
@@ -181,6 +194,7 @@ class LabRequestController extends Controller
 
     function receiveRequest(Request $request)
     {
+        $allProduct =   Product::where('company_id',$this->userDatail->company_id)->get();
         if ($request->requestid == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
         } else {
@@ -192,7 +206,7 @@ class LabRequestController extends Controller
                 ]);
 
                 foreach ($invoice->soldproduct as $key => $sold) {
-                    $product    =   $this->allProduct->where('id', $sold->product_id)->first();
+                    $product    =   $allProduct->where('id', $sold->product_id)->first();
                     // $stockVariation = $product->stock - 1;
 
                     $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', '0', 'received', 'fg', 'in');
@@ -204,6 +218,7 @@ class LabRequestController extends Controller
 
     function dispenseRequest(Request $request)
     {
+        $allProduct =   Product::where('company_id',$this->userDatail->company_id)->get();
         if ($request->requestid == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
         } else {
@@ -215,7 +230,7 @@ class LabRequestController extends Controller
                 ]);
 
                 foreach ($invoice->soldproduct as $key => $sold) {
-                    $product    =   $this->allProduct->where('id', $sold->product_id)->first();
+                    $product    =   $allProduct->where('id', $sold->product_id)->first();
                     // $stockVariation = $product->stock - 1;
 
                     $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', '0', 'client reception', 'fg', 'out');

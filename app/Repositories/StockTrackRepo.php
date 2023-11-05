@@ -14,10 +14,10 @@ class StockTrackRepo implements StockTrackInterface
     public $products;
 
 
-    public function __construct()
-    {
-        $this->products = Product::all();
-    }
+    // public function __construct()
+    // {
+    //     $this->products = Product::where('');
+    // }
 
     function saveTrackRecord(string $productId, string $currentStock, string $incoming, string $change, string $reason, string $type, string $operation)
     {
