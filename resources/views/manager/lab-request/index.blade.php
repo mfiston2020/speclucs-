@@ -153,7 +153,7 @@
                                                                         @php
                                                                             $invoice_product = $products->where('id', $product->product_id)->first();
 
-                                                                            if ($invoice_product->stock<2){
+                                                                            if ($invoice_product->stock>2){
                                                                                 $isOutOfStock='no';
                                                                             }
 
