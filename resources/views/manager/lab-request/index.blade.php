@@ -441,7 +441,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>
-                                                                    <input type="checkbox" onclick="for(c in document.getElementsByName('requestId')) document.getElementsByName('requestId').item(c).checked = this.checked">
+                                                                    <input type="checkbox" onclick="checkUncheck(this)">
                                                                 </th>
                                                                 <th>Request # </th>
                                                                 <th>Patient Name</th>
@@ -2258,6 +2258,16 @@
     <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
 
     <script>
+        function checkUncheck(checkBox) {
+
+            get = document.getElementsByName('requestId[]');
+
+            for(var i=0; i<get.length; i++) {
+
+            get[i].checked = checkBox.checked;}
+
+        }
+
         function exportAll(type, tableName) {
 
             $('#priced-table').tableExport({
