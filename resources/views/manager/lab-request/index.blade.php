@@ -435,7 +435,12 @@
                                         <div id="incomplete-orders" class="tab-pane">
                                             @if (!$requests->isEmpty())
                                                 <div class="table-responsive mt-4">
-                                                    <table id="zero_config"
+                                                    <button onclick="exportOutOfStock('xls','Priced Lens');"
+                                                        class="btn btn-success float-right mb-3">
+                                                        <i class="fa fa-cloud-download-alt"></i>
+                                                        Excel
+                                                    </button>
+                                                    <table id="outOfStock"
                                                         class="table table-striped table-bordered nowrap"
                                                         style="width:100%">
                                                         <thead>
@@ -2271,6 +2276,14 @@
         function exportAll(type, tableName) {
 
             $('#priced-table').tableExport({
+                filename: tableName + '_%DD%-%mm%-%YY%',
+                format: type
+            });
+        }
+
+        function exportOutOfStock(type, tableName) {
+
+            $('#outOfStock').tableExport({
                 filename: tableName + '_%DD%-%mm%-%YY%',
                 format: type
             });
