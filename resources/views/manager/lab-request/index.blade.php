@@ -118,7 +118,7 @@
                                         <li class="nav-item">
                                             <a href="#incomplete-orders" class="nav-link" data-toggle="tab"
                                                 aria-expanded="false">
-                                                Out of Stock
+                                                Booking(s)
                                             </a>
                                         </li>
                                         <li class="nav-item">
