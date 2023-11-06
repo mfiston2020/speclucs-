@@ -46,7 +46,7 @@ class LabRequestController extends Controller
 
         $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('created_at', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('client')->with('soldproduct')->get();
 
-        $bookings   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'booked')->orderBy('created_at', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('client')->with('soldproduct')->get();
+        $bookings   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'booked')->orderBy('created_at', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('soldproduct')->get();
 
         $unavailableProducts    =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct')->get();
 
