@@ -8,7 +8,9 @@
 /****************************************
  *       Basic Table                   *
  ****************************************/
-$('#zero_config').DataTable();
+$('#zero_config').DataTable({
+    "bPaginate": false
+});
 
 /****************************************
  *       Default Order Table           *

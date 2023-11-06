@@ -7,7 +7,7 @@
     <link href="{{asset('css/editable.min.css')}}"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{asset('css/datatable.min')}}">
 
     <style>
         .glyphicon-ok:before {
@@ -38,6 +38,7 @@
     @php
         $powers     =   \App\Models\Power::where('company_id', Auth::user()->company_id)->get();
         $categories =   \App\Models\Category::get();
+        $suppliers  =   \App\Models\Supplier::get();
     @endphp
     <div class="container-fluid">
         <!-- Sales chart -->
@@ -77,7 +78,7 @@
                         {{-- =============================== --}}
 
                         <div class="table-responsive">
-                            <table id="" class="table table-striped table-bordered">
+                            <table id="zero_config" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -139,7 +140,7 @@
                                             </td>
                                             <td>
                                                 <center>
-                                                    {{ $product->supplier_id == null? '-': \App\Models\Supplier::where('id', $product->supplier_id)->pluck('name')->first() }}
+                                                    {{ $product->supplier_id == null? '-': $suppliers->where('id', $product->supplier_id)->pluck('name')->first() }}
                                                 </center>
                                             </td>
                                             {{-- <td>
@@ -169,6 +170,7 @@
                     </div>
                 </div>
             </div>
+            {{ $products->links() }}
         </div>
     </div>
 @endsection

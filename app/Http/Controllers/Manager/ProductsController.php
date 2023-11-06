@@ -24,7 +24,7 @@ class ProductsController extends Controller
 
     public function index()
     {
-        $products =   \App\Models\Product::where('company_id', userInfo()->company_id)->get();
+        $products =   Product::where('company_id', userInfo()->company_id)->cursorPaginate(100);
         return view('manager.product.index', compact('products'));
     }
 
