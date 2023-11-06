@@ -46,6 +46,8 @@ class LabRequestController extends Controller
 
         $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('created_at', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('client')->with('soldproduct')->get();
 
+        $bookings   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'booked')->orderBy('created_at', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('client')->with('soldproduct')->get();
+
         $unavailableProducts    =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct')->get();
 
         $products   =   Product::where('company_id', userInfo()->company_id)->with('power')->get();
@@ -63,7 +65,7 @@ class LabRequestController extends Controller
 
         // return $requests->unavailableproducts_count;
 
-        return view('manager.lab-request.index', compact('requests', 'products', 'unavailableProducts', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
+        return view('manager.lab-request.index', compact('requests', 'products', 'unavailableProducts', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings','isOutOfStock','bookings'));
     }
 
     function sendToLab($id)

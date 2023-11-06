@@ -243,6 +243,13 @@
                             <span class="hide-menu"> {{ __('navigation.insurance') }} </span>
                         </a>
                     </li>
+
+                    @if (userInfo()->permissions=='store')
+                        <li class="sidebar-item"><a href="{{ route('manager.product') }}" class="sidebar-link"><i
+                                class="mdi mdi-adjust"></i><span class="hide-menu">
+                                {{ __('navigation.product_nav') }} </span></a>
+                        </li>
+                    @endif
                 @endif
 
                 @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')

@@ -481,7 +481,7 @@
                                                                 @csrf
 
                                                                 <tbody>
-                                                                        @foreach ($requests as $key => $request)
+                                                                        @foreach ($bookings as $key => $request)
                                                                             @if (count($request->unavailableproducts) <= 0)
                                                                                 @foreach ($request->soldproduct as $product)
                                                                                     @php
