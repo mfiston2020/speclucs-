@@ -50,26 +50,29 @@
                         <div class="row">
                             <h4 class="card-title">All Products</h4>
                             <hr>
-                            <a href="{{ route('manager.product.create') }}"
-                                class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-primary"
-                                style="align-items: right;">
-                                <i class="fa fa-plus"></i> New Product
-                            </a>
-                            <a href="{{ route('manager.lens.stock', 0) }}"
-                                class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-warning"
-                                style="align-items: right;">
-                                <i class="fa fa-inbox"></i> Lens Stock
-                            </a>
-                            <a onclick="exportAll('xls');" href="#"
-                                class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success"
-                                style="align-items: right;">
-                                <i class="fa fa-download"></i> Export To Excel
-                            </a>
-                            <a href="{{ route('manager.product.import') }}"
-                                class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-primary"
-                                style="align-items: right;">
-                                <i class="fa fa-upload"></i> Import Excel
-                            </a>
+                                @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
+                                    <a href="{{ route('manager.product.create') }}"
+                                        class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-primary"
+                                        style="align-items: right;">
+                                        <i class="fa fa-plus"></i> New Product
+                                    </a>
+                                    <a onclick="exportAll('xls');" href="#"
+                                        class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success"
+                                        style="align-items: right;">
+                                        <i class="fa fa-download"></i> Export To Excel
+                                    </a>
+                                    {{-- <a href="{{ route('manager.product.import') }}"
+                                        class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-primary"
+                                        style="align-items: right;">
+                                        <i class="fa fa-upload"></i> Import Excel
+                                    </a> --}}
+
+                            @endif
+                                    <a href="{{ route('manager.lens.stock', 0) }}"
+                                        class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-warning"
+                                        style="align-items: right;">
+                                        <i class="fa fa-inbox"></i> Lens Stock
+                                    </a>
 
                         </div>
                         <hr>
@@ -127,7 +130,7 @@
                                             <td>{{ format_money($product->cost) }}</td>
 
                                             <td>
-                                                @if (userInfo()->permissions!='manager')
+                                                @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
                                                     <a href="#!">{{ $product->stock }}
                                                     </a>
                                                 @else
