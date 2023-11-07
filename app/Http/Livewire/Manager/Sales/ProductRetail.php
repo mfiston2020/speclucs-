@@ -325,8 +325,10 @@ class ProductRetail extends Component
 
             $stock_balancing    =   Invoice::withsum('soldproduct','quantity')->where('company_id',userInfo()->id)->get();
 
-            if ($stock_balancing > $this->rightLenInfo[0]->stock || $stock_balancing > $this->leftLenInfo[0]->stock) {
-                $this->invoiceStatus    =   'booked';
+            if ($this->rightLenFound!=null && $this->leftLenFound!=null) {
+                if ($stock_balancing > $this->rightLenInfo[0]->stock || $stock_balancing > $this->leftLenInfo[0]->stock) {
+                    $this->invoiceStatus    =   'booked';
+                }
             }
 
 
