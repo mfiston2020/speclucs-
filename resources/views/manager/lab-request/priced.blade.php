@@ -1,0 +1,925 @@
+{{-- Priced --}}
+<div class="tab-pane" id="priced" role="tabpanel">
+    <div class="tab-pane  p-20" id="profile2" role="tabpanel">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        @if ($requests_priced->isEmpty())
+                        <div class="alert alert-warning alert-rounded col-lg-7 col-md-9 col-sm-12">
+                            <b>Warning! </b> Nothing to show here
+                            </button>
+                        </div>
+                        @else
+                        <button onclick="exportAll('xls','Priced Lens');" class="btn btn-success float-right mb-3">
+                            <i class="fa fa-cloud-download-alt"></i>
+                            Excel
+                        </button>
+                        <div class="table-responsive mt-4">
+                            <table id="priced-table" class="table table-striped table-bordered nowrap"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th> <input type="checkbox" onclick="checkUncheckrequestId(this)"> </th>
+                                        <th>Request # </th>
+                                        <th>Patient Name</th>
+                                        <th>Description</th>
+                                        <th>Right Eye</th>
+                                        <th>Left Eye</th>
+                                        <th>Request Date</th>
+                                        <th>Request Age</th>
+                                        <th>Cost</th>
+                                        <th>Payment</th>
+                                    </tr>
+                                </thead>
+
+                                <form method="post" action="{{ route('manager.sent.request.send.to.supplier') }}">
+
+                                    @csrf
+                                    <tbody>
+                                        @foreach ($requests_priced as $key => $request)
+                                        <tr>
+                                            <td>
+                                                @if ($request->status == 'Confirmed')
+                                                <input type='checkbox' name="requestId[]" value={{ $request->id }} />
+                                                @else
+                                                -
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a href="#!">
+                                                    Request
+                                                    #{{ sprintf('SPCL-%04d', $request->id) }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @if ($request->client_id != null)
+                                                {{$request->client->name}}
+                                                @else
+                                                @if ($request->hospital_name!=null)
+                                                [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                @else
+                                                {{$request->client_name}}
+                                                @endif
+                                                @endif
+                                                {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                --}}
+                                            </td>
+
+                                            @php
+                                            $availability = true;
+                                            $description = null;
+                                            $right_len = $request->unavailableproducts->where('eye', 'right')->first();
+                                            if (!$right_len) {
+                                            $right_len = $request->soldproduct->where('eye', 'right')->first();
+                                            if ($right_len==null) {
+                                            continue;
+                                            }
+                                            $right_len = $powers->where('product_id',$right_len->product_id)->first();
+                                            $availability = false;
+                                            }
+
+                                            if ($availability == true) {
+                                            $type = $lens_type
+                                            ->where('id', $right_len->type_id)
+                                            ->pluck('name')
+                                            ->first();
+
+                                            $indx = $index
+                                            ->where('id', $right_len->index_id)
+                                            ->pluck('name')
+                                            ->first();
+
+                                            $ct = $coatings
+                                            ->where('id', $right_len->coating_id)
+                                            ->pluck('name')
+                                            ->first();
+
+                                            $chrm = $chromatics
+                                            ->where('id', $right_len->chromatic_id)
+                                            ->pluck('name')
+                                            ->first();
+                                            } else {
+                                            if ($right_len) {
+                                            $description = $products
+                                            ->where('id', $right_len->product_id)
+                                            ->pluck('description')
+                                            ->first();
+                                            }
+                                            }
+
+                                            $left_len = $request->unavailableproducts->where('eye', 'left')->first();
+                                            if (!$left_len) {
+                                            $left_len = $request->soldproduct->where('eye', 'left')->first();
+                                            $left_len = $powers->where('product_id',$right_len->product_id)->first();
+                                            }
+                                            @endphp
+                                            <td>
+                                                @if ($availability)
+                                                {{ initials($type) }} {{ $chrm }}
+                                                {{ $ct }} {{ $indx }}
+                                                @else
+                                                {{ $description }}
+                                                @endif
+                                            </td>
+                                            <td>
+
+                                                @if ($right_len)
+                                                @if ($availability)
+                                                <span>
+                                                    {{ format_values($right_len->sphere) }}
+                                                    /
+                                                    {{ format_values($right_len->cylinder) }}
+                                                    *{{ format_values($right_len->axis) }}
+                                                    {{ format_values($right_len->addition) }}
+                                                </span>
+                                                @else
+                                                <span>
+                                                    {{ format_values($right_len->sphere) }}
+                                                    /
+                                                    {{ format_values($right_len->cylinder) }}
+                                                    *{{ format_values($right_len->axis) }}
+                                                    {{ format_values($right_len->add) }}
+                                                </span>
+                                                @endif
+                                                @else
+                                                <span>-</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($left_len)
+                                                @if ($availability)
+                                                {{ format_values($left_len->sphere) }}
+                                                /
+                                                {{ format_values($left_len->cylinder) }}
+                                                *{{ format_values($left_len->axis) }}
+                                                {{ format_values($left_len->addition) }}
+                                                @else
+                                                {{ format_values($left_len->sphere) }}
+                                                /
+                                                {{ format_values($left_len->cylinder) }}
+                                                *{{ format_values($left_len->axis) }}
+                                                {{ format_values($left_len->add) }}
+                                                @endif
+                                                @else
+                                                <span class="text-center">-</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
+                                            </td>
+                                            <td>
+                                                {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
+                                            </td>
+                                            <td>
+                                                {{ $request->cost }}
+                                            </td>
+                                            <td class="text-start">
+                                                <span @class([ 'text-info'=> $request->status == 'priced',
+                                                    'text-success' => $request->status == 'Confirmed',
+                                                    ])>
+                                                    {{ $request->status }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                            </table>
+                            <hr>
+                            <button class="btn btn-primary">Order from Supplier</button>
+                            </form>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- po sent --}}
+<div class="tab-pane" id="po-sent" role="tabpanel">
+    <div class="tab-pane  p-20" id="profile2" role="tabpanel">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        @if ($requests_supplier->isEmpty())
+                        <div class="alert alert-warning alert-rounded col-lg-7 col-md-9 col-sm-12">
+                            <b>Warning! </b> Nothing to show here
+                            </button>
+                        </div>
+                        @else
+                        <div class="table-responsive mt-4">
+                            <table id="priced-table" class="table table-striped table-bordered nowrap"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Request # </th>
+                                        <th>Patient Name</th>
+                                        <th>Order Date</th>
+                                        <th>Order Age</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <form method="post" action="{{ route('manager.sent.request.send.to.lab') }}">
+
+                                    @csrf
+                                    <tbody>
+                                        @foreach ($requests_supplier as $key => $request)
+                                        <tr>
+                                            <td>
+                                                <input type='checkbox' name="requestId[]" value={{ $request->id }} />
+                                            </td>
+                                            <td>
+                                                <a href="#!" data-toggle="modal"
+                                                    data-target="#sent-sent-{{ $key }}-detail">
+                                                    Request
+                                                    #{{ sprintf('SPCL-%04d', $request->id) }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @if ($request->client_id != null)
+                                                {{$request->client->name}}
+                                                @else
+                                                @if ($request->hospital_name!=null)
+                                                [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                @else
+                                                {{$request->client_name}}
+                                                @endif
+                                                @endif
+                                                {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                --}}
+                                            </td>
+                                            <td>
+                                                {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
+                                            </td>
+                                            <td>
+                                                {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
+                                            </td>
+                                            <td class="text-start">
+                                                <span @class([ 'text-success'=> $request->status == 'sent to supplier',
+                                                    ])>
+                                                    {{ $request->status }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                            </table>
+
+                            <hr>
+                            <button class="btn btn-success">Send to lab</button>
+                            </form>
+                        </div>
+
+                        @foreach ($requests_lab as $key => $request)
+                        {{-- modal --}}
+
+                        <div class="modal fade bs-example-modal-lg" id="sent-sent-{{ $key }}-detail" tabindex="-1"
+                            role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                            <div class="modal-dialog modal-xl modal-dialog-centered">
+                                <div class="modal-content" id="request-{{ $key }}-contents">
+                                    <div class="modal-header">
+                                        <div>
+                                            <h4 class="modal-title text-info">
+                                                @if ($request->client_id != null)
+                                                {{$request->client->name}}
+                                                @else
+                                                @if ($request->hospital_name!=null)
+                                                [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                @else
+                                                {{$request->client_name}}
+                                                @endif
+                                                @endif
+                                                {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                --}}
+                                            </h4>
+                                            <br>
+
+                                            <h4 class="modal-title" id="content-detail-{{ $key }}">
+                                                Request
+                                                #{{ sprintf('SPCL-%04d', $request->id) }}
+                                            </h4>
+                                        </div>
+                                        <button type="button" class="close" data-dismiss="modal"
+                                            aria-hidden="true">×</button>
+                                    </div>
+
+                                    <div class="modal-body" id="printable">
+                                        <h4 class="text-info">Lens</h4>
+                                        <hr>
+
+                                        <table style="width:100%" class="">
+                                            <tr class="mb-4">
+                                                <th>Eye</th>
+                                                <th>Description</th>
+                                                <th>Power</th>
+                                                <th>Location</th>
+                                                <th>Mono PD</th>
+                                                <th>Segment H</th>
+                                            </tr>
+                                            <tbody>
+                                                {{-- looping through available products --}}
+                                                @if ($request->soldproduct->isNotEmpty())
+                                                @foreach ($request->soldproduct as $productsold)
+                                                @php
+                                                $invoice_product = $products->where('id',
+                                                $productsold->product_id)->first();
+                                                @endphp
+
+                                                @if ($invoice_product->category_id == 1)
+                                                <tr>
+                                                    <td>
+                                                        {{ $productsold->eye == null ? '' : Oneinitials($productsold->eye) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $invoice_product->description }}
+                                                    </td>
+                                                    <td>
+                                                        @if (initials($invoice_product->product_name) == 'SV')
+                                                        <span>{{ $invoice_product->power->sphere }}
+                                                            /
+                                                            {{ $invoice_product->power->cylinder }}</span>
+                                                        @else
+                                                        <span>{{ $invoice_product->power->sphere }}
+                                                            /
+                                                            {{ $invoice_product->power->cylinder }}
+                                                            *{{ $invoice_product->power->axis }}
+                                                            {{ $invoice_product->power->add }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-capitalize">
+                                                            {{ $productsold->mono_pd }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-capitalize">
+                                                            {{ $productsold->segment_h }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                @endif
+                                                @endforeach
+                                                @endif
+
+                                                {{-- looping through unavailable products --}}
+                                                @if (!$request->unavailableproducts()->exists())
+                                                @foreach ($request->unavailableproducts as $productsold)
+                                                @php
+                                                $availability = true;
+                                                $descripition = null;
+                                                $right_len = $request->unavailableproducts->where('eye',
+                                                'right')->first();
+                                                if (!$right_len) {
+                                                $right_len = $request->soldproduct->where('eye', 'right')->first();
+                                                $availability = false;
+                                                }
+                                                if ($availability == true) {
+                                                $type = $lens_type
+                                                ->where('id', $right_len->type_id)
+                                                ->pluck('name')
+                                                ->first();
+
+                                                $indx = $index
+                                                ->where('id', $right_len->index_id)
+                                                ->pluck('name')
+                                                ->first();
+
+                                                $ct = $coatings
+                                                ->where('id', $right_len->coating_id)
+                                                ->pluck('name')
+                                                ->first();
+
+                                                $chrm = $chromatics
+                                                ->where('id', $right_len->chromatic_id)
+                                                ->pluck('name')
+                                                ->first();
+                                                } else {
+                                                $description = $products
+                                                ->where('id', $right_len->product_id)
+                                                ->pluck('description')
+                                                ->first();
+                                                }
+
+                                                $left_len = $request->unavailableproducts->where('eye',
+                                                'left')->first();
+                                                if (!$left_len) {
+                                                $left_len = $request->soldproduct->where('eye', 'left')->first();
+                                                }
+                                                @endphp
+                                                <tr>
+                                                    <td>
+                                                        {{ $productsold->eye == null ? '' : Oneinitials($productsold->eye) }}
+                                                    </td>
+                                                    <td>
+                                                        @if ($availability)
+                                                        {{ initials($type) }}
+                                                        {{ $chrm }}
+                                                        {{ $ct }}
+                                                        {{ $indx }}
+                                                        @else
+                                                        {{ $description }}
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        {{ format_values($productsold->sphere) }}
+                                                        /
+                                                        {{ format_values($productsold->cylinder) }}
+                                                        *{{ format_values($productsold->axis) }}
+                                                        {{ format_values($productsold->addition) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $productsold->location == null ? '-' : $productsold->location }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $productsold->mono_pd }}
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-capitalize">
+                                                            {{ $productsold->segment_h }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                                @endif
+
+                                            </tbody>
+                                        </table>
+
+                                        {{-- for frame --}}
+                                        <hr>
+                                        <h4 class="text-info">Frame</h4>
+                                        <hr>
+                                        @if ($products)
+                                        @foreach ($request->soldproduct as $product)
+                                        @php
+                                        $invoice_product = $products->where('id', $product->product_id)->first();
+                                        @endphp
+                                        @if ($invoice_product->category_id == 2)
+                                        <div class="row mb-2">
+                                            <div class="col-6">
+                                                <span class="text-capitalize">
+                                                    {{ $invoice_product->product_name }}
+                                                    -
+                                                    {{ $invoice_product->description }}
+                                                </span>
+                                            </div>
+                                            <div class="col-3">
+                                                <span class="text-capitalize">
+                                                    <h4>Location:
+                                                    </h4>
+                                                </span>
+                                            </div>
+                                            <div class="col-3">
+                                                <span class="text-capitalize">
+                                                    {{ $product->location == null ? '-' : $product->location }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        @endif
+                                        @endforeach
+                                        @endif
+
+                                        <hr>
+                                        <h4 class="text-info">Accessories &
+                                            Others
+                                        </h4>
+                                        <hr>
+                                        {{-- for accessories --}}
+                                        @if ($products)
+                                        @foreach ($request->soldproduct as $product)
+                                        @php
+                                        $invoice_product = $products->where('id', $product->product_id)->first();
+                                        @endphp
+
+                                        @if ($invoice_product->category_id != 2 && $invoice_product->category_id != 1)
+                                        <div class="row mb-2">
+                                            <div class="col-3">
+                                                <span class="text-capitalize">
+                                                    {{ $invoice_product->product_name }}
+                                                    -
+                                                    {{ $invoice_product->description }}
+                                                </span>
+                                            </div>
+                                            <div class="col-3">
+                                                <span class="text-capitalize">
+                                                    <h4 class="text-dark">
+                                                        Location:
+                                                    </h4>
+                                                </span>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="text-capitalize">
+                                                    {{ $product->location == null ? '-' : $product->location }}
+                                                </span>
+                                            </div>
+                                            <div class="col-2 ">
+                                                <span
+                                                    class="text-capitalize d-flex justify-content-around items-center">
+                                                    <h4 class="text-dark">
+                                                        Qty:
+                                                    </h4>
+                                                    <span class="text-capitalize">
+                                                        {{ $product->quantity }}
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        @endif
+                                        @endforeach
+                                        @endif
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-between">
+                                        <button type="button" class="btn btn-danger waves-effect text-left"
+                                            data-dismiss="modal">
+                                            Close
+                                        </button>
+                                        <button type="button" onclick="printModal({{ $key }})"
+                                            class="btn btn-success waves-effect text-left" id="print">Print</button>
+                                        {{-- <button
+                                                                class="btn btn-info waves-effect text-left">
+                                                                Set Price
+                                                            </button> --}}
+                                    </div>
+                                    </form>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                        @endforeach
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- sent to lab --}}
+<div class="tab-pane" id="provided-to-lab" role="tabpanel">
+    <div class="tab-pane  p-20" id="profile2" role="tabpanel">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        @if ($requests_lab->isEmpty())
+                        <div class="alert alert-warning alert-rounded col-lg-7 col-md-9 col-sm-12">
+                            <b>Warning! </b> Nothing to show here
+                            </button>
+                        </div>
+                        @else
+                        <div class="table-responsive mt-4">
+                            <table id="zero_config" class="table table-striped table-bordered nowrap"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Request # </th>
+                                        <th>Patient Name</th>
+                                        <th>Request Date</th>
+                                        <th>Request Age</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach ($requests_lab as $key => $request)
+                                    <tr>
+                                        <td>
+                                            {{ $key + 1 }}
+                                        </td>
+                                        <td>
+                                            <a href="#!" data-toggle="modal"
+                                                data-target="#sent-to-lab-{{ $key }}-detail">
+                                                Request
+                                                #{{ sprintf('SPCL-%04d', $request->id) }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @if ($request->client_id != null)
+                                            {{$request->client->name}}
+                                            @else
+                                            @if ($request->hospital_name!=null)
+                                            [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                            @else
+                                            {{$request->client_name}}
+                                            @endif
+                                            @endif
+                                            {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                            --}}
+                                        </td>
+                                        <td>
+                                            {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
+                                        </td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
+                                        </td>
+                                        <td class="text-start">
+                                            <span @class([ 'text-warning'=> $request->status == 'requested',
+                                                ])>
+                                                {{ $request->status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                            @foreach ($requests_lab as $key => $request)
+                            {{-- modal --}}
+
+                            <div class="modal fade bs-example-modal-lg" id="sent-to-lab-{{ $key }}-detail" tabindex="-1"
+                                role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+                                style="display: none;">
+                                <div class="modal-dialog modal-xl modal-dialog-centered">
+                                    <div class="modal-content" id="request-{{ $key }}-contents">
+                                        <div class="modal-header">
+                                            <div>
+                                                <h4 class="modal-title text-info">
+                                                    @if ($request->client_id != null)
+                                                    {{$request->client->name}}
+                                                    @else
+                                                    @if ($request->hospital_name!=null)
+                                                    [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                    @else
+                                                    {{$request->client_name}}
+                                                    @endif
+                                                    @endif
+                                                    {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                    --}}
+                                                </h4>
+                                                <br>
+
+                                                <h4 class="modal-title" id="content-detail-{{ $key }}">
+                                                    Request
+                                                    #{{ sprintf('SPCL-%04d', $request->id) }}
+                                                </h4>
+                                            </div>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-hidden="true">×</button>
+                                        </div>
+
+                                        <div class="modal-body" id="printable">
+                                            <h4 class="text-info">Lens</h4>
+                                            <hr>
+
+                                            <table style="width:100%" class="">
+                                                <tr class="mb-4">
+                                                    <th>Eye</th>
+                                                    <th>Description</th>
+                                                    <th>Power</th>
+                                                    <th>Location</th>
+                                                    <th>Mono PD</th>
+                                                    <th>Segment H</th>
+                                                </tr>
+                                                <tbody>
+                                                    {{-- looping through available products --}}
+                                                    @if ($request->soldproduct->isNotEmpty())
+                                                    @foreach ($request->soldproduct as $productsold)
+                                                    @php
+                                                    $invoice_product = $products->where('id',
+                                                    $productsold->product_id)->first();
+                                                    @endphp
+
+                                                    @if ($invoice_product->category_id == 1)
+                                                    <tr>
+                                                        <td>
+                                                            {{ $productsold->eye == null ? '' : Oneinitials($productsold->eye) }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $invoice_product->description }}
+                                                        </td>
+                                                        <td>
+                                                            @if (initials($invoice_product->product_name) == 'SV')
+                                                            <span>{{ $invoice_product->power->sphere }}
+                                                                /
+                                                                {{ $invoice_product->power->cylinder }}</span>
+                                                            @else
+                                                            <span>{{ $invoice_product->power->sphere }}
+                                                                /
+                                                                {{ $invoice_product->power->cylinder }}
+                                                                *{{ $invoice_product->power->axis }}
+                                                                {{ $invoice_product->power->add }}</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
+                                                        </td>
+                                                        <td>
+                                                            <span class="text-capitalize">
+                                                                {{ $productsold->mono_pd }}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="text-capitalize">
+                                                                {{ $productsold->segment_h }}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    @endif
+                                                    @endforeach
+                                                    @endif
+
+                                                    {{-- looping through unavailable products --}}
+                                                    @if (!$request->unavailableproducts()->exists())
+                                                    @foreach ($request->unavailableproducts as $productsold)
+                                                    @php
+                                                    $availability = true;
+                                                    $descripition = null;
+                                                    $right_len = $request->unavailableproducts->where('eye',
+                                                    'right')->first();
+                                                    if (!$right_len) {
+                                                    $right_len = $request->soldproduct->where('eye', 'right')->first();
+                                                    $availability = false;
+                                                    }
+                                                    if ($availability == true) {
+                                                    $type = $lens_type
+                                                    ->where('id', $right_len->type_id)
+                                                    ->pluck('name')
+                                                    ->first();
+
+                                                    $indx = $index
+                                                    ->where('id', $right_len->index_id)
+                                                    ->pluck('name')
+                                                    ->first();
+
+                                                    $ct = $coatings
+                                                    ->where('id', $right_len->coating_id)
+                                                    ->pluck('name')
+                                                    ->first();
+
+                                                    $chrm = $chromatics
+                                                    ->where('id', $right_len->chromatic_id)
+                                                    ->pluck('name')
+                                                    ->first();
+                                                    } else {
+                                                    $description = $products
+                                                    ->where('id', $right_len->product_id)
+                                                    ->pluck('description')
+                                                    ->first();
+                                                    }
+
+                                                    $left_len = $request->unavailableproducts->where('eye',
+                                                    'left')->first();
+                                                    if (!$left_len) {
+                                                    $left_len = $request->soldproduct->where('eye', 'left')->first();
+                                                    }
+                                                    @endphp
+                                                    <tr>
+                                                        <td>
+                                                            {{ $productsold->eye == null ? '' : Oneinitials($productsold->eye) }}
+                                                        </td>
+                                                        <td>
+                                                            @if ($availability)
+                                                            {{ initials($type) }}
+                                                            {{ $chrm }}
+                                                            {{ $ct }}
+                                                            {{ $indx }}
+                                                            @else
+                                                            {{ $description }}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            {{ format_values($productsold->sphere) }}
+                                                            /
+                                                            {{ format_values($productsold->cylinder) }}
+                                                            *{{ format_values($productsold->axis) }}
+                                                            {{ format_values($productsold->addition) }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $productsold->location == null ? '-' : $productsold->location }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $productsold->mono_pd }}
+                                                        </td>
+                                                        <td>
+                                                            <span class="text-capitalize">
+                                                                {{ $productsold->segment_h }}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                    @endif
+
+                                                </tbody>
+                                            </table>
+
+                                            {{-- for frame --}}
+                                            <hr>
+                                            <h4 class="text-info">Frame</h4>
+                                            <hr>
+                                            @if ($products)
+                                            @foreach ($request->soldproduct as $product)
+                                            @php
+                                            $invoice_product = $products->where('id', $product->product_id)->first();
+                                            @endphp
+                                            @if ($invoice_product->category_id == 2)
+                                            <div class="row mb-2">
+                                                <div class="col-6">
+                                                    <span class="text-capitalize">
+                                                        {{ $invoice_product->product_name }}
+                                                        -
+                                                        {{ $invoice_product->description }}
+                                                    </span>
+                                                </div>
+                                                <div class="col-3">
+                                                    <span class="text-capitalize">
+                                                        <h4>Location:
+                                                        </h4>
+                                                    </span>
+                                                </div>
+                                                <div class="col-3">
+                                                    <span class="text-capitalize">
+                                                        {{ $product->location == null ? '-' : $product->location }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            @endif
+                                            @endforeach
+                                            @endif
+
+                                            <hr>
+                                            <h4 class="text-info">Accessories &
+                                                Others
+                                            </h4>
+                                            <hr>
+                                            {{-- for accessories --}}
+                                            @if ($products)
+                                            @foreach ($request->soldproduct as $product)
+                                            @php
+                                            $invoice_product = $products->where('id', $product->product_id)->first();
+                                            @endphp
+
+                                            @if ($invoice_product->category_id != 2 && $invoice_product->category_id !=
+                                            1)
+                                            <div class="row mb-2">
+                                                <div class="col-3">
+                                                    <span class="text-capitalize">
+                                                        {{ $invoice_product->product_name }}
+                                                        -
+                                                        {{ $invoice_product->description }}
+                                                    </span>
+                                                </div>
+                                                <div class="col-3">
+                                                    <span class="text-capitalize">
+                                                        <h4 class="text-dark">
+                                                            Location:
+                                                        </h4>
+                                                    </span>
+                                                </div>
+                                                <div class="col-2">
+                                                    <span class="text-capitalize">
+                                                        {{ $product->location == null ? '-' : $product->location }}
+                                                    </span>
+                                                </div>
+                                                <div class="col-2 ">
+                                                    <span
+                                                        class="text-capitalize d-flex justify-content-around items-center">
+                                                        <h4 class="text-dark">
+                                                            Qty:
+                                                        </h4>
+                                                        <span class="text-capitalize">
+                                                            {{ $product->quantity }}
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            @endif
+                                            @endforeach
+                                            @endif
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-between">
+                                            <button type="button" class="btn btn-danger waves-effect text-left"
+                                                data-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button type="button" onclick="printModal({{ $key }})"
+                                                class="btn btn-success waves-effect text-left" id="print">Print</button>
+                                            {{-- <button
+                                                                    class="btn btn-info waves-effect text-left">
+                                                                    Set Price
+                                                                </button> --}}
+                                        </div>
+                                        </form>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            @endforeach
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

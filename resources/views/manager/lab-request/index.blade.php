@@ -20,11 +20,6 @@
 
 @section('content')
 
-
-    @php
-        $isOutOfStock==null;
-        $powers =   \App\Models\Power::where('company_id',userInfo()->company_id)->get();
-    @endphp
     <div class="container-fluid">
         <!-- Sales chart -->
         <div class="row">
@@ -130,7 +125,7 @@
                                     <div class="tab-content br-n pn">
                                         {{-- completed and in stock --}}
                                         <div id="complete-orders" class="tab-pane active">
-                                            @if (!$requests->isEmpty())
+                                            @if (count($requests)>0)
                                                 <div class="table-responsive mt-4">
                                                     <table id="zero_config"
                                                         class="table table-striped table-bordered nowrap"
@@ -452,7 +447,7 @@
 
                                         {{-- out of stock --}}
                                         <div id="incomplete-orders" class="tab-pane">
-                                            @if (!$requests->isEmpty())
+                                            @if (count($requests)>0)
                                                 <div class="table-responsive mt-4">
                                                     <button onclick="exportOutOfStock('xls','Priced Lens');"
                                                         class="btn btn-success float-right mb-3">
@@ -524,7 +519,7 @@
                                                                                             if ($right_len==null) {
                                                                                                 continue;
                                                                                             }
-                                                                                            $right_len = $powers->where('product_id',$right_len->product_id)->first();
+                                                                                            $right_len = $products->power->where('product_id',$right_len->product_id)->first();
                                                                                             $availability = false;
                                                                                         }
 
@@ -560,7 +555,7 @@
                                                                                         $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                                         if (!$left_len) {
                                                                                             $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                                                                            $left_len = $powers->where('product_id',$right_len->product_id)->first();
+                                                                                            $left_len = $products->power->where('product_id',$right_len->product_id)->first();
                                                                                         }
                                                                                     @endphp
                                                                                     <td>
@@ -879,7 +874,7 @@
 
                                         {{-- never been in stock before --}}
                                         <div id="new-orders" class="tab-pane">
-                                            @if (!$requests->isEmpty())
+                                            @if (count($requests)>0)
                                                 <div class="table-responsive mt-4">
                                                     <table id="zero_config"
                                                         class="table table-striped table-bordered nowrap"
@@ -897,7 +892,7 @@
 
                                                         <tbody>
                                                             @foreach ($requests as $key => $request)
-                                                                @if (!$request->unavailableproducts()->exists())
+                                                                @if (!$request->unavailableproducts)
                                                                     <tr>
                                                                         <td>{{ $key + 1 }}</td>
                                                                         <td>
@@ -991,7 +986,7 @@
                                                                             </tr>
                                                                             <tbody>
                                                                                 {{-- looping through available products --}}
-                                                                                @if (!$request->soldproduct->isEmpty())
+                                                                                @if (count($request->soldproduct)>0)
                                                                                     @foreach ($request->soldproduct as $productsold)
                                                                                         @php
                                                                                             $invoice_product = $products->where('id', $productsold->product_id)->first();
@@ -1039,7 +1034,7 @@
                                                                                 @endif
 
                                                                                 {{-- looping through unavailable products --}}
-                                                                                @if (!$request->unavailableproducts()->exists())
+                                                                                @if (!$request->unavailableproducts)
                                                                                     @foreach ($request->unavailableproducts as $productsold)
                                                                                         @php
                                                                                             $availability = true;
@@ -1320,7 +1315,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    @if ($requests_priced->isEmpty())
+                                    @if (count($requests_priced)<=0)
                                         <div class="alert alert-warning alert-rounded col-lg-7 col-md-9 col-sm-12">
                                             <b>Warning! </b> Nothing to show here
                                             </button>
@@ -1392,7 +1387,7 @@
                                                                         if ($right_len==null) {
                                                                             continue;
                                                                         }
-                                                                        $right_len = $powers->where('product_id',$right_len->product_id)->first();
+                                                                        $right_len = $products->power->where('product_id',$right_len->product_id)->first();
                                                                         $availability = false;
                                                                     }
 
@@ -1428,7 +1423,7 @@
                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                     if (!$left_len) {
                                                                         $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                                                        $left_len = $powers->where('product_id',$right_len->product_id)->first();
+                                                                        $left_len = $products->power->where('product_id',$right_len->product_id)->first();
                                                                     }
                                                                 @endphp
                                                                 <td>
@@ -1522,7 +1517,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    @if ($requests_supplier->isEmpty())
+                                    @if (count($requests_supplier)<=0)
                                         <div class="alert alert-warning alert-rounded col-lg-7 col-md-9 col-sm-12">
                                             <b>Warning! </b> Nothing to show here
                                             </button>
@@ -1695,7 +1690,7 @@
                                                                     @endif
 
                                                                     {{-- looping through unavailable products --}}
-                                                                    @if (!$request->unavailableproducts()->exists())
+                                                                    @if (!$request->unavailableproducts)
                                                                         @foreach ($request->unavailableproducts as $productsold)
                                                                             @php
                                                                                 $availability = true;
@@ -1899,7 +1894,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    @if ($requests_lab->isEmpty())
+                                    @if (count($requests_lab)<=0)
                                         <div class="alert alert-warning alert-rounded col-lg-7 col-md-9 col-sm-12">
                                             <b>Warning! </b> Nothing to show here
                                             </button>
@@ -2062,7 +2057,7 @@
                                                                         @endif
 
                                                                         {{-- looping through unavailable products --}}
-                                                                        @if (!$request->unavailableproducts()->exists())
+                                                                        @if (!$request->unavailableproducts)
                                                                             @foreach ($request->unavailableproducts as $productsold)
                                                                                 @php
                                                                                     $availability = true;

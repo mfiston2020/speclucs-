@@ -36,34 +36,36 @@ class LabRequestController extends Controller
 
     function index()
     {
+        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('created_at', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('client')->with('soldproduct')->get();
+        // dd($invoicess);
         $isOutOfStock       =   null;
         $lens_type          =   \App\Models\LensType::all();
         $index              =   \App\Models\PhotoIndex::all();
         $chromatics         =   \App\Models\PhotoChromatics::all();
         $coatings           =   \App\Models\PhotoCoating::all();
-        $productUnvailable  =   UnavailableProduct::where('company_id', userInfo()->company_id)->get();
+        // $productUnvailable  =   UnavailableProduct::where('company_id', userInfo()->company_id)->get();
         // ==================
 
-        $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('created_at', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('client')->with('soldproduct')->get();
+        $requests   =   $invoicess->where('status', 'requested')->all();
 
-        $bookings   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'booked')->orderBy('created_at', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('soldproduct')->get();
+        $bookings   =   $invoicess->where('status', 'booked')->all();
 
-        $unavailableProducts    =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct')->get();
+        $unavailableProducts    =   $invoicess->where('status', 'requested')->all();
 
         $products   =   Product::where('company_id', userInfo()->company_id)->with('power')->get();
 
         $suppliers  =   Supplier::where('company_id', userInfo()->company_id)->get();
 
         // priced
-        $requests_priced  =   Invoice::where('company_id', userInfo()->company_id)->whereIn('status', ['priced', 'confirmed'])->orderBy('created_at', 'desc')->with('client')->with('unavailableproducts')->with('soldproduct')->get();
+        $requests_priced  =   $invoicess->whereIn('status', ['priced', 'confirmed'])->all();
 
         // sent to supplier
-        $requests_supplier  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'sent to supplier')->orderBy('created_at', 'desc')->with('soldproduct')->with('client')->with('soldproduct')->get();
+        $requests_supplier  =   $invoicess->where('status', 'sent to supplier')->all();
 
         // sent to supplier
-        $requests_lab  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('soldproduct')->with('client')->with('soldproduct')->get();
+        $requests_lab  =   $invoicess->where('status', 'sent to lab')->all();
 
-        // return $requests->unavailableproducts_count;
+        // return $products;
 
         return view('manager.lab-request.index', compact('requests', 'products', 'unavailableProducts', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings','isOutOfStock','bookings'));
     }
