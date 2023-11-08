@@ -36,7 +36,7 @@ class LabRequestController extends Controller
 
     function index()
     {
-        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('created_at', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('client')->with('soldproduct')->get();
+        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('soldproduct')->get();
         // dd($invoicess);
         $isOutOfStock       =   null;
         $lens_type          =   \App\Models\LensType::all();

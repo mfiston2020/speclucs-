@@ -519,7 +519,7 @@
                                                                                             if ($right_len==null) {
                                                                                                 continue;
                                                                                             }
-                                                                                            $right_len = $products->power->where('product_id',$right_len->product_id)->first();
+                                                                                            $right_len = $product->power->where('product_id',$right_len->product_id)->first();
                                                                                             $availability = false;
                                                                                         }
 
@@ -555,7 +555,7 @@
                                                                                         $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                                         if (!$left_len) {
                                                                                             $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                                                                            $left_len = $products->power->where('product_id',$right_len->product_id)->first();
+                                                                                            $left_len = $product->power->where('product_id',$right_len->product_id)->first();
                                                                                         }
                                                                                     @endphp
                                                                                     <td>
@@ -1387,7 +1387,7 @@
                                                                         if ($right_len==null) {
                                                                             continue;
                                                                         }
-                                                                        $right_len = $products->power->where('product_id',$right_len->product_id)->first();
+                                                                        $right_len = $product->power->where('product_id',$right_len->product_id)->first();
                                                                         $availability = false;
                                                                     }
 
@@ -1423,7 +1423,7 @@
                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                     if (!$left_len) {
                                                                         $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                                                        $left_len = $products->power->where('product_id',$right_len->product_id)->first();
+                                                                        $left_len = $product->power->where('product_id',$right_len->product_id)->first();
                                                                     }
                                                                 @endphp
                                                                 <td>
