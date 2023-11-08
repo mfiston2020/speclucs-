@@ -1034,7 +1034,7 @@
                                                                                 @endif
 
                                                                                 {{-- looping through unavailable products --}}
-                                                                                @if (!$request->unavailableproducts)
+                                                                                @if (!$request->unavailableproducts->isEmpty())
                                                                                     @foreach ($request->unavailableproducts as $productsold)
                                                                                         @php
                                                                                             $availability = true;
