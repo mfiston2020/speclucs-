@@ -35,11 +35,7 @@
 {{-- === End of breadcumb == --}}
 
 @section('content')
-    @php
-        $powers     =   \App\Models\Power::where('company_id', Auth::user()->company_id)->get();
-        $categories =   \App\Models\Category::get();
-        $suppliers  =   \App\Models\Supplier::get();
-    @endphp
+
     <div class="container-fluid">
         <!-- Sales chart -->
         <div class="row">
@@ -101,26 +97,24 @@
                                     @foreach ($products as $key => $product)
                                         <tr>
                                             <td>{{ $product->id }}</td>
-                                            <td>{{ $categories->where('id',$product->category_id)->pluck('name')->first() }}
+                                            <td>{{ $product->category->name }}
                                             </td>
                                             <td>{{ $product->product_name }}</td>
-                                            <span
-                                                hidden>{{ $power = $powers->where('product_id',$product->id)->first() }}</span>
 
                                             <td>
                                                 @if (initials($product->product_name) == 'SV' || initials($product->product_name) == 'BT')
                                                     {{ $product->description }}
                                                 @else
-                                                    {{ $product->description }} {{$power?'- '.$power->eye:''}}
+                                                    {{ $product->description }} {{$product->power?'- '.$product->power->eye:''}}
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($power)
+                                                @if ($product->power)
                                                     @if (initials($product->product_name) == 'SV')
-                                                        <span>{{ $power->sphere }} / {{ $power->cylinder }}</span>
+                                                        <span>{{ $product->power->sphere }} / {{ $product->power->cylinder }}</span>
                                                     @else
-                                                        <span>{{ $power->sphere }} / {{ $power->cylinder }}
-                                                            *{{ $power->axis }} {{ $power->add }}</span>
+                                                        <span>{{ $product->power->sphere }} / {{ $product->power->cylinder }}
+                                                            *{{ $product->power->axis }} {{ $product->power->add }}</span>
                                                     @endif
                                                 @else
                                                     <span>-</span>
@@ -150,7 +144,7 @@
                                             </td>
                                             <td>
                                                 <center>
-                                                    {{ $product->supplier_id == null? '-': $suppliers->where('id', $product->supplier_id)->pluck('name')->first() }}
+                                                    {{ $product->supplier == null? '-': $product->supplier->name }}
                                                 </center>
                                             </td>
                                             {{-- <td>
