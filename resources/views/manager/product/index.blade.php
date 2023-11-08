@@ -129,18 +129,19 @@
                                             <td>{{ format_money($product->price) }}</td>
                                             <td>{{ format_money($product->cost) }}</td>
 
-                                            <td>
-                                                @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
-                                                    <a href="#!">{{ $product->stock }}
-                                                    </a>
-                                                @else
-                                                    <a href="" class="update" data-name="stock" data-type="text"
+                                            @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
+                                                <td>
+                                                    <a href="#!" class="update" data-name="stock" data-type="text"
                                                         data-pk="{{ $product->id }}"
                                                         data-title="Enter Product Name">{{ $product->stock }}
                                                     </a>
-                                                @endif
-
-                                            </td>
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <span class="text-primary">{{ $product->stock }}
+                                                    </span>
+                                                </td>
+                                            @endif
                                             {{-- <td>{{$product->deffective_stock}}</td> --}}
                                             <td>
                                                 <center>

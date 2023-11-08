@@ -57,13 +57,13 @@ class LabRequestController extends Controller
         $suppliers  =   Supplier::where('company_id', userInfo()->company_id)->get();
 
         // priced
-        $requests_priced  =   $invoicess->whereIn('status', ['priced', 'confirmed'])->all();
+        $requests_priced    =   $invoicess->whereIn('status', ['priced', 'confirmed'])->all();
 
         // sent to supplier
         $requests_supplier  =   $invoicess->where('status', 'sent to supplier')->all();
 
         // sent to supplier
-        $requests_lab  =   $invoicess->where('status', 'sent to lab')->all();
+        $requests_lab       =   $invoicess->where('status', 'sent to lab')->all();
 
         // return $products;
 

@@ -20,10 +20,6 @@
 
 @section('content')
 
-
-    @php
-        $isOutOfStock==null;
-    @endphp
     <div class="container-fluid">
         <!-- Sales chart -->
         <div class="row">
@@ -2264,6 +2260,7 @@
         </div>
 
     </div>
+    
 @endsection
 
 @push('scripts')
