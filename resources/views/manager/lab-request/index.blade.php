@@ -892,7 +892,7 @@
 
                                                         <tbody>
                                                             @foreach ($requests as $key => $request)
-                                                                @if (!$request->unavailableproducts)
+                                                                @if (!$request->unavailableproducts->isEmpty())
                                                                     <tr>
                                                                         <td>{{ $key + 1 }}</td>
                                                                         <td>
@@ -2260,7 +2260,7 @@
         </div>
 
     </div>
-    
+
 @endsection
 
 @push('scripts')

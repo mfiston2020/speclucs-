@@ -37,7 +37,8 @@ class LabRequestController extends Controller
 
     function index()
     {
-        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('unavailableproducts')->with('soldproduct')->get();
+        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('soldproduct')->paginate(50);
+
         $isOutOfStock       =   null;
         $lens_type          =   \App\Models\LensType::all();
         $index              =   \App\Models\PhotoIndex::all();
@@ -49,7 +50,7 @@ class LabRequestController extends Controller
 
         $bookings   =   $invoicess->where('status', 'booked')->all();
 
-        $unavailableProducts    =   $invoicess->where('status', 'requested')->all();
+        $unavailableProducts          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->with('unavailableproducts')->get();
 
         $products   =   Product::with('power')->where('company_id', userInfo()->company_id)->get();
         $powers     =   Power::where('company_id', userInfo()->company_id)->get();
