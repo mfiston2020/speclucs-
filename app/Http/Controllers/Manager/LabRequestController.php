@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use App\Models\Power;
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\TrackStockRecord;
@@ -36,14 +37,12 @@ class LabRequestController extends Controller
 
     function index()
     {
-        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('unavailableproducts')->withcount('unavailableproducts')->with('soldproduct')->get();
-        // dd($invoicess);
+        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('unavailableproducts')->with('soldproduct')->get();
         $isOutOfStock       =   null;
         $lens_type          =   \App\Models\LensType::all();
         $index              =   \App\Models\PhotoIndex::all();
         $chromatics         =   \App\Models\PhotoChromatics::all();
         $coatings           =   \App\Models\PhotoCoating::all();
-        // $productUnvailable  =   UnavailableProduct::where('company_id', userInfo()->company_id)->get();
         // ==================
 
         $requests   =   $invoicess->where('status', 'requested')->all();
@@ -52,7 +51,8 @@ class LabRequestController extends Controller
 
         $unavailableProducts    =   $invoicess->where('status', 'requested')->all();
 
-        $products   =   Product::where('company_id', userInfo()->company_id)->with('power')->get();
+        $products   =   Product::with('power')->where('company_id', userInfo()->company_id)->get();
+        $powers     =   Power::where('company_id', userInfo()->company_id)->get();
 
         $suppliers  =   Supplier::where('company_id', userInfo()->company_id)->get();
 
@@ -67,7 +67,7 @@ class LabRequestController extends Controller
 
         // return $products;
 
-        return view('manager.lab-request.index', compact('requests', 'products', 'unavailableProducts', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings','isOutOfStock','bookings'));
+        return view('manager.lab-request.index', compact('powers','requests', 'products', 'unavailableProducts', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings','isOutOfStock','bookings'));
     }
 
     function sendToLab($id)

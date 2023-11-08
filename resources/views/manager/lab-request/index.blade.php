@@ -20,6 +20,10 @@
 
 @section('content')
 
+
+    @php
+        $isOutOfStock==null;
+    @endphp
     <div class="container-fluid">
         <!-- Sales chart -->
         <div class="row">
@@ -519,7 +523,7 @@
                                                                                             if ($right_len==null) {
                                                                                                 continue;
                                                                                             }
-                                                                                            $right_len = $product->power->where('product_id',$right_len->product_id)->first();
+                                                                                            $right_len = $powers->where('product_id',$right_len->product_id)->first();
                                                                                             $availability = false;
                                                                                         }
 
@@ -555,7 +559,7 @@
                                                                                         $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                                         if (!$left_len) {
                                                                                             $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                                                                            $left_len = $product->power->where('product_id',$right_len->product_id)->first();
+                                                                                            $left_len = $powers->where('product_id',$right_len->product_id)->first();
                                                                                         }
                                                                                     @endphp
                                                                                     <td>
@@ -986,7 +990,7 @@
                                                                             </tr>
                                                                             <tbody>
                                                                                 {{-- looping through available products --}}
-                                                                                @if (count($request->soldproduct)>0)
+                                                                                @if (!$request->soldproduct)
                                                                                     @foreach ($request->soldproduct as $productsold)
                                                                                         @php
                                                                                             $invoice_product = $products->where('id', $productsold->product_id)->first();
@@ -1387,7 +1391,7 @@
                                                                         if ($right_len==null) {
                                                                             continue;
                                                                         }
-                                                                        $right_len = $product->power->where('product_id',$right_len->product_id)->first();
+                                                                        $right_len = $powers->where('product_id',$right_len->product_id)->first();
                                                                         $availability = false;
                                                                     }
 
@@ -1423,7 +1427,7 @@
                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
                                                                     if (!$left_len) {
                                                                         $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                                                        $left_len = $product->power->where('product_id',$right_len->product_id)->first();
+                                                                        $left_len = $powers->where('product_id',$right_len->product_id)->first();
                                                                     }
                                                                 @endphp
                                                                 <td>
