@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Power;
 use App\Models\Product;
 use App\Models\Supplier;
-use App\Models\TrackStockRecord;
-use App\Models\UnavailableProduct;
-use App\Models\User;
-use App\Repositories\ProductRepo;
-use App\Repositories\StockTrackRepo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\ProductRepo;
+use App\Models\UnavailableProduct;
+use App\Http\Controllers\Controller;
+use App\Repositories\StockTrackRepo;
 use Illuminate\Support\Facades\Crypt;
 
 class LabRequestController extends Controller
@@ -23,15 +20,6 @@ class LabRequestController extends Controller
     public function __construct()
     {
         $this->stocktrackRepo = new StockTrackRepo();
-        // dd($this->userDatail);
-        // $this->middleware('auth');
-        // $this->middleware(function ($request, $next) {
-        //     $this->userDatail = Auth::user();
-        //     // dd($this->userDatail);
-        //     $this->allProduct   =   Product::where('company_id',$this->userDatail->company_id)->get();
-
-        //     return $next($request);
-        // });
     }
     // ===============
 
@@ -42,23 +30,23 @@ class LabRequestController extends Controller
         $isOutOfStock       =   null;
         $lens_type          =   \App\Models\LensType::all();
         $index              =   \App\Models\PhotoIndex::all();
-        $chromatics         =   \App\Models\PhotoChromatics::all();
         $coatings           =   \App\Models\PhotoCoating::all();
+        $chromatics         =   \App\Models\PhotoChromatics::all();
         // ==================
-
-        $requests   =   $invoicess->where('status', 'requested')->all();
 
         $bookings   =   $invoicess->where('status', 'booked')->all();
 
+        $requests   =   $invoicess->where('status', 'requested')->all();
+
         $unavailableProducts          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->with('unavailableproducts')->get();
 
-        $products   =   Product::with('power')->where('company_id', userInfo()->company_id)->get();
+        $products   =   Product::where('company_id', userInfo()->company_id)->get();
         $powers     =   Power::where('company_id', userInfo()->company_id)->get();
 
         $suppliers  =   Supplier::where('company_id', userInfo()->company_id)->get();
 
         // priced
-        $requests_priced    =   $invoicess->whereIn('status', ['priced', 'confirmed'])->all();
+        $requests_priced    =   $invoicess->whereIn('status', ['priced', 'Confirmed'])->all();
 
         // sent to supplier
         $requests_supplier  =   $invoicess->where('status', 'sent to supplier')->all();
