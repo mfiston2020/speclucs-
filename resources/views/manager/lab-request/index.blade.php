@@ -467,7 +467,7 @@
                                                                 <th>Patient Name</th>
                                                                 <th>Request Date</th>
                                                                 <th>Request Age</th>
-                                                                <th>Description</th>
+                                                                {{-- <th>Description</th> --}}
                                                                 <th>Right Eye</th>
                                                                 <th>Left Eye</th>
                                                                 <th>Status</th>
@@ -511,19 +511,21 @@
 
                                                                                     </td>
                                                                                     @php
-                                                                                        $availability = true;
+                                                                                        $availability_right = true;
+                                                                                        $availability_left = true;
                                                                                         $description = null;
                                                                                         $right_len = $request->unavailableproducts->where('eye', 'right')->first();
+
                                                                                         if (!$right_len) {
                                                                                             $right_len = $request->soldproduct->where('eye', 'right')->first();
                                                                                             if ($right_len==null) {
                                                                                                 continue;
                                                                                             }
                                                                                             $right_len = $powers->where('product_id',$right_len->product_id)->first();
-                                                                                            $availability = false;
+                                                                                            $availability_right = false;
                                                                                         }
 
-                                                                                        if ($availability == true) {
+                                                                                        if ($availability_right == true) {
                                                                                             $type = $lens_type
                                                                                                 ->where('id', $right_len->type_id)
                                                                                                 ->pluck('name')
@@ -552,23 +554,58 @@
                                                                                             }
                                                                                         }
 
+                                                                                        // left eye checking
                                                                                         $left_len = $request->unavailableproducts->where('eye', 'left')->first();
+
                                                                                         if (!$left_len) {
                                                                                             $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                                                                            $left_len = $powers->where('product_id',$right_len->product_id)->first();
+                                                                                            if ($left_len==null) {
+                                                                                                continue;
+                                                                                            }
+                                                                                            $left_len = $powers->where('product_id',$left_len->product_id)->first();
+                                                                                            $availability_left = false;
+                                                                                        }
+
+                                                                                        if ($availability_left == true) {
+                                                                                            $type = $lens_type
+                                                                                                ->where('id', $left_len->type_id)
+                                                                                                ->pluck('name')
+                                                                                                ->first();
+
+                                                                                            $indx = $index
+                                                                                                ->where('id', $left_len->index_id)
+                                                                                                ->pluck('name')
+                                                                                                ->first();
+
+                                                                                            $ct = $coatings
+                                                                                                ->where('id', $left_len->coating_id)
+                                                                                                ->pluck('name')
+                                                                                                ->first();
+
+                                                                                            $chrm = $chromatics
+                                                                                                ->where('id', $left_len->chromatic_id)
+                                                                                                ->pluck('name')
+                                                                                                ->first();
+                                                                                        } else {
+                                                                                            if ($left_len) {
+                                                                                                $description = $products
+                                                                                                ->where('id', $left_len->product_id)
+                                                                                                ->pluck('description')
+                                                                                                ->first();
+                                                                                            }
                                                                                         }
                                                                                     @endphp
-                                                                                    <td>
-                                                                                        @if ($availability)
+                                                                                    {{-- <td>
+                                                                                        @if ($availability_)
                                                                                             {{ initials($type) }} {{ $chrm }}
                                                                                             {{ $ct }} {{ $indx }}
                                                                                         @else
                                                                                             {{ $description }}
                                                                                         @endif
-                                                                                    </td>
+                                                                                    </td> --}}
                                                                                     <td>
                                                                                         @if ($right_len)
-                                                                                            @if ($availability)
+                                                                                            @if ($availability_right)
                                                                                                 <span>
                                                                                                     {{ format_values($right_len->sphere) }}
                                                                                                     /
@@ -591,7 +628,7 @@
                                                                                     </td>
                                                                                     <td>
                                                                                         @if ($left_len)
-                                                                                            @if ($availability)
+                                                                                            @if ($availability_left)
                                                                                                 {{ format_values($left_len->sphere) }}
                                                                                                 /
                                                                                                 {{ format_values($left_len->cylinder) }}
@@ -679,9 +716,8 @@
 
                                                                                                         <div class="row mb-2">
                                                                                                             <div class="col-1">
-                                                                                                                <h4
-                                                                                                                    class="text-capitalize">
-                                                                                                                    {{ $request->eye == null ? '' : Oneinitials($request->eye) }}
+                                                                                                                <h4 class="text-capitalize">
+                                                                                                                    {{ $product->eye == null ? '' : Oneinitials($product->eye) }}
                                                                                                                 </h4>
                                                                                                             </div>
                                                                                                             <div class="col-3">

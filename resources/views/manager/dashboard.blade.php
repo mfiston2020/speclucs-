@@ -33,7 +33,7 @@
                             <div class="card-body">
                                 <div class="d-flex no-block align-items-center justify-content-between">
                                     <div>
-                                        <h2>{{count(\App\Models\Product::where('company_id',Auth::user()->company_id)->get())}}
+                                        <h2>{{number_format(count(\App\Models\Product::where('company_id',Auth::user()->company_id)->get()))}}
                                         </h2>
                                         <h6 class="text-info">{{__('navigation.product_nav')}}</h6>
                                     </div>

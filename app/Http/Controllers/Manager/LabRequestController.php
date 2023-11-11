@@ -25,7 +25,7 @@ class LabRequestController extends Controller
 
     function index()
     {
-        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('soldproduct')->get();
+        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('soldproduct')->paginate(10);
 
         $isOutOfStock       =   null;
         $lens_type          =   \App\Models\LensType::all();
@@ -38,7 +38,7 @@ class LabRequestController extends Controller
 
         $requests   =   $invoicess->where('status', 'requested')->all();
 
-        $unavailableProducts          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->with('unavailableproducts')->get();
+        $unavailableProducts          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->with('unavailableproducts')->take(10)->get();
 
         $products   =   Product::where('company_id', userInfo()->company_id)->get();
         $powers     =   Power::where('company_id', userInfo()->company_id)->get();
