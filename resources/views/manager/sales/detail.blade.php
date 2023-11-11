@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title', 'Admin Dashboard - Order Detail')
+@section('title', 'Dashboard - Order Detail')
 
 {{-- ==== Breadcumb ======== --}}
 @section('current', 'Order Detail')
@@ -8,6 +8,11 @@
 {{-- === End of breadcumb == --}}
 
 @section('content')
+
+    @php
+        $prodss = \App\Models\Product::where('company_id', Auth::user()->company_id)->with('power')->select('*')->first();
+        // dd($prod);
+    @endphp
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-8">
@@ -60,21 +65,27 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $key => $product)
+                                    @php
+                                        $prod = $prodss->where(['id' => $product->product_id])->first();
+                                        // dd($prod);
+                                    @endphp
                                         <tr>
-                                            <td style="width:50px;"><span class="round">P</span></td>
-                                            <span
-                                                hidden>{{ $prod = \App\Models\Product::where(['id' => $product->product_id])->where('company_id', Auth::user()->company_id)->select('*')->first() }}</span>
-                                            <span
-                                                hidden>{{ $power = \App\Models\Power::where(['product_id' => $product->product_id])->where('company_id', Auth::user()->company_id)->select('*')->first() }}</span>
+                                            <td style="width:50px;">
+                                                @if ($prod->category_id==1)
+                                                    <span class="round"> {{Oneinitials($product->eye)}}</span>
+                                                @else
+                                                    <span class="round">P</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <h6>{{ $prod->product_name }}</h6>
                                                 <small class="text-muted">
-                                                    @if ($power)
+                                                    @if ($prod->power)
                                                         @if (initials($prod->product_name) == 'SV')
-                                                            <span> {{ $power->sphere }} / {{ $power->cylinder }}</span>
+                                                            <span> {{ $prod->power->sphere }} / {{ $prod->power->cylinder }}</span>
                                                         @else
-                                                            <span>{{ $power->sphere }} / {{ $power->cylinder }}
-                                                                *{{ $power->axis }} {{ $power->add }}</span>
+                                                            <span>{{ $prod->power->sphere }} / {{ $prod->power->cylinder }}
+                                                                *{{ $prod->power->axis }} {{ $prod->power->add }}</span>
                                                         @endif
                                                     @endif
                                                 </small>

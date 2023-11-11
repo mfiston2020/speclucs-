@@ -100,10 +100,10 @@ class SalesController extends Controller
         $id =   Crypt::decrypt($id);
 
         $invoice    =   \App\Models\Invoice::find($id);
-        $products   =   DB::table('sold_products')->select('*')->where('invoice_id', $id)->get();
+        $products   =   DB::table('sold_products')->select('*')->where('invoice_id', $id)->orderBy('eye','desc')->get();
 
-        $na_products    =   UnavailableProduct::where('invoice_id', $id)->whereIn('status', ['pending', 'approved'])->get();
-        $has_na_products =   UnavailableProduct::where('invoice_id', $id)->where('status', 'sold')->count();
+        $na_products        =   UnavailableProduct::where('invoice_id', $id)->whereIn('status', ['pending', 'approved'])->get();
+        $has_na_products    =   UnavailableProduct::where('invoice_id', $id)->where('status', 'sold')->count();
 
         return view('manager.sales.detail', compact('invoice', 'products', 'na_products', 'has_na_products'));
     }

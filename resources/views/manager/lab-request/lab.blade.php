@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title', 'Admin Dashboard - Product')
+@section('title', 'Dashboard - Product')
 
 @push('css')
 @endpush

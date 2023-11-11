@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title', 'Admin Dashboard - Add Product')
+@section('title', 'Dashboard - Add Product')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/libs/select2/dist/css/select2.min.css') }}">

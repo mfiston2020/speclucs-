@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title', 'Admin Dashboard - Product')
+@section('title', 'Dashboard - Product')
 
 @push('css')
     <link href="{{ asset('dashboard/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">

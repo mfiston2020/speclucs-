@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title', 'Admin Dashboard - Sales')
+@section('title', 'Dashboard - Sales')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/extra-libs/prism/prism.css') }}">

@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title', 'Admin Dashboard - Sales')
+@section('title', 'Dashboard - Sales')
 
 @push('css')
     <link href="{{ asset('dashboard/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
@@ -187,7 +187,7 @@
                                                     @endif
                                                 </td> --}}
                                             </tr>
-{{-- 
+{{--
                                             <div id="myModal-{{ $key }}" class="modal fade" tabindex="-1"
                                                 role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">

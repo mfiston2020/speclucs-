@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title', 'Admin Dashboard - Order Detail')
+@section('title', 'Dashboard - Order Detail')
 
 {{-- ==== Breadcumb ======== --}}
 @section('current', 'Order Detail')
