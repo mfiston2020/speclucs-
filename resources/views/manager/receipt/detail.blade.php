@@ -130,7 +130,13 @@
                                                 $prod = $products->where('id', $product->product_id)->first();
                                             @endphp
                                             <tr>
-                                                <td class="text-center">{{ $key + $key }}</td>
+                                                <td class="text-center">
+                                                    @if ($product->eye!=null)
+                                                        <center>{{ $product->eye }}</center>
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
                                                 <td>{{ $prod->product_name }} | {{ $prod->description }}
                                                     @if ($prod->power)
                                                         @if (initials($prod->product_name) == 'SV')
