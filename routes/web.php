@@ -195,8 +195,9 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     // order pending when not in stock
     Route::post('/request/sendToSupplier', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendRequestToSupplier'])->name('sent.request.send.to.supplier');
-    Route::post('/request/sendTolab', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendRequestTolab'])->name('sent.request.send.to.lab');
+    Route::get('/request/sendTolab', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendRequestTolab'])->name('sent.request.send.to.lab');
 
+    Route::get('/request/labRequest/na',[\App\Http\Controllers\Manager\LabRequestController::class,'naOrders'])->name('order.not.available');
 
     // pending orders
     Route::get('/pendingRequest', [\App\Http\Controllers\Manager\PendingOrderController::class, 'index'])->name('pending.orders');
@@ -211,6 +212,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/sellProductOff/{id}', [\App\Http\Controllers\Manager\PendingOrderController::class, 'sellProductOff'])->name('sell.na.product.off');
 
     // Route::get('/sales/order/tolab/{id}',[\App\Http\Controllers\Manager\SalesController::class,'send_lab_form'])->name('sales.send.to.lab');
+
 
     // ======================= All routes about receipt ==============================
     Route::get('/receipts', [\App\Http\Controllers\Manager\ReceiptsController::class, 'index'])->name('receipt');

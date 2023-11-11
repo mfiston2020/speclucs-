@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\UnavailableProduct;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useBootstrap();
+
         if ($this->app->environment('production')) {
             \URL::forceScheme('https');
         }

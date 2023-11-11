@@ -77,7 +77,8 @@
                         {{-- =============================== --}}
 
                         <div class="table-responsive">
-                            <table id="zero_config" class="table table-striped table-bordered">
+                            {{ $products->links() }}
+                            <table id="" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -170,11 +171,11 @@
                                     </tr>
                                 </tfoot>
                             </table>
+                        {{ $products->links() }}
                         </div>
                     </div>
                 </div>
             </div>
-            {{ $products->links() }}
         </div>
     </div>
 @endsection

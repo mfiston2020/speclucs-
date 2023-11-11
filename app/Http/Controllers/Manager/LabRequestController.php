@@ -25,7 +25,7 @@ class LabRequestController extends Controller
 
     function index()
     {
-        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('soldproduct')->paginate(10);
+        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->has('soldproduct')->paginate(50);
 
         $isOutOfStock       =   null;
         $lens_type          =   \App\Models\LensType::all();
@@ -37,8 +37,6 @@ class LabRequestController extends Controller
         $bookings   =   $invoicess->where('status', 'booked')->all();
 
         $requests   =   $invoicess->where('status', 'requested')->all();
-
-        $unavailableProducts          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->with('unavailableproducts')->take(10)->get();
 
         $products   =   Product::where('company_id', userInfo()->company_id)->get();
         $powers     =   Power::where('company_id', userInfo()->company_id)->get();
@@ -56,7 +54,30 @@ class LabRequestController extends Controller
 
         // return $products;
 
-        return view('manager.lab-request.index', compact('powers','requests', 'products', 'unavailableProducts', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings','isOutOfStock','bookings'));
+        return view('manager.lab-request.index', compact('invoicess','powers','requests', 'products', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings','isOutOfStock','bookings'));
+    }
+
+    function naOrders(){
+
+
+        $isOutOfStock       =   null;
+        $lens_type          =   \App\Models\LensType::all();
+        $index              =   \App\Models\PhotoIndex::all();
+        $coatings           =   \App\Models\PhotoCoating::all();
+        $chromatics         =   \App\Models\PhotoChromatics::all();
+
+
+
+        $requests          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);
+
+        // dd($requests);
+
+        $products   =   Product::where('company_id', userInfo()->company_id)->get();
+        $powers     =   Power::where('company_id', userInfo()->company_id)->get();
+
+        $suppliers  =   Supplier::where('company_id', userInfo()->company_id)->get();
+
+        return view('manager.lab-request.unavailable',compact('requests','powers','requests', 'products', 'suppliers','lens_type', 'index', 'chromatics', 'coatings'));
     }
 
     function sendToLab($id)

@@ -95,8 +95,6 @@
             </div>
         </div>
 
-        {{$invoicess->links()}}
-
         <div class="tab-content">
             {{-- requested --}}
             <div class="tab-pane active" id="requested" role="tabpanel">
