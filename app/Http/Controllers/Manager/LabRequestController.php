@@ -345,7 +345,7 @@ class LabRequestController extends Controller
                         }
                     } else {
                         $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->where('axis',format_values($sold->axis))->where('add',format_values($sold->addition))->first();
-                        dd('hi');
+                        // dd('hi');
                     }
 
 
