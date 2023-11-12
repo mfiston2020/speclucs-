@@ -38,6 +38,10 @@ class Product extends Model
         return $this->hasOne(Power::class);
     }
 
+    function soldProducts(){
+        return $this->hasMany(SoldProduct::class);
+    }
+
     function supplier()
     {
         return $this->belongsTo(Supplier::class);

@@ -143,7 +143,7 @@
                                                 $type = \App\Models\LensType::where('id', $product->type_id)
                                                     ->pluck('name')
                                                     ->first();
-                                                $coating = \App\Models\PhotoCoating::where('id', $product->type_id)
+                                                $coating = \App\Models\PhotoCoating::where('id', $product->coating_id)
                                                     ->pluck('name')
                                                     ->first();
                                                 $index = \App\Models\PhotoIndex::where('id', $product->index_id)
@@ -156,7 +156,7 @@
 
                                             <td style="width:50px;">
                                                 <span class="round {{ $product->status != 'sold' ? 'bg-warning' : '' }}">
-                                                    {{ $product->status != 'sold' ? 'N/A' : 'P' }}
+                                                    {{ $product->status != 'sold' ? Oneinitials($product->eye) : 'P' }}
                                                 </span>
                                             </td>
 
@@ -166,8 +166,10 @@
                                                 <small class="text-muted">
                                                     {{-- @if ($power) --}}
                                                     @if (initials($type) == 'SV')
-                                                        <span> {{ format_values($product->sphere) }} /
-                                                            {{ format_values($product->cylinder) }}</span>
+                                                        <span>
+                                                            {{ format_values($product->sphere) }} /
+                                                            {{ format_values($product->cylinder) }}
+                                                        </span>
                                                     @else
                                                         <span>{{ format_values($product->sphere) }} /
                                                             {{ format_values($product->cylinder) }}
@@ -213,7 +215,6 @@
                                 @endif
                             @if ($client)
                                 for: {{ $client }}
-                            @else
                             @endif
                         </h4>
 

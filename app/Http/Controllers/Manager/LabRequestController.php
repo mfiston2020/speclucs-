@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Repositories\ProductRepo;
 use App\Models\UnavailableProduct;
 use App\Http\Controllers\Controller;
+use App\Models\LensType;
 use App\Repositories\StockTrackRepo;
 use Illuminate\Support\Facades\Crypt;
 
@@ -102,7 +103,7 @@ class LabRequestController extends Controller
 
             $prdt = Product::where('id', $sold->product_id)->first();
             $prdt->stock    =   $prdt->stock < 1 ? 0 : $prdt->stock - 1;
-            $prdt->save();
+            // $prdt->save();
 
             // $stockVariation = $product->stock - 1;
             $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock + 1, '1', $prdt->stock, 'sent to lab', 'rm', 'out');
@@ -320,7 +321,11 @@ class LabRequestController extends Controller
 
     function sendRequestTolab(Request $request)
     {
+        $f_product_id   =   null;
         $productRepo    =   new ProductRepo();
+        $lensType       =   LensType::all();
+        $powers         =   Power::where('company_id',userInfo()->company_id)->get();
+        $allProduct     =   Product::where('company_id', userInfo()->company_id)->get();
 
         if ($request->requestId == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
@@ -329,20 +334,57 @@ class LabRequestController extends Controller
 
                 $products   = Invoice::where('id', $value)->with('soldproduct')->with('unavailableproducts')->first();
 
-                foreach ($products->unavailableproducts as  $sold) {
-                    $newProduct = $productRepo->saveUnavailableToStock($sold->toArray());
+                foreach ($products->unavailableproducts as $count=>  $sold) {
+                    $lenT   =   $lensType->where('id',$sold->type_id)->pluck('name')->first();
 
-                    $prdt    =   Product::find($newProduct->id);
+                    if (initials($lenT)=='SV') {
+                        $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->where('axis',format_values($sold->axis))->where('add',format_values($sold->addition))->first();
 
-                    $prdt->stock = 1;
-                    $prdt->save();
+                        if ($count>0) {
+                            // dd($f_product_id);
+                        }
+                    } else {
+                        $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->where('axis',format_values($sold->axis))->where('add',format_values($sold->addition))->first();
+                        dd('hi');
+                    }
 
-                    $sold->update([
-                        'product_id' => $prdt->id,
-                    ]);
 
-                    // $this->stocktrackRepo->saveTrackRecord($prdt->id, 1, '1', 0, 'sent to lab', 'rm', 'out');
-                    $this->stocktrackRepo->saveTrackRecord($prdt->id, 0, '1', 1, 'received from supplier', 'rm', 'in');
+                    if ($f_product_id!=null)
+                    {
+                        // dd('kjhgfds');
+                        $sold->update([
+                            'product_id' => $f_product_id->id,
+                        ]);
+
+                        $prdt    =   Product::find($f_product_id->id);
+
+                        $sto    =   $prdt->stock;
+                        $prdt->stock = $sto+1;
+
+                        // dd($prdt->stock);
+                        $prdt->save();
+
+                        $this->stocktrackRepo->saveTrackRecord($f_product_id->id, $prdt->stock, '1', 1, 'received from supplier', 'rm', 'in');
+                        continue;
+                    }
+                    else{
+                        if ($count>0) {
+                            dd($f_product_id);
+                        }
+
+                        $newProduct = $productRepo->saveUnavailableToStock($sold->toArray());
+
+                        $prdt    =   Product::find($newProduct->id);
+
+                        $prdt->stock = 1;
+                        $prdt->save();
+
+                        $sold->update([
+                            'product_id' => $prdt->id,
+                        ]);
+
+                        $this->stocktrackRepo->saveTrackRecord($prdt->id, 0, '1', 1, 'received from supplier', 'rm', 'in');
+                    }
                 }
 
                 $this->sendToLab(Crypt::encrypt($value));

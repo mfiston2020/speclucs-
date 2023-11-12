@@ -678,8 +678,7 @@
                                                     <tr>
                                                         <td>{{ $key + 1 }}</td>
                                                         <td>
-                                                            <a href="#!" data-toggle="modal"
-                                                                data-target="#request-{{ $key }}-detail">
+                                                            <a href="{{ route('manager.sales.edit', Crypt::encrypt($request->id)) }}">
                                                                 Request #{{ sprintf('SPCL-%04d', $request->id) }}
                                                             </a>
                                                         </td>

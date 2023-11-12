@@ -94,7 +94,7 @@
                                                 $type = \App\Models\LensType::where('id', $product->type_id)
                                                     ->pluck('name')
                                                     ->first();
-                                                $coating = \App\Models\PhotoCoating::where('id', $product->type_id)
+                                                $coating = \App\Models\PhotoCoating::where('id', $product->coating_id)
                                                     ->pluck('name')
                                                     ->first();
                                                 $index = \App\Models\PhotoIndex::where('id', $product->index_id)
@@ -105,7 +105,7 @@
                                                     ->first();
                                             @endphp
                                             <tr>
-                                                <td class="text-center">{{ $key + 1 }}</td>
+                                                <td class="text-center"><center>{{ OneInitials($product->eye) }}</center></td>
                                                 <td>{{ initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
                                                     @if (initials($type) == 'SV')
                                                         <span> {{ $product->sphere }} /
@@ -118,11 +118,11 @@
                                                     @endif
                                                 </td>
                                                 @php
-                                                    $total_+=$product->total_amount;
+                                                    $total_+=$product->price;
                                                 @endphp
                                                 <td class="text-right">{{ $product->quantity }} </td>
                                                 <td class="text-right"> {{ format_money($product->price) }} </td>
-                                                <td class="text-right"> {{ format_money($product->total_amount) }} </td>
+                                                <td class="text-right"> {{ format_money($product->price * $product->quantity) }} </td>
                                             </tr>
                                         @endforeach
                                         @foreach ($invoice->soldproduct as $key => $product)
