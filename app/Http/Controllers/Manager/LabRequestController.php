@@ -341,7 +341,7 @@ class LabRequestController extends Controller
                         $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->where('axis',format_values($sold->axis))->where('add',format_values($sold->addition))->first();
 
                         // if ($count>0) {
-                            dd($f_product_id);
+                            // dd($f_product_id);
                         // }
                     } else {
                         $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->where('axis',format_values($sold->axis))->where('add',format_values($sold->addition))->first();
@@ -368,8 +368,8 @@ class LabRequestController extends Controller
                         continue;
                     }
                     else{
-                        if ($count>0) {
-                            dd($count);
+                        if ($f_product_id) {
+                            continue;
                         }
 
                         $newProduct = $productRepo->saveUnavailableToStock($sold->toArray());
