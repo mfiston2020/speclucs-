@@ -369,7 +369,7 @@ class LabRequestController extends Controller
                     }
                     else{
                         if ($count>0) {
-                            dd($f_product_id);
+                            dd($count);
                         }
 
                         $newProduct = $productRepo->saveUnavailableToStock($sold->toArray());
