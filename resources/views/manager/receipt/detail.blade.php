@@ -51,7 +51,7 @@
                                         <p class="m-t-30"><b>Name :</b> {{ $clients_information->name }}</p>
                                         <p class="m-t-30"><b>Phone :</b> {{ $clients_information->phone }}</p>
                                         <p class="m-t-30"><b>Email :</b> {{ $clients_information->email }}</p>
-                                        <p><b>Due Date :</b> <i class="fa fa-calendar"></i>
+                                        <p><b>Invoice Date :</b> <i class="fa fa-calendar"></i>
                                             {{ date('Y-m-d H:m:s', strtotime($invoice->updated_at)) }}</p>
                                     </address>
                                 @else
@@ -132,7 +132,7 @@
                                             <tr>
                                                 <td class="text-center">
                                                     @if ($product->eye!=null)
-                                                        <center>{{ $product->eye }}</center>
+                                                        <center>{{ OneInitials($product->eye) }}</center>
                                                     @else
                                                         -
                                                     @endif
