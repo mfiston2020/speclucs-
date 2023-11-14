@@ -5,13 +5,14 @@
 {{-- === End of breadcumb == --}}
 
 @push('css')
-    <link href="{{ asset('dashboard/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
-        rel="stylesheet" />
 @endpush
 
 <div class="col-md-12">
 
+    @php
+        $pwr        =   \App\Models\Power::where('company_id', Auth::user()->company_id)->get();
+        $category   =   \App\Models\Category::all();
+    @endphp
 
     <div class="card">
         <form wire:submit.prevent='searchInformation'>
@@ -50,14 +51,17 @@
         <div class="card">
             @php
                 $dateNow = now();
-            // dd(date('Y-m-d',strtotime($dateNow.'+1 day')));
                 $stockTracker   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($closing_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($dateNow.'-1day')))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
 
                 $stockTracker2   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($closing_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($dateNow)))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
             @endphp
+
             <div class="card-body">
-                <div class="table-responsive">
-                    <table id="" class="table table-striped table-bordered">
+                <a onclick="exportAll('xls');" href="#" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                    <i class="fa fa-download"></i> Export To Excel
+                </a>
+                <div class="table-responsive mt-3">
+                    <table id="file_export" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -101,11 +105,10 @@
                                 <tr>
                                     <td>{{ $product->id }}</td>
                                     <td>{{ $closing_date}}</td>
-                                    <td>{{ \App\Models\Category::where(['id' => $product->category_id])->pluck('name')->first() }}
+                                    <td>{{ $category->where('id',$product->category_id)->pluck('name')->first() }}
                                     </td>
                                     <td>{{ $product->product_name }}</td>
-                                    <span
-                                        hidden>{{ $power = \App\Models\Power::where(['product_id' => $product->id])->where('company_id', Auth::user()->company_id)->select('*')->first() }}</span>
+                                    <span hidden>{{ $power = $pwr->where('product_id',$product->id)->first() }}</span>
 
                                     <td>{{ $product->description }}</td>
                                     <td>
@@ -149,6 +152,7 @@
                     </table>
                 </div>
             </div>
+
         </div>
 
     @endif
@@ -169,7 +173,14 @@
 </div>
 
 @push('scripts')
+    <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
+    <script>
+        function exportAll(type) {
 
-<script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
-<script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
+                $('#file_export').tableExport({
+                    filename: 'closing_stock_%DD%-%MM%-%YY%-month(%MM%)',
+                    format: type
+                });
+            }
+    </script>
 @endpush

@@ -65,7 +65,7 @@
                                         </p>
                                         <p class="m-t-30"><b>Phone :</b> {{ $invoice->phone??'-' }}</p>
                                         <p class="m-t-30"><b>TIN Number :</b> {{ $invoice->tin_number??'-' }}</p>
-                                        <p><b>Due Date :</b> <i class="fa fa-calendar"></i>
+                                        <p><b>Invoice Date:</b> <i class="fa fa-calendar"></i>
                                             {{ date('Y-m-d H:m:s', strtotime($invoice->updated_at)) }}</p>
                                     </address>
                                 @endif
