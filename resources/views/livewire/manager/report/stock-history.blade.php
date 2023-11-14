@@ -64,8 +64,11 @@
 
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table id="" class="table table-striped table-bordered">
+                <a onclick="exportAll('xls');" href="#" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                    <i class="fa fa-download"></i> Export To Excel
+                </a>
+                <div class="table-responsive mt-3">
+                    <table id="file_export" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -168,4 +171,14 @@
 </div>
 
 @push('scripts')
+    <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
+    <script>
+        function exportAll(type) {
+
+                $('#file_export').tableExport({
+                    filename: 'stock_history_%DD%-%MM%-%YY%-month(%MM%)',
+                    format: type
+                });
+            }
+    </script>
 @endpush
