@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Invoice;
 use App\Models\UnavailableProduct;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
@@ -37,11 +38,18 @@ class AppServiceProvider extends ServiceProvider
             $count_notification     =   count(\App\Models\SupplierNotify::where('supplier_id', Auth::user()->company_id)->where('status', '0')->get());
             $notifications           =   \App\Models\SupplierNotify::where('supplier_id', Auth::user()->company_id)->where('status', '0')->orderBy('created_at', 'desc')->get();
 
-            $pendingProducts    =   UnavailableProduct::where('company_id',userInfo()->company_id)->where('status','pending')->count();
+            $ordersCount   =   Invoice::where('company_id',userInfo()->company_id)->select('status')->get();
+
+            // $pendingProducts    =   UnavailableProduct::where('company_id',userInfo()->company_id)->where('status','pending')->count();
 
             $view->with('count_notification', $count_notification)
                 ->with('notifications', $notifications)
-                ->with('pending_product_on_invoice',$pendingProducts);
+                ->with('orderCount',$ordersCount->count())
+                ->with('requested',$ordersCount->where('status','requested')->count())
+                ->with('priced',$ordersCount->whereIn('status',['Confirmed','priced'])->count())
+                ->with('sentToLab',$ordersCount->where('status','sent to supplier')->count())
+                ;
+                // ->with('pending_product_on_invoice',$pendingProducts);
         });
     }
 }

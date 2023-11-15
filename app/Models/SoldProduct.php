@@ -9,7 +9,7 @@ class SoldProduct extends Model
 {
     use HasFactory;
 
-    function productSold()
+    function product()
     {
         return $this->belongsTo(Product::class);
     }

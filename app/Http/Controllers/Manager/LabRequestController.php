@@ -59,6 +59,40 @@ class LabRequestController extends Controller
         return view('manager.lab-request.index', compact('invoicess','powers','requests', 'products', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings','isOutOfStock','bookings'));
     }
 
+    function indexWithTye($type){
+        $invoices          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('soldproduct')->get();
+
+        $lens_type          =   \App\Models\LensType::all();
+        $index              =   \App\Models\PhotoIndex::all();
+        $coatings           =   \App\Models\PhotoCoating::all();
+        $chromatics         =   \App\Models\PhotoChromatics::all();
+
+        if ($type=='requested') {
+            $invoicess  =   $invoices->where('status','requested')->all();
+
+            $bookings   =   $invoices->where('status', 'booked')->all();
+
+            return view('manager.lab-request.requested',compact('bookings','invoicess','lens_type', 'index', 'chromatics', 'coatings'));
+        }
+
+        if ($type=='priced') {
+
+            // priced
+            $requests_priced    =   $invoices->whereIn('status', ['priced', 'Confirmed'])->all();
+
+            return view('manager.lab-request.priced',compact('requests_priced','lens_type', 'index', 'chromatics', 'coatings'));
+        }
+
+        if ($type=='po-sent') {
+        // sent to supplier
+        $requests_supplier  =   $invoices->where('status', 'sent to supplier')->all();
+
+        // sent to supplier
+        $requests_lab       =   $invoices->where('status', 'sent to lab')->all();
+            return view('manager.lab-request.po-sent',compact('requests_lab','requests_supplier','lens_type', 'index', 'chromatics', 'coatings'));
+        }
+    }
+
     function naOrders(){
 
 

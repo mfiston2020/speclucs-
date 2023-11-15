@@ -451,7 +451,7 @@
                                         <div id="incomplete-orders" class="tab-pane">
                                             @if (count($requests)>0)
                                                 <div class="table-responsive mt-4">
-                                                    <button onclick="exportOutOfStock('xls','Priced Lens');"
+                                                    <button onclick="exportOutOfStock('xls','Out Of Stock');"
                                                         class="btn btn-success float-right mb-3">
                                                         <i class="fa fa-cloud-download-alt"></i>
                                                         Excel

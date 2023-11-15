@@ -178,6 +178,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/sales/retail', ProductRetail::class)->name('retail');
 
     // ============= All lab requests routes =========================
+    Route::get('/request/request/{type}', [\App\Http\Controllers\Manager\LabRequestController::class, 'indexWithTye'])->name('lab.requests.type');
     Route::get('/request/labRequest', [\App\Http\Controllers\Manager\LabRequestController::class, 'index'])->name('lab.requests');
     Route::get('/request/sendToLab/{id}', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendToLab'])->name('send.request.lab');
     Route::get('/request/receive-order', [\App\Http\Controllers\Manager\LabRequestController::class, 'receiveOrder'])->name('receive.order.from');
