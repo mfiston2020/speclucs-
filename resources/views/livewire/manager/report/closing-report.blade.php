@@ -60,6 +60,9 @@
                 <a onclick="exportAll('xls');" href="#" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
                     <i class="fa fa-download"></i> Export To Excel
                 </a>
+
+                {{$products->links()}}
+
                 <div class="table-responsive mt-3">
                     <table id="file_export" class="table table-striped table-bordered">
                         <thead>

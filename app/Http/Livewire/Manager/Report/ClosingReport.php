@@ -18,7 +18,7 @@ class ClosingReport extends Component
     function searchInformation()
     {
         $this->validate();
-        $this->products =   Product::where('company_id', userInfo()->company_id)->get();
+        $this->products =   Product::where('company_id', userInfo()->company_id)->paginate(100);
 
         if (count($this->products) <= 0) {
             $this->searchFoundSomething = 'no';
