@@ -427,12 +427,23 @@
                     @endif
                 @endif
 
-                @if (userInfo()->permissions != 'manager' || userInfo()->permissions != 'store')
+                @if (userInfo()->permissions != 'manager' && userInfo()->permissions != 'store')
                     <li class="sidebar-item">
                         <a href="{{ route('manager.product') }}" class="sidebar-link">
                             <i class="mdi mdi-adjust"></i>
                             <span class="hide-menu">
                                 {{ __('navigation.product_nav') }}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{{route('manager.lab.requests.type','priced')}}" class="sidebar-link">
+                            <i class="mdi mdi-adjust"></i>
+                            <span class="hide-menu">
+                                Priced
+                            </span>
+                            <span class="badge badge-danger badge-pill ml-2">
+                                {{$priced}}
                             </span>
                         </a>
                     </li>
