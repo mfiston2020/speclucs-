@@ -18,7 +18,7 @@ class StockHistory extends Component
     public $products, $stockRecords, $soldProducts, $receivedProducts;
     public $daysCount   =   0;
 
-    public $rawMaterialReport, $lensrawMaterialReport;
+    public $rawMaterialReport, $lensrawMaterialReport,$paginat  =   500;
 
     public $result = false;
 
@@ -26,6 +26,13 @@ class StockHistory extends Component
         'end_date' => 'required',
         'start_date' => 'required',
     ];
+
+    function loadMore(){
+        $this->paginat  +=  500;
+        $this->searchInformation();
+    }
+
+
     function searchInformation()
     {
         $this->resetData();
@@ -45,8 +52,7 @@ class StockHistory extends Component
                 array_push($this->dateList, $carbonDate->addDay($sDate)->format('Y-m-d'));
             }
 
-
-            $this->products =   Product::where('company_id', userInfo()->company_id)->get();
+            $this->products =   Product::where('company_id', userInfo()->company_id)->take($this->paginat)->get();
 
             $this->soldProducts =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))->get();
 
@@ -72,6 +78,7 @@ class StockHistory extends Component
 
     public function render()
     {
+        // $this->searchInformation();
         return view('livewire.manager.report.stock-history')->layout('livewire.livewire-slot');
     }
 }

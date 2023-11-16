@@ -69,8 +69,12 @@
                 $stockTracker   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($start_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($end_date)))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
             @endphp
             <div class="card-body">
+                <a onclick="exportAll('xls');" href="#" class="mb-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                    <i class="fa fa-download"></i>
+                    Export To Excel
+                </a>
                 <div class="table-responsive">
-                    <table id="" class="table table-striped table-bordered">
+                    <table id="file_export" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -167,6 +171,13 @@
                             </tr>
                         </tfoot>
                     </table>
+                    <hr>
+                    <button class="btn btn-primary btn-rounded mb-2" wire:click="loadMore">
+                        <span wire:loading wire:target="loadMore">
+                            <img src="{{asset('dashboard/assets/images/loading2.gif')}}" width="20" alt=""> Loading...
+                        </span>
+                        <span wire:loading.remove>Load More</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -189,7 +200,14 @@
 </div>
 
 @push('scripts')
+    <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
+    <script>
+        function exportAll(type) {
 
-<script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
-<script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
+                $('#file_export').tableExport({
+                    filename: 'Stock_Adjustment_history_%DD%-%MM%-%YY%-month(%MM%)',
+                    format: type
+                });
+            }
+    </script>
 @endpush

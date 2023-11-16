@@ -149,6 +149,13 @@
                             </tr>
                         </tfoot>
                     </table>
+                    <hr>
+                    <button class="btn btn-primary btn-rounded mb-2" wire:click="loadMore">
+                        <span wire:loading wire:target="loadMore">
+                            <img src="{{asset('dashboard/assets/images/loading2.gif')}}" width="20" alt=""> Loading...
+                        </span>
+                        <span wire:loading.remove>Load More</span>
+                    </button>
                 </div>
             </div>
         </div>
