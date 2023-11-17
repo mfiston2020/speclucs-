@@ -92,52 +92,99 @@
                                         </td>
                                         <td>
                                             @if ($request->client_id != null)
-                                            {{$request->client->name}}
+                                                {{$request->client->name}}
                                             @else
-                                            @if ($request->hospital_name!=null)
-                                            [{{$request->cloud_id}}] {{$request->hospital_name}}
-                                            @else
-                                            {{$request->client_name}}
-                                            @endif
+                                                @if ($request->hospital_name!=null)
+                                                    [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                @else
+                                                    {{$request->client_name}}
+                                                @endif
                                             @endif
                                         </td>
                                         @php
-                                        $availability = true;
-                                        $description = null;
-                                        $right_len = $request->unavailableproducts->where('eye', 'right')->first();
-                                        if (!$right_len) {
-                                        $right_len = $request->soldproduct->where('eye', 'right')->first();
-                                        if ($right_len==null) {
-                                        continue;
-                                        }
-                                        $right_len = $right_len->product;
-                                        $availability = false;
-                                        }
+                                            $availability_right = true;
+                                            $availability_left = true;
+                                            $description = null;
+                                            $right_len = $request->unavailableproducts->where('eye', 'right')->first();
 
-                                        if ($availability == true) {
-                                            $type = $lens_type->where('id', $right_len->type_id)->pluck('name')->first();
+                                            // dd($right_len);
 
-                                            $indx = $index->where('id', $right_len->index_id)->pluck('name')->first();
-
-                                            $ct = $coatings->where('id', $right_len->coating_id)->pluck('name')->first();
-
-                                            $chrm = $chromatics->where('id',$right_len->chromatic_id)->pluck('name')->first();
-                                        } else {
-                                        if ($right_len) {
-                                                $description =
-                                                $right_len->description;
+                                            if (!$right_len) {
+                                                $right_len = $request->soldproduct->where('eye', 'right')->first();
+                                                if ($right_len==null) {
+                                                    continue;
+                                                }
+                                                // dd('hello');
+                                                $right_len = $right_len->product;
+                                                $availability_right = false;
                                             }
-                                        }
 
-                                        $left_len = $request->unavailableproducts->where('eye', 'left')->first();
+                                            if ($availability_right == true) {
+                                                $type = $lens_type
+                                                    ->where('id', $right_len->type_id)
+                                                    ->pluck('name')
+                                                    ->first();
 
-                                        if (!$left_len) {
-                                        $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                            $left_len = $left_len->product->power;
-                                        }
+                                                $indx = $index
+                                                    ->where('id', $right_len->index_id)
+                                                    ->pluck('name')
+                                                    ->first();
+
+                                                $ct = $coatings
+                                                    ->where('id', $right_len->coating_id)
+                                                    ->pluck('name')
+                                                    ->first();
+
+                                                $chrm = $chromatics
+                                                    ->where('id', $right_len->chromatic_id)
+                                                    ->pluck('name')
+                                                    ->first();
+                                            } else {
+                                                if ($right_len) {
+                                                    $description = $right_len->description;
+                                                }
+                                            }
+
+                                            // left eye checking
+                                            $left_len = $request->unavailableproducts->where('eye', 'left')->first();
+
+                                            if (!$left_len) {
+                                                $left_len = $request->soldproduct->where('eye', 'left')->first();
+                                                if ($left_len==null) {
+                                                    continue;
+                                                }
+                                                $left_len = $left_len->product;
+                                                $availability_left = false;
+                                            }
+
+                                            if ($availability_left == true) {
+                                                $type = $lens_type
+                                                    ->where('id', $left_len->type_id)
+                                                    ->pluck('name')
+                                                    ->first();
+
+                                                $indx = $index
+                                                    ->where('id', $left_len->index_id)
+                                                    ->pluck('name')
+                                                    ->first();
+
+                                                $ct = $coatings
+                                                    ->where('id', $left_len->coating_id)
+                                                    ->pluck('name')
+                                                    ->first();
+
+                                                $chrm = $chromatics
+                                                    ->where('id', $left_len->chromatic_id)
+                                                    ->pluck('name')
+                                                    ->first();
+                                            } else {
+                                                if ($left_len) {
+                                                    $description = $left_len->description;
+                                                }
+                                            }
                                         @endphp
                                         <td>
-                                            @if ($availability)
+                                            @if ($availability_right)
                                             {{ initials($type) }} {{ $chrm }}
                                             {{ $ct }} {{ $indx }}
                                             @else
@@ -148,7 +195,7 @@
                                         <td>
 
                                             @if ($right_len)
-                                            @if ($availability)
+                                            @if ($availability_right)
                                             <span>
                                                 {{ format_values($right_len->sphere) }}
                                                 /
@@ -158,11 +205,11 @@
                                             </span>
                                             @else
                                             <span>
-                                                {{ format_values($right_len->sphere) }}
+                                                {{ format_values($right_len->power->sphere) }}
                                                 /
-                                                {{ format_values($right_len->cylinder) }}
-                                                *{{ format_values($right_len->axis) }}
-                                                {{ format_values($right_len->add) }}
+                                                {{ format_values($right_len->power->cylinder) }}
+                                                *{{ format_values($right_len->power->axis) }}
+                                                {{ format_values($right_len->power->add) }}
                                             </span>
                                             @endif
                                             @else
@@ -171,7 +218,7 @@
                                         </td>
                                         <td>
                                             @if ($left_len)
-                                            @if ($availability)
+                                            @if ($availability_left)
                                             {{ format_values($left_len->sphere) }}
                                             /
                                             {{ format_values($left_len->cylinder) }}
