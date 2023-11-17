@@ -190,8 +190,8 @@
                 <div class="alert alert-warning alert-rounded ">
                     Nothing Found from: <strong>{{ $closing_date }}</strong> up to
                     <strong>{{ date('Y-m-d',strtotime(now())) }}</strong>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span
-                            aria-hidden="true">x</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">x</span>
                     </button>
                 </div>
             </div>
