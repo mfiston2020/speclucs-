@@ -28,7 +28,7 @@ class PendingOrderController extends Controller
         $index              =   \App\Models\PhotoIndex::all();
         $coatings           =   \App\Models\PhotoCoating::all();
         $chromatics         =   \App\Models\PhotoChromatics::all();
-        $other_orders   =   Invoice::where('company_id',userInfo()->company_id)->paginate(100);
+        $other_orders   =   Invoice::where('company_id',userInfo()->company_id)->orderBy('created_at','desc')->paginate(100);
         return view('manager.sales.order-status',compact('other_orders','lens_type','index','coatings','chromatics','other_orders'));
     }
 
