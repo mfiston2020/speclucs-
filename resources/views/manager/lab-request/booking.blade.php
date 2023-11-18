@@ -28,7 +28,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <h4 class="card-title">All Requested Products {{count($bookings)}}</h4>
+                            <h4 class="card-title">All Requested Products
+                            </h4>
                         </div>
                         {{-- ============================== --}}
                         @include('manager.includes.layouts.message')
@@ -52,6 +53,7 @@
                                             <a href="#incomplete-orders" class="nav-link active" data-toggle="tab"
                                                 aria-expanded="false">
                                                 Booking(s)
+                                                <span class="badge badge-danger badge-pill">{{count($bookings)}}</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -86,6 +88,7 @@
                                                                     <th>Right Eye</th>
                                                                     <th>Left Eye</th>
                                                                     <th>Status</th>
+                                                                    <th>-</th>
                                                                 </tr>
                                                             </thead>
                                                                     @csrf
@@ -261,6 +264,13 @@
                                                                                             ])>
                                                                                                 {{ $request->status }}
                                                                                             </span>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            @if ($request->status=='booked')
+                                                                                                <a href="{{route('manager.lab.order.cancel',Crypt::encrypt($request->id))}}" class="text-danger" onclick="return confirm('Are you sure??')">Cancel Order</a>
+                                                                                            @else
+                                                                                                <center>-</center>
+                                                                                            @endif
                                                                                         </td>
                                                                                     </tr>
 
