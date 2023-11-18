@@ -203,6 +203,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     // pending orders
     Route::get('/pendingRequest', [\App\Http\Controllers\Manager\PendingOrderController::class, 'index'])->name('pending.orders');
+    Route::get('/orderStatus', [\App\Http\Controllers\Manager\PendingOrderController::class, 'orderStatus'])->name('orders.status');
     Route::post('/pendingCancel', [\App\Http\Controllers\Manager\PendingOrderController::class, 'cancelOrder'])->name('pending.order.cancel');
     Route::post('/pendingRequest/setPrice', [\App\Http\Controllers\Manager\PendingOrderController::class, 'setOrderPrice'])->name('pending.order.price');
     Route::post('/pendingSell/setPrice', [\App\Http\Controllers\Manager\PendingOrderController::class, 'sellPendingOrder'])->name('pending.order.sell');

@@ -23,6 +23,15 @@ class PendingOrderController extends Controller
         $this->productRepo  =   new ProductRepo();
     }
 
+    function orderStatus(){
+        $lens_type          =   \App\Models\LensType::all();
+        $index              =   \App\Models\PhotoIndex::all();
+        $coatings           =   \App\Models\PhotoCoating::all();
+        $chromatics         =   \App\Models\PhotoChromatics::all();
+        $other_orders   =   Invoice::where('company_id',userInfo()->company_id)->paginate(100);
+        return view('manager.sales.order-status',compact('other_orders','lens_type','index','coatings','chromatics','other_orders'));
+    }
+
     function index()
     {
         // $pendingOrders  =   PendingOrder::where('company_id', userInfo()->company_id)->orderBy('created_at', 'desc')->get();

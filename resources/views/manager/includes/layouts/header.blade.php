@@ -456,6 +456,15 @@
                     </li>
                 @endif
 
+                 <li class="sidebar-item">
+                    <a href="{{ route('manager.orders.status') }}" class="sidebar-link">
+                        <i class="mdi mdi-adjust"></i>
+                        <span class="hide-menu">
+                            Order Status
+                        </span>
+                    </a>
+                </li>
+
             </ul>
         </nav>
         <!-- End Sidebar navigation -->
