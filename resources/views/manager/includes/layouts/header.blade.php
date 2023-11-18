@@ -245,7 +245,7 @@
                     </li>
                 @endif
 
-                @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
+                @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store' || userInfo()->permissions == 'lab')
                     <!-- User Profile-->
                     <li class="nav-small-cap">
                         <i class="mdi mdi-dots-horizontal"></i>
