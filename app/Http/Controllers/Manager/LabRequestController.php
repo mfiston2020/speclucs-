@@ -55,7 +55,6 @@ class LabRequestController extends Controller
         $requests_lab       =   $invoicess->where('status', 'sent to lab')->all();
 
         // return $products;
-
         return view('manager.lab-request.index', compact('invoicess','powers','requests', 'products', 'suppliers', 'requests_priced', 'requests_supplier', 'requests_lab', 'lens_type', 'index', 'chromatics', 'coatings','isOutOfStock','bookings'));
     }
 

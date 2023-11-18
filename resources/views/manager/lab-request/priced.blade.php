@@ -114,7 +114,7 @@
                                                 if ($right_len==null) {
                                                     continue;
                                                 }
-                                                dd('hello');
+                                                // dd('hello');
                                                 $right_len = $right_len->product;
                                                 $availability_right = false;
                                             }
@@ -185,54 +185,54 @@
                                         @endphp
                                         <td>
                                             @if ($availability_right)
-                                            {{ initials($type) }} {{ $chrm }}
-                                            {{ $ct }} {{ $indx }}
+                                                {{ initials($type) }} {{ $chrm }}
+                                                {{ $ct }} {{ $indx }}
                                             @else
-                                            {{ $description }}
+                                                {{ $description }}
                                             @endif
                                         </td>
 
                                         <td>
 
                                             @if ($right_len)
-                                            @if ($availability_right)
-                                            <span>
-                                                {{ format_values($right_len->sphere) }}
-                                                /
-                                                {{ format_values($right_len->cylinder) }}
-                                                *{{ format_values($right_len->axis) }}
-                                                {{ format_values($right_len->addition) }}
-                                            </span>
-                                            @else
-                                            <span>
-                                                {{ format_values($right_len->power->sphere) }}
-                                                /
-                                                {{ format_values($right_len->power->cylinder) }}
-                                                *{{ format_values($right_len->power->axis) }}
-                                                {{ format_values($right_len->power->add) }}
-                                            </span>
-                                            @endif
+                                                @if ($availability_right)
+                                                    <span>
+                                                        {{ format_values($right_len->sphere) }}
+                                                        /
+                                                        {{ format_values($right_len->cylinder) }}
+                                                        *{{ format_values($right_len->axis) }}
+                                                        {{ format_values($right_len->addition) }}
+                                                    </span>
+                                                @else
+                                                    <span>
+                                                        {{ format_values($right_len->power->sphere) }}
+                                                        /
+                                                        {{ format_values($right_len->power->cylinder) }}
+                                                        *{{ format_values($right_len->power->axis) }}
+                                                        {{ format_values($right_len->power->add) }}
+                                                    </span>
+                                                @endif
                                             @else
                                             <span>-</span>
                                             @endif
                                         </td>
                                         <td>
                                             @if ($left_len)
-                                            @if ($availability_left)
-                                            {{ format_values($left_len->sphere) }}
-                                            /
-                                            {{ format_values($left_len->cylinder) }}
-                                            *{{ format_values($left_len->axis) }}
-                                            {{ format_values($left_len->addition) }}
+                                                @if ($availability_left)
+                                                    {{ format_values($left_len->sphere) }}
+                                                    /
+                                                    {{ format_values($left_len->cylinder) }}
+                                                    *{{ format_values($left_len->axis) }}
+                                                    {{ format_values($left_len->addition) }}
+                                                @else
+                                                    {{ format_values($left_len->sphere) }}
+                                                    /
+                                                    {{ format_values($left_len->cylinder) }}
+                                                    *{{ format_values($left_len->axis) }}
+                                                    {{ format_values($left_len->add) }}
+                                                @endif
                                             @else
-                                            {{ format_values($left_len->sphere) }}
-                                            /
-                                            {{ format_values($left_len->cylinder) }}
-                                            *{{ format_values($left_len->axis) }}
-                                            {{ format_values($left_len->add) }}
-                                            @endif
-                                            @else
-                                            <span class="text-center">-</span>
+                                                <span class="text-center">-</span>
                                             @endif
                                         </td>
                                         <td>
@@ -249,19 +249,13 @@
                                         </td>
                                     </tr>
 
-
                                     {{-- modal --}}
 
-                                    <div class="modal fade bs-example-modal-lg"
-                                        id="proddd-{{ $key }}-detail"
-                                        tabindex="-1" role="dialog"
-                                        aria-labelledby="myLargeModalLabel"
-                                        aria-hidden="true" style="display: none;">
+                                    <div class="modal fade bs-example-modal-lg" id="proddd-{{ $key }}-detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
                                         @php
                                             $isOutOfStock='no';
                                         @endphp
-                                        <div
-                                            class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-dialog modal-xl modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <div>
@@ -275,19 +269,14 @@
                                                                     {{$request->client_name}}
                                                                 @endif
                                                             @endif
-                                                            {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                         </h4>
                                                         <br>
 
-                                                        <h4 class="modal-title"
-                                                            id="content-detail-{{ $key }}">
-                                                            Request
-                                                            #{{ sprintf('SPCL-%04d', $request->id) }}
+                                                        <h4 class="modal-title" id="content-detail-{{ $key }}">
+                                                            Request #{{ sprintf('SPCL-%04d', $request->id) }}
                                                         </h4>
                                                     </div>
-                                                    <button type="button" class="close"
-                                                        data-dismiss="modal"
-                                                        aria-hidden="true">×</button>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                 </div>
                                                 <div class="modal-body" id="printable">
                                                     <h4 class="text-info">Lens</h4>
@@ -295,14 +284,6 @@
                                                     @foreach ($request->soldproduct as $product)
                                                         @php
                                                             $invoice_product = $product->product;
-
-                                                            if ($invoice_product->stock<2){
-                                                                $isOutOfStock='yes';
-                                                            }
-                                                            else {
-                                                                $isOutOfStock='no';
-                                                            }
-
                                                         @endphp
 
                                                         {{-- for lens --}}
@@ -336,8 +317,6 @@
                                                                     <span>
                                                                         <h6>Location: </h6>
                                                                     </span>
-                                                                    {{-- </div>
-                                                <div class="col-2"> --}}
                                                                     {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
                                                                 </div>
                                                                 <div class="col-2 ">
@@ -368,6 +347,79 @@
                                                                 </div>
                                                             </div>
                                                         @endif
+
+                                                    @endforeach
+                                                    @foreach ($request->unavailableproducts as $product)
+                                                        @php
+                                                            $invoice_product = $product;
+
+                                                            if ($availability_left == true) {
+                                                                $type = $lens_type->where('id', $left_len->type_id)->pluck('name')->first();
+                                                                $indx = $index->where('id', $left_len->index_id)->pluck('name')->first();
+                                                                $ct = $coatings->where('id', $left_len->coating_id)->pluck('name')->first();
+                                                                $chrm = $chromatics->where('id', $left_len->chromatic_id)->pluck('name')->first();
+                                                            }
+                                                        @endphp
+
+                                                        {{-- for lens --}}
+
+                                                            <div class="row mb-2">
+                                                                <div class="col-1">
+                                                                    <h4 class="text-capitalize">
+                                                                        {{ $invoice_product->eye == null ? '' : Oneinitials($invoice_product->eye) }}
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="col-3">
+                                                                    <span>
+                                                                        {{ initials($type) }} {{ $chrm }} {{ $ct }} {{ $indx }}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="col-2">
+                                                                    @if (initials($type) == 'SV')
+                                                                        <span>{{ $invoice_product->sphere }}
+                                                                            /
+                                                                            {{ $invoice_product->cylinder }}</span>
+                                                                    @else
+                                                                        <span>{{ $invoice_product->sphere }}
+                                                                            /
+                                                                            {{ $invoice_product->cylinder }}
+                                                                            *{{ $invoice_product->axis }}
+                                                                            {{ $invoice_product->add }}</span>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="col-2 row">
+                                                                    <span>
+                                                                        <h6>Location: </h6>
+                                                                    </span>
+                                                                    {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
+                                                                </div>
+                                                                <div class="col-2 ">
+                                                                    <span
+                                                                        class="text-capitalize d-flex justify-content-around items-center">
+                                                                        <h6
+                                                                            class="text-dark">
+                                                                            Mono PD:
+                                                                        </h6>
+                                                                        <span
+                                                                            class="text-capitalize">
+                                                                            {{ $invoice_product->mono_pd }}
+                                                                        </span>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="col-2 ">
+                                                                    <span
+                                                                        class="text-capitalize d-flex justify-content-around items-center">
+                                                                        <h6
+                                                                            class="text-dark">
+                                                                            Seg H:
+                                                                        </h6>
+                                                                        <span
+                                                                            class="text-capitalize">
+                                                                            {{ $invoice_product->segment_h }}
+                                                                        </span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
                                                     @endforeach
 
                                                     {{-- for frame --}}
@@ -461,34 +513,21 @@
                                                         @endforeach
                                                     @endif
                                                 </div>
-                                                <div
-                                                    class="modal-footer d-flex justify-content-between">
-
-                                                        @if ($isOutOfStock=='yes')
-                                                            <center><h4 class="text-danger">Product out of stock</h4></center>
-                                                        @else
-                                                            <button type="button"
-                                                                class="btn btn-danger waves-effect text-left"
-                                                                data-dismiss="modal">
-                                                                Close
-                                                            </button>
-                                                            <button type="button"
-                                                                class="btn btn-success waves-effect text-left"
-                                                                id="print">Print</button>
-                                                            <a href="{{ route('manager.send.request.lab', Crypt::encrypt($request->id)) }}"
-                                                                onclick="return confirm('are you sure?')"
-                                                                class="btn btn-info waves-effect text-left">
-                                                                Send to Lab
-                                                            </a>
-
-                                                        @endif
+                                                <div class="modal-footer d-flex justify-content-between">
+                                                    <button type="button"
+                                                        class="btn btn-danger waves-effect text-left"
+                                                        data-dismiss="modal">
+                                                        Close
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-success waves-effect text-left"
+                                                        id="print">Print</button>
                                                 </div>
                                             </div>
                                             <!-- /.modal-content -->
                                         </div>
                                         <!-- /.modal-dialog -->
                                     </div>
-
 
                                 @endforeach
                             </tbody>
