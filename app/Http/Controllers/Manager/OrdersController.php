@@ -258,4 +258,5 @@ class OrdersController extends Controller
             return redirect()->back()->with('errorMsg','Oops! Something went wrong!'.$th);
         }
     }
+    
 }

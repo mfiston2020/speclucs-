@@ -142,7 +142,6 @@
                                                                             </td>
                                                                         </tr>
 
-
                                                                         {{-- modal --}}
                                                                         <div class="modal fade bs-example-modal-lg"
                                                                             id="request-{{ $key }}-detail"
