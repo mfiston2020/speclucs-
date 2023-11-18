@@ -141,13 +141,13 @@ class LabRequestController extends Controller
             $product    =   $allProduct->where('id', $sold->product_id)->first();
 
             $prdt = Product::where('id', $sold->product_id)->first();
-            $prdt->stock    =   $prdt->stock < 1 ? 0 : $prdt->stock - 1;
-            // $prdt->save();
+            $prdt->stock    =   $prdt->stock < 1 ? 0 : $prdt->stock - $sold->quantity;
+            $prdt->save();
 
-            dd($sold->quantity);
+            // dd($sold->quantity);
 
             // $stockVariation = $product->stock - 1;
-            $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock + 1, '1', $prdt->stock, 'sent to lab', 'rm', 'out');
+            $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock + 1, $sold->quantity, $prdt->stock, 'sent to lab', 'rm', 'out');
         }
 
         Invoice::find(Crypt::decrypt($id))->update([
