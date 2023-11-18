@@ -308,10 +308,9 @@ class ProductRetail extends Component
         if ($this->frame == null && $this->searchProduct == false && $this->accessory == null) {
             $this->showModal('select at least one product');
             return;
-        } else {
+        }
+        else {
             $reference  =   count(DB::table('invoices')->select('reference_number')->where('company_id', userInfo()->company_id)->get());
-
-
 
             if ($this->leftLenFound || $this->rightLenFound) {
                 if ($this->rightLenQty < 1 || $this->leftLenQty < 1) {
@@ -320,6 +319,9 @@ class ProductRetail extends Component
                     $this->invoiceStatus  =   'requested';
                 }
             } else {
+                $this->invoiceStatus  =   'requested';
+            }
+            if ($this->frame == null && $this->searchProduct == false && $this->accessory != null) {
                 $this->invoiceStatus  =   'requested';
             }
 

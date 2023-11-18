@@ -27,7 +27,11 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <h4 class="card-title">All Requested Products<span class="badge badge-danger badge-pill ml-2"> {{count($invoicess)}}</span></h4>
+                            <h4 class="card-title">All Requested Products
+                                <span class="badge badge-danger badge-pill ml-2">
+                                    {{count($invoicess)}}
+                                </span>
+                            </h4>
                         </div>
                         {{-- ============================== --}}
                         @include('manager.includes.layouts.message')
@@ -84,7 +88,7 @@
 
                                                         <tbody>
                                                             @foreach ($invoicess as $key => $request)
-                                                                @if (count($request->unavailableproducts) <= 0)
+                                                                {{-- @if (count($request->unavailableproducts) <= 0) --}}
                                                                     @foreach ($request->soldproduct as $product)
                                                                         @php
                                                                             if ($product->product->stock>2){
@@ -373,7 +377,7 @@
                                                                             <!-- /.modal-dialog -->
                                                                         </div>
                                                                     @endif
-                                                                @endif
+                                                                {{-- @endif --}}
                                                             @endforeach
                                                         </tbody>
                                                     </table>

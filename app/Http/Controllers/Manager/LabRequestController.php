@@ -59,7 +59,7 @@ class LabRequestController extends Controller
     }
 
     function indexWithTye($type){
-        $invoices          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('soldproduct')->get();
+        $invoices          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id','desc')->with('soldproduct')->get();
 
         $lens_type          =   \App\Models\LensType::all();
         $index              =   \App\Models\PhotoIndex::all();
