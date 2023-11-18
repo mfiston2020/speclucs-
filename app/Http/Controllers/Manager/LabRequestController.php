@@ -59,6 +59,7 @@ class LabRequestController extends Controller
     }
 
     function indexWithTye($type){
+        $isOutOfStock   =   null;
         $invoices          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id','desc')->with('soldproduct')->get();
 
         $lens_type          =   \App\Models\LensType::all();
@@ -69,14 +70,14 @@ class LabRequestController extends Controller
         if ($type=='requested') {
             $invoicess  =   $invoices->where('status','requested')->all();
 
-            return view('manager.lab-request.requested',compact('invoicess','lens_type', 'index', 'chromatics', 'coatings'));
+            return view('manager.lab-request.requested',compact('invoicess','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
 
         if ($type=='booking') {
 
             $bookings   =   $invoices->where('status', 'booked')->all();
 
-            return view('manager.lab-request.booking',compact('bookings','lens_type', 'index', 'chromatics', 'coatings'));
+            return view('manager.lab-request.booking',compact('bookings','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
 
         if ($type=='priced') {
@@ -84,7 +85,7 @@ class LabRequestController extends Controller
             // priced
             $requests_priced    =   $invoices->whereIn('status', ['priced', 'Confirmed'])->all();
 
-            return view('manager.lab-request.priced',compact('requests_priced','lens_type', 'index', 'chromatics', 'coatings'));
+            return view('manager.lab-request.priced',compact('requests_priced','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
 
         if ($type=='po-sent') {
@@ -93,7 +94,7 @@ class LabRequestController extends Controller
 
         // sent to supplier
         $requests_lab       =   $invoices->where('status', 'sent to lab')->all();
-            return view('manager.lab-request.po-sent',compact('requests_lab','requests_supplier','lens_type', 'index', 'chromatics', 'coatings'));
+            return view('manager.lab-request.po-sent',compact('requests_lab','requests_supplier','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
     }
 
@@ -142,6 +143,8 @@ class LabRequestController extends Controller
             $prdt = Product::where('id', $sold->product_id)->first();
             $prdt->stock    =   $prdt->stock < 1 ? 0 : $prdt->stock - 1;
             // $prdt->save();
+
+            dd($sold->quantity);
 
             // $stockVariation = $product->stock - 1;
             $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock + 1, '1', $prdt->stock, 'sent to lab', 'rm', 'out');
