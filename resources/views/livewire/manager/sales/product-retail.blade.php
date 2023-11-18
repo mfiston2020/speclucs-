@@ -488,16 +488,20 @@
 
 
                         <div class="row d-flex justify-content-center items-center mt-4">
-                            <button wire:loading.attr="disabled" class="btn btn-sm btn-primary" type="button"
-                                wire:click="checkAvailability">
-                                <span wire:loading.remove wire:target="checkAvailability">
-                                    Check Product Availability
-                                </span>
-                                <span wire:loading wire:target="checkAvailability">
-                                    Checking... <img src="{{ asset('dashboard/assets/images/loading2.gif') }}"
-                                        width="20" />
-                                </span>
-                            </button>
+                            @if ($accessory != null && $accessory_quantity<=$accessory_stock)
+                                <button wire:loading.attr="disabled" class="btn btn-sm btn-primary" type="button"
+                                    wire:click="checkAvailability">
+                                    <span wire:loading.remove wire:target="checkAvailability">
+                                        Check Product Availability
+                                    </span>
+                                    <span wire:loading wire:target="checkAvailability">
+                                        Checking... <img src="{{ asset('dashboard/assets/images/loading2.gif') }}"
+                                            width="20" />
+                                    </span>
+                                </button>
+                            @else
+                                <h5 class="text-danger">Surpassed Available Quantity</h5>
+                            @endif
                         </div>
 
                     </div>
