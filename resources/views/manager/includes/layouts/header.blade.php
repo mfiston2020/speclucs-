@@ -279,6 +279,24 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
+                                    <a href="{{route('manager.lab.requests.type','booking')}}" class="sidebar-link">
+                                        <i class="mdi mdi-adjust"></i>
+                                        <span class="hide-menu"> Booking </span>
+                                        <span class="badge badge-danger badge-pill ml-2">
+                                            {{$requested}}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="{{route('manager.lab.requests.type','requested')}}" class="sidebar-link">
+                                        <i class="mdi mdi-adjust"></i>
+                                        <span class="hide-menu"> Requested </span>
+                                        <span class="badge badge-danger badge-pill ml-2">
+                                            {{$requested}}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
                                     <a href="{{route('manager.lab.requests.type','priced')}}" class="sidebar-link">
                                         <i class="mdi mdi-adjust"></i>
                                         <span class="hide-menu"> Priced </span>
@@ -433,17 +451,6 @@
                             <i class="mdi mdi-adjust"></i>
                             <span class="hide-menu">
                                 {{ __('navigation.product_nav') }}
-                            </span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a href="{{route('manager.lab.requests.type','priced')}}" class="sidebar-link">
-                            <i class="mdi mdi-adjust"></i>
-                            <span class="hide-menu">
-                                Priced
-                            </span>
-                            <span class="badge badge-danger badge-pill ml-2">
-                                {{$priced}}
                             </span>
                         </a>
                     </li>
