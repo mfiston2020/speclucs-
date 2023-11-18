@@ -283,7 +283,7 @@
                                         <i class="mdi mdi-adjust"></i>
                                         <span class="hide-menu"> Booking </span>
                                         <span class="badge badge-danger badge-pill ml-2">
-                                            {{$requested}}
+                                            {{$booking}}
                                         </span>
                                     </a>
                                 </li>

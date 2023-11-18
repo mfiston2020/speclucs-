@@ -45,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('count_notification', $count_notification)
                 ->with('notifications', $notifications)
                 ->with('orderCount',$ordersCount->count())
+                ->with('booking',$ordersCount->where('status','booked')->count())
                 ->with('requested',$ordersCount->where('status','requested')->count())
                 ->with('priced',$ordersCount->whereIn('status',['Confirmed','priced'])->count())
                 ->with('sentToLab',$ordersCount->where('status','sent to supplier')->count())

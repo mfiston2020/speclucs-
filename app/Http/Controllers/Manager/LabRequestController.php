@@ -70,9 +70,14 @@ class LabRequestController extends Controller
         if ($type=='requested') {
             $invoicess  =   $invoices->where('status','requested')->all();
 
+            return view('manager.lab-request.requested',compact('invoicess','lens_type', 'index', 'chromatics', 'coatings'));
+        }
+
+        if ($type=='booking') {
+
             $bookings   =   $invoices->where('status', 'booked')->all();
 
-            return view('manager.lab-request.requested',compact('bookings','invoicess','lens_type', 'index', 'chromatics', 'coatings'));
+            return view('manager.lab-request.booking',compact('bookings','lens_type', 'index', 'chromatics', 'coatings'));
         }
 
         if ($type=='priced') {
