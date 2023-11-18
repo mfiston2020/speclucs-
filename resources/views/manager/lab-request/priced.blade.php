@@ -68,6 +68,7 @@
                                 <th>Request Age</th>
                                 {{-- <th>Cost</th> --}}
                                 <th>Payment</th>
+                                <th></th>
                             </tr>
                         </thead>
 
@@ -246,6 +247,13 @@
                                                 $request->status == 'Confirmed',])>
                                                 {{ $request->status }}
                                             </span>
+                                        </td>
+                                        <td>
+                                            @if ($request->status=='Confirmed' || $request->status=='priced')
+                                                <a href="{{route('manager.lab.order.cancel',Crypt::encrypt($request->id))}}" class="text-danger" onclick="return confirm('Are you sure??')">Cancel Order</a>
+                                            @else
+                                                <center>-</center>
+                                            @endif
                                         </td>
                                     </tr>
 

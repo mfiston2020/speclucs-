@@ -68,6 +68,7 @@
                                                         <th>Request Date</th>
                                                         <th>Request Age</th>
                                                         <th>Status</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
 
@@ -107,6 +108,13 @@
                                                                     ])>
                                                                         {{ $request->status }}
                                                                     </span>
+                                                                </td>
+                                                                <td>
+                                                                    @if ($request->status=='requested')
+                                                                        <a href="{{route('manager.lab.order.cancel',Crypt::encrypt($request->id))}}" class="text-danger" onclick="return confirm('Are you sure??')">Cancel Order</a>
+                                                                    @else
+                                                                        <center>-</center>
+                                                                    @endif
                                                                 </td>
                                                             </tr>
                                                         @endif

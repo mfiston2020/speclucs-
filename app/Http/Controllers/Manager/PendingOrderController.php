@@ -114,10 +114,10 @@ class PendingOrderController extends Controller
             $order  =   PendingOrder::find($id);
             $order->delete();
 
-            return redirect()->back()->with('successMsg', 'Order Cancel!');
+            return redirect()->back()->with('successMsg', 'Order Canceled!');
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->back()->with('errorMsg', 'Oops! Something Went Wrong!' . $th);
+            return redirect()->back()->with('errorMsg', 'Oops! Something Went Wrong!');
         }
     }
 

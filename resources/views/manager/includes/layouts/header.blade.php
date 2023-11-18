@@ -288,15 +288,6 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="{{route('manager.lab.requests.type','requested')}}" class="sidebar-link">
-                                        <i class="mdi mdi-adjust"></i>
-                                        <span class="hide-menu"> Requested </span>
-                                        <span class="badge badge-danger badge-pill ml-2">
-                                            {{$requested}}
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
                                     <a href="{{route('manager.lab.requests.type','priced')}}" class="sidebar-link">
                                         <i class="mdi mdi-adjust"></i>
                                         <span class="hide-menu"> Priced </span>

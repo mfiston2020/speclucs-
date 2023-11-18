@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Notifications\OrderPlaced;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use App\Models\Product;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Notification;
@@ -148,9 +149,9 @@ class OrdersController extends Controller
         $order->status  =   'canceled';
         try {
             $order->save();
-            $notification   =   \App\Models\SupplierNotify::where('order_id', Crypt::decrypt($id));
-            $notification->delete();
-            return redirect()->back()->with('successMsg', 'Order Successfully Canceled!');
+            // $notification   =   \App\Models\SupplierNotify::where('order_id', Crypt::decrypt($id));
+            // $notification->delete();
+            return redirect()->back()->with('successMsg', 'Order Canceled!');
         } catch (\Throwable $th) {
             return redirect()->back()->with('errorMsg', 'Something Went Wrong!');
         }
@@ -244,6 +245,17 @@ class OrdersController extends Controller
             return redirect()->back()->with('successMsg', 'Thank you for using Speclucs! ');
         } catch (\Throwable $th) {
             return redirect()->back()->with('errorMsg', 'Something Went Wrong!' . $th);
+        }
+    }
+
+    function cancelLabOrders($id){
+        $invoice    =   Invoice::find(Crypt::decrypt($id));
+        try {
+            $invoice->status='canceled';
+            $invoice->save();
+            return redirect()->back()->with('successMsg','Order Canceled!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errorMsg','Oops! Something went wrong!'.$th);
         }
     }
 }

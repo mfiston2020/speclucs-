@@ -315,6 +315,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/cancelOrder/{cancelOrder}', [\App\Http\Controllers\Manager\OrdersController::class, 'cancelOrder'])->name('order.cancelOrder');
     Route::get('/receivedOrder/{receivedOrder}', [\App\Http\Controllers\Manager\OrdersController::class, 'receivedOrder'])->name('order.receivedOrder');
     Route::post('/fetchSupplierProduct', [\App\Http\Controllers\Manager\OrdersController::class, 'fetchSupplierProduct'])->name('order.fetchSupplierProduct');
+    Route::get('/cancelLabOrder/{id}', [\App\Http\Controllers\Manager\OrdersController::class, 'cancelLabOrders'])->name('lab.order.cancel');
 
     // ====================== Routes about Received Orders ==========================
     Route::get('/receivedOrder', [\App\Http\Controllers\Manager\ReceivedOrdersController::class, 'index'])->name('received.order');
