@@ -55,9 +55,6 @@ class StockHistory extends Component
 
             $this->soldProducts =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))->get();
 
-            // $this->receivedProducts =   ReceivedProduct::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date)))->get();
-
-
             if (count($this->products) <= 0) {
                 $this->searchFoundSomething = 'no';
             } else {

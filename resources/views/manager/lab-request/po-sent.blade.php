@@ -370,7 +370,7 @@
                                                                         /
                                                                         {{ format_values($invoice_product->cylinder) }}
                                                                         *{{ format_values($invoice_product->axis) }}
-                                                                        {{ $invoice_product->add }}</span>
+                                                                        {{ $invoice_product->addition }}</span>
                                                                 @endif
                                                             </div>
                                                             <div class="col-2 row">

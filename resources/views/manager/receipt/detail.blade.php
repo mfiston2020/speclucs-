@@ -108,13 +108,13 @@
                                                 <td class="text-center"><center>{{ OneInitials($product->eye) }}</center></td>
                                                 <td>{{ initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
                                                     @if (initials($type) == 'SV')
-                                                        <span> {{ $product->sphere }} /
-                                                            {{ $product->cylinder }}</span>
+                                                        <span> {{ format_values($product->sphere) }} /
+                                                            {{ format_values($product->cylinder) }}</span>
                                                     @else
-                                                        <span>{{ $product->sphere }} /
-                                                            {{ $product->cylinder }}
-                                                            *{{ $product->axis }}
-                                                            {{ $product->add }}</span>
+                                                        <span>{{ format_values($product->sphere) }} /
+                                                            {{ format_values($product->cylinder) }}
+                                                            *{{ format_values($product->axis) }}
+                                                            {{ $product->addition }}</span>
                                                     @endif
                                                 </td>
                                                 @php

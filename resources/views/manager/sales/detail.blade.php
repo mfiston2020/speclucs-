@@ -85,7 +85,7 @@
                                                             <span> {{ $prod->power->sphere }} / {{ $prod->power->cylinder }}</span>
                                                         @else
                                                             <span>{{ $prod->power->sphere }} / {{ $prod->power->cylinder }}
-                                                                *{{ $prod->power->axis }} {{ $prod->power->add }}</span>
+                                                                *{{ $prod->power->axis }} {{ $prod->power->add }}{{ $prod->power->addition }}</span>
                                                         @endif
                                                     @endif
                                                 </small>
@@ -173,7 +173,7 @@
                                                     @else
                                                         <span>{{ format_values($product->sphere) }} /
                                                             {{ format_values($product->cylinder) }}
-                                                            *{{ $product->axis }} {{ $product->add }}</span>
+                                                            *{{ format_values($product->axis) }} {{ $product->addition }}</span>
                                                     @endif
                                                     {{-- @endif --}}
                                                 </small>
@@ -222,8 +222,9 @@
                     <div class="card-body bg-light">
                         <div class="row text-center">
                             <div class="col-6 m-t-10 m-b-10">
-                                <span
-                                    class="label label-{{ $invoice->status == 'completed' ? 'success' : 'warning' }}">{{ $invoice->status }}</span>
+                                <span class="label label-{{ $invoice->status == 'completed' ? 'success' : 'warning' }}">
+                                    {{ $invoice->status }}
+                                </span>
                             </div>
                             <div class="col-6 m-t-10 m-b-10">
                                 {{ \Carbon\Carbon::parse($invoice->created_at)->diffForHumans() }}
