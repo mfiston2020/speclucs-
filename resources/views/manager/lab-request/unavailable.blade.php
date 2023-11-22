@@ -273,7 +273,7 @@
                                                                                     </td>
                                                                                     <td>
                                                                                         @if ($availability)
-                                                                                            {{ initials($type) }}
+                                                                                            {{ initials($type)=='BT'?'Bifocal Round':initials($type) }}
                                                                                             {{ $chrm }}
                                                                                             {{ $ct }}
                                                                                             {{ $indx }}

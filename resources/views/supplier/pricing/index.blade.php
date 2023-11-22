@@ -35,8 +35,8 @@
                 <i class="icon-note m-1"></i><span class="d-none d-md-block font-14">Add Product Pricing</span></a>
         </li>
     </ul>
-    
-        
+
+
                         {{-- ====== input error message ========== --}}
                         @include('manager.includes.layouts.message')
                         {{-- ====================================== --}}
@@ -46,8 +46,8 @@
             <span hidden>{{$indx=\App\Models\PhotoIndex::where(['id'=>$pricing->index_id])->pluck('name')->first()}}</span>
             <span hidden>{{$chro=\App\Models\PhotoChromatics::where(['id'=>$pricing->chromatics_id])->pluck('name')->first()}}</span>
             <span hidden>{{$coat=\App\Models\PhotoCoating::where(['id'=>$pricing->coating_id])->pluck('name')->first()}}</span>
-            <h4 class="font-medium m-b-0"><h4 class="card-title">{{initials($type)." ".$indx." ".$chro." ".$coat}}</h4></h4>
-            
+            <h4 class="font-medium m-b-0"><h4 class="card-title">{{initials($type)=='BT'?'Bifocal Round':initials($type)." ".$indx." ".$chro." ".$coat}}</h4></h4>
+
             {{-- cards  --}}
             <div class="col-lg-3">
             <div class="card bg-{{($key%2==0)?'inverse':'cyan'}} text-white">
@@ -69,7 +69,7 @@
             </div>
         </div>
         @endforeach
-        
+
     </div>
 </div>
 @endsection

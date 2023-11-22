@@ -822,7 +822,7 @@
                                             <div class="content-todo ms-3">
                                                 <h5 class="font-medium fs-4 todo-header mb-0"
                                                     data-todo-header="Meeting with Mr.Jojo Sukla at 5.00PM">
-                                                    {{ initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
+                                                    {{ initials($type)=='BT'?'Bifocal Round':initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
                                                     <span class="text-warning">[{{ $product->quantity }}]</span>
                                                 </h5>
                                                 <span class="todo-time fs-2 text-muted d-flex align-items-center">

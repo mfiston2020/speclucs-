@@ -304,7 +304,7 @@
                                                                     </div>
                                                                     <div class="col-3">
                                                                         <span>
-                                                                            {{ initials($type) }} {{ $chrm }} {{ $ct }} {{ $indx }}
+                                                                            {{ initials($type)=='BT'?'Bifocal Round':initials($type) }} {{ $chrm }} {{ $ct }} {{ $indx }}
                                                                         </span>
                                                                     </div>
                                                                     <div class="col-2">
