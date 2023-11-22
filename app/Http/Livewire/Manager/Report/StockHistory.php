@@ -52,7 +52,7 @@ class StockHistory extends Component
                 array_push($this->dateList, $carbonDate->addDay($sDate)->format('Y-m-d'));
             }
 
-            $this->products =   Product::where('company_id', userInfo()->company_id)->take($this->paginat)->get();
+            $this->products =   Product::where('company_id', userInfo()->company_id)->oderBy('created_at','desc')->take($this->paginat)->get();
 
             $this->soldProducts =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))->get();
 
