@@ -476,25 +476,25 @@ class ProductRepo implements ProductInterface
         $chromatic  =   \App\Models\PhotoChromatics::find($request['chromatic_id']);
         $coating    =   \App\Models\PhotoCoating::find($request['coating_id']);
 
-        $description    =   initials($lens_type['name']) . " " . $index['name'] . " " . $chromatic['name'] . " " . $coating['name'];
+        $description=   initials($lens_type['name']) . " " . $index['name'] . " " . $chromatic['name'] . " " . $coating['name'];
 
         $eye        =   $request['eye'];
+        $add        =   $request['addition'];
         $axis       =   $request['axis'];
         $sphere     =   $request['sphere'];
         $cylinder   =   $request['cylinder'];
-        $add        =   $request['addition'];
 
 
         $product->category_id       =   '1';
-        $product->product_name      =   $lens_type->name;
-        $product->description       =   $description;
-        $product->stock             =   $request['quantity'];
         $product->deffective_stock  =   '0';
-        $product->price             =   $request['price'];
-        $product->cost              =   $request['cost'];
         $product->fitting_cost      =   '0';
-        $product->company_id        =   userInfo()->company_id;
+        $product->description       =   $description;
+        $product->cost              =   $request['cost'];
+        $product->product_name      =   $lens_type->name;
+        $product->price             =   $request['price'];
+        $product->stock             =   $request['quantity'];
         $product->location          =   $request['location'];
+        $product->company_id        =   userInfo()->company_id;
         $product->supplier_id       =   $request['supplier_id'];
 
         $product->save();

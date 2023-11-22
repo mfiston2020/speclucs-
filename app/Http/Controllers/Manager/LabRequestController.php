@@ -68,7 +68,8 @@ class LabRequestController extends Controller
         $chromatics         =   \App\Models\PhotoChromatics::all();
 
         if ($type=='requested') {
-            $invoicess  =   $invoices->where('status','requested')->all();
+
+            $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->where('status','requested')->orderBy('id','desc')->whereDoesntHave('unavailableProducts')->get();
 
             return view('manager.lab-request.requested',compact('invoicess','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
@@ -111,7 +112,6 @@ class LabRequestController extends Controller
 
         $requests          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);
 
-        // dd($requests);
 
         $products   =   Product::where('company_id', userInfo()->company_id)->get();
         $powers     =   Power::where('company_id', userInfo()->company_id)->get();
@@ -123,31 +123,27 @@ class LabRequestController extends Controller
 
     function sendToLab($id)
     {
-        $soldProducts   =   Invoice::where('id', Crypt::decrypt($id))->with('soldproduct')->first();
-        $products       =   Product::where('company_id', userInfo()->company_id)->get();
+        $soldProducts   =   Invoice::where('id', Crypt::decrypt($id))->with('soldproduct')->with('unavailableProducts')->first();
 
-        // foreach ($soldProducts->soldproduct as  $sold) {
-        //     $product    =   $products->where('id', $sold->product_id)->first();
+        foreach ($soldProducts->unavailableProducts as $key => $unavailable) {
 
-        //     if ($product->stock <= 0) {
-        //         return redirect()->back()->with('warningMsg', $product->product_name . ' | ' . $product->description . ' is out of Stock!');
-        //     }
-        // }
+            $prdt = Product::where('id', $unavailable->product_id)->first();
 
-        // dd($soldProducts->soldproduct);
-
-        foreach ($soldProducts->soldproduct as $key => $sold) {
-            $allProduct =   Product::where('company_id', userInfo()->company_id)->get();
-            $product    =   $allProduct->where('id', $sold->product_id)->first();
-
-            $prdt = Product::where('id', $sold->product_id)->first();
-            $prdt->stock    =   $prdt->stock < 1 ? 0 : $prdt->stock - $sold->quantity;
+            $nmstock    =   $prdt->stock;
+            $prdt->stock=   $nmstock - $unavailable->quantity;
             $prdt->save();
 
-            // dd($sold->quantity);
+            $this->stocktrackRepo->saveTrackRecord($prdt->id, $nmstock, $unavailable->quantity, $prdt->stock, 'sent to lab', 'rm', 'out');
+        }
 
-            // $stockVariation = $product->stock - 1;
-            $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock + 1, $sold->quantity, $prdt->stock, 'sent to lab', 'rm', 'out');
+        foreach ($soldProducts->soldproduct as $sold) {
+
+            $prdt = Product::where('id', $sold->product_id)->first();
+            $nmstock    =   $prdt->stock;
+            $prdt->stock=   $nmstock - $sold->quantity;
+            $prdt->save();
+
+            $this->stocktrackRepo->saveTrackRecord($prdt->id, $nmstock, $sold->quantity, $prdt->stock, 'sent to lab', 'rm', 'out');
         }
 
         Invoice::find(Crypt::decrypt($id))->update([
@@ -360,94 +356,221 @@ class LabRequestController extends Controller
         }
     }
 
-    function sendRequestTolab(Request $request)
-    {
-        $f_product_id   =   null;
+    function sendRequestTolab(Request $request){
         $productRepo    =   new ProductRepo();
         $lensType       =   LensType::all();
         $powers         =   Power::where('company_id',userInfo()->company_id)->get();
-        $allProduct     =   Product::where('company_id', userInfo()->company_id)->get();
+        $invoices         =   Invoice::where('company_id',userInfo()->company_id)->get();
 
         if ($request->requestId == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
         } else {
-            foreach ($request->requestId as $key => $value) {
+            foreach ($request->requestId as $key => $invoiceId) {
+                $invoice   =   $invoices->where('id',$invoiceId)->first();
+                $unavailableProductsCount   =   count($invoice->unavailableproducts);
 
-                $products   = Invoice::where('id', $value)->with('soldproduct')->with('unavailableproducts')->first();
+                if ($unavailableProductsCount==2) {
+                    $lenT   =   $lensType->where('id',$invoice->unavailableproducts[0]->type_id)->pluck('name')->first();
 
-                foreach ($products->unavailableproducts as $count=>  $sold) {
-                    $lenT   =   $lensType->where('id',$sold->type_id)->pluck('name')->first();
-
+                    // checking for the lens type to know how to compare them
                     if (initials($lenT)=='SV') {
-                        $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->where('axis',format_values($sold->axis))->where('add',format_values($sold->addition))->first();
+                        if (
+                            $invoice->unavailableproducts[0]->sphere == $invoice->unavailableproducts[1]->sphere
+                            &&
+                            $invoice->unavailableproducts[0]->cylinder == $invoice->unavailableproducts[1]->cylinder
+                            ){
+                                $f_product_id   =   $powers->where('type_id',$invoice->unavailableproducts[0]->type_id)
+                                                            ->where('chromatics_id',$invoice->unavailableproducts[0]->chromatic_id)
+                                                            ->where('coating_id',$invoice->unavailableproducts[0]->coating_id)
+                                                            ->where('sphere',format_values($invoice->unavailableproducts[0]->sphere))
+                                                            ->where('cylinder',format_values($invoice->unavailableproducts[0]->cylinder))->first();
+                                // when product is found
+                                if (!is_null($f_product_id)) {
+                                    foreach ($invoice->unavailableproducts as $key => $unProduct) {
+                                        $unProduct->update([
+                                            'product_id'=>$f_product_id->product_id
+                                        ]);
+                                    }
+                                }
+                                // when product not found
+                                else{
+                                    $newProduct =   $productRepo->saveUnavailableToStock($invoice->unavailableproducts[0]->toArray());
+                                    $prdt       =   Product::find($newProduct->id);
+                                    $pstock     =   $prdt->stock;
 
-                        // if ($count>0) {
-                            // dd($f_product_id);
-                        // }
-                    } else {
-                        $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->where('axis',format_values($sold->axis))->where('add',format_values($sold->addition))->first();
-                        dd('hi');
-                    }
+                                    $prdt->stock = 2;
+                                    $prdt->save();
 
-
-                    if ($f_product_id!=null)
-                    {
-                        // dd('kjhgfds');
-                        $sold->update([
-                            'product_id' => $f_product_id->id,
-                        ]);
-
-                        $prdt    =   Product::find($f_product_id->id);
-
-                        $sto    =   $prdt->stock;
-                        $prdt->stock = $sto+1;
-
-                        // dd($prdt->stock);
-                        $prdt->save();
-
-                        $this->stocktrackRepo->saveTrackRecord($f_product_id->id, $prdt->stock, '1', 1, 'received from supplier', 'rm', 'in');
-                        continue;
-                    }
-                    else{
-                        if ($f_product_id) {
-                            continue;
+                                    foreach ($invoice->unavailableproducts as $key => $unProduct) {
+                                        UnavailableProduct::where('id',$unProduct->id)->update([
+                                            'product_id' => $prdt->id,
+                                        ]);
+                                        $this->stocktrackRepo->saveTrackRecord($prdt->id, $pstock, '1', 1, 'received from supplier', 'rm', 'in');
+                                    }
+                                }
                         }
+                        // if single vision but power not equal
+                        else{
+                            foreach ($invoice->unavailableproducts as $key => $unProduct) {
 
-                        $newProduct = $productRepo->saveUnavailableToStock($sold->toArray());
+                                $newProduct =   $productRepo->saveUnavailableToStock($unProduct->toArray());
+                                $prdt       =   Product::find($newProduct->id);
+                                $pstock     =   $prdt->stock;
 
-                        $prdt    =   Product::find($newProduct->id);
+                                $prdt->stock = 2;
+                                $prdt->save();
 
-                        $prdt->stock = 1;
-                        $prdt->save();
+                                UnavailableProduct::where('id',$unProduct->id)->update([
+                                    'product_id' => $prdt->id,
+                                ]);
+                                $this->stocktrackRepo->saveTrackRecord($prdt->id, $pstock, '1', 1, 'received from supplier', 'rm', 'in');
+                            }
+                        }
+                    }
+                    // if not single vision
+                    else{
+                        if ( $invoice->unavailableproducts[0]->sphere == $invoice->unavailableproducts[1]->sphere
+                            &&
+                            $invoice->unavailableproducts[0]->cylinder == $invoice->unavailableproducts[1]->cylinder
+                            &&
+                            $invoice->unavailableproducts[0]->axis == $invoice->unavailableproducts[1]->axis
+                            &&
+                            $invoice->unavailableproducts[0]->addition == $invoice->unavailableproducts[1]->addition
+                            ){
+                            $f_product_id   =   $powers->where('type_id',$invoice->unavailableproducts[0]->type_id)
+                                                ->where('chromatics_id',$invoice->unavailableproducts[0]->chromatic_id)
+                                                ->where('coating_id',$invoice->unavailableproducts[0]->coating_id)
+                                                ->where('sphere',format_values($invoice->unavailableproducts[0]->sphere))
+                                                ->where('cylinder',format_values($invoice->unavailableproducts[0]->cylinder))
+                                                ->where('axis',format_values($invoice->unavailableproducts[0]->axis))
+                                                ->where('add',format_values($invoice->unavailableproducts[0]->addition))
+                                                ->first();
 
-                        $sold->update([
-                            'product_id' => $prdt->id,
-                        ]);
+                            // when product is found
+                            if (!is_null($f_product_id)) {
+                                foreach ($invoice->unavailableproducts as $key => $unProduct) {
+                                    $unProduct->update([
+                                        'product_id'=>$f_product_id->product_id
+                                    ]);
+                                }
+                            }
+                            // when product not found
+                            else{
+                                $newProduct =   $productRepo->saveUnavailableToStock($invoice->unavailableproducts[0]->toArray());
+                                $prdt       =   Product::find($newProduct->id);
+                                $pstock     =   $prdt->stock;
 
-                        $this->stocktrackRepo->saveTrackRecord($prdt->id, 0, '1', 1, 'received from supplier', 'rm', 'in');
+                                $prdt->stock = 2;
+                                $prdt->save();
+
+                                foreach ($invoice->unavailableproducts as $key => $unProduct) {
+                                    UnavailableProduct::where('id',$unProduct->id)->update([
+                                        'product_id' => $prdt->id,
+                                    ]);
+                                    $this->stocktrackRepo->saveTrackRecord($prdt->id, $pstock, '1', 1, 'received from supplier', 'rm', 'in');
+                                }
+                            }
+                        }
+                        // if not single vision but power not equal
+                        else{
+                            foreach ($invoice->unavailableproducts as $key => $unProduct) {
+
+                                $newProduct =   $productRepo->saveUnavailableToStock($unProduct->toArray());
+                                $prdt       =   Product::find($newProduct->id);
+                                $pstock     =   $prdt->stock;
+
+                                $prdt->stock = 2;
+                                $prdt->save();
+
+                                UnavailableProduct::where('id',$unProduct->id)->update([
+                                    'product_id' => $prdt->id,
+                                ]);
+                                $this->stocktrackRepo->saveTrackRecord($prdt->id, $pstock, '1', 1, 'received from supplier', 'rm', 'in');
+                            }
+                        }
                     }
                 }
+                // if only one unavailable product
+                else {
+                    foreach ($invoice->unavailableproducts as $key => $unProduct) {
 
-                $this->sendToLab(Crypt::encrypt($value));
+                        $newProduct =   $productRepo->saveUnavailableToStock($unProduct->toArray());
+                        $prdt       =   Product::find($newProduct->id);
+                        $pstock     =   $prdt->stock;
 
-                // foreach ($products->soldproduct as  $sold) {
-                //     $product    =   $this->allProduct->where('id', $sold->product_id)->first();
+                        $prdt->stock += 0;
+                        $prdt->save();
 
-                //     if ($product->stock <= 0) {
-                //         return redirect()->back()->with('warningMsg', $product->product_name . ' | ' . $product->description . ' is out of Stock!');
-                //     }
-                //     else{
-                //         $this->sendToLab();
-                //     }
-                // }
-
-                // Invoice::find($value)->update([
-                //     'status' => 'sent to lab',
-                //     'sent_to_lab' => now(),
-                //     'receive_from_supplier' => now(),
-                // ]);
+                        UnavailableProduct::where('id',$unProduct->id)->update([
+                            'product_id' => $prdt->id,
+                        ]);
+                        $this->stocktrackRepo->saveTrackRecord($prdt->id, $pstock, '1', 1, 'received from supplier', 'rm', 'in');
+                    }
+                }
+                $this->sendToLab(Crypt::encrypt($invoiceId));
             }
             return redirect()->back()->with('successMsg', 'Request sent to Lab!');
         }
     }
+
+    // function sendRequestTolab(Request $request)
+    // {
+    //     $f_product_id   =   null;
+    //     $productRepo    =   new ProductRepo();
+    //     $lensType       =   LensType::all();
+    //     $powers         =   Power::where('company_id',userInfo()->company_id)->get();
+
+    //     if ($request->requestId == null) {
+    //         return redirect()->back()->with('warningMsg', 'Select at least one Order!');
+    //     } else {
+    //         foreach ($request->requestId as $key => $value) {
+
+    //             $products   = Invoice::where('id', $value)->with('unavailableproducts')->first();
+
+    //             foreach ($products->unavailableproducts as $count=> $sold) {
+    //                 $lenT   =   $lensType->where('id',$sold->type_id)->pluck('name')->first();
+
+    //                 if ($count>0) {
+    //                     if (initials($lenT)=='SV') {
+    //                         $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->first();
+    //                     } else {
+    //                         $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->where('axis',format_values($sold->axis))->where('add',format_values($sold->addition))->first();
+    //                     }
+    //                 }
+
+    //                 if (is_null($f_product_id))
+    //                 {
+    //                     $newProduct = $productRepo->saveUnavailableToStock($sold->toArray());
+    //                     $prdt    =   Product::find($newProduct->id);
+    //                     $pstock=$prdt->stock;
+
+    //                     $prdt->stock += 1;
+    //                     $prdt->save();
+
+    //                     UnavailableProduct::where('id',$sold->id)->update([
+    //                         'product_id' => $prdt->id,
+    //                     ]);
+
+    //                     $this->stocktrackRepo->saveTrackRecord($prdt->id, $pstock, '1', 1, 'received from supplier', 'rm', 'in');
+    //                 }
+    //                 if (!is_null($f_product_id)){
+    //                     $prdt    =   Product::find($f_product_id->product_id);
+
+    //                     $sto    =   $prdt->stock;
+    //                     $prdt->stock += 1;
+
+    //                     $prdt->save();
+
+    //                     UnavailableProduct::where('id',$sold->id)->update([
+    //                         'product_id' => $prdt->id,
+    //                     ]);
+
+    //                     $this->stocktrackRepo->saveTrackRecord($f_product_id->product_id, $sto, '1', 1, 'received from supplier', 'rm', 'in');
+    //                 }
+    //             }
+    //             $this->sendToLab(Crypt::encrypt($value));
+    //         }
+    //         return redirect()->back()->with('successMsg', 'Request sent to Lab!');
+    //     }
+    // }
 }

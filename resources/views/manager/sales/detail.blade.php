@@ -92,8 +92,8 @@
                                             </td>
                                             <td>{{ $product->quantity }}</td>
                                             <td>{{ format_money($product->unit_price) }}</td>
-                                            <td>{{ format_money($product->discount) }}</td>
-                                            <td>{{ format_money($product->total_amount) }}</td>
+                                            <td>{{ format_money($product->discount ) }}</td>
+                                            <td>{{ format_money($product->unit_price * $product->quantity) }}</td>
                                             {{-- @if ($invoice->status == 'completed')
                                             @else
                                                 <td>

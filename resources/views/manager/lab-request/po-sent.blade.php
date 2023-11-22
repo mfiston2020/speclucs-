@@ -349,63 +349,63 @@
 
                                                         {{-- for lens --}}
 
-                                                            <div class="row mb-2">
-                                                                <div class="col-1">
-                                                                    <h4 class="text-capitalize">
-                                                                        {{ $invoice_product->eye == null ? '' : Oneinitials($invoice_product->eye) }}
-                                                                    </h4>
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <span>
-                                                                        {{ initials($type) }} {{ $chrm }} {{ $ct }} {{ $indx }}
-                                                                    </span>
-                                                                </div>
-                                                                <div class="col-2">
-                                                                    @if (initials($type) == 'SV')
-                                                                        <span>{{ $invoice_product->sphere }}
-                                                                            /
-                                                                            {{ $invoice_product->cylinder }}</span>
-                                                                    @else
-                                                                        <span>{{ $invoice_product->sphere }}
-                                                                            /
-                                                                            {{ $invoice_product->cylinder }}
-                                                                            *{{ $invoice_product->axis }}
-                                                                            {{ $invoice_product->add }}</span>
-                                                                    @endif
-                                                                </div>
-                                                                <div class="col-2 row">
-                                                                    <span>
-                                                                        <h6>Location: </h6>
-                                                                    </span>
-                                                                    {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
-                                                                </div>
-                                                                <div class="col-2 ">
-                                                                    <span
-                                                                        class="text-capitalize d-flex justify-content-around items-center">
-                                                                        <h6
-                                                                            class="text-dark">
-                                                                            Mono PD:
-                                                                        </h6>
-                                                                        <span
-                                                                            class="text-capitalize">
-                                                                            {{ $invoice_product->mono_pd }}
-                                                                        </span>
-                                                                    </span>
-                                                                </div>
-                                                                <div class="col-2 ">
-                                                                    <span
-                                                                        class="text-capitalize d-flex justify-content-around items-center">
-                                                                        <h6
-                                                                            class="text-dark">
-                                                                            Seg H:
-                                                                        </h6>
-                                                                        <span
-                                                                            class="text-capitalize">
-                                                                            {{ $invoice_product->segment_h }}
-                                                                        </span>
-                                                                    </span>
-                                                                </div>
+                                                        <div class="row mb-2">
+                                                            <div class="col-1">
+                                                                <h4 class="text-capitalize">
+                                                                    {{ $invoice_product->eye == null ? '' : Oneinitials($invoice_product->eye) }}
+                                                                </h4>
                                                             </div>
+                                                            <div class="col-3">
+                                                                <span>
+                                                                    {{ initials($type) }} {{ $chrm }} {{ $ct }} {{ $indx }}
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-2">
+                                                                @if (initials($type) == 'SV')
+                                                                    <span>{{ format_values($invoice_product->sphere) }}
+                                                                        /
+                                                                        {{ format_values($invoice_product->cylinder) }}</span>
+                                                                @else
+                                                                    <span>{{ format_values($invoice_product->sphere) }}
+                                                                        /
+                                                                        {{ format_values($invoice_product->cylinder) }}
+                                                                        *{{ format_values($invoice_product->axis) }}
+                                                                        {{ $invoice_product->add }}</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="col-2 row">
+                                                                <span>
+                                                                    <h6>Location: </h6>
+                                                                </span>
+                                                                {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
+                                                            </div>
+                                                            <div class="col-2 ">
+                                                                <span
+                                                                    class="text-capitalize d-flex justify-content-around items-center">
+                                                                    <h6
+                                                                        class="text-dark">
+                                                                        Mono PD:
+                                                                    </h6>
+                                                                    <span
+                                                                        class="text-capitalize">
+                                                                        {{ $invoice_product->mono_pd }}
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-2 ">
+                                                                <span
+                                                                    class="text-capitalize d-flex justify-content-around items-center">
+                                                                    <h6
+                                                                        class="text-dark">
+                                                                        Seg H:
+                                                                    </h6>
+                                                                    <span
+                                                                        class="text-capitalize">
+                                                                        {{ $invoice_product->segment_h }}
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
                                                     @endforeach
 
                                                     {{-- for frame --}}
@@ -762,7 +762,7 @@
                                                                                                                 /
                                                                                                                 {{ format_values($productsold->cylinder) }}
                                                                                                                 *{{ format_values($productsold->axis) }}
-                                                                                                                {{ format_values($productsold->addition) }}
+                                                                                                                {{ $productsold->addition }}
                                                                                                             </td>
                                                                                                             <td>
                                                                                                                 {{ $productsold->location == null ? '-' : $productsold->location }}

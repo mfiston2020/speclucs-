@@ -202,7 +202,7 @@
                                                         /
                                                         {{ format_values($right_len->cylinder) }}
                                                         *{{ format_values($right_len->axis) }}
-                                                        {{ format_values($right_len->addition) }}
+                                                        {{ $right_len->addition }}
                                                     </span>
                                                 @else
                                                     <span>
@@ -210,7 +210,7 @@
                                                         /
                                                         {{ format_values($right_len->power->cylinder) }}
                                                         *{{ format_values($right_len->power->axis) }}
-                                                        {{ format_values($right_len->power->add) }}
+                                                        {{ $right_len->power->add }}
                                                     </span>
                                                 @endif
                                             @else
@@ -224,13 +224,13 @@
                                                     /
                                                     {{ format_values($left_len->cylinder) }}
                                                     *{{ format_values($left_len->axis) }}
-                                                    {{ format_values($left_len->addition) }}
+                                                    {{ $left_len->addition }}
                                                 @else
                                                     {{ format_values($left_len->sphere) }}
                                                     /
                                                     {{ format_values($left_len->cylinder) }}
                                                     *{{ format_values($left_len->axis) }}
-                                                    {{ format_values($left_len->add) }}
+                                                    {{ $left_len->add }}
                                                 @endif
                                             @else
                                                 <span class="text-center">-</span>
@@ -384,15 +384,15 @@
                                                                 </div>
                                                                 <div class="col-2">
                                                                     @if (initials($type) == 'SV')
-                                                                        <span>{{ $invoice_product->sphere }}
+                                                                        <span>{{ format_values($invoice_product->sphere) }}
                                                                             /
-                                                                            {{ $invoice_product->cylinder }}</span>
+                                                                            {{ format_values($invoice_product->cylinder) }}</span>
                                                                     @else
-                                                                        <span>{{ $invoice_product->sphere }}
+                                                                        <span>{{ format_values($invoice_product->sphere) }}
                                                                             /
-                                                                            {{ $invoice_product->cylinder }}
+                                                                            {{ format_values($invoice_product->cylinder) }}
                                                                             *{{ $invoice_product->axis }}
-                                                                            {{ $invoice_product->add }}</span>
+                                                                            {{ $invoice_product->addition }}</span>
                                                                     @endif
                                                                 </div>
                                                                 <div class="col-2 row">
@@ -527,9 +527,9 @@
                                                         data-dismiss="modal">
                                                         Close
                                                     </button>
-                                                    <button type="button"
+                                                    {{-- <button type="button"
                                                         class="btn btn-success waves-effect text-left"
-                                                        id="print">Print</button>
+                                                        id="print">Print</button> --}}
                                                 </div>
                                             </div>
                                             <!-- /.modal-content -->
