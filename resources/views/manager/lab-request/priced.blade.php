@@ -223,11 +223,11 @@
                                                     *{{ format_values($left_len->axis) }}
                                                     {{ $left_len->addition }}
                                                 @else
-                                                    {{ format_values($left_len->sphere) }}
+                                                    {{ format_values($left_len->power->sphere) }}
                                                     /
-                                                    {{ format_values($left_len->cylinder) }}
-                                                    *{{ format_values($left_len->axis) }}
-                                                    {{ $left_len->add }}
+                                                    {{ format_values($left_len->power->cylinder) }}
+                                                    *{{ format_values($left_len->power->axis) }}
+                                                    {{ $left_len->power->add }}
                                                 @endif
                                             @else
                                                 <span class="text-center">-</span>
