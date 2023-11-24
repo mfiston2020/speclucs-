@@ -81,9 +81,9 @@
                                     <tr>
                                         <td>
                                             @if ($request->status == 'Confirmed')
-                                            <input type='checkbox' name="requestId[]" value={{ $request->id }} />
+                                                <input type='checkbox' name="requestId[]" value={{ $request->id }} />
                                             @else
-                                            -
+                                                -
                                             @endif
                                         </td>
                                         <td>
@@ -108,14 +108,11 @@
                                             $description = null;
                                             $right_len = $request->unavailableproducts->where('eye', 'right')->first();
 
-                                            // dd($right_len);
-
                                             if (!$right_len) {
                                                 $right_len = $request->soldproduct->where('eye', 'right')->first();
                                                 if ($right_len==null) {
                                                     continue;
                                                 }
-                                                // dd('hello');
                                                 $right_len = $right_len->product;
                                                 $availability_right = false;
                                             }
