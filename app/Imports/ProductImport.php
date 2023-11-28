@@ -41,7 +41,6 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
         $count  =   0;
 
         foreach ($collection as $un_filtered_data) {
-            // dd($un_filtered_data);
             try {
                 $indx   =   $this->index->where('name', strtoupper($un_filtered_data['index']))->first();
                 $ctng   =   $this->coating->where('name', strtoupper($un_filtered_data['coating']))->first();

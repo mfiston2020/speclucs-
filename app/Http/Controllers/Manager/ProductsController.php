@@ -146,8 +146,8 @@ class ProductsController extends Controller
                 'product_description' => 'required | min:3',
                 'stock' => 'required | integer',
                 'defective_stock' => 'required | integer',
-                'price' => 'required | integer',
-                'cost' => 'required | integer',
+                'price' => 'required|between:0,99.99',
+                'cost' => 'required|between:0,99.99',
             ]);
 
             $product    =   new \App\Models\Product();
