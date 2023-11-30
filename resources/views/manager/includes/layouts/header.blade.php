@@ -232,6 +232,13 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-item">
+                        <a href="{{ route('manager.retail') }}" class="sidebar-link">
+                            <i class="mdi mdi-adjust"></i>
+                            <span class="hide-menu"> Retail </span>
+                        </a>
+                    </li>
+
                     {{-- <li class="sidebar-item"><a href="{{ route('manager.order') }}" class="sidebar-link"><i
                                 class="mdi mdi-cart-plus"></i><span class="hide-menu">
                                 {{ __('navigation.lab_orders') }} </span></a>
