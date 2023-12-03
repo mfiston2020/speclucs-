@@ -161,7 +161,7 @@
                                             </td>
 
                                             <td>
-                                                <h6>{{ initials($type)=='BT'?'Bifocal Round':initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
+                                                <h6>{{ initials($type)=='BT'?'Bifocal Round Top':initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
                                                 </h6>
                                                 <small class="text-muted">
                                                     {{-- @if ($power) --}}

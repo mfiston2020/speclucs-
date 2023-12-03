@@ -26,9 +26,9 @@
                         @if ($receiptDetail->status=='completed')
                             <a href="{{route('manager.payment.add')}}"
                                 class="pull-right btn btn-outline-primary">Pay Receipt</a>
-                        @elseif($receiptDetail->status=='paid')  
+                        @elseif($receiptDetail->status=='paid')
                             <a href="{{url()->previous()}}"
-                                class="pull-right btn btn-outline-secondary">Back</a>        
+                                class="pull-right btn btn-outline-secondary">Back</a>
                         @else
                             <a href="{{route('manager.receipt.add.product',Crypt::encrypt($receiptDetail->id))}}"
                             class="pull-right btn btn-outline-secondary">Add Product</a>
@@ -47,10 +47,10 @@
                                     <th>Cost</th>
                                     <th>Total Cost</th>
                                     @if ($receiptDetail->status=='completed' || $receiptDetail->status=='paid')
-                                        
+
                                     @else
                                         <th>Operation</th>
-                                    @endif                                   
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,7 +61,7 @@
                                     <span
                                         hidden>{{$prod=\App\Models\Product::where(['id'=>$product->product_id])->where('company_id',Auth::user()->company_id)->select('*')->first()}}</span>
                                     <td>
-                                        <h6>{{$prod->product_name}}</h6>
+                                        <h6>{{$prod->product_name}} {{$prod->description}} </h6>
                                         <small class="text-muted">
                                             <span hidden>{{$power=\App\Models\Power::where(['product_id'=>$prod->id])->where('company_id',Auth::user()->company_id)->select('*')->first()}}</span>
                                             @if ($power)
@@ -75,7 +75,7 @@
                                                 {{\App\Models\Category::where(['id'=>$prod->category_id])->where('company_id',Auth::user()->company_id)->pluck('name')->first()}}
                                             </span>
                                         @endif
-                                            
+
                                         </small>
                                     </td>
                                     <td>{{$product->stock}}</td>
@@ -84,9 +84,9 @@
                                     <td>{{format_money($total_cost)}}</td>
                                     <span hidden> {{$gnereral_cost = $total_cost + $gnereral_cost }}</span>
                                     <span hidden> {{$total_stock = $total_stock + $product->stock }}</span>
-                                    
+
                                     @if ($receiptDetail->status=='completed' || $receiptDetail->status=='paid')
-                                        
+
                                     @else
                                     <td>
                                         <a href="{{route('manager.edit.receipt',Crypt::encrypt($product->id))}}" style="color: rgb(0, 38, 255)">Edit</a>
@@ -158,8 +158,8 @@
                         <a href="" data-toggle="modal" data-target="#myModal" type="button" class="m-t-20 btn waves-effect waves-light btn-success">Finalize Receipt</a>
                         @else
                         @endif
-                        
-                        
+
+
 
                     <div id="myModal" class="modal fade" tabindex="-1" role="dialog"
                         aria-labelledby="myModalLabel" aria-hidden="true">
@@ -167,7 +167,7 @@
                             <form action="{{route('manager.finalize.receipt',Crypt::encrypt($receiptDetail->id))}}" method="post">
                                 @csrf
                             <div class="modal-content">
-                               
+
                                 <div class="modal-header">
                                     <h4 class="modal-title" id="myModalLabel"><i class="fa fa-exclamation-triangle"></i>
                                         Warning</h4>

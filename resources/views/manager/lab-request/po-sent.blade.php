@@ -357,7 +357,7 @@
                                                             </div>
                                                             <div class="col-3">
                                                                 <span>
-                                                                    {{ initials($type)=='BT'?'Bifocal Round':initials($type) }} {{ $chrm }} {{ $ct }} {{ $indx }}
+                                                                    {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }} {{ $chrm }} {{ $ct }} {{ $indx }}
                                                                 </span>
                                                             </div>
                                                             <div class="col-2">
@@ -749,7 +749,7 @@
                                                                                                             </td>
                                                                                                             <td>
                                                                                                                 @if ($availability)
-                                                                                                                    {{ initials($type)=='BT'?'Bifocal Round':initials($type) }}
+                                                                                                                    {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }}
                                                                                                                     {{ $chrm }}
                                                                                                                     {{ $ct }}
                                                                                                                     {{ $indx }}

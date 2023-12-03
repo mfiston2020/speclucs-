@@ -205,7 +205,7 @@
                                                                                         </h4>
                                                                                         <span class="ml-3">
                                                                                             @if ($availability)
-                                                                                                {{ initials($type)=='BT'?'Bifocal Round':initials($type) }}
+                                                                                                {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }}
                                                                                                 {{ $chrm }}
                                                                                                 {{ $ct }}
                                                                                                 {{ $indx }}
@@ -814,7 +814,7 @@
                                                                                 </h4>
                                                                                 <span class="ml-3">
                                                                                     @if ($availability)
-                                                                                        {{ initials($type)=='BT'?'Bifocal Round':initials($type) }}
+                                                                                        {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }}
                                                                                         {{ $chrm }}
                                                                                         {{ $ct }}
                                                                                         {{ $indx }}

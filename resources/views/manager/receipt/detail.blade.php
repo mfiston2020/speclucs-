@@ -106,7 +106,7 @@
                                             @endphp
                                             <tr>
                                                 <td class="text-center"><center>{{ OneInitials($product->eye) }}</center></td>
-                                                <td>{{ initials($type)=='BT'?'Bifocal Round':initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
+                                                <td>{{ initials($type)=='BT'?'Bifocal Round Top':initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
                                                     @if (initials($type) == 'SV')
                                                         <span> {{ format_values($product->sphere) }} /
                                                             {{ format_values($product->cylinder) }}</span>

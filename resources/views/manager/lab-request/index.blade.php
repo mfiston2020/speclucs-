@@ -1038,7 +1038,7 @@
                                                                 @endphp
                                                                 <td>
                                                                     @if ($availability)
-                                                                        {{ initials($type)=='BT'?'Bifocal Round':initials($type) }} {{ $chrm }}
+                                                                        {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }} {{ $chrm }}
                                                                         {{ $ct }} {{ $indx }}
                                                                     @else
                                                                         {{ $description }}
@@ -1348,7 +1348,7 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     @if ($availability)
-                                                                                        {{ initials($type)=='BT'?'Bifocal Round':initials($type) }}
+                                                                                        {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }}
                                                                                         {{ $chrm }}
                                                                                         {{ $ct }}
                                                                                         {{ $indx }}
@@ -1715,7 +1715,7 @@
                                                                                     </td>
                                                                                     <td>
                                                                                         @if ($availability)
-                                                                                            {{ initials($type)=='BT'?'Bifocal Round':initials($type) }}
+                                                                                            {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }}
                                                                                             {{ $chrm }}
                                                                                             {{ $ct }}
                                                                                             {{ $indx }}

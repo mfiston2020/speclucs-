@@ -46,7 +46,7 @@
             <span hidden>{{$indx=\App\Models\PhotoIndex::where(['id'=>$pricing->index_id])->pluck('name')->first()}}</span>
             <span hidden>{{$chro=\App\Models\PhotoChromatics::where(['id'=>$pricing->chromatics_id])->pluck('name')->first()}}</span>
             <span hidden>{{$coat=\App\Models\PhotoCoating::where(['id'=>$pricing->coating_id])->pluck('name')->first()}}</span>
-            <h4 class="font-medium m-b-0"><h4 class="card-title">{{initials($type)=='BT'?'Bifocal Round':initials($type)." ".$indx." ".$chro." ".$coat}}</h4></h4>
+            <h4 class="font-medium m-b-0"><h4 class="card-title">{{initials($type)=='BT'?'Bifocal Round Top':initials($type)." ".$indx." ".$chro." ".$coat}}</h4></h4>
 
             {{-- cards  --}}
             <div class="col-lg-3">

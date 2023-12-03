@@ -209,7 +209,7 @@
                                                                                         @endphp
                                                                                         <td>
                                                                                             @if ($availability_right)
-                                                                                                {{ initials($type)=='BT'?'Bifocal Round':initials($type) }} {{ $chrm }}
+                                                                                                {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }} {{ $chrm }}
                                                                                                 {{ $ct }} {{ $indx }}
                                                                                             @else
                                                                                                 {{ $description }}
