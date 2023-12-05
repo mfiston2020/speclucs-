@@ -3,14 +3,14 @@
 @section('title','Admin Dashboard - Sales')
 
 @push('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/extra-libs/prism/prism.css')}}">
-<style>
-    .custom-border{
-        border: 1px solid #F0F0F0;
-        border-left: 2px solid #3BAFDA;
-        border-radius: 4px;
-    }
-</style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/extra-libs/prism/prism.css')}}">
+    <style>
+        .custom-border{
+            border: 1px solid #F0F0F0;
+            border-left: 2px solid #3BAFDA;
+            border-radius: 4px;
+        }
+    </style>
 @endpush
 
 {{-- ==== Breadcumb ======== --}}
@@ -19,11 +19,11 @@
 {{-- === End of breadcumb == --}}
 
 @section('content')
-<div class="container-fluid row">
+    <div class="container-fluid row">
 
-    @livewire('manager.add-sale-product',['invoice_id'=>$invoice_id])
+        @livewire('manager.add-sale-product',['invoice_id'=>$invoice_id])
 
-</div>
+    </div>
 @endsection
 
 @push('scripts')

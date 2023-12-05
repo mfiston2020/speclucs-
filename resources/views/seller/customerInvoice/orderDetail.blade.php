@@ -66,7 +66,7 @@
                                         <td>ORDER # {{sprintf('%04d',$order->reference_number)}}</td>
                                         <td>{{\App\Models\Category::where('id',$product->category_id)->pluck('name')->first()}}</td>
                                         <td>{{$product->product_name}}</td>
-                                        <td>{{$product->description}}</td>
+                                        <td>{{lensDescription($product->description)}}</td>
                                         <td>
                                             @if ($power)
                                                 @if (initials($product->product_name)=='SV')

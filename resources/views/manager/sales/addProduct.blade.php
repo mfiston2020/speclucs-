@@ -41,7 +41,7 @@
                                             {{$category->name}}
                                         </option>
                                     @else
-                                        
+
                                     @endif
                                     @endforeach
                                     <option value="others"
@@ -263,9 +263,9 @@
             <br>
             <form action="{{route('manager.sales.save')}}" method="POST">
                 @csrf
-                
+
                 <input type="hidden" value="{{$id}}" name="invoice_id">
-                
+
                 <div class="form-group row">
                     <label for="pname" class="col-sm-3 text-right control-label col-form-label">Product
                     </label>
@@ -275,7 +275,7 @@
                             <option value="">Select</option>
                             @foreach ($products as $product)
                             <option value="{{$product->id}}" {{(old('product')==$product->id)?'selected':''}}>
-                                {{$product->product_name}} | {{$product->description}}
+                                {{$product->product_name}} | {{lensDescription($product->description)}}
                             </option>
                             @endforeach
                         </select>
@@ -401,7 +401,7 @@
                 if (!data.length) {
                     $('#loading').hide();
                     $('#warning').show();
-                    
+
                     console.log(data);
                 } else {
                     $('#loading').hide();
@@ -412,10 +412,10 @@
                     $('#product_id').val(data[0].id);
 
                     $('#search_results').modal('show');
-                    
+
                     console.log(data);
                 }
-                
+
             },
             error: function (data) {
                 console.log(data.length);
@@ -458,11 +458,11 @@
         var total = $("#total_amount").val((qty * up) - dsct);
     });
 
-    $('#quantity2').on('input', function () 
+    $('#quantity2').on('input', function ()
     {
 
         $('#discount2').removeAttr('readonly');
-        
+
         var qty = $(this).val();
         var up = $('#unit_price2').val();
         var dsct = $('#discount').val();
@@ -489,7 +489,7 @@
 
         var total = $("#total_amount2").val((parseInt(up)+parseInt(dsct))*qty);
     });
-    
+
 
     $('#lens_type').on('change',function(){
         if ($(this).val()=='2') {

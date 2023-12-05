@@ -95,7 +95,7 @@
                                         <tr>
                                             <td class="text-center">1</td>
                                             <td>
-                                                {{$product->product_name }} | {{ $product->description}}
+                                                {{$product->product_name }} | {{ lensDescription($product->description)}}
                                                 <br>
                                                 @if ($product->type_id!=null)
                                                     @if (initials($product->product_name)=='SV')

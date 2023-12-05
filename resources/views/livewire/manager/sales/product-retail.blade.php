@@ -85,7 +85,6 @@
             <div class="card">
                 <div class="card-header">
                     Customer Information
-                    {{-- <button wire:click=showModal>shwi</button> --}}
                 </div>
 
                 <div class="card-body">
@@ -376,6 +375,7 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                <img src={{asset('dashboard/assets/images/loading2.gif')}} width="20" wire:loading wire:target="frame"/>
                                 </div>
                             </div>
 
@@ -416,6 +416,24 @@
                                     placeholder="Location" wire:model.lazy="frame_location" readonly>
                             </div>
                         </div>
+                        @if (!is_null($frame_stock))
+                            <hr>
+                            <div class="row">
+                                <!--/span-->
+
+                                <div class="form-group col-2">
+                                    <label>Stock Booked</label>
+                                    <h5 class="text-primary">{{number_format($ordered_frames)}}</h5>
+                                </div>
+
+                                <div class="form-group col-3">
+                                    <label>Stock Available for orders</label>
+                                    <h5 class="text-primary">
+                                        {{(int)$frame_stock-(int)$ordered_frames}}
+                                    </h5>
+                                </div>
+                            </div>
+                        @endif
 
                     </div>
                 </div>
@@ -488,17 +506,21 @@
 
 
                         <div class="row d-flex justify-content-center items-center mt-4">
-                            @if ($accessory != null && $accessory_quantity<=$accessory_stock)
-                                <button wire:loading.attr="disabled" class="btn btn-sm btn-primary" type="button"
-                                    wire:click="checkAvailability">
-                                    <span wire:loading.remove wire:target="checkAvailability">
-                                        Check Product Availability
-                                    </span>
-                                    <span wire:loading wire:target="checkAvailability">
-                                        Checking... <img src="{{ asset('dashboard/assets/images/loading2.gif') }}"
-                                            width="20" />
-                                    </span>
-                                </button>
+                            @if ($accessory != null && $accessory_quantity<=$accessory_stock )
+                                @if (!is_null($frame_stock) && (int)$frame_stock-(int)$ordered_frames<0)
+                                    <h5 class="text-warning">Frame Quantity Not Available </h5>
+                                @else
+                                    <button wire:loading.attr="disabled" class="btn btn-sm btn-primary" type="button"
+                                            wire:click="checkAvailability">
+                                            <span wire:loading.remove wire:target="checkAvailability">
+                                                Check Product Availability
+                                            </span>
+                                            <span wire:loading wire:target="checkAvailability">
+                                                Checking... <img src="{{ asset('dashboard/assets/images/loading2.gif') }}"
+                                                    width="20" />
+                                            </span>
+                                        </button>
+                                @endif
                             @else
                                 <h5 class="text-danger">Surpassed Available Quantity</h5>
                             @endif
@@ -537,6 +559,7 @@
                                             <label>Lens</label>
                                             <br>
                                             <span>R</span>
+                                            <br>
                                             @if ($rightLen)
                                             <label @class(['badge badge-pill ml-2', 'badge-success' => $rightLenQty>=10,'badge-warning' => $rightLenQty<10,'badge-danger' => $rightLenQty<=1,])>
                                                 @if ($rightLenQty<=1)
@@ -546,7 +569,7 @@
                                                         Out Of Stock
                                                     @endif --}}
                                                 @else
-                                                    Available [Qty: {{$rightLenQty}}]
+                                                    Qty: {{$rightLenQty}}-Book: {{$rightBooked}}-AV: {{$rightLenQty-$rightBooked}}
                                                 @endif
                                             </label>
                                             @else
@@ -563,7 +586,8 @@
                                                             Out Of Stock
                                                         @endif --}}
                                                     @else
-                                                        Available [Qty: {{$leftLenQty}}]
+                                                        Qty: {{$leftLenQty}}-Book: {{$leftBooked}}-AV: {{$leftLenQty-$leftBooked}}
+                                                        {{-- Available Qty: {{$leftLenQty}} --}}
                                                     @endif
                                                 </label>
                                             @else

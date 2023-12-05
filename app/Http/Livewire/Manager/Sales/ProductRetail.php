@@ -40,7 +40,7 @@ class ProductRetail extends Component
 
     public $l_sphere, $l_cylinder, $l_axis, $l_addition, $l_segment_height, $l_mono_pd;
 
-    public $leftLenInfo, $leftLenQty, $leftLenID, $rightLenInfo, $rightLenQty, $rightLenID;
+    public $leftLenInfo, $leftLenQty, $leftLenID, $rightLenInfo, $rightLenQty, $rightLenID,$rightBooked,$leftBooked;
 
     // =========== frame variable management==========
     public $frame, $frame_stock, $frame_unit_price, $frame_quantity, $frame_price_adjust = 0, $frame_total_amount, $frame_location, $frameInfo;
@@ -56,7 +56,7 @@ class ProductRetail extends Component
     public $insurance_percentage_lens, $insurance_payment_lens, $insurance_approved_lens, $patient_payment_lens, $insurance_type;
 
     // frame variables for insurance calculations ======
-    public $insurance_percentage_frame, $insurance_payment_frame, $insurance_approved_frame, $patient_payment_frame;
+    public $insurance_percentage_frame, $insurance_payment_frame, $insurance_approved_frame, $patient_payment_frame,$ordered_frames;
 
     public $invoiceStatus   =   'requested';
 
@@ -81,6 +81,12 @@ class ProductRetail extends Component
         $repo   =   new ProductRepo();
 
         $frameResult = $repo->searchProduct($data);
+
+        $invoiceStock   =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$frameResult->id)->withSum('soldproduct','quantity')->get();
+
+        $this->ordered_frames   =   $invoiceStock->sum('soldproduct_sum_quantity');
+        // dd($invoiceStock->sum('soldproduct_sum_quantity'));
+
         $this->frameInfo    =   $frameResult;
 
         if ($frameResult) {
@@ -214,6 +220,14 @@ class ProductRetail extends Component
 
                 $this->total_lens_amount =    $leftPrice + $rightPrice;
                 // }
+
+                // checking for booked stock on lens
+                $invoiceStock =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$right_len_Results[0]->id)->withSum('soldproduct','quantity')->get();
+                $invoiceStock =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$left_len_Results[0]->id)->withSum('soldproduct','quantity')->get();
+
+                $this->leftBooked  =   $invoiceStock->sum('soldproduct_sum_quantity');
+
+
             }
             // if left len is the only product
             else if ($left_len_Results != 'product-not-found' && $right_len_Results == 'product-not-found') {
@@ -325,7 +339,7 @@ class ProductRetail extends Component
                 $this->invoiceStatus  =   'requested';
             }
 
-            $stock_balancing    =   Invoice::withsum('soldproduct','quantity')->where('status','requested')->where('company_id',userInfo()->id)->get();
+            $stock_balancing    =   Invoice::withsum('soldproduct','quantity')->where('product_id',$this->rightLenInfo[0]->id)->where('status','requested')->where('company_id',userInfo()->id)->get();
 
             if ($this->rightLenFound!=null && $this->leftLenFound!=null) {
                 if ($stock_balancing > $this->rightLenInfo[0]->stock || $stock_balancing > $this->leftLenInfo[0]->stock) {

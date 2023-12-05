@@ -81,6 +81,7 @@
                                                                         <input type="checkbox" onclick="checkUncheckrequestId(this)">
                                                                     </th>
                                                                     <th>Request # </th>
+                                                                    <th>Cloud ID</th>
                                                                     <th>Patient Name</th>
                                                                     <th>Request Date</th>
                                                                     <th>Request Age</th>
@@ -110,10 +111,21 @@
                                                                                         </td>
                                                                                         <td>
                                                                                             @if ($request->client_id != null)
+                                                                                                -
+                                                                                            @else
+                                                                                                @if ($request->hospital_name!=null)
+                                                                                                    {{$request->cloud_id}}
+                                                                                                @else
+                                                                                                    -
+                                                                                                @endif
+                                                                                            @endif
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            @if ($request->client_id != null)
                                                                                                 {{$request->client->name}}
                                                                                             @else
                                                                                                 @if ($request->hospital_name!=null)
-                                                                                                [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                                                                {{-- [{{$request->cloud_id}}]  --}}     {{$request->hospital_name}}
                                                                                                 @else
                                                                                                     {{$request->client_name}}
                                                                                                 @endif

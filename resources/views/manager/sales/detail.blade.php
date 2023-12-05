@@ -24,8 +24,8 @@
                             <hr>
 
                             <a href="{{ route('manager.invoice.receipt', Crypt::encrypt($invoice->id)) }}"
-                                class="pull-right btn btn-outline-warning "><i class="fa fa-print"></i> Print
-                                Receipt
+                                class="pull-right btn btn-outline-warning ">
+                                <i class="fa fa-print"></i> Print Receipt
                             </a>
 
                             @if ($invoice->status == 'delivered')
@@ -84,8 +84,10 @@
                                                         @if (initials($prod->product_name) == 'SV')
                                                             <span> {{ $prod->power->sphere }} / {{ $prod->power->cylinder }}</span>
                                                         @else
-                                                            <span>{{ $prod->power->sphere }} / {{ $prod->power->cylinder }}
-                                                                *{{ $prod->power->axis }} {{ $prod->power->add }}{{ $prod->power->addition }}</span>
+                                                            <span>
+                                                                {{ $prod->power->sphere }} / {{ $prod->power->cylinder }}
+                                                                *{{ $prod->power->axis }} {{ $prod->power->add }}{{ $prod->power->addition }}
+                                                            </span>
                                                         @endif
                                                     @endif
                                                 </small>

@@ -104,9 +104,9 @@
 
                                             <td>
                                                 @if (initials($product->product_name) == 'SV' || initials($product->product_name) == 'BT')
-                                                    {{ $product->description }}
+                                                    {{ lensDescription($product->description) }}
                                                 @else
-                                                    {{ $product->description }} {{$product->power?'- '.$product->power->eye:''}}
+                                                    {{ lensDescription($product->description) }} {{$product->power?'- '.$product->power->eye:''}}
                                                 @endif
                                             </td>
                                             <td>

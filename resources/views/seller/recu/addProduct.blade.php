@@ -38,7 +38,7 @@
                                     <option value="">Select</option>
                                     @foreach ($products as $product)
                                     <option value="{{$product->id}}" {{(old('product')==$product->id)?'selected':''}}>
-                                        {{$product->product_name}} - {{$product->description}}
+                                        {{$product->product_name}} - {{lensDescription($product->description)}}
                                     </option>
                                     @endforeach
 

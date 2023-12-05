@@ -279,7 +279,7 @@
                                 <option value="">Select</option>
                                 @foreach ($products as $product)
                                 <option value="{{$product->id}}" {{(old('product')==$product->id)?'selected':''}}>
-                                    {{$product->product_name}} - {{$product->description}}
+                                    {{$product->product_name}} - {{lensDescription($product->description)}}
                                 </option>
                                 @endforeach
 
@@ -400,7 +400,7 @@
     $('#productPrompt').hide();
     $('#lens').hide();
 
-    function product() 
+    function product()
     {
         // $('#lens').hide();
         $('#productPrompt').show();
@@ -419,9 +419,9 @@
         var add = $('#add').val();
         var eye_array = document.getElementsByName('eye');
 
-        for (i = 0; i < eye_array.length; i++) 
+        for (i = 0; i < eye_array.length; i++)
         {
-            if (eye_array[i].checked) 
+            if (eye_array[i].checked)
             {
                 eye = eye + eye_array[i].value;
             }
@@ -456,7 +456,7 @@
     });
 
     // ====================================
-    function searchProduct() 
+    function searchProduct()
     {
         const element = document.getElementById('searchForm');
         element.addEventListener('submit', event => {
@@ -560,7 +560,7 @@
         }
     });
 
-    // 
+    //
     $('#product').on('change', function () {
         var id = ($(this).val());
 

@@ -139,43 +139,43 @@
                                     // Lens total for all
                                     $lensopeningStockTotalQuantity = 0;
                                     $lensopeningStockTotalCost = 0;
-                                    
+
                                     $inStockTotalQuantity = 0;
                                     $inStockTotalCost = 0;
-                                    
+
                                     $lensStockOutTtlQty = 0;
                                     $lensStockOutTtlCost = 0;
-                                    
+
                                     // Frames total for all
                                     $frameopeningStockTotalQuantity = 0;
                                     $frameopeningStockTotalCost = 0;
-                                    
+
                                     $frameinStockTotalQuantity = 0;
                                     $frameinStockTotalCost = 0;
-                                    
+
                                     $frameoutStockTotalQuantity = 0;
                                     $frameoutStockTotalCost = 0;
-                                    
+
                                     // Accessories total for all
                                     $accessoriesopeningStockTotalQuantity = 0;
                                     $accessoriesopeningStockTotalCost = 0;
-                                    
+
                                     $accessoriesinStockTotalQuantity = 0;
                                     $accessoriesinStockTotalCost = 0;
-                                    
+
                                     $accinStockTotalQuantity = 0;
                                     $accinStockTotalCost = 0;
-                                    
+
                                     $accoutStockTotalQuantity = 0;
                                     $accoutStockTotalCost = 0;
-                                    
+
                                     $accessoriesoutStockTotalQuantity = 0;
                                     $accessoriesoutStockTotalCost = 0;
-                                    
+
                                     // counting product name
                                     $product_name = '';
                                     $product_name_count = '';
-                                    
+
                                     // Accessories total for all
                                     $closingStockTotalQty = 0;
                                     $closingStockTotalAmt = 0;
@@ -188,7 +188,7 @@
                                     // ----------------------
                                     $accessoryclosingStockTotalQty = 0;
                                     $accessoryclosingStockTotalAmt = 0;
-                                    
+
                                 @endphp
 
                                 {{-- body --}}
@@ -198,105 +198,105 @@
                                         @foreach ($dateList as $key => $rm)
                                             @php
                                                 $stockRecord = $rm . '-' . $product->id;
-                                                
+
                                                 $openingStockQty = $product->stock + $productListingVariation[$product->id];
                                                 $openingStockTtl = $product->stock;
-                                                
+
                                                 $stockInQty = 0;
                                                 $stockInTtl = 0;
-                                                
+
                                                 $stockOutQty = 0;
                                                 $stockOutTtl = 0;
-                                                
+
                                                 $stockClsQty = $product->stock;
                                                 $stockClsTtl = $product->stock;
-                                                
+
                                                 // closing caclulations
                                                 if ($productListing[$stockRecord]['closingStock'] != 0 && $product->category_id == '1') {
                                                     $lensclosingStockTotalQty += $productListing[$stockRecord]['closingStock'];
                                                     $lensclosingStockTotalAmt += $productListing[$stockRecord]['closingStock'] * $product->cost;
                                                 }
-                                                
+
                                                 if ($productListing[$stockRecord]['closingStock'] != 0 && $product->category_id == '2') {
                                                     $frameclosingStockTotalQty += $productListing[$stockRecord]['closingStock'];
                                                     $frameclosingStockTotalAmt += $productListing[$stockRecord]['closingStock'] * $product->cost;
                                                 }
-                                                
+
                                                 if ($productListing[$stockRecord]['closingStock'] != 0 && $product->category_id > 2) {
                                                     $accessoryclosingStockTotalQty += $productListing[$stockRecord]['closingStock'];
                                                     $accessoryclosingStockTotalAmt += $productListing[$stockRecord]['closingStock'] * $product->cost;
                                                 }
-                                                
+
                                                 if ($productListing[$stockRecord]['current_stock'] != null) {
                                                     $closingStockTotalQty += $productListing[$stockRecord]['current_stock']['closingStock'];
-                                                
+
                                                     // opening stock
                                                     $openingStockQty = $productListing[$stockRecord]['current_stock']->current_stock;
                                                     $openingStockTtl = $productListing[$stockRecord]['current_stock']->current_stock * $product->cost;
-                                                
+
                                                     if ($product_name == '' || ($product_name != $product->id && $product->category_id == '1')) {
                                                         $lensopeningStockTotalQuantity += $openingStockQty;
                                                         $lensopeningStockTotalCost += $openingStockTtl;
-                                                
+
                                                         $product_name = $product->id;
                                                     }
-                                                
+
                                                     if ($product_name == '' || ($product_name != $product->id && $product->category_id == '2')) {
                                                         $frameopeningStockTotalQuantity += $openingStockQty;
                                                         $frameopeningStockTotalCost += $openingStockTtl;
-                                                
+
                                                         $product_name = $product->id;
                                                     }
-                                                
+
                                                     if ($product_name == '' || ($product_name != $product->id && $product->category_id > 2)) {
                                                         $accessoriesopeningStockTotalQuantity += $openingStockQty;
                                                         $accessoriesopeningStockTotalCost += $openingStockTtl;
-                                                
+
                                                         $product_name = $product->id;
                                                     }
-                                                
+
                                                     // Stock In
                                                     if ($productListing[$stockRecord]['current_stock']->operation == 'in' && $productListing[$stockRecord]['current_stock']->type == 'rm') {
                                                         $stockInQty = $productListing[$stockRecord]['incoming'];
                                                         $stockInTtl = $productListing[$stockRecord]['incoming'] * $product->cost;
-                                                
+
                                                         if ($product->category_id == '1') {
                                                             $inStockTotalQuantity += $stockInQty;
                                                             $inStockTotalCost += $openingStockTtl;
                                                         }
-                                                
+
                                                         if ($product->category_id == '2') {
                                                             $frameinStockTotalQuantity += $stockInQty;
                                                             $frameinStockTotalCost += $openingStockTtl;
                                                         }
-                                                
+
                                                         if ($product->category_id > 2) {
                                                             $accinStockTotalQuantity += $stockInQty;
                                                             $accinStockTotalCost += $openingStockTtl;
                                                         }
                                                     }
-                                                
+
                                                     // Stock Out
                                                     if ($productListing[$stockRecord]['current_stock']->operation == 'out' && $productListing[$stockRecord]['current_stock']->type == 'rm') {
                                                         $stockOutQty = $productListing[$stockRecord]['incoming'];
                                                         $stockOutTtl = $productListing[$stockRecord]['incoming'] * $product->cost;
-                                                
+
                                                         if ($product->category_id == '1') {
                                                             $lensStockOutTtlQty += $stockOutQty;
                                                             $lensStockOutTtlCost += $stockOutTtl;
                                                         }
-                                                
+
                                                         if ($product->category_id == '2') {
                                                             $frameoutStockTotalQuantity += $stockOutQty;
                                                             $frameoutStockTotalCost += $stockOutTtl;
                                                         }
-                                                
+
                                                         if ($product->category_id > 2) {
                                                             $accoutStockTotalQuantity += $stockOutQty;
                                                             $accoutStockTotalCost += $stockOutTtl;
                                                         }
                                                     }
-                                                
+
                                                     // Closing Stock
                                                     if ($productListing[$stockRecord]['current_stock']->type == 'rm') {
                                                         $stockClsQty = $productListing[$stockRecord]['current_stock']->current_stock - $productListing[$stockRecord]['incoming'];
@@ -304,7 +304,7 @@
                                                         $stockClsTtl = $stockClsQty * $product->cost;
                                                     }
                                                 }
-                                                
+
                                             @endphp
 
                                             <tr>
@@ -318,7 +318,7 @@
                                                 <td {{ $productListing[$stockRecord]['hide'] == true ? 'hidden' : '' }}
                                                     rowspan="{{ $daysCount }}"
                                                     style="vertical-align : middle;text-align:center;">
-                                                    <h6>{{ $product->category_id == 1 ? '' : $product->product_name . ' | ' }}{{ $product->description }}
+                                                    <h6>{{ $product->category_id == 1 ? '' : $product->product_name . ' | ' }}{{ lensDescription($product->description) }}
                                                     </h6>
                                                     @if ($product->power)
                                                         @if (initials($product->product_name) == 'SV')

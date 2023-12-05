@@ -98,19 +98,21 @@ class LensStockController extends Controller
 
             if (initials($type)!='SV')
             {
-                for($i = $sphere_min; $i <= $sphere_max; $i=$i+0.25)
-                {
+                // dd('not sv');
                     for ($j = $add_min; $j <= $add_max; $j=$j+0.25)
+                {
+                    for($i = $sphere_min; $i <= $sphere_max; $i=$i+0.25)
+                    // for ($j = $add_min; $j <= $add_max; $j=$j+0.25)
                     {
-                        $product_id=\App\Models\Power::where(['sphere'=>format_values($i)])
-                                                                      ->where('type_id',$lt)
-                                                                      ->where('index_id',$ix)
-                                                                      ->where('chromatics_id',$chrm)
-                                                                      ->where('coating_id',$ct)
-                                                                      ->where('company_id',Auth::user()->company_id)
-                                                                      ->where(['add'=>format_values($j)])
-                                                                      ->where(['sphere'=>format_values($i)])
-                                                                      ->select('product_id','sphere','add','eye','cylinder')->get();
+                        $product_id=\App\Models\Power::where('type_id',$lt)
+                                                        ->where('index_id',$ix)
+                                                        ->where('chromatics_id',$chrm)
+                                                        ->where('coating_id',$ct)
+                                                        ->where('company_id',Auth::user()->company_id)
+                                                        ->where(['add'=>format_values($j)])
+                                                        ->where(['sphere'=>format_values($i)])
+                                                        ->select('product_id','sphere','add','eye','cylinder')
+                                                        ->get();
 
 
 
@@ -135,7 +137,7 @@ class LensStockController extends Controller
                 }
             }
 
-            // return $products_id_array;
+            // dd($products_id_array_[10]);
 
             return view('manager.stockLens.final-result',
             compact('lens_type','index','chromatics','coatings','results','sphere','sphere_max','sphere_min',

@@ -115,7 +115,7 @@
                                             <td>{{date('Y-m-d',strtotime($product->order_date))}}</td>
                                             {{-- <td>Order #{{sprintf('%04d',$product->order_number)}}</td> --}}
                                             <td>Order #{{$product->reference_number}}</td>
-                                            <td>{{$product->description}}</td>
+                                            <td>{{lensDescription($product->description)}}</td>
                                             <td>{{$product->quantity}}</td>
 <<<<<<< HEAD
                                             <td>{{format_money($product->unit_price+$discounted)}}</td>

@@ -74,7 +74,7 @@ class ProductRepo implements ProductInterface
                             ->where('chromatics_id', $productDescription['chromatic'])
                             ->where('coating_id', $productDescription['coating'])
                             ->where('sphere', format_values($productDescription['sphere']))
-                            ->where('cylinder', format_values($productDescription['cylinder']))
+                            // ->where('cylinder', format_values($productDescription['cylinder']))
                             ->where('axis', format_values($productDescription['axis']))
                             ->where('add', format_values($productDescription['addition']))
                             ->where('eye', $productDescription['eye'])

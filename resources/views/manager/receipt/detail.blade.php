@@ -23,6 +23,12 @@
             <div class="col-md-12">
                 <div class="card card-body printableArea">
                     <h3><b>INVOICE</b> <span class="pull-right">#{{ sprintf('%04d', $invoice->reference_number) }}</span>
+
+                        @if ($invoice->hospital_name!=null)
+                            | [{{$invoice->cloud_id}}] {{$invoice->hospital_name}}
+                        @else
+                            | {{$invoice->client_name}}
+                        @endif
                     </h3>
                     <hr>
                     <div class="row">
@@ -80,6 +86,8 @@
                                             <th>Product Name</th>
                                             <th class="text-right">Quantity</th>
                                             <th class="text-right">Unit Cost</th>
+                                            <th class="text-right">Seg H</th>
+                                            <th class="text-right">Mono PD</th>
                                             <th class="text-right">Total</th>
                                         </tr>
                                     </thead>
@@ -122,6 +130,8 @@
                                                 @endphp
                                                 <td class="text-right">{{ $product->quantity }} </td>
                                                 <td class="text-right"> {{ format_money($product->price) }} </td>
+                                                <td class="text-right">{{ is_null($product->segment_h)?'-':$product->segment_h }}</td>
+                                                <td class="text-right">{{ is_null($product->mono_pd)?'-': $product->mono_pd}}</td>
                                                 <td class="text-right"> {{ format_money($product->price * $product->quantity) }} </td>
                                             </tr>
                                         @endforeach
@@ -137,7 +147,7 @@
                                                         -
                                                     @endif
                                                 </td>
-                                                <td>{{ $prod->product_name }} | {{ $prod->description }}
+                                                <td>{{ $prod->product_name }} | {{ lensDescription($prod->description) }}
                                                     @if ($prod->power)
                                                         @if (initials($prod->product_name) == 'SV')
                                                             <span> {{ $prod->power->sphere }} /
@@ -160,6 +170,8 @@
                                                 @endphp
                                                 <td class="text-right">{{ $product->quantity }} </td>
                                                 <td class="text-right"> {{ format_money($product->unit_price) }} </td>
+                                                <td class="text-right">{{ is_null($product->segment_h)?'-':$product->segment_h }}</td>
+                                                <td class="text-right">{{ is_null($product->mono_pd)?'-': $product->mono_pd}}</td>
                                                 <td class="text-right"> {{ format_money($product->total_amount) }} </td>
                                             </tr>
                                         @endforeach

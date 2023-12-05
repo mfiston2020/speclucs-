@@ -115,7 +115,7 @@
                                     <td>{{ $product->product_name }}</td>
                                     <span hidden>{{ $power = $pwr->where('product_id',$product->id)->first() }}</span>
 
-                                    <td>{{ $product->description }}</td>
+                                    <td>{{ lensDescription($product->description) }}</td>
                                     <td>
                                         @if ($power)
                                             @if (initials($product->product_name) == 'SV')

@@ -187,3 +187,19 @@ function dateDiffInDays($date1, $date2)
 
     return round($datediff / (60 * 60 * 24));
 }
+
+function lensDescription($description){
+    $desc   =   null;
+    if (str_starts_with($description,'BB')) {
+        $desc   =   str_replace('BB','Bifocal',$description);
+    }
+    elseif (str_starts_with('BT',$description)) {
+        $desc   =   str_replace('BT','Bifocal Round Top',$description);
+    }
+    elseif (str_starts_with($description,'PP')) {
+        $desc   =   str_replace('PP','PROG',$description);
+    }else{
+        $desc   =   $description;
+    }
+    return $desc;
+}
