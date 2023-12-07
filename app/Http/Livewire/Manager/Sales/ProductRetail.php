@@ -371,7 +371,7 @@ class ProductRetail extends Component
                 // }
             }
 
-            dd($this->invoiceStatus);
+            // dd($this->invoiceStatus);
 
 
             $invoice    =   new Invoice();
