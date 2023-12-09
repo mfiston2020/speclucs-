@@ -449,60 +449,118 @@
                     <div class="card-body">
 
                         <div class="row">
-                            <!--/span-->
-                            <div class="col-md-3 col-sm-12">
-                                <label>Products</label>
-                                <div class="form-group">
-                                    <select class="form-control custom-select" id="accessory" style="width: 100%; height:2rem;" wire:model.lazy="accessory">
-                                        <option value="">
-                                            *** Select Product ***
-                                        </option>
-                                        @foreach ($accessoriesList as $accessory)
-                                            <option value="{{ $accessory->id }}">
-                                                {{ $accessory->product_name }} | {{ $accessory->description }}
+                            <div class="col-12 row">
+                                <!--/span-->
+                                <div class="col-md-3 col-sm-12">
+                                    <label>Products</label>
+                                    <div class="form-group">
+                                        <select class="form-control custom-select" id="accessory" style="width: 100%; height:2rem;" wire:model.lazy="accessory">
+                                            <option value="">
+                                                *** Select Product ***
                                             </option>
-                                        @endforeach
-                                    </select>
+                                            @foreach ($accessoriesList as $accessory)
+                                                <option value="{{ $accessory->id }}">
+                                                    {{ $accessory->product_name }} | {{ $accessory->description }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-1">
+                                    <label>Stock</label>
+                                    <input type="text"
+                                        class="form-control {{ $accessory_stock <= 0 && $accessory_stock != null ? 'border border-danger' : '' }}"
+                                        id="accessory_stock" placeholder="Stock" wire:model.lazy="accessory_stock"
+                                        readonly>
+                                </div>
+
+                                <div class="form-group col-1">
+                                    <label>U. Price</label>
+                                    <input type="text" class="form-control border-red-500" id="accessory_unit_price"
+                                        placeholder="Unit Price" wire:model.lazy="accessory_unit_price" readonly>
+                                </div>
+
+                                <div class="form-group col-1">
+                                    <label>Quantity</label>
+                                    <input type="number" class="form-control" id="accessory_quantity" placeholder="Qty"
+                                        wire:model="accessory_quantity" max="{{$accessory_quantity}}" min="1">
+                                </div>
+
+                                <div class="form-group col-2">
+                                    <label>Price Adj</label>
+                                    <input type="number" class="form-control" id="accessory_price_adjust"
+                                        placeholder="Price Adj" wire:model="accessory_price_adjust">
+                                </div>
+
+                                <div class="form-group col-2">
+                                    <label>T.Amount</label>
+                                    <input type="number" class="form-control" id="accessory_total_amount"
+                                        placeholder="Total" readonly>
+                                </div>
+
+                                <div class="form-group col-2">
+                                    <label>Location</label>
+                                    <input type="text" class="form-control" id="accessory_location"
+                                        placeholder="Location" wire:model.lazy="accessory_location" readonly>
                                 </div>
                             </div>
+                            {{-- <div class="col-12 row">
+                                <!--/span-->
+                                <div class="col-md-2 col-sm-12">
+                                    <label>Products</label>
+                                    <div class="form-group">
+                                        <select class="form-control custom-select" id="accessory" style="width: 100%; height:2rem;" wire:model.lazy="accessory">
+                                            <option value="">
+                                                *** Select Product ***
+                                            </option>
+                                            @foreach ($accessoriesList as $accessory)
+                                                <option value="{{ $accessory->id }}">
+                                                    {{ $accessory->product_name }} | {{ $accessory->description }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
 
-                            <div class="form-group col-1">
-                                <label>Stock</label>
-                                <input type="text"
-                                    class="form-control {{ $accessory_stock <= 0 && $accessory_stock != null ? 'border border-danger' : '' }}"
-                                    id="accessory_stock" placeholder="Stock" wire:model.lazy="accessory_stock"
-                                    readonly>
-                            </div>
+                                <div class="form-group col-1">
+                                    <label>Stock</label>
+                                    <input type="text"
+                                        class="form-control {{ $accessory_stock <= 0 && $accessory_stock != null ? 'border border-danger' : '' }}"
+                                        id="accessory_stock" placeholder="Stock" wire:model.lazy="accessory_stock"
+                                        readonly>
+                                </div>
 
-                            <div class="form-group col-1">
-                                <label>U. Price</label>
-                                <input type="text" class="form-control border-red-500" id="accessory_unit_price"
-                                    placeholder="Unit Price" wire:model.lazy="accessory_unit_price" readonly>
-                            </div>
+                                <div class="form-group col-1">
+                                    <label>U. Price</label>
+                                    <input type="text" class="form-control border-red-500" id="accessory_unit_price"
+                                        placeholder="Unit Price" wire:model.lazy="accessory_unit_price" readonly>
+                                </div>
 
-                            <div class="form-group col-1">
-                                <label>Quantity</label>
-                                <input type="number" class="form-control" id="accessory_quantity" placeholder="Qty"
-                                    wire:model="accessory_quantity" max="{{$accessory_quantity}}" min="1">
-                            </div>
+                                <div class="form-group col-1">
+                                    <label>Quantity</label>
+                                    <input type="number" class="form-control" id="accessory_quantity" placeholder="Qty"
+                                        wire:model="accessory_quantity" max="{{$accessory_quantity}}" min="1">
+                                </div>
 
-                            <div class="form-group col-2">
-                                <label>Price Adj</label>
-                                <input type="number" class="form-control" id="accessory_price_adjust"
-                                    placeholder="Price Adj" wire:model="accessory_price_adjust">
-                            </div>
+                                <div class="form-group col-2">
+                                    <label>Price Adj</label>
+                                    <input type="number" class="form-control" id="accessory_price_adjust"
+                                        placeholder="Price Adj" wire:model="accessory_price_adjust">
+                                </div>
 
-                            <div class="form-group col-2">
-                                <label>T.Amount</label>
-                                <input type="number" class="form-control" id="accessory_total_amount"
-                                    placeholder="Total" readonly>
-                            </div>
+                                <div class="form-group col-2">
+                                    <label>T.Amount</label>
+                                    <input type="number" class="form-control" id="accessory_total_amount"
+                                        placeholder="Total" readonly>
+                                </div>
 
-                            <div class="form-group col-2">
-                                <label>Location</label>
-                                <input type="text" class="form-control" id="accessory_location"
-                                    placeholder="Location" wire:model.lazy="accessory_location" readonly>
-                            </div>
+                                <div class="form-group col-2">
+                                    <label>Location</label>
+                                    <input type="text" class="form-control" id="accessory_location"
+                                        placeholder="Location" wire:model.lazy="accessory_location" readonly>
+                                </div>
+                            </div> --}}
                         </div>
 
 
@@ -513,14 +571,14 @@
                                 @else
                                     <button wire:loading.attr="disabled" class="btn btn-sm btn-primary" type="button"
                                             wire:click="checkAvailability">
-                                            <span wire:loading.remove wire:target="checkAvailability">
-                                                Check Product Availability
-                                            </span>
-                                            <span wire:loading wire:target="checkAvailability">
-                                                Checking... <img src="{{ asset('dashboard/assets/images/loading2.gif') }}"
-                                                    width="20" />
-                                            </span>
-                                        </button>
+                                        <span wire:loading.remove wire:target="checkAvailability">
+                                            Check Product Availability
+                                        </span>
+                                        <span wire:loading wire:target="checkAvailability">
+                                            Checking... <img src="{{ asset('dashboard/assets/images/loading2.gif') }}"
+                                                width="20" />
+                                        </span>
+                                    </button>
                                 @endif
                             @else
                                 <h5 class="text-danger">Surpassed Available Quantity</h5>

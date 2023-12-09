@@ -17,8 +17,14 @@
         <!-- Column -->
         <div class="col-lg-12 col-xlg-12 col-md-12">
             <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item ">
+                    <a class="nav-link active" data-toggle="tab" href="#lens-pricing" role="tab">
+                        <span class="hidden-sm-up"><i class="ti-email"></i></span>
+                        <span class="hidden-xs-down">Lens Pricing</span>
+                    </a>
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#exam" role="tab">
+                    <a class="nav-link" data-toggle="tab" href="#exam" role="tab">
                         <span class="hidden-sm-up">
                             <i class="ti-home"></i>
                         </span>
@@ -55,7 +61,110 @@
             </ul>
             <!-- Tab panes -->
             <div class="tab-content tabcontent-border">
-                <div class="tab-pane active" id="exam" role="tabpanel">
+
+                <div class="tab-pane p-20 active" id="lens-pricing" role="tabpanel">
+                    <div class="col-md-12" id="lens">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Lens Description</h4>
+                                <div class="form-body">
+                                    <div class="row">
+                                        <!--/span-->
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Lens Type</label>
+                                                <select class="form-control custom-select" name="lens_type" id="type">
+                                                    <option value="">-- Select --</option>
+                                                    @foreach (\App\Models\LensType::get() as $lens_type)
+                                                        <option value="{{ $lens_type->id }}"
+                                                            {{ old('lens_type') == $lens_type->id ? 'selected' : '' }}>
+                                                            {{ $lens_type->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Index</label>
+                                                <select class="form-control custom-select" name="index" id="index">
+                                                    <option value="">-- Select --</option>
+                                                    @foreach (\App\Models\PhotoIndex::get() as $index)
+                                                        <option value="{{ $index->id }}"
+                                                            {{ old('index') == $index->id ? 'selected' : '' }}>
+                                                            {{ $index->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Chromatics Aspects</label>
+                                                <select class="form-control custom-select" name="chromatics" id="chrm">
+                                                    <option value="">-- Select --</option>
+                                                    @foreach (\App\Models\PhotoChromatics::get() as $chromatics)
+                                                        <option value="{{ $chromatics->id }}"
+                                                            {{ old('chromatics') == $chromatics->id ? 'selected' : '' }}>
+                                                            {{ $chromatics->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Coating</label>
+                                                <select class="form-control custom-select" name="coating" id="coating">
+                                                    <option value="">-- Select --</option>
+                                                    @foreach (\App\Models\PhotoCoating::get() as $coatings)
+                                                        <option value="{{ $coatings->id }}"
+                                                            {{ old('coating') == $coatings->id ? 'selected' : '' }}>
+                                                            {{ $coatings->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="power">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <h4 class="card-title">Lens Power</h4>
+
+
+                                    <div id="education_fields" class=" m-t-20"></div>
+
+                                    <div class="row">
+                                        <div class="col-md-12" id="eyes">
+                                            <div class="form-group row">
+
+
+
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-success" type="button"
+                                                            onclick="education_fields();"><i class="fa fa-plus"></i>
+                                                            Add Lens
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="exam" role="tabpanel">
                     <div class="row mt-3">
                         <div class="col-md-8 col-sm-12">
                             <div class="card">
@@ -172,6 +281,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="tab-pane  p-20" id="insurance" role="tabpanel">
                     <div class="row mt-3">
                         <div class="col-md-8 col-sm-12">
@@ -614,6 +724,7 @@
 
 @push('scripts')
 <script>
+    <script src="{{ asset('dashboard/assets/extra-libs/jquery.repeater/dff.js') }}"></script>
     $('#exam-form').on('submit', function () {
         $('#submitButton').html('Saving Exam...');
         $('#submitButton').prop('diabled', true);
