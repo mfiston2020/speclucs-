@@ -58,10 +58,10 @@
                                             <small class="text-muted">
                                                 @if ($power)
                                                 @if (initials($prod->product_name)=='SV')
-                                                <span>{{$prod->description }} - {{$power->sphere}} /
+                                                <span>{{$prod->description }} / {{$power->sphere}} /
                                                     {{$power->cylinder}}</span>
                                                 @else
-                                                <span>{{$prod->description }} -{{$power->sphere}} / {{$power->cylinder}}
+                                                <span>{{$prod->description }} / {{$power->sphere}} / {{$power->cylinder}}
                                                     *{{$power->axis}} {{$power->add}}</span>
                                                 @endif
                                                 @endif

@@ -149,7 +149,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Insurance</label>
-                                <select class="form-control @error('insurance_type') is-invalid @enderror custom-select"
+                                <select style="width: 100%; height:2rem;"  class="form-control @error('insurance_type') is-invalid @enderror custom-select"
                                     wire:model.lazy='insurance_type' required>
                                     <option value="">** Select Type **</option>
                                     <option value="private">private</option>
@@ -365,7 +365,7 @@
                             <div class="col-md-3 col-sm-12">
                                 <label>Frames</label>
                                 <div class="form-group">
-                                    <select class="form-control" id="frame" wire:model.lazy="frame">
+                                    <select class="form-control custom-select" style="width: 100%; height:2rem;"  id="frame" wire:model.lazy="frame">
                                         <option value="">
                                             *** Select Type ***
                                         </option>
@@ -453,7 +453,7 @@
                             <div class="col-md-3 col-sm-12">
                                 <label>Products</label>
                                 <div class="form-group">
-                                    <select class="form-control" id="accessory" wire:model.lazy="accessory">
+                                    <select class="form-control custom-select" id="accessory" style="width: 100%; height:2rem;" wire:model.lazy="accessory">
                                         <option value="">
                                             *** Select Product ***
                                         </option>
@@ -735,8 +735,16 @@
     </form>
 
 </div>
+@push('css')
+<link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/libs/select2/dist/css/select2.min.css')}}">
+@endpush
 
 @push('scripts')
+    <script src="{{ asset('dashboard/assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
+    <script src="{{ asset('dashboard/assets/libs/select2/dist/js/select2.min.js')}}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/pages/forms/select2/select2.init.js')}}"></script>
+
+
     <script src="//unpkg.com/alpinejs" defer></script>
     <script>
         window.addEventListener('showwarningModal', event => {

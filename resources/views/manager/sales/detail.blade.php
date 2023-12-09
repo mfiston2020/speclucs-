@@ -78,7 +78,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <h6>{{ $prod->product_name }}</h6>
+                                                <h6>{{ lensDescription($prod->product_name) }}</h6>
                                                 <small class="text-muted">
                                                     @if ($prod->power)
                                                         @if (initials($prod->product_name) == 'SV')
@@ -163,7 +163,7 @@
                                             </td>
 
                                             <td>
-                                                <h6>{{ initials($type)=='BT'?'Bifocal Round Top':initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
+                                                <h6>{{ initials($type)=='BT'?'Bifocal Round Top':lensDescription(initials($type)) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
                                                 </h6>
                                                 <small class="text-muted">
                                                     {{-- @if ($power) --}}

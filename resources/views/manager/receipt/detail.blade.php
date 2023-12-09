@@ -84,10 +84,10 @@
                                         <tr>
                                             <th class="text-center">#</th>
                                             <th>Product Name</th>
-                                            <th class="text-right">Quantity</th>
-                                            <th class="text-right">Unit Cost</th>
                                             <th class="text-right">Seg H</th>
                                             <th class="text-right">Mono PD</th>
+                                            <th class="text-right">Quantity</th>
+                                            <th class="text-right">Unit Cost</th>
                                             <th class="text-right">Total</th>
                                         </tr>
                                     </thead>
@@ -114,7 +114,8 @@
                                             @endphp
                                             <tr>
                                                 <td class="text-center"><center>{{ OneInitials($product->eye) }}</center></td>
-                                                <td>{{ initials($type)=='BT'?'Bifocal Round Top':initials($type) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
+                                                <td>
+                                                    {{ initials($type)=='BT'?'Bifocal Round Top':lensDescription(initials($type)) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
                                                     @if (initials($type) == 'SV')
                                                         <span> {{ format_values($product->sphere) }} /
                                                             {{ format_values($product->cylinder) }}</span>
@@ -128,10 +129,10 @@
                                                 @php
                                                     $total_+=$product->price;
                                                 @endphp
-                                                <td class="text-right">{{ $product->quantity }} </td>
-                                                <td class="text-right"> {{ format_money($product->price) }} </td>
                                                 <td class="text-right">{{ is_null($product->segment_h)?'-':$product->segment_h }}</td>
                                                 <td class="text-right">{{ is_null($product->mono_pd)?'-': $product->mono_pd}}</td>
+                                                <td class="text-right">{{ $product->quantity }} </td>
+                                                <td class="text-right"> {{ format_money($product->price) }} </td>
                                                 <td class="text-right"> {{ format_money($product->price * $product->quantity) }} </td>
                                             </tr>
                                         @endforeach
@@ -168,10 +169,10 @@
                                                         $Instotal_      =   $percentage;
                                                     }
                                                 @endphp
-                                                <td class="text-right">{{ $product->quantity }} </td>
-                                                <td class="text-right"> {{ format_money($product->unit_price) }} </td>
                                                 <td class="text-right">{{ is_null($product->segment_h)?'-':$product->segment_h }}</td>
                                                 <td class="text-right">{{ is_null($product->mono_pd)?'-': $product->mono_pd}}</td>
+                                                <td class="text-right">{{ $product->quantity }} </td>
+                                                <td class="text-right"> {{ format_money($product->unit_price) }} </td>
                                                 <td class="text-right"> {{ format_money($product->total_amount) }} </td>
                                             </tr>
                                         @endforeach

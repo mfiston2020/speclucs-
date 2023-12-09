@@ -61,7 +61,7 @@
                                     <span
                                         hidden>{{$prod=\App\Models\Product::where(['id'=>$product->product_id])->where('company_id',Auth::user()->company_id)->select('*')->first()}}</span>
                                     <td>
-                                        <h6>{{$prod->product_name}} {{$prod->description}} </h6>
+                                        <h6>{{$prod->product_name}} {{lensDescription($prod->description)}} </h6>
                                         <small class="text-muted">
                                             <span hidden>{{$power=\App\Models\Power::where(['product_id'=>$prod->id])->where('company_id',Auth::user()->company_id)->select('*')->first()}}</span>
                                             @if ($power)
