@@ -150,7 +150,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <button class="btn btn-success" type="button"
-                                                            onclick="education_fields();"><i class="fa fa-plus"></i>
+                                                            onclick="educationFields();"><i class="fa fa-plus"></i>
                                                             Add Lens
                                                         </button>
                                                     </div>
@@ -724,7 +724,7 @@
 
 @push('scripts')
 <script>
-    <script src="{{ asset('dashboard/assets/extra-libs/jquery.repeater/dff.js') }}"></script>
+    <script src="{{ asset('dashboard/assets/extra-libs/jquery.repeater/product-settings.js') }}"></script>
     $('#exam-form').on('submit', function () {
         $('#submitButton').html('Saving Exam...');
         $('#submitButton').prop('diabled', true);

@@ -1,6 +1,6 @@
 var room = 1;
 
-function education_fields() {
+function educationFields() {
 
     room++;
     var objTo = document.getElementById('education_fields')
