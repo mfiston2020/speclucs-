@@ -57,11 +57,11 @@
                                         style="align-items: right;">
                                         <i class="fa fa-download"></i> Export To Excel
                                     </a> --}}
-                                    {{-- <a href="{{ route('manager.product.import') }}"
+                                    <a href="{{ route('manager.product.import') }}"
                                         class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-primary"
                                         style="align-items: right;">
                                         <i class="fa fa-upload"></i> Import Excel
-                                    </a> --}}
+                                    </a> {{-- --}}
 
                             @endif
                                 <a href="{{ route('manager.lens.stock', 0) }}"
