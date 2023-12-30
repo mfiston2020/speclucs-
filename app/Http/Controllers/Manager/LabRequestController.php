@@ -398,7 +398,7 @@ class LabRequestController extends Controller
                                     $prdt       =   Product::find($newProduct->id);
                                     $pstock     =   $prdt->stock;
 
-                                    $prdt->stock = 2;
+                                    $prdt->stock = 1;
                                     $prdt->save();
 
                                     foreach ($invoice->unavailableproducts as $key => $unProduct) {
@@ -417,7 +417,7 @@ class LabRequestController extends Controller
                                 $prdt       =   Product::find($newProduct->id);
                                 $pstock     =   $prdt->stock;
 
-                                $prdt->stock = 2;
+                                $prdt->stock = 1;
                                 $prdt->save();
 
                                 UnavailableProduct::where('id',$unProduct->id)->update([
@@ -460,7 +460,7 @@ class LabRequestController extends Controller
                                 $prdt       =   Product::find($newProduct->id);
                                 $pstock     =   $prdt->stock;
 
-                                $prdt->stock = 2;
+                                $prdt->stock = 1;
                                 $prdt->save();
 
                                 foreach ($invoice->unavailableproducts as $key => $unProduct) {
@@ -479,7 +479,7 @@ class LabRequestController extends Controller
                                 $prdt       =   Product::find($newProduct->id);
                                 $pstock     =   $prdt->stock;
 
-                                $prdt->stock = 2;
+                                $prdt->stock = 1;
                                 $prdt->save();
 
                                 UnavailableProduct::where('id',$unProduct->id)->update([

@@ -36,7 +36,7 @@ class ClosingReport extends Component
 
     public function render()
     {
-        $this->products =   Product::where('company_id', userInfo()->company_id)->take($this->paginat)->get();
+        $this->products =   Product::where('company_id', userInfo()->company_id)->take($this->paginat)->orderBy('created_at','desc')->get();
         return view('livewire.manager.report.closing-report')->layout('livewire.livewire-slot');
     }
 }

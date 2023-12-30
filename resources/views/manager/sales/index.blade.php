@@ -40,7 +40,7 @@
 
                                 @if ($pending > 0)
                                     <span class="badge badge-danger badge-pill">
-                                        {{ $pending }}
+                                        {{ number_format($pending) }}
                                     </span>
                                 @endif
                             </a>

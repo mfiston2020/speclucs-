@@ -127,5 +127,4 @@ class ReceivedOrdersController extends Controller
             return redirect()->route('manager.received.order')->with('successMsg','Selected Orders now in Delivery');
         }
     }
-
 }
