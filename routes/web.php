@@ -124,6 +124,9 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     // ============================== all routes for Clinic settings =============================
     Route::get('/clinic_settings', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'index'])->name('clinic.settings');
 
+    // ============================== all routes for Clinic settings [ Lens Pricing ] =============================
+    Route::post('/lensPricing', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'lensPricingSave'])->name('clinic.settings.lens.pricing.save');
+
     // exam routes
     Route::post('/clinic_exam', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'save_clinic_exam'])->name('clinic.exam.save');
     Route::get('/clinic_exam_remove/{id}', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'save_clinic_exam_remove'])->name('exam.remove');

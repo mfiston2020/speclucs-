@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Manager\Sales;
 
 use App\Models\Insurance;
 use App\Models\Invoice;
+use App\Models\LensPricing;
 use App\Models\LensType;
 use App\Models\PhotoChromatics;
 use App\Models\PhotoCoating;
@@ -30,7 +31,7 @@ class ProductRetail extends Component
     // control variables
     public $lensType, $lensIndex, $lensCoating, $lensChromaticAspect, $frameList, $accessoriesList, $insuranceList;
 
-    public $rightEye = false, $leftEye = false, $showPaymentSection = false, $leftLen = false, $rightLen = false, $leftLenFound = true, $rightLenFound = false, $searchProduct = false, $showsubmit = false, $isCloudOrder = 'no';
+    public $rightEye = false, $leftEye = false, $showPaymentSection = false, $leftLen = false, $rightLen = false, $leftLenFound = true, $rightLenFound = false, $searchProduct = false, $showsubmit = false, $isCloudOrder = 'no',$leftPriceRange,$rightPriceRange;
 
     // ============== lens selection variables ========
     public $lens_type, $lens_index, $lens_coating, $lens_chromatic;
@@ -207,12 +208,9 @@ class ProductRetail extends Component
             $this->leftLenQty       =   $left_len_Results == 'product-not-found' ? '-' : $left_len_Results[0]->stock;
             $this->leftLenID        =   $left_len_Results == 'product-not-found' ? 'l-' : $left_len_Results[0]->id;
 
+
             // if both products are found
             if ($left_len_Results != 'product-not-found' && $right_len_Results != 'product-not-found') {
-                // if ($left_len_Results[0]->id == $right_len_Results[0]->id) {
-
-                //     $this->total_lens_amount =    $right_len_Results[0]->price;
-                // } else {
 
                 $leftPrice      =   $left_len_Results   == 'product-not-found' ? 0 : $left_len_Results[0]->price;
                 $rightPrice     =   $right_len_Results  == 'product-not-found' ? 0 : $right_len_Results[0]->price;
@@ -246,6 +244,23 @@ class ProductRetail extends Component
             }
             // if right len is the only product
             else {
+                // checking  price inside the range price setter
+                // L
+                if ($this->lens_type==2) {
+                    $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','>=',$this->l_sphere)->where('sphere_to','<=',$this->l_sphere)->where('cylinder_from','>=',$this->l_cylinder)->where('cylinder_to','<=',$this->l_cylinder)->first();
+
+                    // R
+                    $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','>=',$this->r_sphere)->where('sphere_to','<',$this->r_sphere)->where('cylinder_from','>=',$this->r_cylinder)->where('cylinder_to','<=',$this->r_cylinder)->first();
+
+                    dd($this->leftPriceRange);
+
+                } else {
+                    # code...
+                }
+
+
+                dd($this->rightPriceRange);
+
                 $this->total_lens_amount =    0;
             }
 

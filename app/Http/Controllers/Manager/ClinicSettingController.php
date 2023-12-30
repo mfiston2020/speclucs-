@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\LensPricing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -30,9 +31,10 @@ class ClinicSettingController extends Controller
         $insurance_exams    =   \App\Models\InsuranceExam::where('company_id',Auth::user()->company_id)->get();
         $complaint          =   \App\Models\Complaint::where('company_id',Auth::user()->company_id)->get();
         $histories          =   \App\Models\History::where('company_id',Auth::user()->company_id)->get();
+        $pricings           =   LensPricing::where('company_id',Auth::user()->company_id)->get();
 
         return view('manager.profile.clinicsettings',compact(
-            'drugs','exams','insurances','insurance_exams','complaint','histories'
+            'drugs','exams','insurances','insurance_exams','complaint','histories','pricings'
         ));
     }
 
@@ -196,6 +198,46 @@ class ClinicSettingController extends Controller
             return redirect()->back()->with('successMsg','history Removed Successfully');
         } catch (\Throwable $th) {
             return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong!');
+        }
+    }
+
+    // lens pricing
+    function lensPricingSave(Request $request){
+        $this->validate($request,[
+            'lens_type' =>  'required',
+            'index'     =>  'required',
+            'chromatics'=>  'required',
+            'coating'   =>  'required',
+        ]);
+
+        if (is_null($request->sphere_from)) {
+            return redirect()->back()->with('warningMsg','Add at least one range of prices')->withInput();
+        }
+        else{
+
+            $lensPricing    =   new LensPricing();
+
+            foreach ($request->sphere_from as $key => $value) {
+                $lensPricing->company_id   =  userInfo()->company_id;
+                $lensPricing->type_id      =  $request->lens_type;
+                $lensPricing->coating_id   =  $request->coating;
+                $lensPricing->index_id     =  $request->index;
+                $lensPricing->chromatic_id =  $request->chromatics;
+                $lensPricing->sphere_from  =  $request->sphere_from[$key];
+                $lensPricing->sphere_to    =  $request->sphere_to[$key];
+                $lensPricing->cylinder_from=  $request->cylinder_from[$key];
+                $lensPricing->cylinder_to  =  $request->cylinder_to[$key];
+                $lensPricing->addition_from=  $request->addition_from[$key];
+                $lensPricing->addition_to  =  $request->addition_to[$key];
+                $lensPricing->cost         =  $request->cost[$key];
+                $lensPricing->price        =  $request->price[$key];
+                try {
+                    $lensPricing->save();
+                } catch (\Throwable $th) {
+                    dd($th);
+                }
+            }
+            return redirect()->back()->with('successMsg','Pricing saved!');
         }
     }
 

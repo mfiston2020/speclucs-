@@ -620,38 +620,18 @@
                                             <span>R</span>
                                             {{-- <br> --}}
                                             @if ($rightLen)
-                                            {{-- <label @class(['badge badge-pill ml-2 badge-sm', 'badge-success' => $rightLenQty>=10,'badge-warning' => $rightLenQty<10,'badge-danger' => $rightLenQty<=1,])>
-                                                @if ($rightLenQty<=1)
-                                                    @if ($rightLenID == $leftLenID)
-                                                        Out Of Stock
-                                                    @else
-                                                        Out Of Stock
-                                                    @endif
-                                                @else
-                                                .
-                                                    {{-- <span>&nbsp;&nbsp;</span> --}
-                                                @endif
-                                            </label> --}}
-                                            <h6>Stock: <span class="text-primary">{{$rightLenQty}}</span> |
-                                                Requested: <span class="text-primary">{{is_null($rightBooked)?0:$rightBooked}}</span> |
-                                                Available: <span class="text-primary">
-                                                    {{$rightLenQty-$rightBooked<0?'0':$rightLenQty-$rightBooked}}
-                                                </span>
-                                            </h6>
+                                                <h6>Stock: <span class="text-primary">{{$rightLenQty}}</span> |
+                                                    Requested: <span class="text-primary">{{is_null($rightBooked)?0:$rightBooked}}</span> |
+                                                    Available: <span class="text-primary">
+                                                        {{$rightLenQty-$rightBooked<0?'0':$rightLenQty-$rightBooked}}
+                                                    </span>
+                                                </h6>
                                             @else
                                                 <label class="badge badge-danger badge-pill ml-2">N/A</label>
                                             @endif
                                             <br>
                                             <span>L</span>
                                             @if ($leftLen)
-                                                {{-- <label @class(['badge badge-pill ml-2', 'badge-success' => $leftLenQty>=10,'badge-warning' => $leftLenQty<10,'badge-danger' => $leftLenQty<=1,])>
-                                                    @if ($leftLenQty<=1)
-                                                            Out Of Stock
-                                                    @else
-                                                        {{-- Qty: {{$leftLenQty}}-Book: {{$leftBooked}}-AV: {{$leftLenQty-$leftBooked}} --}
-                                                    @endif
-                                                </label> --}}
-
                                                 <h6>Stock: <span class="text-primary">{{$leftLenQty}}</span> |
                                                     Requested: <span class="text-primary">{{is_null($leftBooked)?'0':$leftBooked}}</span> |
                                                     Available: <span class="text-primary">

@@ -3,7 +3,7 @@
 @section('title','Manager\'Clinic Settings')
 
 @push('css')
-
+    <link href="{{ asset('dashboard/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endpush
 
 {{-- ==== Breadcumb ======== --}}
@@ -63,103 +63,188 @@
             <div class="tab-content tabcontent-border">
 
                 <div class="tab-pane p-20 active" id="lens-pricing" role="tabpanel">
-                    <div class="col-md-12" id="lens">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Lens Description</h4>
-                                <div class="form-body">
-                                    <div class="row">
-                                        <!--/span-->
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Lens Type</label>
-                                                <select class="form-control custom-select" name="lens_type" id="type">
-                                                    <option value="">-- Select --</option>
-                                                    @foreach (\App\Models\LensType::get() as $lens_type)
-                                                        <option value="{{ $lens_type->id }}"
-                                                            {{ old('lens_type') == $lens_type->id ? 'selected' : '' }}>
-                                                            {{ $lens_type->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#home" role="tab">
+                                <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                                <span class="hidden-xs-down">Pricing List</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
+                                <span class="hidden-sm-up"><i class="ti-plus"></i></span>
+                                <span class="hidden-xs-down">Add Pricing</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content tabcontent-border">
+                        <div class="tab-pane active" id="home" role="tabpanel">
+                            <div class="p-20 row" style="width:100%">
+                                {{-- <div class="card">
+                                    <div class="card-body"> --}}
+                                        <div class="table-responsive">
+                                            <table id="zero_config" class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Product</th>
+                                                    <th>Sphere From</th>
+                                                    <th>Sphere To</th>
+                                                    <th>Cylinder From</th>
+                                                    <th>Cylinder To</th>
+                                                    <th>Addition From</th>
+                                                    <th>Addition To</th>
+                                                    <th>cost</th>
+                                                    <th>Price</th>
+                                                    {{-- <th>Total Sold</th> --}}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($pricings as $key=> $pricing)
+                                                    <tr>
+                                                        <td>{{$key+1}}</td>
+                                                        <td>{{lensDescription(initials($pricing->lenstype->name)).' '.$pricing->index->name.' '.$pricing->chromatics->name.' '.$pricing->coating->name}}</td>
+                                                        <td>{{$pricing->sphere_from}}</td>
+                                                        <td>{{$pricing->sphere_to}}</td>
+                                                        <td>{{$pricing->cylinder_from}}</td>
+                                                        <td>{{$pricing->cylinder_to}}</td>
+                                                        <td>{{$pricing->addition_from}}</td>
+                                                        <td>{{$pricing->addition_to}}</td>
+                                                        <td>{{$pricing->cost}}</td>
+                                                        <td>{{$pricing->price}}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                            </table>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Index</label>
-                                                <select class="form-control custom-select" name="index" id="index">
-                                                    <option value="">-- Select --</option>
-                                                    @foreach (\App\Models\PhotoIndex::get() as $index)
-                                                        <option value="{{ $index->id }}"
-                                                            {{ old('index') == $index->id ? 'selected' : '' }}>
-                                                            {{ $index->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Chromatics Aspects</label>
-                                                <select class="form-control custom-select" name="chromatics" id="chrm">
-                                                    <option value="">-- Select --</option>
-                                                    @foreach (\App\Models\PhotoChromatics::get() as $chromatics)
-                                                        <option value="{{ $chromatics->id }}"
-                                                            {{ old('chromatics') == $chromatics->id ? 'selected' : '' }}>
-                                                            {{ $chromatics->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Coating</label>
-                                                <select class="form-control custom-select" name="coating" id="coating">
-                                                    <option value="">-- Select --</option>
-                                                    @foreach (\App\Models\PhotoCoating::get() as $coatings)
-                                                        <option value="{{ $coatings->id }}"
-                                                            {{ old('coating') == $coatings->id ? 'selected' : '' }}>
-                                                            {{ $coatings->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                    </div>
-                                </div>
+                                    {{-- </div>
+                                </div> --}}
                             </div>
                         </div>
+                        <div class="tab-pane  p-20" id="profile" role="tabpanel">
 
-                        <div id="power">
-                            <div class="card">
-                                <div class="card-body">
-
-                                    <h4 class="card-title">Lens Power</h4>
-
-
-                                    <div id="education_fields" class=" m-t-20"></div>
-
-                                    <div class="row">
-                                        <div class="col-md-12" id="eyes">
-                                            <div class="form-group row">
-
-
-
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <button class="btn btn-success" type="button"
-                                                            onclick="educationFields();"><i class="fa fa-plus"></i>
-                                                            Add Lens
-                                                        </button>
+                            <div class="col-md-12" id="lens">
+                                @include('manager.includes.layouts.message')
+                                <form action={{route('manager.clinic.settings.lens.pricing.save')}} method="post">
+                                    @csrf
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Lens Description</h4>
+                                            <div class="form-body">
+                                                <div class="row">
+                                                    <!--/span-->
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Lens Type</label>
+                                                            <select class="form-control custom-select" name="lens_type" id="type" required>
+                                                                <option value="">-- Select --</option>
+                                                                @foreach (\App\Models\LensType::get() as $lens_type)
+                                                                    <option value="{{ $lens_type->id }}"
+                                                                        {{ old('lens_type') == $lens_type->id ? 'selected' : '' }}>
+                                                                        {{ $lens_type->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                     </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Index</label>
+                                                            <select class="form-control custom-select" name="index" id="index" required>
+                                                                <option value="">-- Select --</option>
+                                                                @foreach (\App\Models\PhotoIndex::get() as $index)
+                                                                    <option value="{{ $index->id }}"
+                                                                        {{ old('index') == $index->id ? 'selected' : '' }}>
+                                                                        {{ $index->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Chromatics Aspects</label>
+                                                            <select class="form-control custom-select" name="chromatics" id="chrm" required>
+                                                                <option value="">-- Select --</option>
+                                                                @foreach (\App\Models\PhotoChromatics::get() as $chromatics)
+                                                                    <option value="{{ $chromatics->id }}"
+                                                                        {{ old('chromatics') == $chromatics->id ? 'selected' : '' }}>
+                                                                        {{ $chromatics->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Coating</label>
+                                                            <select class="form-control custom-select" name="coating" id="coating" required>
+                                                                <option value="">-- Select --</option>
+                                                                @foreach (\App\Models\PhotoCoating::get() as $coatings)
+                                                                    <option value="{{ $coatings->id }}"
+                                                                        {{ old('coating') == $coatings->id ? 'selected' : '' }}>
+                                                                        {{ $coatings->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!--/span-->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+
+                                    <div id="power">
+
+                                        <div class="card">
+                                            <div class="card-body">
+
+                                                <h4 class="card-title">Lens Power</h4>
+
+
+                                                <div id="product-pricing" class=" m-t-20"></div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12" id="eyes">
+                                                        <div class="form-group row">
+                                                            <div class="col-12 mt-3">
+                                                                <div class="form-group">
+                                                                    <button class="btn btn-success" type="button"
+                                                                        onclick="productPricingSection();"><i class="fa fa-plus"></i>
+                                                                        Add Lens
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        {{-- =========== Powe division for addition =============== --}}
+                                        {{-- <div class="col-md-12" id="action_buttons"> --}}
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="form-group m-b-0 text-center">
+                                                        <button type="submit" class="btn btn-info waves-effect waves-light">Save</button>
+                                                        <a href="{{ url()->previous() }}"
+                                                            class="btn btn-dark waves-effect waves-light">Cancel</a>
+                                                    </div>
+                                                </div>
+                                            {{-- </div> --}}
+                                        </div>
+                                        {{-- =========== Powe division for addition =============== --}}
+
+                                    </div>
+                                </form>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -723,11 +808,13 @@
 @endsection
 
 @push('scripts')
-<script>
+    <script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
     <script src="{{ asset('dashboard/assets/extra-libs/jquery.repeater/product-settings.js') }}"></script>
-    $('#exam-form').on('submit', function () {
-        $('#submitButton').html('Saving Exam...');
-        $('#submitButton').prop('diabled', true);
-    });
-</script>
+    <script>
+        $('#exam-form').on('submit', function () {
+            $('#submitButton').html('Saving Exam...');
+            $('#submitButton').prop('diabled', true);
+        });
+    </script>
 @endpush
