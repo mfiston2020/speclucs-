@@ -30,7 +30,6 @@ class ClosingReport extends Component
         } else {
             $this->searchFoundSomething = 'yes';
         }
-
         $this->result   =   true;
     }
 
