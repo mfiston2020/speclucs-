@@ -267,6 +267,7 @@
                             </span>
                         </a>
                     </li>
+
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow waves-effect waves-dark" href="#!" aria-expanded="false">
                             <i class="mdi mdi-view-dashboard"></i>
@@ -281,7 +282,7 @@
                                         <i class="mdi mdi-adjust"></i>
                                         <span class="hide-menu"> Requested </span>
                                         <span class="badge badge-danger badge-pill ml-2">
-                                            {{$requested}}
+                                            {{ number_format($requested) }}
                                         </span>
                                     </a>
                                 </li>
@@ -290,7 +291,7 @@
                                         <i class="mdi mdi-adjust"></i>
                                         <span class="hide-menu"> Booking </span>
                                         <span class="badge badge-danger badge-pill ml-2">
-                                            {{$booking}}
+                                            {{ number_format($booking) }}
                                         </span>
                                     </a>
                                 </li>
@@ -299,7 +300,7 @@
                                         <i class="mdi mdi-adjust"></i>
                                         <span class="hide-menu"> Priced </span>
                                         <span class="badge badge-danger badge-pill ml-2">
-                                            {{$priced}}
+                                            {{ number_format($priced) }}
                                         </span>
                                     </a>
                                 </li>
@@ -308,7 +309,7 @@
                                         <i class="mdi mdi-adjust"></i>
                                         <span class="hide-menu"> PO Sent </span>
                                         <span class="badge badge-danger badge-pill ml-2">
-                                            {{$sentToLab}}
+                                            {{ number_format($sentToLab) }}
                                         </span>
                                     </a>
                                 </li>
