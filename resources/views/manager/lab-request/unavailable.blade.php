@@ -285,8 +285,8 @@
                                                                                         {{ format_values($productsold->sphere) }}
                                                                                         /
                                                                                         {{ format_values($productsold->cylinder) }}
-                                                                                        *{{ format_values($productsold->axis) }}
-                                                                                        {{ format_values($productsold->addition) }}
+                                                                                        *{{ format_values($productsold->axis??0) }}
+                                                                                        {{ format_values($productsold->addition??0) }}
                                                                                     </td>
                                                                                     <td>
                                                                                         {{ $productsold->location == null ? '-' : $productsold->location }}

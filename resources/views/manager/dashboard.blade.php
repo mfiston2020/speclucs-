@@ -49,7 +49,7 @@
                             <div class="card-body">
                                 <div class="d-flex no-block align-items-center justify-content-between">
                                     <div>
-                                        <h2>{{number_format(\App\Models\Invoice::where('company_id',Auth::user()->company_id)->count())}}
+                                        <h2>{{count(\App\Models\Invoice::where('company_id',Auth::user()->company_id)->get())}}
                                         </h2>
                                         <h6 class="text-cyan">{{__('navigation.invoice')}}</h6>
                                     </div>
@@ -65,7 +65,7 @@
                             <div class="card-body">
                                 <div class="d-flex no-block align-items-center justify-content-between">
                                     <div>
-                                        <h2>{{number_format(\App\Models\Supplier::where('company_id',Auth::user()->company_id)->count())}}
+                                        <h2>{{count(\App\Models\Supplier::where('company_id',Auth::user()->company_id)->get())}}
                                         </h2>
                                         <h6 class="text-success">{{__('navigation.suppliers')}}</h6>
                                     </div>
