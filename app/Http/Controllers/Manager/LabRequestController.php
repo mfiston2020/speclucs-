@@ -520,7 +520,7 @@ class LabRequestController extends Controller
 
                         $prdt       =   Product::find($pr->product_id);
 
-                        if (!is_null($prdt)) {
+                        if (!is_null($prdt) && $prdt->category_id=='1') {
                             $prdt       =   Product::find($pr->product_id);
                             $prdt->stock += 1;
                             $prdt->save();
