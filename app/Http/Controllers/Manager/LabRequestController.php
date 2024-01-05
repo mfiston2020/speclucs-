@@ -357,10 +357,13 @@ class LabRequestController extends Controller
     }
 
     function sendRequestTolab(Request $request){
+
+        // dd($request->all());
+
         $productRepo    =   new ProductRepo();
         $lensType       =   LensType::all();
         $powers         =   Power::where('company_id',userInfo()->company_id)->get();
-        $invoices         =   Invoice::where('company_id',userInfo()->company_id)->get();
+        $invoices       =   Invoice::where('company_id',userInfo()->company_id)->get();
 
         if ($request->requestId == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
@@ -369,7 +372,9 @@ class LabRequestController extends Controller
                 $invoice   =   $invoices->where('id',$invoiceId)->first();
                 $unavailableProductsCount   =   count($invoice->unavailableproducts);
 
+
                 if ($unavailableProductsCount==2) {
+                // dd($unavailableProductsCount);
                     $lenT   =   $lensType->where('id',$invoice->unavailableproducts[0]->type_id)->pluck('name')->first();
 
                     // checking for the lens type to know how to compare them
@@ -490,15 +495,18 @@ class LabRequestController extends Controller
                         }
                     }
                 }
+
                 // if only one unavailable product
-                else {
+                if ($unavailableProductsCount==1) {
+
+                    // dd($unavailableProductsCount);
                     foreach ($invoice->unavailableproducts as $key => $unProduct) {
 
                         $newProduct =   $productRepo->saveUnavailableToStock($unProduct->toArray());
                         $prdt       =   Product::find($newProduct->id);
                         $pstock     =   $prdt->stock;
 
-                        $prdt->stock += 0;
+                        $prdt->stock = 1;
                         $prdt->save();
 
                         UnavailableProduct::where('id',$unProduct->id)->update([
@@ -506,6 +514,20 @@ class LabRequestController extends Controller
                         ]);
                         $this->stocktrackRepo->saveTrackRecord($prdt->id, $pstock, '1', 1, 'received from supplier', 'rm', 'in');
                     }
+                }
+                if ($unavailableProductsCount==0){
+                    foreach ($invoice->SoldProduct as $key => $pr) {
+
+                        $prdt       =   Product::find($pr->product_id);
+
+                        if (!is_null($prdt)) {
+                            $prdt       =   Product::find($pr->product_id);
+                            $prdt->stock += 1;
+                            $prdt->save();
+                            $this->stocktrackRepo->saveTrackRecord($prdt->id, $prdt->stock, '1', 1, 'received from supplier', 'rm', 'in');
+                        }
+                    }
+
                 }
                 $this->sendToLab(Crypt::encrypt($invoiceId));
             }
