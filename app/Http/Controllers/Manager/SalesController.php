@@ -14,11 +14,15 @@ class SalesController extends Controller
 {
     public function index()
     {
-        $pending  =   Invoice::where('company_id', Auth::user()->company_id)->whereNotIn('status', ['collected', 'received'])->count();
+        $requests  =   Invoice::where('company_id', Auth::user()->company_id)->with('client')->whereIn('status', ['collected', 'received'])->withSum('soldproduct','total_amount')->withSum('soldproduct','insurance_payment')->orderBy('created_at', 'DESC')->get();
 
-        $sales  =   \App\Models\Invoice::where('company_id', Auth::user()->company_id)->where('status', 'received')->orderBy('created_at', 'DESC')->get();
+        $others  =   Invoice::where('company_id', Auth::user()->company_id)->with('client')->whereNotIn('status', ['collected', 'received'])->count();
 
-        return view('manager.sales.index', compact('sales', 'pending'));
+        // dd($requests[0]);
+
+        // $sales  =   \App\Models\Invoice::where('company_id', Auth::user()->company_id)->where('status', 'received')->orderBy('created_at', 'DESC')->get();
+
+        return view('manager.sales.index', compact('requests','others'));
     }
 
     public function addCustomerSale()

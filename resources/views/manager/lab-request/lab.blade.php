@@ -33,7 +33,7 @@
                                     </span>
                                 </a>
                             </li>
-                            <li class=" nav-item">
+                            {{-- <li class=" nav-item">
                                 <a href="#inProduction" class="nav-link" data-toggle="tab" aria-expanded="false">
                                     In Production
                                     <span class="badge badge-danger badge-pill">
@@ -56,16 +56,16 @@
                                         {{ count($requests_delivered) }}
                                     </span>
                                 </a>
-                            </li>
+                            </li> --}}
                             {{-- all other orders --}}
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="#other-order" class="nav-link" data-toggle="tab" aria-expanded="true">
                                     Order Status
                                     {{-- <span class="badge badge-info badge-pill">
                                         {{ count($other_orders) }}
-                                    </span> --}}
+                                    </span> --}
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </div>
@@ -98,6 +98,12 @@
                                                 <tbody>
                                                     @foreach ($requests as $key => $request)
                                                         <tr>
+                                            <td>
+                                                <div class="form-check form-check-inline align-content-center">
+                                                    <input class="form-check-input allCheckbox" type="checkbox"
+                                                        name="order[]" id="inlineCheckbox1" value="{{$order->id}}">
+                                                </div>
+                                            </td>
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>
                                                                 <a href="#!" data-toggle="modal"

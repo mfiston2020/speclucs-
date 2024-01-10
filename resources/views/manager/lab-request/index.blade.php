@@ -214,27 +214,7 @@
                                                                                 class="modal-dialog modal-xl modal-dialog-centered">
                                                                                 <div class="modal-content">
                                                                                     <div class="modal-header">
-                                                                                        <div>
-                                                                                            <h4 class="modal-title text-info">
-                                                                                                @if ($request->client_id != null)
-                                                                                                    {{$request->client->name}}
-                                                                                                @else
-                                                                                                    @if ($request->hospital_name!=null)
-                                                                                                        [{{$request->cloud_id}}] {{$request->hospital_name}}
-                                                                                                    @else
-                                                                                                        {{$request->client_name}}
-                                                                                                    @endif
-                                                                                                @endif
-                                                                                                {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
-                                                                                            </h4>
-                                                                                            <br>
-
-                                                                                            <h4 class="modal-title"
-                                                                                                id="content-detail-{{ $key }}">
-                                                                                                Request
-                                                                                                #{{ sprintf('SPCL-%04d', $request->id) }}
-                                                                                            </h4>
-                                                                                        </div>
+                                                                                        
                                                                                         <button type="button" class="close"
                                                                                             data-dismiss="modal"
                                                                                             aria-hidden="true">×</button>

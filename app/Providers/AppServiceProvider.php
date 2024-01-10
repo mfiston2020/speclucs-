@@ -49,6 +49,10 @@ class AppServiceProvider extends ServiceProvider
                 ->with('requested',$ordersCount->where('status','requested')->count())
                 ->with('priced',$ordersCount->whereIn('status',['Confirmed','priced'])->count())
                 ->with('sentToLab',$ordersCount->where('status','sent to supplier')->count())
+                // lab orders count
+                ->with('production',$ordersCount->where('status','production')->count())
+                ->with('completed',$ordersCount->where('status','completed')->count())
+                ->with('delivered',$ordersCount->where('status','delivered')->count())
                 ;
                 // ->with('pending_product_on_invoice',$pendingProducts);
         });

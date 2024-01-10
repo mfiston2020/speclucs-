@@ -24,6 +24,10 @@ class ReceivedOrdersController extends Controller
         return view('manager.receivedorder.index',compact('orders','orders_count','orders_new','orders_production','orders_completed','orders_delivery','orders_received'));
     }
 
+    function orders($query){
+        
+    }
+
     public function new()
     {
         $orders =   \App\Models\Order::where('supplier_id',Auth::user()->company_id)->where('status','=','submitted')->get();

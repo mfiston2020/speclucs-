@@ -276,52 +276,45 @@
                                 {{$orderCount}}
                             </span>
                         </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{route('manager.lab.requests.type','requested')}}" class="sidebar-link">
-                                        <i class="mdi mdi-adjust"></i>
-                                        <span class="hide-menu"> Requested </span>
-                                        <span class="badge badge-danger badge-pill ml-2">
-                                            {{ number_format($requested) }}
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{route('manager.lab.requests.type','booking')}}" class="sidebar-link">
-                                        <i class="mdi mdi-adjust"></i>
-                                        <span class="hide-menu"> Booking </span>
-                                        <span class="badge badge-danger badge-pill ml-2">
-                                            {{ number_format($booking) }}
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{route('manager.lab.requests.type','priced')}}" class="sidebar-link">
-                                        <i class="mdi mdi-adjust"></i>
-                                        <span class="hide-menu"> Priced </span>
-                                        <span class="badge badge-danger badge-pill ml-2">
-                                            {{ number_format($priced) }}
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{route('manager.lab.requests.type','po-sent')}}" class="sidebar-link">
-                                        <i class="mdi mdi-adjust"></i>
-                                        <span class="hide-menu"> PO Sent </span>
-                                        <span class="badge badge-danger badge-pill ml-2">
-                                            {{ number_format($sentToLab) }}
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                    {{-- <li class="sidebar-item">
-                        <a href="{{ route('manager.lab.requests') }}" class="sidebar-link">
-                            <i class="mdi mdi-adjust"></i>
-                            <span class="hide-menu">Lab Request </span>
-                        </a>
-                    </li> --}}
+                        <ul aria-expanded="false" class="collapse  first-level">
+                            <li class="sidebar-item">
+                                <a href="{{route('manager.lab.requests.type','requested')}}" class="sidebar-link">
+                                    <i class="mdi mdi-adjust"></i>
+                                    <span class="hide-menu"> Requested </span>
+                                    <span class="badge badge-danger badge-pill ml-2">
+                                        {{ number_format($requested) }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{route('manager.lab.requests.type','booking')}}" class="sidebar-link">
+                                    <i class="mdi mdi-adjust"></i>
+                                    <span class="hide-menu"> Booking </span>
+                                    <span class="badge badge-danger badge-pill ml-2">
+                                        {{ number_format($booking) }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{route('manager.lab.requests.type','priced')}}" class="sidebar-link">
+                                    <i class="mdi mdi-adjust"></i>
+                                    <span class="hide-menu"> Priced </span>
+                                    <span class="badge badge-danger badge-pill ml-2">
+                                        {{ number_format($priced) }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{route('manager.lab.requests.type','po-sent')}}" class="sidebar-link">
+                                    <i class="mdi mdi-adjust"></i>
+                                    <span class="hide-menu"> PO Sent </span>
+                                    <span class="badge badge-danger badge-pill ml-2">
+                                        {{ number_format($sentToLab) }}
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
                     <li class="sidebar-item"><a href="{{ route('manager.receipt') }}" class="sidebar-link"><i
                                 class="mdi mdi-adjust"></i><span class="hide-menu">
@@ -339,10 +332,6 @@
                                 {{ __('navigation.purchase_order') }} </span></a>
                     </li>
 
-                    {{-- <li class="sidebar-item"><a href="{{ route('manager.quations') }}" class="sidebar-link"><i
-                                class="mdi mdi-account-convert"></i><span class="hide-menu">
-                                {{ __('navigation.quotation') }}</span></a>
-                    </li> --}}
                 @endif
 
 
@@ -411,14 +400,71 @@
 
                 @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'lab')
                     <!-- User Profile-->
-                    <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span
-                            class="hide-menu">{{ __('navigation.laboratory_department') }}</span></li>
-
-
-                    <li class="sidebar-item"><a href="{{ route('manager.received.order') }}" class="sidebar-link"><i
-                                class="mdi mdi-flask"></i><span class="hide-menu"> {{ __('navigation.laboratory') }}
-                            </span></a>
+                    <li class="nav-small-cap">
+                        <i class="mdi mdi-adjust"></i>
+                        <span class="hide-menu">
+                                {{ __('navigation.laboratory_department') }}
+                            </span>
+                        {{-- <span class="hide-menu">{{ __('navigation.laboratory_department') }}</span> --}}
                     </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link has-arrow waves-effect waves-dark" href="#!" aria-expanded="false">
+                            <i class="mdi mdi-view-dashboard"></i>
+                            <span class="hide-menu">Lab Request </span>
+                            <span class="badge badge-danger badge-pill ml-2">
+                                {{$production+$completed+$delivered}}
+                            </span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse  first-level">
+                            <li class="sidebar-item">
+                                <a href="{{ route('manager.receive.order.from',encrypt("new")) }}" class="sidebar-link">
+                                    <i class="mdi mdi-adjust"></i>
+                                    <span class="hide-menu"> New Order(s) </span>
+                                    <span class="badge badge-danger badge-pill ml-2">
+                                        {{ number_format($production) }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ route('manager.receive.order.from',encrypt("production")) }}" class="sidebar-link">
+                                    <i class="mdi mdi-adjust"></i>
+                                    <span class="hide-menu"> In Production </span>
+                                    <span class="badge badge-danger badge-pill ml-2">
+                                        {{ number_format($production) }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ route('manager.receive.order.from',encrypt('completed')) }}" class="sidebar-link">
+                                    <i class="mdi mdi-adjust"></i>
+                                    <span class="hide-menu"> Completed </span>
+                                    <span class="badge badge-danger badge-pill ml-2">
+                                        {{ number_format($completed) }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ route('manager.receive.order.from',encrypt('delivered')) }}" class="sidebar-link">
+                                    <i class="mdi mdi-adjust"></i>
+                                    <span class="hide-menu"> Delivered </span>
+                                    <span class="badge badge-danger badge-pill ml-2">
+                                        {{ number_format($delivered) }}
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    {{-- <li class="sidebar-item">
+                        <a href="{{ route('manager.received.order') }}" class="sidebar-link"><i
+                                class="mdi mdi-flask"></i><span class="hide-menu"> {{ __('navigation.laboratory') }}
+                            </span>
+                        </a>
+                    </li> --}}
+
+
                     <li class="sidebar-item"><a href="{{ route('manager.retail') }}" class="sidebar-link"><i
                                 class="mdi mdi-adjust"></i><span class="hide-menu">
                                 {{ __('navigation.lab_request') }} </span></a>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Insurance;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\PendingOrder;
@@ -34,15 +35,18 @@ class PendingOrderController extends Controller
 
     function index()
     {
+        $ords   =   Invoice::where('company_id', Auth::user()->company_id)->withSum('soldproduct','total_amount')->withSum('soldproduct','insurance_payment')->orderBy('created_at', 'DESC')->get();
         // $pendingOrders  =   PendingOrder::where('company_id', userInfo()->company_id)->orderBy('created_at', 'desc')->get();
 
-        $sales_requested  =   Invoice::where('company_id', Auth::user()->company_id)->where('status', 'requested')->orderBy('created_at', 'DESC')->get();
+        $sales_requested  =   $ords->where('status', 'requested')->all();
 
-        $sales_priced  =   Invoice::where('company_id', Auth::user()->company_id)->where('status', 'priced')->orderBy('created_at', 'DESC')->get();
+        $sales_priced  =   $ords->where('status', 'priced')->all();
 
-        $sales_delivered  =   Invoice::where('company_id', Auth::user()->company_id)->where('status', 'delivered')->orderBy('created_at', 'DESC')->get();
+        $sales_delivered  =   $ords->where('status', 'delivered')->all();
 
-        $sales_sent_to_lab  =   Invoice::where('company_id', Auth::user()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'DESC')->get();
+        $sales_sent_to_lab  =   $ords->where('status', 'sent to lab')->all();
+
+        // dd($ords);
 
         $other_orders  =   Invoice::where('company_id', userInfo()->company_id)->whereNotIn('status', ['delivered', 'sent to lab', 'in production', 'completed'])->orderBy('created_at', 'desc')->with('unavailableproducts')->with('client')->with('soldproduct')->get();
 

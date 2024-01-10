@@ -38,11 +38,11 @@
                                 style="align-items: right;">
                                 <i class="fa fa-bars"></i> {{ __('manager/sales.pending_orders') }}
 
-                                @if ($pending > 0)
+                                {{-- @if ($pending > 0) --}}
                                     <span class="badge badge-danger badge-pill">
-                                        {{ number_format($pending) }}
+                                        {{ number_format(($others)) }}
                                     </span>
-                                @endif
+                                {{-- @endif --}}
                             </a>
 
                         </div>
@@ -64,38 +64,15 @@
                                             <th>{{ __('manager/sales.reference_number') }} #</th>
                                             <th>{{ __('manager/sales.customer') }}</th>
                                             <th>{{ __('manager/sales.ins') }}</th>
-                                            <th>T. Amnt</th>
+                                            {{-- <th>T. Amnt</th> --}}
                                             <th>Ins Due Amnt</th>
                                             <th>Pt Due Amnt</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($sales as $key => $sale)
+                                        @foreach ($requests as $key => $sale)
                                             <tr>
-                                                @php
-                                                    $client = \App\Models\Customer::where(['id' => $sale->client_id])
-                                                        ->where('company_id', Auth::user()->company_id)
-                                                        ->pluck('name')
-                                                        ->first();
-
-                                                    $product = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
-                                                        ->where('company_id', Auth::user()->company_id)
-                                                        ->select('product_id', 'insurance_id', 'insurance_payment', 'patient_payment')
-                                                        ->first();
-
-                                                    $amount_paid = \App\Models\Transactions::where('invoice_id', $sale->id)
-                                                        ->select('amount')
-                                                        ->sum('amount');
-                                                    $ins_due_amount = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
-                                                        ->where('company_id', Auth::user()->company_id)
-                                                        ->select('insurance_payment')
-                                                        ->sum('insurance_payment');
-                                                    $pt_due_amount = \App\Models\SoldProduct::where(['invoice_id' => $sale->id])
-                                                        ->where('company_id', Auth::user()->company_id)
-                                                        ->select('patient_payment')
-                                                        ->sum('patient_payment');
-                                                @endphp
                                                 <td>
                                                     <input type="checkbox" name="requestid[]" value="{{ $sale->id }}"
                                                         {{ $sale->status == 'collected' ? 'checked disabled' : '' }} />
@@ -110,32 +87,29 @@
                                                         {{ $sale->reference_number }}</a>
                                                 </td>
                                                 <td>
-                                                    @if ($client)
-                                                        <center><span>{{ $client }}</span></center>
+                                                    @if ($sale->client_id != null)
+                                                        {{$sale->client->name}}
                                                     @else
-                                                        <center>
-                                                            <span>{{ $sale->client_name }}</span>
-                                                        </center>
+                                                        @if ($sale->hospital_name!=null)
+                                                            [{{$sale->cloud_id}}] {{$sale->hospital_name}}
+                                                        @else
+                                                            {{$sale->client_name}}
+                                                        @endif
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    @if ($product && $product->insurance_id != null)
-                                                        {{ \App\Models\Insurance::where('id', $product->insurance_id)->pluck('insurance_name')->first() }}
-                                                    @else
-                                                        Private
-                                                    @endif
-                                                </td>
-                                                <td>{{ format_money($sale->total_amount == null || $sale->total_amount == 'completed' ? 0 : $sale->total_amount) }}
-                                                </td>
-                                                <td>
-                                                    {{ format_money($ins_due_amount == null ? 0 : $ins_due_amount) }}
+                                                {{-- <td>
+                                                    @php
+                                                        $amount_paid = 0;
+
+                                                        @endphp
+                                                </td> --}}
+                                                <td>{{ format_money($sale->soldproduct_sum_total_amount) }}
                                                 </td>
                                                 <td>
-                                                    @if ($product && $product->insurance_id != null)
-                                                        {{ format_money($pt_due_amount - $amount_paid) }}
-                                                    @else
-                                                        {{ format_money($pt_due_amount - $amount_paid) }}
-                                                    @endif
+                                                    {{ format_money($sale->insurance_payment) }}
+                                                </td>
+                                                <td>
+                                                    {{ format_money($sale->soldproduct_sum_total_amount - $sale->insurance_payment)}}
                                                 </td>
                                                 <td>
                                                     <span @class([

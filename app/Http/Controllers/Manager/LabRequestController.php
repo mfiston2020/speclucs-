@@ -155,33 +155,48 @@ class LabRequestController extends Controller
     }
 
     // ====================
-    function receiveOrder()
+    function receiveOrder($type)
     {
         $lens_type  =   \App\Models\LensType::all();
         $index      =   \App\Models\PhotoIndex::all();
         $chromatics =   \App\Models\PhotoChromatics::all();
         $coatings   =   \App\Models\PhotoCoating::all();
         // ==================
+        // $products   =   Product::where('company_id', userInfo()->company_id)->with('power')->get();
 
 
-        // sent to lab
-        $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('client')->with('soldproduct')->get();
+        if (decrypt($type)=='new') {
+            // sent to lab
+            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(20);
 
-        // in production
-        $requests_inProduction   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('client')->with('soldproduct')->get();
+            return view('manager.lab-request.received.new', compact('requests', 'lens_type', 'index', 'chromatics', 'coatings'));
+        }
 
-        // completed
-        $requests_completed   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('client')->with('soldproduct')->get();
+        if (decrypt($type)=='production') {
+            // in production
+            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(20);
 
-        // delivered
-        $requests_delivered  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('client')->with('soldproduct')->get();
+            return view('manager.lab-request.received.in-production', compact('requests', 'lens_type', 'index', 'chromatics', 'coatings'));
+        }
 
-        // other products
-        $other_orders  =   Invoice::where('company_id', userInfo()->company_id)->whereNotIn('status', ['delivered', 'sent to lab', 'in production', 'completed'])->orderBy('created_at', 'desc')->with('unavailableproducts')->with('client')->with('soldproduct')->get();
+        if (decrypt($type)=='completed') {
+            // completed
+            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(20);
 
-        $products   =   Product::where('company_id', userInfo()->company_id)->with('power')->get();
+            return view('manager.lab-request.received.completed', compact('requests','lens_type', 'index', 'chromatics', 'coatings'));
+        }
 
-        return view('manager.lab-request.lab', compact('requests', 'requests_completed', 'requests_delivered', 'other_orders', 'requests_inProduction', 'products', 'lens_type', 'index', 'chromatics', 'coatings'));
+        if (decrypt($type)=='delivered') {
+            // delivered
+            $requests  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(20);
+
+            return view('manager.lab-request.received.delivered', compact('requests','lens_type', 'index', 'chromatics', 'coatings'));
+        }
+
+        // // other products
+        // $other_orders  =   Invoice::where('company_id', userInfo()->company_id)->whereNotIn('status', ['delivered', 'sent to lab', 'in production', 'completed'])->orderBy('created_at', 'desc')->with('unavailableproducts')->with('client')->with('soldproduct')->get();
+
+
     }
 
     // ========================================
@@ -199,6 +214,7 @@ class LabRequestController extends Controller
         foreach ($invoice->soldproduct as $key => $sold) {
             $product    =   $allProduct->where('id', $sold->product_id)->first();
             $stockVariation = $product->stock - 1;
+            $product->save();
 
             $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', '0', 'in production', 'wip', 'in');
         }
@@ -209,10 +225,16 @@ class LabRequestController extends Controller
     // ==============
     function sendToCompleted(Request $request)
     {
-        if ($request->requestid == null) {
+        if ($request->invoiceId == null && !$request->has('invoiceId')) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
-        } else {
-            foreach ($request->requestid as $key => $value) {
+        }
+        if ($request->idsalfjei !=null && !$request->has('invoiceId')) {
+            Invoice::where($request->idsalfjei)->update([
+                'status' => 'completed',
+            ]);
+        }
+         else {
+            foreach ($request->invoiceId as $value) {
                 Invoice::find($value)->update([
                     'status' => 'completed',
                 ]);

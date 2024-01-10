@@ -24,7 +24,7 @@
                     <div class="card-body">
                         <div class="row">
                             <h4 class="card-title">
-                                <a href="{{ route('manager.receive.order.from') }}" class="btn btn-info btn-rounded">
+                                <a href="#!" class="btn btn-info btn-rounded">
                                     <i class="mdi mdi-cart-plus"></i> Receive Order(s)</a>
                                 {{-- <a href="{{ route('manager.received.order.new') }}" class="btn btn-primary btn-rounded"><i
                                         class="mdi mdi-cart-plus"></i> New Orders</a>

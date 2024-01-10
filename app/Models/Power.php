@@ -22,4 +22,20 @@ class Power extends Model
         'coating_id',
         'chromatics_id',
     ];
+
+    function type(){
+        return $this->belongsTo(LensType::class);
+    }
+
+    function chromatic(){
+        return $this->belongsTo(PhotoChromatics::class,'chromatics_id');
+    }
+
+    function coating(){
+        return $this->belongsTo(PhotoCoating::class,'coating_id');
+    }
+
+    function index(){
+        return $this->belongsTo(PhotoIndex::class,'index_id');
+    }
 }
