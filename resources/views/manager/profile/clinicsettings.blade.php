@@ -17,12 +17,12 @@
         <!-- Column -->
         <div class="col-lg-12 col-xlg-12 col-md-12">
             <ul class="nav nav-tabs" role="tablist">
-                {{-- <li class="nav-item ">
+                <li class="nav-item ">
                     <a class="nav-link active" data-toggle="tab" href="#lens-pricing" role="tab">
                         <span class="hidden-sm-up"><i class="ti-email"></i></span>
                         <span class="hidden-xs-down">Lens Pricing</span>
                     </a>
-                </li> --}}
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#exam" role="tab">
                         <span class="hidden-sm-up">
@@ -62,7 +62,7 @@
             <!-- Tab panes -->
             <div class="tab-content tabcontent-border">
 
-                {{-- <div class="tab-pane p-20 active" id="lens-pricing" role="tabpanel">
+                <div class="tab-pane p-20 active" id="lens-pricing" role="tabpanel">
 
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
@@ -84,7 +84,7 @@
                         <div class="tab-pane active" id="home" role="tabpanel">
                             <div class="p-20 row" style="width:100%">
                                 {{-- <div class="card">
-                                    <div class="card-body"> --}
+                                    <div class="card-body"> --}}
                                         <div class="table-responsive">
                                             <table id="zero_config" class="table table-striped table-bordered">
                                             <thead>
@@ -99,7 +99,7 @@
                                                     <th>Addition To</th>
                                                     <th>cost</th>
                                                     <th>Price</th>
-                                                    {{-- <th>Total Sold</th> --}
+                                                    {{-- <th>Total Sold</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -121,7 +121,7 @@
                                             </table>
                                         </div>
                                     {{-- </div>
-                                </div> --}
+                                </div> --}}
                             </div>
                         </div>
                         <div class="tab-pane  p-20" id="profile" role="tabpanel">
@@ -228,7 +228,7 @@
                                         </div>
 
                                         {{-- =========== Powe division for addition =============== --}}
-                                        {{-- <div class="col-md-12" id="action_buttons"> --}
+                                        {{-- <div class="col-md-12" id="action_buttons"> --}}
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="form-group m-b-0 text-center">
@@ -237,9 +237,9 @@
                                                             class="btn btn-dark waves-effect waves-light">Cancel</a>
                                                     </div>
                                                 </div>
-                                            {{-- </div> --}
+                                            {{-- </div> --}}
                                         </div>
-                                        {{-- =========== Powe division for addition =============== --}
+                                        {{-- =========== Powe division for addition =============== --}}
 
                                     </div>
                                 </form>
@@ -247,7 +247,7 @@
 
                         </div>
                     </div>
-                </div> --}}
+                </div>
 
                 <div class="tab-pane" id="exam" role="tabpanel">
                     <div class="row mt-3">

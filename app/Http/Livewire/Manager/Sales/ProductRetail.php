@@ -136,6 +136,7 @@ class ProductRetail extends Component
     // if product not found give price if it's in the pricing range
     function autoPricing(){
         if ($this->lens_type!=1) {
+            dd($this->l_sphere);
             $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','>=',$this->l_sphere)->first();
 
             // R

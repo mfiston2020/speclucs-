@@ -169,28 +169,28 @@ class LabRequestController extends Controller
 
         if (decrypt($type)=='new') {
             // sent to lab
-            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(20);
+            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
 
             return view('manager.lab-request.received.new', compact('requests', 'lens_type', 'index', 'chromatics', 'coatings'));
         }
 
         if (decrypt($type)=='production') {
             // in production
-            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(20);
+            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
 
             return view('manager.lab-request.received.in-production', compact('requests', 'lens_type', 'index', 'chromatics', 'coatings'));
         }
 
         if (decrypt($type)=='completed') {
             // completed
-            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(20);
+            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
 
             return view('manager.lab-request.received.completed', compact('requests','lens_type', 'index', 'chromatics', 'coatings'));
         }
 
         if (decrypt($type)=='delivered') {
             // delivered
-            $requests  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(20);
+            $requests  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
 
             return view('manager.lab-request.received.delivered', compact('requests','lens_type', 'index', 'chromatics', 'coatings'));
         }

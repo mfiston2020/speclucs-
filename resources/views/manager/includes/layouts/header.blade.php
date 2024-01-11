@@ -411,7 +411,7 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow waves-effect waves-dark" href="#!" aria-expanded="false">
                             <i class="mdi mdi-view-dashboard"></i>
-                            <span class="hide-menu">Lab Request </span>
+                            <span class="hide-menu">Lab Orders </span>
                             <span class="badge badge-danger badge-pill ml-2">
                                 {{ $sentToLab+$production+$completed+$delivered }}
                             </span>
