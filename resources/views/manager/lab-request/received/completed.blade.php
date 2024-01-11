@@ -185,8 +185,6 @@
                                                                                             ->where('id', $right_len->chromatic_id)
                                                                                             ->pluck('name')
                                                                                             ->first();
-                                                                                    } else {
-                                                                                        $description = $$request->unavailableproducts->product->description;
                                                                                     }
 
                                                                                     $left_len = $request->unavailableproducts->where('eye', 'left')->first();
@@ -207,7 +205,7 @@
                                                                                                     {{ $ct }}
                                                                                                     {{ $indx }}
                                                                                                 @else
-                                                                                                    {{ $description }}
+                                                                                                    {{ $unavail->product->description }}
                                                                                                 @endif
                                                                                             </span>
                                                                                         </div>
