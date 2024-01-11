@@ -71,6 +71,8 @@ class LabRequestController extends Controller
 
             $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->where('status','requested')->orderBy('id','desc')->whereDoesntHave('unavailableProducts')->get();
 
+            // dd(count($invoicess));
+
             return view('manager.lab-request.requested',compact('invoicess','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
 

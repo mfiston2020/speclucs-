@@ -88,304 +88,289 @@
 
                                                         <tbody>
                                                             @foreach ($invoicess as $key => $request)
-                                                                {{-- @if (count($request->unavailableproducts) <= 0) --}}
-                                                                    @foreach ($request->soldproduct as $product)
-                                                                        @php
-                                                                            if ($product->product->stock>2){
-                                                                                $isOutOfStock='no';
-                                                                            }
-                                                                            else{
-                                                                                $isOutOfStock='yes';
-                                                                            // dd($isOutOfStock);
-                                                                            }
 
-                                                                        @endphp
-                                                                    @endforeach
-                                                                    @if ($isOutOfStock=='no')
+                                                                <tr>
+                                                                    <td>-</td>
+                                                                    <td>
+                                                                        <a href="#!" data-toggle="modal"
+                                                                            data-target="#request-{{ $key }}-detail">
+                                                                            Request
+                                                                            #{{ sprintf('SPCL-%04d', $request->id) }}
+                                                                        </a>
+                                                                    </td>
+                                                                    <td>
+                                                                        @if ($request->client_id != null)
+                                                                            {{$request->client->name}}
+                                                                        @else
+                                                                            @if ($request->hospital_name!=null)
+                                                                            [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                                            @else
+                                                                                {{$request->client_name}}
+                                                                            @endif
+                                                                        @endif
+                                                                        {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
+                                                                    </td>
+                                                                    <td class="text-start">
+                                                                        <span @class([
+                                                                            'text-warning' => $request->status == 'requested',
+                                                                        ])>
+                                                                            {{ $request->status }}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td>
+                                                                        @if ($request->status=='requested')
+                                                                            <a href="{{route('manager.lab.order.cancel',Crypt::encrypt($request->id))}}" class="text-danger" onclick="return confirm('Are you sure??')">Cancel Order</a>
+                                                                        @else
+                                                                            <center>-</center>
+                                                                        @endif
+                                                                    </td>
+                                                                </tr>
 
-                                                                        <tr>
-                                                                            <td>-</td>
-                                                                            <td>
-                                                                                <a href="#!" data-toggle="modal"
-                                                                                    data-target="#request-{{ $key }}-detail">
-                                                                                    Request
-                                                                                    #{{ sprintf('SPCL-%04d', $request->id) }}
-                                                                                </a>
-                                                                            </td>
-                                                                            <td>
-                                                                                @if ($request->client_id != null)
-                                                                                    {{$request->client->name}}
-                                                                                @else
-                                                                                    @if ($request->hospital_name!=null)
-                                                                                    [{{$request->cloud_id}}] {{$request->hospital_name}}
-                                                                                    @else
-                                                                                        {{$request->client_name}}
+                                                                {{-- modal --}}
+                                                                <div class="modal fade bs-example-modal-lg"
+                                                                    id="request-{{ $key }}-detail"
+                                                                    tabindex="-1" role="dialog"
+                                                                    aria-labelledby="myLargeModalLabel"
+                                                                    aria-hidden="true" style="display: none;">
+                                                                    @php
+                                                                        $isOutOfStock='no';
+                                                                    @endphp
+                                                                    <div
+                                                                        class="modal-dialog modal-xl modal-dialog-centered">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <div>
+                                                                                    <h4 class="modal-title text-info">
+                                                                                        @if ($request->client_id != null)
+                                                                                            {{$request->client->name}}
+                                                                                        @else
+                                                                                            @if ($request->hospital_name!=null)
+                                                                                                [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                                                            @else
+                                                                                                {{$request->client_name}}
+                                                                                            @endif
+                                                                                        @endif
+                                                                                        {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
+                                                                                    </h4>
+                                                                                    <br>
+
+                                                                                    <h4 class="modal-title"
+                                                                                        id="content-detail-{{ $key }}">
+                                                                                        Request
+                                                                                        #{{ sprintf('SPCL-%04d', $request->id) }}
+                                                                                    </h4>
+                                                                                </div>
+                                                                                <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-hidden="true">×</button>
+                                                                            </div>
+                                                                            <div class="modal-body" id="printable">
+                                                                                {{-- @if ($product->hasLens()) --}}
+                                                                                    <h4 class="text-info">Lens</h4>
+                                                                                    <hr>
+                                                                                    @foreach ($request->soldproduct as $product)
+                                                                                        @php
+
+                                                                                            if ($product->product->stock<2){
+                                                                                                $isOutOfStock='yes';
+                                                                                            }
+
+                                                                                        @endphp
+
+                                                                                        {{-- for lens --}}
+                                                                                        @if ($product->product->category_id == 1)
+
+                                                                                            <div class="row mb-2">
+                                                                                                <div class="col-1">
+                                                                                                    <h4
+                                                                                                        class="text-capitalize">
+                                                                                                        {{ $product->eye == null ? '' : Oneinitials($product->eye) }}
+                                                                                                    </h4>
+                                                                                                </div>
+                                                                                                <div class="col-3">
+                                                                                                    <span>
+                                                                                                        {{ $product->product->description }}
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                                <div class="col-2">
+                                                                                                    @if (initials($product->product->product_name) == 'SV')
+                                                                                                        <span>{{ $product->product->power->sphere }}
+                                                                                                            /
+                                                                                                            {{ $product->product->power->cylinder }}</span>
+                                                                                                    @else
+                                                                                                        <span>{{ $product->product->power->sphere }}
+                                                                                                            /
+                                                                                                            {{ $product->product->power->cylinder }}
+                                                                                                            *{{ $product->product->power->axis }}
+                                                                                                            {{ $product->product->power->add }}</span>
+                                                                                                    @endif
+                                                                                                </div>
+                                                                                                <div class="col-2 row">
+                                                                                                    <span>
+                                                                                                        <h6>Location: </h6>
+                                                                                                    </span>
+                                                                                                    {{ $product->product->location == null ? '-' : $product->product->location }}
+                                                                                                </div>
+                                                                                                <div class="col-2 ">
+                                                                                                    <span
+                                                                                                        class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                        <h6
+                                                                                                            class="text-dark">
+                                                                                                            Mono PD:
+                                                                                                        </h6>
+                                                                                                        <span
+                                                                                                            class="text-capitalize">
+                                                                                                            {{ $product->mono_pd }}
+                                                                                                        </span>
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                                <div class="col-2 ">
+                                                                                                    <span
+                                                                                                        class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                        <h6
+                                                                                                            class="text-dark">
+                                                                                                            Seg H:
+                                                                                                        </h6>
+                                                                                                        <span
+                                                                                                            class="text-capitalize">
+                                                                                                            {{ $product->segment_h }}
+                                                                                                        </span>
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                {{-- @endif --}}
+
+                                                                                {{-- for frame --}}
+                                                                                @if ($product->hasFrame())
+                                                                                    @if ($product->hasLens())
+                                                                                        <hr>
+                                                                                    @endif
+                                                                                    <h4 class="text-info">Frame</h4>
+                                                                                    <hr>
+                                                                                    @if ($product)
+                                                                                        @foreach ($request->soldproduct as $product)
+
+                                                                                            @if ($product->product->category_id == 2)
+                                                                                                <div class="row mb-2">
+                                                                                                    <div class="col-6">
+                                                                                                        <span
+                                                                                                            class="text-capitalize">
+                                                                                                            {{ $product->product->product_name }}
+                                                                                                            -
+                                                                                                            {{ $product->product->description }}
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                    <div class="col-3">
+                                                                                                        <span
+                                                                                                            class="text-capitalize">
+                                                                                                            <h4>Location:
+                                                                                                            </h4>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                    <div class="col-3">
+                                                                                                        <span
+                                                                                                            class="text-capitalize">
+                                                                                                            {{ $product->location == null ? '-' : $product->location }}
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            @endif
+                                                                                        @endforeach
                                                                                     @endif
                                                                                 @endif
-                                                                                {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
-                                                                            </td>
-                                                                            <td>
-                                                                                {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
-                                                                            </td>
-                                                                            <td>
-                                                                                {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
-                                                                            </td>
-                                                                            <td class="text-start">
-                                                                                <span @class([
-                                                                                    'text-warning' => $request->status == 'requested',
-                                                                                ])>
-                                                                                    {{ $request->status }}
-                                                                                </span>
-                                                                            </td>
-                                                                            <td>
-                                                                                @if ($request->status=='requested')
-                                                                                    <a href="{{route('manager.lab.order.cancel',Crypt::encrypt($request->id))}}" class="text-danger" onclick="return confirm('Are you sure??')">Cancel Order</a>
-                                                                                @else
-                                                                                    <center>-</center>
-                                                                                @endif
-                                                                            </td>
-                                                                        </tr>
 
-                                                                        {{-- modal --}}
-                                                                        <div class="modal fade bs-example-modal-lg"
-                                                                            id="request-{{ $key }}-detail"
-                                                                            tabindex="-1" role="dialog"
-                                                                            aria-labelledby="myLargeModalLabel"
-                                                                            aria-hidden="true" style="display: none;">
-                                                                            @php
-                                                                                $isOutOfStock='no';
-                                                                            @endphp
-                                                                            <div
-                                                                                class="modal-dialog modal-xl modal-dialog-centered">
-                                                                                <div class="modal-content">
-                                                                                    <div class="modal-header">
-                                                                                        <div>
-                                                                                            <h4 class="modal-title text-info">
-                                                                                                @if ($request->client_id != null)
-                                                                                                    {{$request->client->name}}
-                                                                                                @else
-                                                                                                    @if ($request->hospital_name!=null)
-                                                                                                        [{{$request->cloud_id}}] {{$request->hospital_name}}
-                                                                                                    @else
-                                                                                                        {{$request->client_name}}
-                                                                                                    @endif
-                                                                                                @endif
-                                                                                                {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
-                                                                                            </h4>
-                                                                                            <br>
+                                                                                @if ($product->hasAccessories())
+                                                                                    @if ($product->hasFrame())
+                                                                                        <hr>
+                                                                                    @endif
+                                                                                    <h4 class="text-info">Accessories &
+                                                                                        Others
+                                                                                    </h4>
+                                                                                    <hr>
+                                                                                    {{-- for accessories --}}
+                                                                                    @if ($product)
+                                                                                        @foreach ($request->soldproduct as $product)
 
-                                                                                            <h4 class="modal-title"
-                                                                                                id="content-detail-{{ $key }}">
-                                                                                                Request
-                                                                                                #{{ sprintf('SPCL-%04d', $request->id) }}
-                                                                                            </h4>
-                                                                                        </div>
-                                                                                        <button type="button" class="close"
-                                                                                            data-dismiss="modal"
-                                                                                            aria-hidden="true">×</button>
-                                                                                    </div>
-                                                                                    <div class="modal-body" id="printable">
-                                                                                        @if ($product->hasLens())
-                                                                                            <h4 class="text-info">Lens</h4>
-                                                                                            <hr>
-                                                                                            @foreach ($request->soldproduct as $product)
-                                                                                                @php
-
-                                                                                                    if ($product->product->stock<2){
-                                                                                                        $isOutOfStock='yes';
-                                                                                                    }
-
-                                                                                                @endphp
-
-                                                                                                {{-- for lens --}}
-                                                                                                @if ($product->product->category_id == 1)
-
-                                                                                                    <div class="row mb-2">
-                                                                                                        <div class="col-1">
-                                                                                                            <h4
-                                                                                                                class="text-capitalize">
-                                                                                                                {{ $product->eye == null ? '' : Oneinitials($product->eye) }}
-                                                                                                            </h4>
-                                                                                                        </div>
-                                                                                                        <div class="col-3">
-                                                                                                            <span>
-                                                                                                                {{ $product->product->description }}
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col-2">
-                                                                                                            @if (initials($product->product->product_name) == 'SV')
-                                                                                                                <span>{{ $product->product->power->sphere }}
-                                                                                                                    /
-                                                                                                                    {{ $product->product->power->cylinder }}</span>
-                                                                                                            @else
-                                                                                                                <span>{{ $product->product->power->sphere }}
-                                                                                                                    /
-                                                                                                                    {{ $product->product->power->cylinder }}
-                                                                                                                    *{{ $product->product->power->axis }}
-                                                                                                                    {{ $product->product->power->add }}</span>
-                                                                                                            @endif
-                                                                                                        </div>
-                                                                                                        <div class="col-2 row">
-                                                                                                            <span>
-                                                                                                                <h6>Location: </h6>
-                                                                                                            </span>
-                                                                                                            {{ $product->product->location == null ? '-' : $product->product->location }}
-                                                                                                        </div>
-                                                                                                        <div class="col-2 ">
-                                                                                                            <span
-                                                                                                                class="text-capitalize d-flex justify-content-around items-center">
-                                                                                                                <h6
-                                                                                                                    class="text-dark">
-                                                                                                                    Mono PD:
-                                                                                                                </h6>
-                                                                                                                <span
-                                                                                                                    class="text-capitalize">
-                                                                                                                    {{ $product->mono_pd }}
-                                                                                                                </span>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col-2 ">
-                                                                                                            <span
-                                                                                                                class="text-capitalize d-flex justify-content-around items-center">
-                                                                                                                <h6
-                                                                                                                    class="text-dark">
-                                                                                                                    Seg H:
-                                                                                                                </h6>
-                                                                                                                <span
-                                                                                                                    class="text-capitalize">
-                                                                                                                    {{ $product->segment_h }}
-                                                                                                                </span>
-                                                                                                            </span>
-                                                                                                        </div>
+                                                                                            @if ($product->product->category_id != 2 && $product->product->category_id != 1)
+                                                                                                <div class="row mb-2">
+                                                                                                    <div class="col-3">
+                                                                                                        <span
+                                                                                                            class="text-capitalize">
+                                                                                                            {{ $product->product->product_name }}
+                                                                                                            -
+                                                                                                            {{ $product->product->description }}
+                                                                                                        </span>
                                                                                                     </div>
-                                                                                                @endif
-                                                                                            @endforeach
-                                                                                        @endif
-
-                                                                                        {{-- for frame --}}
-                                                                                        @if ($product->hasFrame())
-                                                                                            @if ($product->hasLens())
-                                                                                                <hr>
+                                                                                                    <div class="col-3">
+                                                                                                        <span
+                                                                                                            class="text-capitalize">
+                                                                                                            <h4
+                                                                                                                class="text-dark">
+                                                                                                                Location:
+                                                                                                            </h4>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                    <div class="col-2">
+                                                                                                        <span
+                                                                                                            class="text-capitalize">
+                                                                                                            {{ $product->product->location == null ? '-' : $product->product->location }}
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                    <div class="col-2 ">
+                                                                                                        <span
+                                                                                                            class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                            <h4
+                                                                                                                class="text-dark">
+                                                                                                                Qty:
+                                                                                                            </h4>
+                                                                                                            <span
+                                                                                                                class="text-capitalize">
+                                                                                                                {{ $product->quantity }}
+                                                                                                            </span>
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                </div>
                                                                                             @endif
-                                                                                            <h4 class="text-info">Frame</h4>
-                                                                                            <hr>
-                                                                                            @if ($product)
-                                                                                                @foreach ($request->soldproduct as $product)
-
-                                                                                                    @if ($product->product->category_id == 2)
-                                                                                                        <div class="row mb-2">
-                                                                                                            <div class="col-6">
-                                                                                                                <span
-                                                                                                                    class="text-capitalize">
-                                                                                                                    {{ $product->product->product_name }}
-                                                                                                                    -
-                                                                                                                    {{ $product->product->description }}
-                                                                                                                </span>
-                                                                                                            </div>
-                                                                                                            <div class="col-3">
-                                                                                                                <span
-                                                                                                                    class="text-capitalize">
-                                                                                                                    <h4>Location:
-                                                                                                                    </h4>
-                                                                                                                </span>
-                                                                                                            </div>
-                                                                                                            <div class="col-3">
-                                                                                                                <span
-                                                                                                                    class="text-capitalize">
-                                                                                                                    {{ $product->location == null ? '-' : $product->location }}
-                                                                                                                </span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    @endif
-                                                                                                @endforeach
-                                                                                            @endif
-                                                                                        @endif
-
-                                                                                        @if ($product->hasAccessories())
-                                                                                            @if ($product->hasFrame())
-                                                                                                <hr>
-                                                                                            @endif
-                                                                                            <h4 class="text-info">Accessories &
-                                                                                                Others
-                                                                                            </h4>
-                                                                                            <hr>
-                                                                                            {{-- for accessories --}}
-                                                                                            @if ($product)
-                                                                                                @foreach ($request->soldproduct as $product)
-
-                                                                                                    @if ($product->product->category_id != 2 && $product->product->category_id != 1)
-                                                                                                        <div class="row mb-2">
-                                                                                                            <div class="col-3">
-                                                                                                                <span
-                                                                                                                    class="text-capitalize">
-                                                                                                                    {{ $product->product->product_name }}
-                                                                                                                    -
-                                                                                                                    {{ $product->product->description }}
-                                                                                                                </span>
-                                                                                                            </div>
-                                                                                                            <div class="col-3">
-                                                                                                                <span
-                                                                                                                    class="text-capitalize">
-                                                                                                                    <h4
-                                                                                                                        class="text-dark">
-                                                                                                                        Location:
-                                                                                                                    </h4>
-                                                                                                                </span>
-                                                                                                            </div>
-                                                                                                            <div class="col-2">
-                                                                                                                <span
-                                                                                                                    class="text-capitalize">
-                                                                                                                    {{ $product->product->location == null ? '-' : $product->product->location }}
-                                                                                                                </span>
-                                                                                                            </div>
-                                                                                                            <div class="col-2 ">
-                                                                                                                <span
-                                                                                                                    class="text-capitalize d-flex justify-content-around items-center">
-                                                                                                                    <h4
-                                                                                                                        class="text-dark">
-                                                                                                                        Qty:
-                                                                                                                    </h4>
-                                                                                                                    <span
-                                                                                                                        class="text-capitalize">
-                                                                                                                        {{ $product->quantity }}
-                                                                                                                    </span>
-                                                                                                                </span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    @endif
-                                                                                                @endforeach
-                                                                                            @endif
-                                                                                        @endif
-                                                                                    </div>
-                                                                                    <div
-                                                                                        class="modal-footer d-flex justify-content-between">
-
-                                                                                            @if ($isOutOfStock=='yes')
-                                                                                                <center><h4 class="text-danger">Product out of stock</h4></center>
-                                                                                            @else
-                                                                                                <button type="button"
-                                                                                                    class="btn btn-danger waves-effect text-left"
-                                                                                                    data-dismiss="modal">
-                                                                                                    Close
-                                                                                                </button>
-                                                                                                <button type="button"
-                                                                                                    class="btn btn-success waves-effect text-left"
-                                                                                                    id="print">Print</button>
-                                                                                                <a href="{{ route('manager.send.request.lab', Crypt::encrypt($request->id)) }}"
-                                                                                                    onclick="return confirm('are you sure?')"
-                                                                                                    class="btn btn-info waves-effect text-left">
-                                                                                                    Send to Lab
-                                                                                                </a>
-
-                                                                                            @endif
-                                                                                    </div>
-                                                                                </div>
-                                                                                <!-- /.modal-content -->
+                                                                                        @endforeach
+                                                                                    @endif
+                                                                                @endif
                                                                             </div>
-                                                                            <!-- /.modal-dialog -->
+                                                                            <div
+                                                                                class="modal-footer d-flex justify-content-between">
+
+                                                                                    @if ($isOutOfStock=='yes')
+                                                                                        <center><h4 class="text-danger">Product out of stock</h4></center>
+                                                                                    @else
+                                                                                        <button type="button"
+                                                                                            class="btn btn-danger waves-effect text-left"
+                                                                                            data-dismiss="modal">
+                                                                                            Close
+                                                                                        </button>
+                                                                                        <button type="button"
+                                                                                            class="btn btn-success waves-effect text-left"
+                                                                                            id="print">Print</button>
+                                                                                        <a href="{{ route('manager.send.request.lab', Crypt::encrypt($request->id)) }}"
+                                                                                            onclick="return confirm('are you sure?')"
+                                                                                            class="btn btn-info waves-effect text-left">
+                                                                                            Send to Lab
+                                                                                        </a>
+
+                                                                                    @endif
+                                                                            </div>
                                                                         </div>
-                                                                    @endif
-                                                                {{-- @endif --}}
+                                                                        <!-- /.modal-content -->
+                                                                    </div>
+                                                                    <!-- /.modal-dialog -->
+                                                                </div>
+
                                                             @endforeach
                                                         </tbody>
                                                     </table>
