@@ -597,6 +597,9 @@
                         <div class="card-header d-flex justify-content-between items-center">
                             <span>
                                 Insurance / Patient Payment
+                                @if ($autoL || $autoR)
+                                    | <strong class="text-warning">Lens Price Automatically Generated</strong>
+                                @endif
 
                             </span>
                             <h5>
@@ -627,7 +630,13 @@
                                                     </span>
                                                 </h6>
                                             @else
-                                                <label class="badge badge-danger badge-pill ml-2">N/A</label>
+                                                <label class="badge {{$autoR?'badge-secondary':'badge-danger'}} badge-pill ml-2">
+                                                    @if ($autoR)
+                                                        Auto
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </label>
                                             @endif
                                             <br>
                                             <span>L</span>
@@ -639,7 +648,13 @@
                                                     </span>
                                                 </h6>
                                             @else
-                                                <label class="badge badge-danger badge-pill ml-2">N/A</label>
+                                                <label class="badge {{$autoL?'badge-secondary':'badge-danger'}} badge-pill ml-2">
+                                                    @if ($autoL)
+                                                        Auto
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </label>
                                             @endif
                                         </div>
 
@@ -775,6 +790,22 @@
 </div>
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/libs/select2/dist/css/select2.min.css')}}">
+    <style>
+      .blink {
+        animation: blink-animation 1s steps(5, start) infinite;
+        -webkit-animation: blink-animation 1s steps(5, start) infinite;
+      }
+      @keyframes blink-animation {
+        to {
+          visibility: hidden;
+        }
+      }
+      @-webkit-keyframes blink-animation {
+        to {
+          visibility: hidden;
+        }
+      }
+    </style>
 @endpush
 
 @push('scripts')

@@ -19,7 +19,7 @@ use Livewire\Component;
 class ProductRetail extends Component
 {
     // repository
-    public $informationMessage;
+    public $informationMessage,$autoL=false,$autoR=false;
 
     // variables for cloud
     public $cloud_id, $hospital_name;
@@ -134,21 +134,40 @@ class ProductRetail extends Component
     }
 
     // if product not found give price if it's in the pricing range
-    function autoPricing(){
+    function autoPricingLeft(){
         if ($this->lens_type!=1) {
-            dd($this->l_sphere);
-            $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','>=',$this->l_sphere)->first();
+            // L
+            $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->l_sphere)->where('sphere_to','>=',$this->l_sphere)->where('cylinder_from','<=',$this->l_cylinder)->where('cylinder_to','>=',$this->l_cylinder)->where('addition_from','<=',$this->l_addition)->where('addition_to','>=',$this->l_addition)->first();
+        } else {
+            // L
+            $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->l_sphere)->where('sphere_to','>=',$this->l_sphere)->where('cylinder_from','<=',$this->l_cylinder)->where('cylinder_to','>=',$this->l_cylinder)->first();
+        }
+        if (is_null($this->leftPriceRange)) {
+            $this->autoL =   false;
+        } else {
+            $this->autoL =   true;
+        }
+        return $this->leftPriceRange?->price ?? 0;
+    }
 
+    // if product not found give price if it's in the pricing range
+    function autoPricingRight(){
+        if ($this->lens_type!=1) {
             // R
-            // $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','>=',$this->r_sphere)->where('sphere_to','<',$this->r_sphere)->where('cylinder_from','>=',$this->r_cylinder)->where('cylinder_to','<=',$this->r_cylinder)->first();
-
-            dd($this->leftPriceRange);
+            $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->r_sphere)->where('sphere_to','>=',$this->r_sphere)->where('cylinder_from','<=',$this->r_cylinder)->where('cylinder_to','>=',$this->r_cylinder)->where('addition_from','<=',$this->r_addition)->where('addition_to','>=',$this->r_addition)->first();
 
         } else {
-            dd('ge');
+            // R
+            $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->r_sphere)->where('sphere_to','>=',$this->r_sphere)->where('cylinder_from','<=',$this->r_cylinder)->where('cylinder_to','>=',$this->r_cylinder)->first();
         }
 
-        dd('$this->leftPriceRange');
+        if (is_null($this->rightPriceRange)) {
+            $this->autoR =   false;
+        } else {
+            $this->autoR =   true;
+        }
+
+        return $this->rightPriceRange?->price ?? 0;
     }
 
     function showModal($msg)
@@ -246,7 +265,8 @@ class ProductRetail extends Component
             }
             // if left len is the only product
             else if ($left_len_Results != 'product-not-found' && $right_len_Results == 'product-not-found') {
-                $this->total_lens_amount =    $left_len_Results[0]->price;
+                $rightPrice =   $this->autoPricingRight();
+                $this->total_lens_amount =    $left_len_Results[0]->price + $rightPrice;
 
                 $invoiceStock =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$left_len_Results[0]->id)->withSum('soldproduct','quantity')->get();
 
@@ -254,7 +274,8 @@ class ProductRetail extends Component
             }
             // if right len is the only product
             else if ($left_len_Results == 'product-not-found' && $right_len_Results != 'product-not-found') {
-                $this->total_lens_amount =    $right_len_Results[0]->price;
+                $leftPrice  =   $this->autoPricingLeft();
+                $this->total_lens_amount =    $right_len_Results[0]->price + $leftPrice;
 
                 // checking for booked stock on lens
                 $invoiceStock =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$right_len_Results[0]->id)->withSum('soldproduct','quantity')->get();
@@ -263,7 +284,11 @@ class ProductRetail extends Component
 
             // if both lens are not found
             else {
-                // $this->autoPricing();
+                $leftPrice  =   $this->autoPricingLeft();
+                $rightPrice =   $this->autoPricingRight();
+
+                $this->total_lens_amount    =   $leftPrice + $rightPrice;
+                // dd($this->total_lens_amount);
             }
 
             // $this->accessory_total_amount   =   $this->accessory_quantity * ($this->accessory_unit_price - ($this->accessory_price_adjust == null ? 0 : $this->accessory_price_adjust));
