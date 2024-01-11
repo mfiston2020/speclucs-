@@ -137,28 +137,28 @@ class ProductRetail extends Component
     function autoPricingLeft(){
         if ($this->lens_type!=1) {
             // L
-            $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->l_sphere)->where('sphere_to','>=',$this->l_sphere)->where('cylinder_from','<=',$this->l_cylinder)->where('cylinder_to','>=',$this->l_cylinder)->where('addition_from','<=',$this->l_addition)->where('addition_to','>=',$this->l_addition)->first();
+            $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->l_sphere)->where('sphere_to','>=',$this->l_sphere)->where('cylinder_from','<=',$this->l_cylinder)->where('cylinder_to','>=',$this->l_cylinder)->where('addition_from','<=',$this->l_addition)->where('addition_to','>=',$this->l_addition)->select('price','cost')->first();
         } else {
             // L
-            $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->l_sphere)->where('sphere_to','>=',$this->l_sphere)->where('cylinder_from','<=',$this->l_cylinder)->where('cylinder_to','>=',$this->l_cylinder)->first();
+            $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->l_sphere)->where('sphere_to','>=',$this->l_sphere)->where('cylinder_from','<=',$this->l_cylinder)->where('cylinder_to','>=',$this->l_cylinder)->select('price','cost')->first();
         }
         if (is_null($this->leftPriceRange)) {
             $this->autoL =   false;
         } else {
             $this->autoL =   true;
         }
-        return $this->leftPriceRange?->price ?? 0;
+        return $this->leftPriceRange ?? 0;
     }
 
     // if product not found give price if it's in the pricing range
     function autoPricingRight(){
         if ($this->lens_type!=1) {
             // R
-            $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->r_sphere)->where('sphere_to','>=',$this->r_sphere)->where('cylinder_from','<=',$this->r_cylinder)->where('cylinder_to','>=',$this->r_cylinder)->where('addition_from','<=',$this->r_addition)->where('addition_to','>=',$this->r_addition)->first();
+            $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->r_sphere)->where('sphere_to','>=',$this->r_sphere)->where('cylinder_from','<=',$this->r_cylinder)->where('cylinder_to','>=',$this->r_cylinder)->where('addition_from','<=',$this->r_addition)->where('addition_to','>=',$this->r_addition)->select('price','cost')->first();
 
         } else {
             // R
-            $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->r_sphere)->where('sphere_to','>=',$this->r_sphere)->where('cylinder_from','<=',$this->r_cylinder)->where('cylinder_to','>=',$this->r_cylinder)->first();
+            $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->r_sphere)->where('sphere_to','>=',$this->r_sphere)->where('cylinder_from','<=',$this->r_cylinder)->where('cylinder_to','>=',$this->r_cylinder)->select('price','cost')->first();
         }
 
         if (is_null($this->rightPriceRange)) {
@@ -167,7 +167,7 @@ class ProductRetail extends Component
             $this->autoR =   true;
         }
 
-        return $this->rightPriceRange?->price ?? 0;
+        return $this->rightPriceRange ?? 0;
     }
 
     function showModal($msg)
@@ -265,7 +265,7 @@ class ProductRetail extends Component
             }
             // if left len is the only product
             else if ($left_len_Results != 'product-not-found' && $right_len_Results == 'product-not-found') {
-                $rightPrice =   $this->autoPricingRight();
+                $rightPrice =   $this->autoPricingRight()->price;
                 $this->total_lens_amount =    $left_len_Results[0]->price + $rightPrice;
 
                 $invoiceStock =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$left_len_Results[0]->id)->withSum('soldproduct','quantity')->get();
@@ -274,7 +274,7 @@ class ProductRetail extends Component
             }
             // if right len is the only product
             else if ($left_len_Results == 'product-not-found' && $right_len_Results != 'product-not-found') {
-                $leftPrice  =   $this->autoPricingLeft();
+                $leftPrice  =   $this->autoPricingLeft()->price;
                 $this->total_lens_amount =    $right_len_Results[0]->price + $leftPrice;
 
                 // checking for booked stock on lens
@@ -284,14 +284,12 @@ class ProductRetail extends Component
 
             // if both lens are not found
             else {
-                $leftPrice  =   $this->autoPricingLeft();
-                $rightPrice =   $this->autoPricingRight();
+                $leftPrice  =   $this->autoPricingLeft()?$this->autoPricingLeft()->price:0;
+                $rightPrice =   $this->autoPricingRight()?$this->autoPricingRight()->price:0;
 
                 $this->total_lens_amount    =   $leftPrice + $rightPrice;
-                // dd($this->total_lens_amount);
             }
 
-            // $this->accessory_total_amount   =   $this->accessory_quantity * ($this->accessory_unit_price - ($this->accessory_price_adjust == null ? 0 : $this->accessory_price_adjust));
         }
         if ($this->frame) {
             $this->frame_total_amount   =   ($this->frame_unit_price + $this->frame_price_adjust) * $this->frame_quantity;
@@ -395,13 +393,11 @@ class ProductRetail extends Component
             }
 
             if ($this->rightLenFound!=null && $this->leftLenFound!=null) {
-                // dd($this->invoiceStatus);
 
                 $stock_balancingR    =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$this->rightLenInfo[0]->id)->where('company_id',userInfo()->company_id)->withsum('soldproduct','quantity')->get();
 
                 $stock_balancingL    =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$this->leftLenInfo[0]->id)->where('company_id',userInfo()->company_id)->withsum('soldproduct','quantity')->get();
 
-                // dd((int)$this->rightLenInfo[0]->stock);
                 if ($stock_balancingR->sum('soldproduct_sum_quantity') >= ((int)$this->rightLenInfo[0]->stock-1) || $stock_balancingL->sum('soldproduct_sum_quantity') >= ((int)$this->leftLenInfo[0]->stock-1)) {
                     $this->invoiceStatus    =   'booked';
                 }
@@ -410,17 +406,15 @@ class ProductRetail extends Component
                     $this->invoiceStatus  =   'Confirmed';
                 }
             }
-            // dd($this->leftLenFound);
+
 
             if (!$this->rightLen || !$this->leftLen) {
-                // dd('here');
-                // if ($this->rightLenQty < 1 || $this->leftLenQty < 1) {
                     $this->invoiceStatus  =   'requested';
-                // }
             }
 
-            // dd($this->invoiceStatus);
-
+            if ($this->autoL && $this->autoR) {
+                $this->invoiceStatus  =   'Confirmed';
+            }
 
             $invoice    =   new Invoice();
 
@@ -522,6 +516,10 @@ class ProductRetail extends Component
                 'cylinder'  => $eye == 'right' ? $this->r_cylinder : $this->l_cylinder,
                 'axis'      => $eye == 'right' ? $this->r_axis : $this->l_axis,
                 'addition'  => $eye == 'right' ? $this->r_addition : $this->l_addition,
+
+                // pricing when a product was found in a range
+                'price'     => $eye == 'right' ? ($this->autoR?$this->autoPricingRight()->price:0) : ($this->autoL?$this->autoPricingLeft()->price:0),
+                'cost'      => $eye == 'right' ? ($this->autoR?$this->autoPricingRight()->cost:0) : ($this->autoL?$this->autoPricingLeft()->cost:0),
 
                 'mono_pd'   => $this->r_mono_pd,
                 'segment_h' => $this->r_segment_height

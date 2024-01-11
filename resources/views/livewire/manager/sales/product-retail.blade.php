@@ -464,6 +464,7 @@
                                                 </option>
                                             @endforeach
                                         </select>
+                                        <img src={{asset('dashboard/assets/images/loading2.gif')}} width="20" wire:loading wire:target="accessory"/>
                                     </div>
                                 </div>
 
@@ -691,53 +692,55 @@
                                         </div>
                                     </div>
                                 </div>
-                                <hr>
                             @endif
-                            <div class="row">
-                                <!--/span-->
-                                <div class="d-flex flex-col items-center">
-                                    <div class="col-md-2 col-sm-12">
-                                        <label></label>
-                                        <br>
-                                        <span>Frame Name</span>
-                                        <br>
-                                        <span></span>
-                                    </div>
+                            @if ($frame_total_amount!=null)
+                                <hr>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="d-flex flex-col items-center">
+                                        <div class="col-md-2 col-sm-12">
+                                            <label></label>
+                                            <br>
+                                            <span>Frame Name</span>
+                                            <br>
+                                            <span></span>
+                                        </div>
 
-                                    <div class="form-group col-2">
-                                        <label>Total Amount</label>
-                                        <input type="text" class="form-control" id="frame_final_total"
-                                            placeholder="Total Amount"
-                                            value="{{ format_money($frame_total_amount) }}" readonly>
-                                    </div>
+                                        <div class="form-group col-2">
+                                            <label>Total Amount</label>
+                                            <input type="text" class="form-control" id="frame_final_total"
+                                                placeholder="Total Amount"
+                                                value="{{ format_money($frame_total_amount) }}" readonly>
+                                        </div>
 
-                                    <div class="form-group col-2">
-                                        <label>Insurance Percentage</label>
-                                        <input type="text" min="0" max="100" class="form-control"
-                                            id="insurance_percentage_frame" placeholder="Ins. %"
-                                            wire:model="insurance_percentage_frame">
-                                    </div>
+                                        <div class="form-group col-2">
+                                            <label>Insurance Percentage</label>
+                                            <input type="text" min="0" max="100" class="form-control"
+                                                id="insurance_percentage_frame" placeholder="Ins. %"
+                                                wire:model="insurance_percentage_frame">
+                                        </div>
 
-                                    <div class="form-group col-2">
-                                        <label>Ins Apprv</label>
-                                        <input type="text" class="form-control" id="insurance_approved_frame"
-                                            placeholder="approved Amt" wire:model="insurance_approved_frame">
-                                    </div>
+                                        <div class="form-group col-2">
+                                            <label>Ins Apprv</label>
+                                            <input type="text" class="form-control" id="insurance_approved_frame"
+                                                placeholder="approved Amt" wire:model="insurance_approved_frame">
+                                        </div>
 
-                                    <div class="form-group col-2">
-                                        <label>Ins Payment</label>
-                                        <input type="text" class="form-control" id="insurance_payment_frame"
-                                            placeholder="Ins. payment" wire:model.lazy="insurance_payment_frame"
-                                            readonly>
-                                    </div>
+                                        <div class="form-group col-2">
+                                            <label>Ins Payment</label>
+                                            <input type="text" class="form-control" id="insurance_payment_frame"
+                                                placeholder="Ins. payment" wire:model.lazy="insurance_payment_frame"
+                                                readonly>
+                                        </div>
 
-                                    <div class="form-group col-2">
-                                        <label>Pt Payment</label>
-                                        <input type="text" class="form-control" id="patient_payment_frame"
-                                            placeholder="Pt. Payment" wire:model="patient_payment_frame" readonly>
+                                        <div class="form-group col-2">
+                                            <label>Pt Payment</label>
+                                            <input type="text" class="form-control" id="patient_payment_frame"
+                                                placeholder="Pt. Payment" wire:model="patient_payment_frame" readonly>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
 
 
                             <div class="row d-flex justify-content-around items-center mt-4">
