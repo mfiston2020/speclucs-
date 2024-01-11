@@ -9,11 +9,6 @@
 
 <div class="col-md-12">
 
-    @php
-        $pwr        =   \App\Models\Power::where('company_id', Auth::user()->company_id)->get();
-        $category   =   \App\Models\Category::all();
-    @endphp
-
     <div class="card">
         <form wire:submit.prevent='searchInformation'>
             @csrf
@@ -34,6 +29,38 @@
                             @enderror
                         </div>
                     </div>
+                    <!--/span-->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label> Category </label>
+                            <select class="form-control" wire:model="category" id="">
+                                <option value="">*Select Category*</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                @endforeach
+                            </select>
+                            @error('category')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    @if ($showType)
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label> Lens Type </label>
+                                <select class="form-control" wire:model="lens_type" id="">
+                                    <option value="">*Select Category*</option>
+                                    @foreach ($types as $type)
+                                        <option value="{{$type->name}}">{{$type->name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('lens_type')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                    @endif
 
 
                 </div>
@@ -86,10 +113,6 @@
 
                                     $closingStock   =   0;
 
-                                    $date2=($closing_date);
-                                    $date1=now();
-                                    $diff=dateDiffInDays($date1,$date2);
-
                                     // if ($diff-1==0) {
                                     //     $closingStock   =   $product->stock;
                                     // }
@@ -110,19 +133,18 @@
                                 <tr>
                                     <td>{{ $product->id }}</td>
                                     <td>{{ $closing_date}}</td>
-                                    <td>{{ $category->where('id',$product->category_id)->pluck('name')->first() }}
+                                    <td>{{ $product->category->name }}
                                     </td>
                                     <td>{{ $product->product_name }}</td>
-                                    <span hidden>{{ $power = $pwr->where('product_id',$product->id)->first() }}</span>
 
                                     <td>{{ lensDescription($product->description) }}</td>
                                     <td>
-                                        @if ($power)
+                                        @if ($product->power)
                                             @if (initials($product->product_name) == 'SV')
-                                                <span>{{ $power->sphere }} / {{ $power->cylinder }}</span>
+                                                <span>{{ $product->power->sphere }} / {{ $product->power->cylinder }}</span>
                                             @else
-                                                <span>{{ $power->sphere }} / {{ $power->cylinder }}
-                                                    *{{ $power->axis }} {{ $power->add }}</span>
+                                                <span>{{ $product->power->sphere }} / {{ $product->power->cylinder }}
+                                                    *{{ $product->power->axis }} {{ $product->power->add }}</span>
                                             @endif
                                         @else
                                             <span>-</span>
@@ -155,13 +177,13 @@
                             </tr>
                         </tfoot>
                     </table>
-                    <hr>
+                    {{-- <hr>
                     <button class="btn btn-primary btn-rounded mb-2" wire:click="loadMore">
                         <span wire:loading wire:target="loadMore">
                             <img src="{{asset('dashboard/assets/images/loading2.gif')}}" width="20" alt=""> Loading...
                         </span>
                         <span wire:loading.remove>Load More</span>
-                    </button>
+                    </button> --}}
                 </div>
             </div>
 

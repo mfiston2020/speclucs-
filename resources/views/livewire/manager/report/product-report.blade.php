@@ -50,6 +50,38 @@
                         </div>
                     </div>
                 </div>
+                    <!--/span-->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label> Category </label>
+                            <select class="form-control" wire:model="category" id="">
+                                <option value="">*Select Category*</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                @endforeach
+                            </select>
+                            @error('category')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    @if ($showType)
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label> Lens Type </label>
+                                <select class="form-control" wire:model="lens_type" id="">
+                                    <option value="">*Select Category*</option>
+                                    @foreach ($types as $type)
+                                        <option value="{{$type->name}}">{{$type->name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('lens_type')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                    @endif
 
                 <button type="submit" class="btn btn-primary">
                     <span wire:loading.remove>Search</span>

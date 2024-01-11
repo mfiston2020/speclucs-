@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Manager\Report;
 
+use App\Models\Category;
+use App\Models\LensType;
 use App\Models\Product;
 use App\Models\TrackStockRecord;
 use Carbon\Carbon;
@@ -22,14 +24,29 @@ class StockHistory extends Component
 
     public $result = false;
 
+    public $types,$lens_type,$showType=false,$categories,$category;
+
     protected $rules = [
         'end_date' => 'required',
         'start_date' => 'required',
+
+        'category' => 'required',
+        'lens_type'=>'required_if:category,1'
     ];
 
     function loadMore(){
         $this->paginat  +=  500;
         $this->searchInformation();
+    }
+
+    function updatedCategory(){
+        if ($this->category=='1') {
+            $this->types    =   LensType::get();
+            $this->showType =   true;
+        }
+        else{
+            $this->showType=false;
+        }
     }
 
     function searchInformation()
@@ -61,7 +78,6 @@ class StockHistory extends Component
                 $this->searchFoundSomething = 'yes';
             }
         }
-        // dd($this->productListingVariation);
 
         $this->result   =   true;
     }
@@ -75,6 +91,7 @@ class StockHistory extends Component
     public function render()
     {
         // $this->searchInformation();
+        $this->categories   =   Category::get();
         return view('livewire.manager.report.stock-history')->layout('livewire.livewire-slot');
     }
 }
