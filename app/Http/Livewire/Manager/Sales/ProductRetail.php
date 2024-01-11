@@ -263,7 +263,7 @@ class ProductRetail extends Component
 
             // if both lens are not found
             else {
-                $this->autoPricing();
+                // $this->autoPricing();
             }
 
             // $this->accessory_total_amount   =   $this->accessory_quantity * ($this->accessory_unit_price - ($this->accessory_price_adjust == null ? 0 : $this->accessory_price_adjust));
