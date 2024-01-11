@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Manager\Report;
 
+use App\Models\Category;
+use App\Models\LensType;
 use App\Models\Product;
 use App\Models\TrackStockRecord;
 use Carbon\Carbon;
@@ -18,6 +20,7 @@ class ProductReport extends Component
     public $daysCount   =   0;
 
     public $rawMaterialReport, $lensrawMaterialReport;
+    public $types,$lens_type,$showType=false,$categories,$category;
 
     public $result = false;
 
@@ -26,10 +29,19 @@ class ProductReport extends Component
         'start_date' => 'required',
     ];
 
-
     function hideResult()
     {
         $this->result   =   false;
+    }
+
+    function updatedCategory(){
+        if ($this->category=='1') {
+            $this->types    =   LensType::get();
+            $this->showType =   true;
+        }
+        else{
+            $this->showType=false;
+        }
     }
 
     function updatedstart_date()
@@ -130,6 +142,7 @@ class ProductReport extends Component
 
     public function render()
     {
+        $this->categories   =   Category::get();
         return view('livewire.manager.report.product-report')->layout('livewire.livewire-slot');
     }
 }

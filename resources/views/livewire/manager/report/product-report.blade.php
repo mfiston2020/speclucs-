@@ -18,7 +18,7 @@
 
                 <div class="row">
                     <!--/span-->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Start Date </label>
                             <div class="input-group">
@@ -34,7 +34,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Start Date </label>
                             <div class="input-group">
@@ -49,9 +49,8 @@
                             @enderror
                         </div>
                     </div>
-                </div>
                     <!--/span-->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label> Category </label>
                             <select class="form-control" wire:model="category" id="">
@@ -67,7 +66,7 @@
                     </div>
                     @if ($showType)
                         <!--/span-->
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label> Lens Type </label>
                                 <select class="form-control" wire:model="lens_type" id="">
@@ -82,6 +81,7 @@
                             </div>
                         </div>
                     @endif
+                </div>
 
                 <button type="submit" class="btn btn-primary">
                     <span wire:loading.remove>Search</span>

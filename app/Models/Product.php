@@ -46,4 +46,8 @@ class Product extends Model
     {
         return $this->belongsTo(Supplier::class);
     }
+
+    function stockRecords(){
+        return $this->hasMany(TrackStockRecord::class);
+    }
 }

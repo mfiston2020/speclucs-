@@ -133,6 +133,23 @@ class ProductRetail extends Component
         }
     }
 
+    // if product not found give price if it's in the pricing range
+    function autoPricing(){
+        if ($this->lens_type!=1) {
+            $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','>=',$this->l_sphere)->first();
+
+            // R
+            // $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','>=',$this->r_sphere)->where('sphere_to','<',$this->r_sphere)->where('cylinder_from','>=',$this->r_cylinder)->where('cylinder_to','<=',$this->r_cylinder)->first();
+
+            dd($this->leftPriceRange);
+
+        } else {
+            dd('ge');
+        }
+
+        dd('$this->leftPriceRange');
+    }
+
     function showModal($msg)
     {
         $this->informationMessage   =   $msg;
@@ -234,7 +251,7 @@ class ProductRetail extends Component
 
                 $this->leftBooked  =   $invoiceStock->sum('soldproduct_sum_quantity');
             }
-            // if left len is the only product
+            // if right len is the only product
             else if ($left_len_Results == 'product-not-found' && $right_len_Results != 'product-not-found') {
                 $this->total_lens_amount =    $right_len_Results[0]->price;
 
@@ -242,24 +259,10 @@ class ProductRetail extends Component
                 $invoiceStock =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$right_len_Results[0]->id)->withSum('soldproduct','quantity')->get();
                 $this->rightBooked  =   $invoiceStock->sum('soldproduct_sum_quantity');
             }
-            // if right len is the only product
+
+            // if both lens are not found
             else {
-                // checking  price inside the range price setter
-                // L
-                if ($this->lens_type==2) {
-                    $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','>=',$this->l_sphere)->where('sphere_to','<=',$this->l_sphere)->where('cylinder_from','>=',$this->l_cylinder)->where('cylinder_to','<=',$this->l_cylinder)->first();
-
-                    // R
-                    $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','>=',$this->r_sphere)->where('sphere_to','<',$this->r_sphere)->where('cylinder_from','>=',$this->r_cylinder)->where('cylinder_to','<=',$this->r_cylinder)->first();
-
-                    // dd($this->leftPriceRange);
-
-                }
-
-
-                // dd($this->rightPriceRange);
-
-                $this->total_lens_amount =    0;
+                $this->autoPricing();
             }
 
             // $this->accessory_total_amount   =   $this->accessory_quantity * ($this->accessory_unit_price - ($this->accessory_price_adjust == null ? 0 : $this->accessory_price_adjust));
