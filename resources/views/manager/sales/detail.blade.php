@@ -67,12 +67,12 @@
                                     @foreach ($products as $key => $product)
                                     @php
                                         $prod = $prodss->where(['id' => $product->product_id])->first();
-                                        // dd($prod);
+                                        // dd($product);
                                     @endphp
                                         <tr>
                                             <td style="width:50px;">
                                                 @if ($prod->category_id==1)
-                                                    <span class="round"> {{Oneinitials($product->eye)}}</span>
+                                                    <span class="round"> {{ Oneinitials($product->eye??'-') }}</span>
                                                 @else
                                                     <span class="round">P</span>
                                                 @endif

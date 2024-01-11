@@ -151,110 +151,112 @@
                                                                             aria-hidden="true">×</button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <h4 class="text-info">Lens</h4>
-                                                                        <hr>
+                                                                        {{-- @if ($product->hasLens()) --}}
+                                                                            <h4 class="text-info">Lens</h4>
+                                                                            <hr>
 
-                                                                        @if (!$request->unavailableproducts->isEmpty())
-                                                                            @php
-                                                                                $availability = true;
-                                                                                $descripition = null;
-                                                                                $right_len = $request->unavailableproducts->where('eye', 'right')->first();
+                                                                            @if (!$request->unavailableproducts->isEmpty())
+                                                                                @php
+                                                                                    $availability = true;
+                                                                                    $descripition = null;
+                                                                                    $right_len = $request->unavailableproducts->where('eye', 'right')->first();
 
-                                                                                if (!$right_len) {
-                                                                                    $right_len = $request->soldproduct->where('eye', 'right')->first();
-                                                                                    $availability = false;
-                                                                                }
-                                                                                if ($availability == true) {
-                                                                                    $type = $lens_type
-                                                                                        ->where('id', $right_len->type_id)
-                                                                                        ->pluck('name')
-                                                                                        ->first();
+                                                                                    if (!$right_len) {
+                                                                                        $right_len = $request->soldproduct->where('eye', 'right')->first();
+                                                                                        $availability = false;
+                                                                                    }
+                                                                                    if ($availability == true) {
+                                                                                        $type = $lens_type
+                                                                                            ->where('id', $right_len->type_id)
+                                                                                            ->pluck('name')
+                                                                                            ->first();
 
-                                                                                    $indx = $index
-                                                                                        ->where('id', $right_len->index_id)
-                                                                                        ->pluck('name')
-                                                                                        ->first();
+                                                                                        $indx = $index
+                                                                                            ->where('id', $right_len->index_id)
+                                                                                            ->pluck('name')
+                                                                                            ->first();
 
-                                                                                    $ct = $coatings
-                                                                                        ->where('id', $right_len->coating_id)
-                                                                                        ->pluck('name')
-                                                                                        ->first();
+                                                                                        $ct = $coatings
+                                                                                            ->where('id', $right_len->coating_id)
+                                                                                            ->pluck('name')
+                                                                                            ->first();
 
-                                                                                    $chrm = $chromatics
-                                                                                        ->where('id', $right_len->chromatic_id)
-                                                                                        ->pluck('name')
-                                                                                        ->first();
-                                                                                } else {
-                                                                                    $description = $$request->unavailableproducts->product->description;
-                                                                                }
+                                                                                        $chrm = $chromatics
+                                                                                            ->where('id', $right_len->chromatic_id)
+                                                                                            ->pluck('name')
+                                                                                            ->first();
+                                                                                    } else {
+                                                                                        $description = $$request->unavailableproducts->product->description;
+                                                                                    }
 
-                                                                                $left_len = $request->unavailableproducts->where('eye', 'left')->first();
-                                                                                if (!$left_len) {
-                                                                                    $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                                                                }
-                                                                            @endphp
-                                                                            @foreach ($request->unavailableproducts as $unavail)
-                                                                                <div class="row mb-4">
-                                                                                    <div class="col-3 row">
-                                                                                        <h4 class="text-capitalize">
-                                                                                            {{ $unavail->eye == null ? '' : Oneinitials($unavail->eye) }}
-                                                                                        </h4>
-                                                                                        <span class="ml-3">
-                                                                                            @if ($availability)
-                                                                                                {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }}
-                                                                                                {{ $chrm }}
-                                                                                                {{ $ct }}
-                                                                                                {{ $indx }}
-                                                                                            @else
-                                                                                                {{ $description }}
-                                                                                            @endif
-                                                                                        </span>
-                                                                                    </div>
-                                                                                    <div class="col-2">
-
-                                                                                        <span>{{ format_values($unavail->sphere) }}
-                                                                                            /
-                                                                                            {{ format_values($unavail->cylinder) }}
-                                                                                            *{{ $unavail->axis }}
-                                                                                            {{ $unavail->addition }}</span>
-                                                                                    </div>
-                                                                                    <div class="col-2 row">
-                                                                                        <span>
-                                                                                            <h6>Location: </h6>
-                                                                                        </span>
-                                                                                        {{ $unavail->location == null ? '-' : $unavail->location }}
-                                                                                    </div>
-                                                                                    <div class="col-2 ">
-                                                                                        <span
-                                                                                            class="text-capitalize d-flex justify-content-around items-center">
-                                                                                            <h6 class="text-dark">Mono
-                                                                                                PD:
-                                                                                            </h6>
-                                                                                            <span class="text-capitalize">
-                                                                                                {{ $unavail->mono_pd }}
+                                                                                    $left_len = $request->unavailableproducts->where('eye', 'left')->first();
+                                                                                    if (!$left_len) {
+                                                                                        $left_len = $request->soldproduct->where('eye', 'left')->first();
+                                                                                    }
+                                                                                @endphp
+                                                                                @foreach ($request->unavailableproducts as $unavail)
+                                                                                    <div class="row mb-4">
+                                                                                        <div class="col-3 row">
+                                                                                            <h4 class="text-capitalize">
+                                                                                                {{ $unavail->eye == null ? '' : Oneinitials($unavail->eye) }}
+                                                                                            </h4>
+                                                                                            <span class="ml-3">
+                                                                                                @if ($availability)
+                                                                                                    {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }}
+                                                                                                    {{ $chrm }}
+                                                                                                    {{ $ct }}
+                                                                                                    {{ $indx }}
+                                                                                                @else
+                                                                                                    {{ $description }}
+                                                                                                @endif
                                                                                             </span>
-                                                                                        </span>
-                                                                                    </div>
-                                                                                    <div class="col-2 ">
-                                                                                        <span
-                                                                                            class="text-capitalize d-flex justify-content-around items-center">
-                                                                                            <h6 class="text-dark">Seg
-                                                                                                H:
-                                                                                            </h6>
-                                                                                            <span class="text-capitalize">
-                                                                                                {{ $unavail->segment_h }}
+                                                                                        </div>
+                                                                                        <div class="col-2">
+
+                                                                                            <span>{{ format_values($unavail->sphere) }}
+                                                                                                /
+                                                                                                {{ format_values($unavail->cylinder) }}
+                                                                                                *{{ $unavail->axis }}
+                                                                                                {{ $unavail->addition }}</span>
+                                                                                        </div>
+                                                                                        <div class="col-2 row">
+                                                                                            <span>
+                                                                                                <h6>Location: </h6>
                                                                                             </span>
-                                                                                        </span>
+                                                                                            {{ $unavail->location == null ? '-' : $unavail->location }}
+                                                                                        </div>
+                                                                                        <div class="col-2 ">
+                                                                                            <span
+                                                                                                class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                <h6 class="text-dark">Mono
+                                                                                                    PD:
+                                                                                                </h6>
+                                                                                                <span class="text-capitalize">
+                                                                                                    {{ $unavail->mono_pd }}
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div class="col-2 ">
+                                                                                            <span
+                                                                                                class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                <h6 class="text-dark">Seg
+                                                                                                    H:
+                                                                                                </h6>
+                                                                                                <span class="text-capitalize">
+                                                                                                    {{ $unavail->segment_h }}
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                            @endforeach
-                                                                        @endif
+                                                                                @endforeach
+                                                                            @endif
+                                                                        {{-- @endif --}}
 
                                                                         @if (!$request->soldproduct->isEmpty())
                                                                             @foreach ($request->soldproduct as $product)
                                                                                 @php
                                                                                     $invoice_product = $product->product;
-                                                                                    // dd($product->hasLens());
+                                                                                    // dd($product->hasFrame());
                                                                                 @endphp
 
                                                                                 {{-- for lens --}}
@@ -322,7 +324,7 @@
                                                                             @endforeach
                                                                         @endif
 
-                                                                        @if ($product->hasLens())
+                                                                        @if ($product->hasFrame())
 
                                                                             {{-- for frame --}}
                                                                             <hr>
@@ -420,7 +422,7 @@
 
                                                                             <hr>
                                                                             <h4 class="text-info">Operation</h4>
-                                                                            <hr>
+                                                                            {{-- <hr>    --}}
                                                                             <div
                                                                                 class="modal-footer d-flex justify-content-between">
                                                                                 <button type="button"
@@ -435,7 +437,7 @@
                                                                                 {{-- @endif --}}
                                                                             </div>
                                                                     </div>
-                                                                    <div
+                                                                    {{-- <div
                                                                         class="modal-footer d-flex justify-content-between">
                                                                         <button type="button"
                                                                             class="btn btn-danger waves-effect text-left"
@@ -444,7 +446,7 @@
                                                                         </button>
                                                                         {{-- <button type="button"
                                                                             class="btn btn-success waves-effect text-left"
-                                                                            data-dismiss="modal">Print</button> --}}
+                                                                            data-dismiss="modal">Print</button> --}
 
                                                                         @if ($request->status == 'sent to lab')
                                                                             <button type="submit"
@@ -452,7 +454,7 @@
                                                                                 Complete Order
                                                                             </button>
                                                                         @endif
-                                                                    </div>
+                                                                    </div> --}}
                                                                     </form>
                                                                 </div>
                                                                 <!-- /.modal-content -->

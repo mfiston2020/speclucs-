@@ -373,8 +373,6 @@
                                                                                                                     <span>
                                                                                                                         <h6>Location: </h6>
                                                                                                                     </span>
-                                                                                                                    {{-- </div>
-                                                                                                <div class="col-2"> --}}
                                                                                                                     {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
                                                                                                                 </div>
                                                                                                                 <div class="col-2 ">

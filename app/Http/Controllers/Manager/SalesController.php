@@ -14,7 +14,7 @@ class SalesController extends Controller
 {
     public function index()
     {
-        $requests  =   Invoice::where('company_id', Auth::user()->company_id)->with('client')->whereIn('status', ['collected', 'received'])->withSum('soldproduct','total_amount')->withSum('soldproduct','insurance_payment')->orderBy('created_at', 'DESC')->get();
+        $requests  =   Invoice::where('company_id', Auth::user()->company_id)->with('client')->where('status','received')->withSum('soldproduct','total_amount')->withSum('soldproduct','insurance_payment')->orderBy('created_at', 'DESC')->get();
 
         $others  =   Invoice::where('company_id', Auth::user()->company_id)->with('client')->whereNotIn('status', ['collected', 'received'])->count();
 

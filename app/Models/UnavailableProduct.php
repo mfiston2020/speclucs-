@@ -18,6 +18,10 @@ class UnavailableProduct extends Model
 
     ];
 
+    function product(){
+        return $this->belongsTo(Product::class);
+    }
+
     function invoice()
     {
         return $this->belongsTo(Invoice::class);

@@ -50,7 +50,8 @@ class AppServiceProvider extends ServiceProvider
                 ->with('priced',$ordersCount->whereIn('status',['Confirmed','priced'])->count())
                 ->with('sentToLab',$ordersCount->where('status','sent to supplier')->count())
                 // lab orders count
-                ->with('production',$ordersCount->where('status','production')->count())
+                ->with('sentToLab',$ordersCount->where('status','sent to lab')->count())
+                ->with('production',$ordersCount->where('status','in production')->count())
                 ->with('completed',$ordersCount->where('status','completed')->count())
                 ->with('delivered',$ordersCount->where('status','delivered')->count())
                 ;

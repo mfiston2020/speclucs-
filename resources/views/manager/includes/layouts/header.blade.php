@@ -273,7 +273,7 @@
                             <i class="mdi mdi-view-dashboard"></i>
                             <span class="hide-menu">Lab Request </span>
                             <span class="badge badge-danger badge-pill ml-2">
-                                {{$orderCount}}
+                                {{number_format($requested+$booking+$priced+$sentToLab)}}
                             </span>
                         </a>
                         <ul aria-expanded="false" class="collapse  first-level">
@@ -413,7 +413,7 @@
                             <i class="mdi mdi-view-dashboard"></i>
                             <span class="hide-menu">Lab Request </span>
                             <span class="badge badge-danger badge-pill ml-2">
-                                {{$production+$completed+$delivered}}
+                                {{ $sentToLab+$production+$completed+$delivered }}
                             </span>
                         </a>
                         <ul aria-expanded="false" class="collapse  first-level">
@@ -422,7 +422,7 @@
                                     <i class="mdi mdi-adjust"></i>
                                     <span class="hide-menu"> New Order(s) </span>
                                     <span class="badge badge-danger badge-pill ml-2">
-                                        {{ number_format($production) }}
+                                        {{ number_format($sentToLab) }}
                                     </span>
                                 </a>
                             </li>

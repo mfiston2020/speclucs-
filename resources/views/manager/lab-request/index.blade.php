@@ -214,7 +214,7 @@
                                                                                 class="modal-dialog modal-xl modal-dialog-centered">
                                                                                 <div class="modal-content">
                                                                                     <div class="modal-header">
-                                                                                        
+
                                                                                         <button type="button" class="close"
                                                                                             data-dismiss="modal"
                                                                                             aria-hidden="true">×</button>
@@ -299,94 +299,98 @@
                                                                                         @endforeach
 
                                                                                         {{-- for frame --}}
-                                                                                        <hr>
-                                                                                        <h4 class="text-info">Frame</h4>
-                                                                                        <hr>
-                                                                                        @if ($products)
-                                                                                            @foreach ($request->soldproduct as $product)
-                                                                                                @php
-                                                                                                    $invoice_product = $products->where('id', $product->product_id)->first();
-                                                                                                @endphp
-                                                                                                @if ($invoice_product->category_id == 2)
-                                                                                                    <div class="row mb-2">
-                                                                                                        <div class="col-6">
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                {{ $invoice_product->product_name }}
-                                                                                                                -
-                                                                                                                {{ $invoice_product->description }}
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col-3">
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                <h4>Location:
-                                                                                                                </h4>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col-3">
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                {{ $product->location == null ? '-' : $product->location }}
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                @endif
-                                                                                            @endforeach
-                                                                                        @endif
-
-                                                                                        <hr>
-                                                                                        <h4 class="text-info">Accessories &
-                                                                                            Others
-                                                                                        </h4>
-                                                                                        <hr>
-                                                                                        {{-- for accessories --}}
-                                                                                        @if ($products)
-                                                                                            @foreach ($request->soldproduct as $product)
-                                                                                                @php
-                                                                                                    $invoice_product = $products->where('id', $product->product_id)->first();
-                                                                                                @endphp
-                                                                                                @if ($invoice_product->category_id != 2 && $invoice_product->category_id != 1)
-                                                                                                    <div class="row mb-2">
-                                                                                                        <div class="col-3">
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                {{ $invoice_product->product_name }}
-                                                                                                                -
-                                                                                                                {{ $invoice_product->description }}
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col-3">
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                <h4
-                                                                                                                    class="text-dark">
-                                                                                                                    Location:
-                                                                                                                </h4>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col-2">
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col-2 ">
-                                                                                                            <span
-                                                                                                                class="text-capitalize d-flex justify-content-around items-center">
-                                                                                                                <h4
-                                                                                                                    class="text-dark">
-                                                                                                                    Qty:
-                                                                                                                </h4>
+                                                                                        @if ($product->hasFrame())
+                                                                                            <hr>
+                                                                                            <h4 class="text-info">Frame</h4>
+                                                                                            <hr>
+                                                                                            @if ($products)
+                                                                                                @foreach ($request->soldproduct as $product)
+                                                                                                    @php
+                                                                                                        $invoice_product = $products->where('id', $product->product_id)->first();
+                                                                                                    @endphp
+                                                                                                    @if ($invoice_product->category_id == 2)
+                                                                                                        <div class="row mb-2">
+                                                                                                            <div class="col-6">
                                                                                                                 <span
                                                                                                                     class="text-capitalize">
-                                                                                                                    {{ $product->quantity }}
+                                                                                                                    {{ $invoice_product->product_name }}
+                                                                                                                    -
+                                                                                                                    {{ $invoice_product->description }}
                                                                                                                 </span>
-                                                                                                            </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-3">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    <h4>Location:
+                                                                                                                    </h4>
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-3">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    {{ $product->location == null ? '-' : $product->location }}
+                                                                                                                </span>
+                                                                                                            </div>
                                                                                                         </div>
-                                                                                                    </div>
-                                                                                                @endif
-                                                                                            @endforeach
+                                                                                                    @endif
+                                                                                                @endforeach
+                                                                                            @endif
+                                                                                        @endif
+
+                                                                                        @if ($product->hasAccessories())
+                                                                                            <hr>
+                                                                                            <h4 class="text-info">Accessories &
+                                                                                                Others
+                                                                                            </h4>
+                                                                                            <hr>
+                                                                                            {{-- for accessories --}}
+                                                                                            @if ($products)
+                                                                                                @foreach ($request->soldproduct as $product)
+                                                                                                    @php
+                                                                                                        $invoice_product = $products->where('id', $product->product_id)->first();
+                                                                                                    @endphp
+                                                                                                    @if ($invoice_product->category_id != 2 && $invoice_product->category_id != 1)
+                                                                                                        <div class="row mb-2">
+                                                                                                            <div class="col-3">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    {{ $invoice_product->product_name }}
+                                                                                                                    -
+                                                                                                                    {{ $invoice_product->description }}
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-3">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    <h4
+                                                                                                                        class="text-dark">
+                                                                                                                        Location:
+                                                                                                                    </h4>
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-2">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-2 ">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                                    <h4
+                                                                                                                        class="text-dark">
+                                                                                                                        Qty:
+                                                                                                                    </h4>
+                                                                                                                    <span
+                                                                                                                        class="text-capitalize">
+                                                                                                                        {{ $product->quantity }}
+                                                                                                                    </span>
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    @endif
+                                                                                                @endforeach
+                                                                                            @endif
                                                                                         @endif
                                                                                     </div>
                                                                                     <div

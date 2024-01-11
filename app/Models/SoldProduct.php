@@ -18,7 +18,15 @@ class SoldProduct extends Model
         return $this->belongsTo(Insurance::class);
     }
 
-    function hasLens(){
+    function hasLens():bool{
+        if ($this->product()->where('category_id','1')->exists()) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    function hasFrame():bool{
         if ($this->product()->where('category_id','2')->exists()) {
             return true;
         }else{
@@ -26,7 +34,7 @@ class SoldProduct extends Model
         }
     }
 
-    function hasAccessories(){
+    function hasAccessories():bool{
         if ($this->product()->whereNotIn('category_id',['2,','1'])->exists()) {
             return true;
         }else{

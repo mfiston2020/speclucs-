@@ -774,7 +774,7 @@
 
 </div>
 @push('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/libs/select2/dist/css/select2.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/libs/select2/dist/css/select2.min.css')}}">
 @endpush
 
 @push('scripts')

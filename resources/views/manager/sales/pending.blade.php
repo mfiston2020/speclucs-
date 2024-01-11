@@ -157,7 +157,7 @@
                                                             </td>
                                                             <td>
                                                                 @if ($sale->insurance_id != null)
-                                                                    {{ $sale->insurance->insurance_name }}
+                                                                    {{ \App\Models\Insurance::where('id',$sale->insurance_id)->pluck('insurance_name')->first() }}
                                                                 @else
                                                                     Private
                                                                 @endif
@@ -199,7 +199,7 @@
                 </div>
             </div>
 
-            {{--  --}}
+            {{-- priced orders --}}
             <div class="tab-pane" id="priced" role="tabpanel">
                 <div class="tab-pane  p-20" id="profile2" role="tabpanel">
                     <div class="row">
@@ -273,7 +273,7 @@
                                                             </td>
                                                             <td>
                                                                 @if ($sale->insurance_id != null)
-                                                                    {{ $sale->insurance->insurance_name }}
+                                                                    {{ \App\Models\Insurance::where('id',$sale->insurance_id)->pluck('insurance_name')->first() }}
                                                                 @else
                                                                     Private
                                                                 @endif
@@ -315,6 +315,7 @@
                 </div>
             </div>
 
+            {{-- delivered orders --}}
             <div class="tab-pane" id="Delivered" role="tabpanel">
                 <div class="tab-pane  p-20" id="profile2" role="tabpanel">
                     <div class="row">
@@ -374,7 +375,7 @@
                                                             </td>
                                                             <td>
                                                                 @if ($sale->insurance_id != null)
-                                                                    {{ $sale->insurance->insurance_name }}
+                                                                    {{ \App\Models\Insurance::where('id',$sale->insurance_id)->pluck('insurance_name')->first() }}
                                                                 @else
                                                                     Private
                                                                 @endif
@@ -418,6 +419,7 @@
                 </div>
             </div>
 
+            {{-- sent to lab orders --}}
             <div class="tab-pane" id="Sent-to-lab" role="tabpanel">
                 <div class="tab-pane  p-20" id="profile2" role="tabpanel">
                     <div class="row">
@@ -464,15 +466,15 @@
                                                                     {{$sale->client->name}}
                                                                 @else
                                                                     @if ($sale->hospital_name!=null)
-                                                                        [{{$sale->cloud_id}}] {{$sale->hospital_name}}
+                                                                        [{{ $sale->cloud_id }}] {{ $sale->hospital_name }}
                                                                     @else
                                                                         {{$sale->client_name}}
                                                                     @endif
                                                                 @endif
                                                             </td>
                                                             <td>
-                                                                @if ($sale->insurance_id != null)
-                                                                    {{ $sale->insurance->insurance_name }}
+                                                                @if (!is_null($sale->insurance_id))
+                                                                    {{ \App\Models\Insurance::where('id',$sale->insurance_id)->pluck('insurance_name')->first() }}
                                                                 @else
                                                                     Private
                                                                 @endif
@@ -513,6 +515,7 @@
                 </div>
             </div>
 
+            {{-- other orders --}}
             <div class="tab-pane" id="order-status" role="tabpanel">
                 <div class="tab-pane  p-20" id="profile2" role="tabpanel">
                     <div class="row">

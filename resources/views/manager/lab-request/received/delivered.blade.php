@@ -240,7 +240,7 @@
                                                                             @foreach ($request->soldproduct as $product)
                                                                                 @php
                                                                                     $invoice_product = $product->product;
-                                                                                    // dd($product->hasLens());
+                                                                                    // dd($product->hasFrame());
                                                                                 @endphp
 
                                                                                 {{-- for lens --}}
@@ -308,7 +308,7 @@
                                                                             @endforeach
                                                                         @endif
 
-                                                                        @if ($product->hasLens())
+                                                                        @if ($product->hasFrame())
 
                                                                             {{-- for frame --}}
                                                                             <hr>

@@ -252,14 +252,12 @@ class ProductRetail extends Component
                     // R
                     $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','>=',$this->r_sphere)->where('sphere_to','<',$this->r_sphere)->where('cylinder_from','>=',$this->r_cylinder)->where('cylinder_to','<=',$this->r_cylinder)->first();
 
-                    dd($this->leftPriceRange);
+                    // dd($this->leftPriceRange);
 
-                } else {
-                    # code...
                 }
 
 
-                dd($this->rightPriceRange);
+                // dd($this->rightPriceRange);
 
                 $this->total_lens_amount =    0;
             }
@@ -287,6 +285,12 @@ class ProductRetail extends Component
             $this->patient_payment_lens      =   $this->total_lens_amount;
         } elseif ($this->insurance_type == null) {
             $this->showModal('Select Insurance type first');
+            return;
+        } elseif (!is_null($this->insurance_type) && is_null($this->insurance_percentage_frame) || is_null($this->insurance_percentage_lens) ) {
+            $this->showModal('Insurance approved amount and percentage for Lens required');
+            return;
+        } elseif (!is_null($this->insurance_type) && is_null($this->insurance_approved_lens) || is_null($this->insurance_approved_frame) ) {
+            $this->showModal('Insurance approved amount and percentage for frame required');
             return;
         } else {
 

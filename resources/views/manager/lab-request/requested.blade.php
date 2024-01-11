@@ -185,111 +185,76 @@
                                                                                             aria-hidden="true">×</button>
                                                                                     </div>
                                                                                     <div class="modal-body" id="printable">
-                                                                                        <h4 class="text-info">Lens</h4>
-                                                                                        <hr>
-                                                                                        @foreach ($request->soldproduct as $product)
-                                                                                            @php
-
-                                                                                                if ($product->product->stock<2){
-                                                                                                    $isOutOfStock='yes';
-                                                                                                }
-
-                                                                                            @endphp
-
-                                                                                            {{-- for lens --}}
-                                                                                            @if ($product->product->category_id == 1)
-
-                                                                                                <div class="row mb-2">
-                                                                                                    <div class="col-1">
-                                                                                                        <h4
-                                                                                                            class="text-capitalize">
-                                                                                                            {{ $product->eye == null ? '' : Oneinitials($product->eye) }}
-                                                                                                        </h4>
-                                                                                                    </div>
-                                                                                                    <div class="col-3">
-                                                                                                        <span>
-                                                                                                            {{ $product->product->description }}
-                                                                                                        </span>
-                                                                                                    </div>
-                                                                                                    <div class="col-2">
-                                                                                                        @if (initials($product->product->product_name) == 'SV')
-                                                                                                            <span>{{ $product->product->power->sphere }}
-                                                                                                                /
-                                                                                                                {{ $product->product->power->cylinder }}</span>
-                                                                                                        @else
-                                                                                                            <span>{{ $product->product->power->sphere }}
-                                                                                                                /
-                                                                                                                {{ $product->product->power->cylinder }}
-                                                                                                                *{{ $product->product->power->axis }}
-                                                                                                                {{ $product->product->power->add }}</span>
-                                                                                                        @endif
-                                                                                                    </div>
-                                                                                                    <div class="col-2 row">
-                                                                                                        <span>
-                                                                                                            <h6>Location: </h6>
-                                                                                                        </span>
-                                                                                                        {{-- </div>
-                                                                                    <div class="col-2"> --}}
-                                                                                                        {{ $product->product->location == null ? '-' : $product->product->location }}
-                                                                                                    </div>
-                                                                                                    <div class="col-2 ">
-                                                                                                        <span
-                                                                                                            class="text-capitalize d-flex justify-content-around items-center">
-                                                                                                            <h6
-                                                                                                                class="text-dark">
-                                                                                                                Mono PD:
-                                                                                                            </h6>
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                {{ $product->mono_pd }}
-                                                                                                            </span>
-                                                                                                        </span>
-                                                                                                    </div>
-                                                                                                    <div class="col-2 ">
-                                                                                                        <span
-                                                                                                            class="text-capitalize d-flex justify-content-around items-center">
-                                                                                                            <h6
-                                                                                                                class="text-dark">
-                                                                                                                Seg H:
-                                                                                                            </h6>
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                {{ $product->segment_h }}
-                                                                                                            </span>
-                                                                                                        </span>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            @endif
-                                                                                        @endforeach
-
-                                                                                        {{-- for frame --}}
-                                                                                        <hr>
-                                                                                        <h4 class="text-info">Frame</h4>
-                                                                                        <hr>
-                                                                                        @if ($product)
+                                                                                        @if ($product->hasLens())
+                                                                                            <h4 class="text-info">Lens</h4>
+                                                                                            <hr>
                                                                                             @foreach ($request->soldproduct as $product)
+                                                                                                @php
 
-                                                                                                @if ($product->product->category_id == 2)
+                                                                                                    if ($product->product->stock<2){
+                                                                                                        $isOutOfStock='yes';
+                                                                                                    }
+
+                                                                                                @endphp
+
+                                                                                                {{-- for lens --}}
+                                                                                                @if ($product->product->category_id == 1)
+
                                                                                                     <div class="row mb-2">
-                                                                                                        <div class="col-6">
-                                                                                                            <span
+                                                                                                        <div class="col-1">
+                                                                                                            <h4
                                                                                                                 class="text-capitalize">
-                                                                                                                {{ $product->product->product_name }}
-                                                                                                                -
+                                                                                                                {{ $product->eye == null ? '' : Oneinitials($product->eye) }}
+                                                                                                            </h4>
+                                                                                                        </div>
+                                                                                                        <div class="col-3">
+                                                                                                            <span>
                                                                                                                 {{ $product->product->description }}
                                                                                                             </span>
                                                                                                         </div>
-                                                                                                        <div class="col-3">
+                                                                                                        <div class="col-2">
+                                                                                                            @if (initials($product->product->product_name) == 'SV')
+                                                                                                                <span>{{ $product->product->power->sphere }}
+                                                                                                                    /
+                                                                                                                    {{ $product->product->power->cylinder }}</span>
+                                                                                                            @else
+                                                                                                                <span>{{ $product->product->power->sphere }}
+                                                                                                                    /
+                                                                                                                    {{ $product->product->power->cylinder }}
+                                                                                                                    *{{ $product->product->power->axis }}
+                                                                                                                    {{ $product->product->power->add }}</span>
+                                                                                                            @endif
+                                                                                                        </div>
+                                                                                                        <div class="col-2 row">
+                                                                                                            <span>
+                                                                                                                <h6>Location: </h6>
+                                                                                                            </span>
+                                                                                                            {{ $product->product->location == null ? '-' : $product->product->location }}
+                                                                                                        </div>
+                                                                                                        <div class="col-2 ">
                                                                                                             <span
-                                                                                                                class="text-capitalize">
-                                                                                                                <h4>Location:
-                                                                                                                </h4>
+                                                                                                                class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                                <h6
+                                                                                                                    class="text-dark">
+                                                                                                                    Mono PD:
+                                                                                                                </h6>
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    {{ $product->mono_pd }}
+                                                                                                                </span>
                                                                                                             </span>
                                                                                                         </div>
-                                                                                                        <div class="col-3">
+                                                                                                        <div class="col-2 ">
                                                                                                             <span
-                                                                                                                class="text-capitalize">
-                                                                                                                {{ $product->location == null ? '-' : $product->location }}
+                                                                                                                class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                                <h6
+                                                                                                                    class="text-dark">
+                                                                                                                    Seg H:
+                                                                                                                </h6>
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    {{ $product->segment_h }}
+                                                                                                                </span>
                                                                                                             </span>
                                                                                                         </div>
                                                                                                     </div>
@@ -297,56 +262,99 @@
                                                                                             @endforeach
                                                                                         @endif
 
-                                                                                        <hr>
-                                                                                        <h4 class="text-info">Accessories &
-                                                                                            Others
-                                                                                        </h4>
-                                                                                        <hr>
-                                                                                        {{-- for accessories --}}
-                                                                                        @if ($product)
-                                                                                            @foreach ($request->soldproduct as $product)
+                                                                                        {{-- for frame --}}
+                                                                                        @if ($product->hasFrame())
+                                                                                            @if ($product->hasLens())
+                                                                                                <hr>
+                                                                                            @endif
+                                                                                            <h4 class="text-info">Frame</h4>
+                                                                                            <hr>
+                                                                                            @if ($product)
+                                                                                                @foreach ($request->soldproduct as $product)
 
-                                                                                                @if ($product->product->category_id != 2 && $product->product->category_id != 1)
-                                                                                                    <div class="row mb-2">
-                                                                                                        <div class="col-3">
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                {{ $product->product->product_name }}
-                                                                                                                -
-                                                                                                                {{ $product->product->description }}
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col-3">
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                <h4
-                                                                                                                    class="text-dark">
-                                                                                                                    Location:
-                                                                                                                </h4>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col-2">
-                                                                                                            <span
-                                                                                                                class="text-capitalize">
-                                                                                                                {{ $product->product->location == null ? '-' : $product->product->location }}
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col-2 ">
-                                                                                                            <span
-                                                                                                                class="text-capitalize d-flex justify-content-around items-center">
-                                                                                                                <h4
-                                                                                                                    class="text-dark">
-                                                                                                                    Qty:
-                                                                                                                </h4>
+                                                                                                    @if ($product->product->category_id == 2)
+                                                                                                        <div class="row mb-2">
+                                                                                                            <div class="col-6">
                                                                                                                 <span
                                                                                                                     class="text-capitalize">
-                                                                                                                    {{ $product->quantity }}
+                                                                                                                    {{ $product->product->product_name }}
+                                                                                                                    -
+                                                                                                                    {{ $product->product->description }}
                                                                                                                 </span>
-                                                                                                            </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-3">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    <h4>Location:
+                                                                                                                    </h4>
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-3">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    {{ $product->location == null ? '-' : $product->location }}
+                                                                                                                </span>
+                                                                                                            </div>
                                                                                                         </div>
-                                                                                                    </div>
-                                                                                                @endif
-                                                                                            @endforeach
+                                                                                                    @endif
+                                                                                                @endforeach
+                                                                                            @endif
+                                                                                        @endif
+
+                                                                                        @if ($product->hasAccessories())
+                                                                                            @if ($product->hasFrame())
+                                                                                                <hr>
+                                                                                            @endif
+                                                                                            <h4 class="text-info">Accessories &
+                                                                                                Others
+                                                                                            </h4>
+                                                                                            <hr>
+                                                                                            {{-- for accessories --}}
+                                                                                            @if ($product)
+                                                                                                @foreach ($request->soldproduct as $product)
+
+                                                                                                    @if ($product->product->category_id != 2 && $product->product->category_id != 1)
+                                                                                                        <div class="row mb-2">
+                                                                                                            <div class="col-3">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    {{ $product->product->product_name }}
+                                                                                                                    -
+                                                                                                                    {{ $product->product->description }}
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-3">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    <h4
+                                                                                                                        class="text-dark">
+                                                                                                                        Location:
+                                                                                                                    </h4>
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-2">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize">
+                                                                                                                    {{ $product->product->location == null ? '-' : $product->product->location }}
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-2 ">
+                                                                                                                <span
+                                                                                                                    class="text-capitalize d-flex justify-content-around items-center">
+                                                                                                                    <h4
+                                                                                                                        class="text-dark">
+                                                                                                                        Qty:
+                                                                                                                    </h4>
+                                                                                                                    <span
+                                                                                                                        class="text-capitalize">
+                                                                                                                        {{ $product->quantity }}
+                                                                                                                    </span>
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    @endif
+                                                                                                @endforeach
+                                                                                            @endif
                                                                                         @endif
                                                                                     </div>
                                                                                     <div

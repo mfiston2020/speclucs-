@@ -27,7 +27,7 @@
                                 <i class="fa fa-print"></i> Print proforma
                             </a>
                         @endif
-                            
+
                         @if ($proforma->status=='pending')
                             <a href="{{route('manager.proforma.add.product',Crypt::encrypt($proforma->id))}}"
                             class="pull-right btn btn-outline-secondary mx-2">Add Product</a>
@@ -46,11 +46,11 @@
                                     <th>Percentage</th>
                                     <th>Total</th>
                                     @if ($proforma->status!='pending')
-                                        
+
                                     @else
                                         <th>Operation</th>
                                     @endif
-                                    
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,10 +59,10 @@
                                     <td style="width:50px;"><span class="round">P</span></td>
                                     <span
                                         hidden>{{$prod=\App\Models\Product::where(['id'=>$product->product_id])->where('company_id',Auth::user()->company_id)->select('*')->first()}}</span>
-                                        <span 
+                                        <span
                                             hidden>{{$power=\App\Models\Power::where(['product_id'=>$product->product_id])->where('company_id',Auth::user()->company_id)->select('*')->first()}}</span>
                                     <td>
-                                        <h6>{{$prod->product_name}}</h6>
+                                        <h6>{{$prod?->product_name}}</h6>
                                         <small class="text-muted">
                                             @if ($power)
                                             @if (initials($prod->product_name)=='SV')
@@ -80,7 +80,7 @@
                                     </td>
                                     <td>{{format_money($product->total_amount)}}</td>
                                     @if ($proforma->status!='pending')
-                                        
+
                                     @else
                                     <td>
                                         <a href="{{route('manager.proforma.edit.product',Crypt::encrypt($product->id))}}" style="color: rgb(0, 38, 255)">Edit</a>
@@ -101,7 +101,7 @@
                                                     aria-hidden="true">×</button>
                                             </div>
                                             <div class="modal-body">
-                                                <h4>{{$prod->product_name}} have {{$product->quantity}} quantity!
+                                                <h4>{{$prod?->product_name}} have {{$product->quantity}} quantity!
                                                     continue??</h4>
 
                                             </div>
@@ -126,8 +126,8 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-body">
-                   
-                   <h4 class="card-title">Proforma #{{sprintf('%04d',$proforma->id)}} 
+
+                   <h4 class="card-title">Proforma #{{sprintf('%04d',$proforma->id)}}
 
                 </h4>
 
@@ -167,11 +167,11 @@
 
                         @if ($proforma->status=='finalized')
                         <hr>
-                            <a href="{{route('manager.proforma.approve.proforma',Crypt::encrypt($proforma->id))}}" 
+                            <a href="{{route('manager.proforma.approve.proforma',Crypt::encrypt($proforma->id))}}"
                                 type="button" class="m-t-20 btn waves-effect waves-light btn-success">
                                 Approve Proforma
                             </a>
-                            <a href="{{route('manager.proforma.decline.proforma',Crypt::encrypt($proforma->id))}}" 
+                            <a href="{{route('manager.proforma.decline.proforma',Crypt::encrypt($proforma->id))}}"
                                 type="button" class="m-t-20 btn waves-effect waves-light btn-warning">
                                 Reject Proforma
                             </a>
