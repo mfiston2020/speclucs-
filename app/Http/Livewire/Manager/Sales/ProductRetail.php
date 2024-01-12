@@ -265,7 +265,7 @@ class ProductRetail extends Component
             }
             // if left len is the only product
             else if ($left_len_Results != 'product-not-found' && $right_len_Results == 'product-not-found') {
-                $rightPrice =   $this->autoPricingRight()->price;
+                $rightPrice =   $this->autoPricingRight()?$this->autoPricingRight()->price:0;
                 $this->total_lens_amount =    $left_len_Results[0]->price + $rightPrice;
 
                 $invoiceStock =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$left_len_Results[0]->id)->withSum('soldproduct','quantity')->get();
@@ -274,7 +274,7 @@ class ProductRetail extends Component
             }
             // if right len is the only product
             else if ($left_len_Results == 'product-not-found' && $right_len_Results != 'product-not-found') {
-                $leftPrice  =   $this->autoPricingLeft()->price;
+                $leftPrice  =   $this->autoPricingLeft()?$this->autoPricingLeft()->price:0;
                 $this->total_lens_amount =    $right_len_Results[0]->price + $leftPrice;
 
                 // checking for booked stock on lens
