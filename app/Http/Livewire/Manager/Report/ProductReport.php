@@ -74,7 +74,7 @@ class ProductReport extends Component
             }
 
 
-            $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('category_id')->with('power')->get();
+            $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('category_id')->where('category_id',$this->category)->with('power')->get();
 
             $productTracker =   TrackStockRecord::where('company_id', userInfo()->company_id)->get();
             foreach ($productTracker as $key => $id) {
