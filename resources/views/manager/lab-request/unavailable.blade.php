@@ -413,6 +413,7 @@
                                                                                         class="form-control"
                                                                                         name="cost[]"
                                                                                         id="inputlname"
+                                                                                        value="{{$unavail->cost}}"
                                                                                         placeholder="cost"
                                                                                         required>
                                                                                 </div>
@@ -426,6 +427,7 @@
                                                                                         class="form-control"
                                                                                         id="inputname"
                                                                                         name="price[]"
+                                                                                        value="{{$unavail->price}}"
                                                                                         placeholder="price"
                                                                                         required>
                                                                                 </div>

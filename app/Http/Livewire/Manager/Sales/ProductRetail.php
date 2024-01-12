@@ -135,7 +135,7 @@ class ProductRetail extends Component
 
     // if product not found give price if it's in the pricing range
     function autoPricingLeft(){
-        if ($this->lens_type!=1) {
+        if (initials($this->lensType->where('id',$this->lens_type)->pluck('name')->first())!='SV') {
             // L
             $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->l_sphere)->where('sphere_to','>=',$this->l_sphere)->where('cylinder_from','<=',$this->l_cylinder)->where('cylinder_to','>=',$this->l_cylinder)->where('addition_from','<=',$this->l_addition)->where('addition_to','>=',$this->l_addition)->select('price','cost')->first();
         } else {
@@ -152,7 +152,7 @@ class ProductRetail extends Component
 
     // if product not found give price if it's in the pricing range
     function autoPricingRight(){
-        if ($this->lens_type!=1) {
+        if (initials($this->lensType->where('id',$this->lens_type)->pluck('name')->first())!='SV') {
             // R
             $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->r_sphere)->where('sphere_to','>=',$this->r_sphere)->where('cylinder_from','<=',$this->r_cylinder)->where('cylinder_to','>=',$this->r_cylinder)->where('addition_from','<=',$this->r_addition)->where('addition_to','>=',$this->r_addition)->select('price','cost')->first();
 
