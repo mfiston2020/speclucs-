@@ -69,9 +69,9 @@ class StockHistory extends Component
             }
 
             if ($this->category=='1') {
-                $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('created_at','asc')->where('category_id',$this->category)->where('product_name',$this->lens_type)->with('stockRecords')->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))->take($this->paginat)->get();
+                $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('created_at','asc')->where('category_id',$this->category)->where('product_name',$this->lens_type)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))->take($this->paginat)->get();
             } else {
-                $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('created_at','asc')->where('category_id',$this->category)->where('product_name',$this->lens_type)->with('stockRecords')->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))->take($this->paginat)->get();
+                $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('created_at','asc')->where('category_id',$this->category)->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))->take($this->paginat)->get();
             }
 
 
