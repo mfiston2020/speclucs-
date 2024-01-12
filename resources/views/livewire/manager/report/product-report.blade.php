@@ -314,18 +314,18 @@
                                                         $stockOutTtl = $productListing[$stockRecord]['incoming'] * $product->cost;
 
                                                         if ($product->category_id == '1') {
-                                                            $lensStockOutTtlQty += $stockOutQty;
-                                                            $lensStockOutTtlCost += $stockOutTtl;
+                                                            $lensStockOutTtlQty += is_null($stockOutQty)?0:$stockOutQty;
+                                                            $lensStockOutTtlCost += is_null($stockOutTtl)?0:$stockOutTtl;
                                                         }
 
                                                         if ($product->category_id == '2') {
-                                                            $frameoutStockTotalQuantity += $stockOutQty;
-                                                            $frameoutStockTotalCost += $stockOutTtl;
+                                                            $frameoutStockTotalQuantity += is_null($stockOutQty)?0:$stockOutQty;
+                                                            $frameoutStockTotalCost += is_null($stockOutTtl)?0:$stockOutTtl;
                                                         }
 
                                                         if ($product->category_id > 2) {
-                                                            $accoutStockTotalQuantity += $stockOutQty;
-                                                            $accoutStockTotalCost += $stockOutTtl;
+                                                            $accoutStockTotalQuantity += is_null($stockOutQty)?0:$stockOutQty;
+                                                            $accoutStockTotalCost += is_null($stockOutTtl)?0:$stockOutTtl;
                                                         }
                                                     }
 
