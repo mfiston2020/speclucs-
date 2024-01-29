@@ -20,7 +20,7 @@ class StockHistory extends Component
     public $products, $stockRecords, $soldProducts, $receivedProducts;
     public $daysCount   =   0;
 
-    public $rawMaterialReport, $lensrawMaterialReport,$paginat  =   500;
+    public $rawMaterialReport, $lensrawMaterialReport;
 
     public $result = false;
 
@@ -34,10 +34,9 @@ class StockHistory extends Component
         'lens_type'=>'required_if:category,1'
     ];
 
-    function loadMore(){
-        $this->paginat  +=  500;
-        $this->searchInformation();
-    }
+    // function loadMore(){
+    //     $this->searchInformation();
+    // }
 
     function updatedCategory(){
         if ($this->category=='1') {
@@ -69,9 +68,9 @@ class StockHistory extends Component
             }
 
             if ($this->category=='1') {
-                $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('created_at','asc')->where('category_id',$this->category)->where('product_name',$this->lens_type)->take($this->paginat)->get();
+                $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('created_at','asc')->where('category_id',$this->category)->where('product_name',$this->lens_type)->get();
             } else {
-                $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('created_at','asc')->where('category_id',$this->category)->take($this->paginat)->get();
+                $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('created_at','asc')->where('category_id',$this->category)->get();
             }
 
             // dd($this->products);
