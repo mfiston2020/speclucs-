@@ -116,7 +116,7 @@
                                                 <td class="text-center"><center>{{ OneInitials($product->eye) }}</center></td>
                                                 <td>
                                                     {{ initials($type)=='BT'?'Bifocal Round Top':lensDescription(initials($type)) . ' ' . $index . ' ' . $chromatics . ' ' . $coating }}
-                                                    @if (initials($type) == 'SV')
+                                                    @if (initials($type) == 'SV' && is_null($product->cylinder))
                                                         <span> {{ format_values($product->sphere) }} /
                                                             {{ format_values($product->cylinder) }}</span>
                                                     @else
@@ -150,7 +150,7 @@
                                                 </td>
                                                 <td>{{ $prod->product_name }} | {{ lensDescription($prod->description) }}
                                                     @if ($prod->power)
-                                                        @if (initials($prod->product_name) == 'SV')
+                                                        @if (initials($prod->product_name) == 'SV' && is_null($prod->power->cylinder))
                                                             <span> {{ $prod->power->sphere }} /
                                                                 {{ $prod->power->cylinder }}</span>
                                                         @else

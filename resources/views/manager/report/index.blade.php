@@ -74,7 +74,7 @@
             </a>
 
             {{-- fifo --}}
-            <a href="{{ route('manager.product.report') }}" class="col-lg-4 col-md-6 text-success">
+            {{-- <a href="{{ route('manager.product.report') }}" class="col-lg-4 col-md-6 text-success">
                 <div class="">
                     <div class="card border-right border-success">
                         <div class="card-body">
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-            </a>
+            </a> --}}
 
             {{-- Insurance report --}}
             {{-- <a href="{{ route('manager.insurance.proforma') }}" class="col-lg-4 col-md-6 text-primary">
