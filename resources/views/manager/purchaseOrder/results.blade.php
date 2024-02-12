@@ -54,7 +54,7 @@
                                         <span
                                             hidden>{{$power=\App\Models\Power::where(['product_id'=>$product])->select('*')->first()}}</span>
                                         <td>
-                                            <h6>{{$prod->product_name}}</h6>
+                                            <h6>{{$prod->product_name}} {{initials($prod->product_name)=='SV'?'':$prod->power->eye}}</h6>
                                             <small class="text-muted">
                                                 @if ($power)
                                                 @if (initials($prod->product_name)=='SV')
