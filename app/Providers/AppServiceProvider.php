@@ -51,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
                 ->with('sentToLab',$ordersCount->where('status','sent to supplier')->count())
                 ->with('n_a',Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->count())
                 // lab orders count
-                // ->with('sentToLab',$ordersCount->where('status','sent to lab')->count())
+                ->with('sentToLab_',$ordersCount->where('status','sent to lab')->count())
                 ->with('production',$ordersCount->where('status','in production')->count())
                 ->with('completed',$ordersCount->where('status','completed')->count())
                 ->with('delivered',$ordersCount->where('status','delivered')->count())

@@ -40,13 +40,7 @@ class PendingOrderController extends Controller
 
         $sales_delivered  =   $ords->where('status', 'delivered')->all();
 
-        $sales_sent_to_lab  =   $ords->where('status', 'sent to lab')->all();
-
-        // dd($ords);
-
-        $other_orders  =   Invoice::where('company_id', userInfo()->company_id)->whereNotIn('status', ['delivered', 'sent to lab', 'in production', 'completed'])->orderBy('created_at', 'desc')->with('unavailableproducts')->with('client')->with('soldproduct')->get();
-
-        return view('manager.sales.pending', compact('sales_requested', 'sales_priced', 'sales_delivered', 'sales_sent_to_lab','other_orders'));
+        return view('manager.sales.pending', compact('sales_requested', 'sales_priced', 'sales_delivered'));
     }
 
     function setOrderPrice(Request $request)
