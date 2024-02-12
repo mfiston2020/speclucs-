@@ -144,9 +144,6 @@
                                                     <span class="text-primary">{{ $product->cost }}</span>
                                                 </td>
                                                 <td>
-                                                    <span class="text-primary">{{ $product->stock }}</span>
-                                                </td>
-                                                <td>
                                                     <span class="text-primary">{{ $product->stock }}
                                                     </span>
                                                 </td>
