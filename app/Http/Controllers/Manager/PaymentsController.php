@@ -28,9 +28,9 @@ class PaymentsController extends Controller
             'receipt'=>'required',
             'supplier'=>'required',
             'payment_method'=>'required',
-            'balance'=>'required | integer',
-            'amount'=>'required | integer',
-            'due'=>'required | integer',
+            'balance'=>'required',
+            'amount'=>'required',
+            'due'=>'required',
         ]);
 
         $payments   =   new \App\Models\Payment();

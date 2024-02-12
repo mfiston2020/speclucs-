@@ -138,6 +138,8 @@ class ProductRetail extends Component
         if (initials($this->lensType->where('id',$this->lens_type)->pluck('name')->first())!='SV') {
             // L
             $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->l_sphere)->where('sphere_to','>=',$this->l_sphere)->where('cylinder_from','<=',$this->l_cylinder)->where('cylinder_to','>=',$this->l_cylinder)->where('addition_from','<=',$this->l_addition)->where('addition_to','>=',$this->l_addition)->select('price','cost')->first();
+
+            dd($this->leftPriceRange);
         } else {
             // L
             $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',$this->l_sphere)->where('sphere_to','>=',$this->l_sphere)->where('cylinder_from','<=',$this->l_cylinder)->where('cylinder_to','>=',$this->l_cylinder)->select('price','cost')->first();

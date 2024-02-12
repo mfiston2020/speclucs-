@@ -296,6 +296,15 @@
                                 </a>
                             </li>
                             <li class="sidebar-item">
+                                <a href="{{ route('manager.order.not.available')}}" class="sidebar-link">
+                                    <i class="mdi mdi-adjust"></i>
+                                    <span class="hide-menu"> N/A Products</span>
+                                    <span class="badge badge-danger badge-pill ml-2">
+                                        {{ number_format($n_a) }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
                                 <a href="{{route('manager.lab.requests.type','priced')}}" class="sidebar-link">
                                     <i class="mdi mdi-adjust"></i>
                                     <span class="hide-menu"> Priced </span>

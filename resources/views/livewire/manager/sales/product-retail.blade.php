@@ -28,9 +28,9 @@
 
             @if ($isCloudOrder=='yes')
                 {{-- personal information --}}
-                <div class="card">
+                <div class="card border border-dark">
                     <div class="card-header">
-                        Cloud Information
+                        <span class="h4 text-primary">Cloud Information</span>
                         {{-- <button wire:click=showModal>shwi</button> --}}
                     </div>
 
@@ -82,9 +82,9 @@
             @else
 
             {{-- personal information --}}
-            <div class="card">
+            <div class="card border border-dark">
                 <div class="card-header">
-                    Customer Information
+                    <span class="h4 text-primary">Customer Information</span>
                 </div>
 
                 <div class="card-body">
@@ -199,9 +199,9 @@
 
             {{-- lens --}}
             <div class="col-md-12 col-sm-12 mt-2">
-                <div class="card">
+                <div class="card border border-dark">
                     <div class="card-header">
-                        Lens
+                        <span class="h4 text-primary">Lens</span>
                     </div>
                     <div class="card-body">
 
@@ -354,9 +354,9 @@
 
             {{-- frame div --}}
             <div class="col-md-12 col-sm-12 mt-2">
-                <div class="card">
+                <div class="card border border-dark">
                     <div class="card-header">
-                        Frame
+                        <span class="h4 text-primary">Frame</span>
                     </div>
                     <div class="card-body">
 
@@ -442,9 +442,9 @@
 
             {{-- accessories div --}}
             <div class="col-md-12 col-sm-12 mt-2">
-                <div class="card">
+                <div class="card border border-dark">
                     <div class="card-header">
-                        Accessories & Other Products
+                        <span class="h4 text-primary">Accessories & Other Products</span>
                     </div>
                     <div class="card-body">
 
@@ -592,13 +592,13 @@
 
             @if ($showPaymentSection)
                 <div class="col-md-12 col-sm-12 mt-2">
-                    <div class="card d-flex">
+                    <div class="card d-flex border border-dark">
 
                         <div class="card-header d-flex justify-content-between items-center">
-                            <span>
-                                Insurance / Patient Payment
+                            {{-- <span> --}}
+                                <span class="h4 text-primary">Insurance / Patient Payment</span>
 
-                            </span>
+                            {{-- </span> --}}
                             <h5>
                                 @php
                                     $payment = $patient_payment_frame + $patient_payment_lens + $accessory_total_amount;

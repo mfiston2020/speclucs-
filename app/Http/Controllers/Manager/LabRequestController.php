@@ -96,8 +96,8 @@ class LabRequestController extends Controller
         $requests_supplier  =   $invoices->where('status', 'sent to supplier')->all();
 
         // sent to supplier
-        $requests_lab       =   $invoices->where('status', 'sent to lab')->all();
-            return view('manager.lab-request.po-sent',compact('requests_lab','requests_supplier','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
+        // $requests_lab       =   $invoices->where('status', 'sent to lab')->all();
+            return view('manager.lab-request.po-sent',compact('requests_supplier','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
     }
 

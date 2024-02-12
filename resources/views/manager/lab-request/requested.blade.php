@@ -60,11 +60,6 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('manager.order.not.available')}}" class="nav-link">
-                                                N/A Stock Order(s)
-                                            </a>
-                                        </li>
                                     </ul>
                                     <div class="tab-content br-n pn">
                                         {{-- completed and in stock --}}
