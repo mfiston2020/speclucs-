@@ -16,9 +16,17 @@ class SalesController extends Controller
     {
         $requests  =   Invoice::where('company_id', Auth::user()->company_id)->with('client')->where('status','received')->withSum('soldproduct','total_amount')->withSum('soldproduct','insurance_payment')->orderBy('created_at', 'DESC')->get();
 
-        $others  =   Invoice::where('company_id', Auth::user()->company_id)->with('client')->whereNotIn('status', ['collected', 'received'])->count();
+        $others  =   Invoice::where('company_id', Auth::user()->company_id)->withSum('soldproduct','total_amount')->withSum('soldproduct','insurance_payment')->get();
 
-        return view('manager.sales.index', compact('requests','others'));
+        $sales_requested  =   $others->where('status', 'requested')->count();
+
+        $sales_priced  =   $others->where('status', 'priced')->count();
+
+        $sales_delivered  =   $others->where('status', 'delivered')->count();
+
+        $countings  =   $sales_requested+$sales_priced+$sales_delivered;
+
+        return view('manager.sales.index', compact('requests','others','countings'));
     }
 
     public function addCustomerSale()

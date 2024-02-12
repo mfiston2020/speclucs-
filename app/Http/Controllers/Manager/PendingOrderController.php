@@ -25,7 +25,7 @@ class PendingOrderController extends Controller
     }
 
     function orderStatus(){
-        $other_orders       =   Invoice::where('company_id',userInfo()->company_id)->orderBy('created_at','desc')->paginate(500);
+        $other_orders       =   Invoice::where('company_id',userInfo()->company_id)->orderBy('created_at','desc')->paginate(1000);
         return view('manager.sales.order-status',compact('other_orders'));
     }
 

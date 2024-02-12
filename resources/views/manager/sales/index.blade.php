@@ -40,7 +40,7 @@
 
                                 {{-- @if ($pending > 0) --}}
                                     <span class="badge badge-danger badge-pill">
-                                        {{ number_format(($others)) }}
+                                        {{ number_format($countings) }}
                                     </span>
                                 {{-- @endif --}}
                             </a>
