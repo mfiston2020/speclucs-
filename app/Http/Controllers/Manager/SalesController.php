@@ -18,10 +18,6 @@ class SalesController extends Controller
 
         $others  =   Invoice::where('company_id', Auth::user()->company_id)->with('client')->whereNotIn('status', ['collected', 'received'])->count();
 
-        // dd($requests[0]);
-
-        // $sales  =   \App\Models\Invoice::where('company_id', Auth::user()->company_id)->where('status', 'received')->orderBy('created_at', 'DESC')->get();
-
         return view('manager.sales.index', compact('requests','others'));
     }
 

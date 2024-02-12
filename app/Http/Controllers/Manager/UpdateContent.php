@@ -45,5 +45,51 @@ class UpdateContent extends Controller
                 return 'success in';
             }
         }
+
+        if ($name == 'price') {
+            if ($product->price > $value) {
+                $variation = $product->price - $value;
+
+                $this->stocktrackRepo->saveTrackPricing($product->id,$product->price,$value,'decrease','price');
+                $product->price     =   $value;
+                $product->save();
+
+
+                return 'success decrease';
+            }
+            if ($product->price < $value) {
+                $variation = $product->price - $value;
+
+                $this->stocktrackRepo->saveTrackPricing($product->id,$product->price,$value,'increase','price');
+                $product->price     =   $value;
+                $product->save();
+
+
+                return 'success increase';
+            }
+        }
+
+        if ($name == 'cost') {
+            if ($product->cost > $value) {
+                $variation = $product->cost - $value;
+
+                $this->stocktrackRepo->saveTrackPricing($product->id,$product->cost,$value,'decrease','cost');
+                $product->cost     =   $value;
+                $product->save();
+
+
+                return 'success decrease';
+            }
+            if ($product->cost < $value) {
+                $variation = $product->cost - $value;
+
+                $this->stocktrackRepo->saveTrackPricing($product->id,$product->cost,$value,'increase','cost');
+                $product->cost     =   $value;
+                $product->save();
+
+
+                return 'success increase';
+            }
+        }
     }
 }

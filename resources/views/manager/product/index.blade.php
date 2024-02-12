@@ -86,7 +86,7 @@
                                         <th>Product</th>
                                         <th>Description</th>
                                         <th>Power</th>
-                                        <th>Price</th>
+                                        <th>Price [RWF]</th>
                                         <th>cost</th>
                                         <th>Stock</th>
                                         <th>Location</th>
@@ -121,8 +121,14 @@
                                                     <span>-</span>
                                                 @endif
                                             </td>
-                                            <td>{{ format_money($product->price) }}</td>
-                                            <td>{{ format_money($product->cost) }}</td>
+                                            <td>
+                                                <a href="#!" class="update" data-name="price" data-type="text" data-pk="{{ $product->id }}" data-title="Enter Product Name">{{ $product->price }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="#!" class="update" data-name="cost" data-type="text" data-pk="{{ $product->id }}" data-title="Enter Product Name">{{ $product->cost }}
+                                                </a>
+                                            </td>
 
                                             @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
                                                 <td>
@@ -209,6 +215,19 @@
             },
             mode: 'inline',
             url: '{{ url('/manager/updateStock') }}',
+            title: 'Update',
+            success: function(response, newValue) {
+                console.log('Updated', response)
+            }
+        });
+
+        $('.updateCost').editable({
+            validate: function(value) {
+                if ($.trim(value) == '')
+                    return 'Value is required.';
+            },
+            mode: 'inline',
+            url: '{{ url('/manager/updateCost') }}',
             title: 'Update',
             success: function(response, newValue) {
                 console.log('Updated', response)

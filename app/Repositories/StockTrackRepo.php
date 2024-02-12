@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interface\StockTrackInterface;
 use App\Models\Product;
+use App\Models\TrackPricingChange;
 use App\Models\TrackStockRecord;
 
 class StockTrackRepo implements StockTrackInterface
@@ -26,6 +27,17 @@ class StockTrackRepo implements StockTrackInterface
             'reason'        => $reason,
             'type'          => $type,
             'status'        => $operation,
+        ]);
+    }
+
+    function saveTrackPricing(string $productId,string $currentPrice,string $incoming,string $status,string $side){
+        TrackPricingChange::create([
+            'company_id'=>  userInfo()->company_id,
+            'user_id'   =>  userInfo()->id,
+            'product_id'=>  $productId,
+            'new'       =>  $incoming,
+            'old'       =>  $currentPrice,
+            'status'    =>  $status,
         ]);
     }
 }
