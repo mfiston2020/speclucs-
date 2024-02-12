@@ -121,16 +121,15 @@
                                                     <span>-</span>
                                                 @endif
                                             </td>
-                                            <td>
-                                                <a href="#!" class="update" data-name="price" data-type="text" data-pk="{{ $product->id }}" data-title="Enter Product Name">{{ $product->price }}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a href="#!" class="update" data-name="cost" data-type="text" data-pk="{{ $product->id }}" data-title="Enter Product Name">{{ $product->cost }}
-                                                </a>
-                                            </td>
-
                                             @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
+                                                <td>
+                                                    <a href="#!" class="update" data-name="price" data-type="text" data-pk="{{ $product->id }}" data-title="Enter Product Name">{{ $product->price }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="#!" class="update" data-name="cost" data-type="text" data-pk="{{ $product->id }}" data-title="Enter Product Name">{{ $product->cost }}
+                                                    </a>
+                                                </td>
                                                 <td>
                                                     <a href="#!" class="update" data-name="stock" data-type="text"
                                                         data-pk="{{ $product->id }}"
@@ -138,6 +137,15 @@
                                                     </a>
                                                 </td>
                                             @else
+                                                <td>
+                                                    <span class="text-primary">{{ $product->price }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-primary">{{ $product->cost }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-primary">{{ $product->stock }}</span>
+                                                </td>
                                                 <td>
                                                     <span class="text-primary">{{ $product->stock }}
                                                     </span>
