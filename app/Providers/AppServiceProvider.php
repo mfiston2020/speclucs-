@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
                 ->with('notifications', $notifications)
                 ->with('orderCount',$ordersCount->count())
                 ->with('booking',$ordersCount->where('status','booked')->count())
-                ->with('requested',$ordersCount->where('status','requested')->count())
+                ->with('requested',Invoice::where('company_id', userInfo()->company_id)->where('status','requested')->whereDoesntHave('unavailableProducts')->count())
                 ->with('priced',$ordersCount->whereIn('status',['Confirmed','priced'])->count())
                 ->with('sentToLab',$ordersCount->where('status','sent to supplier')->count())
                 ->with('n_a',Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->count())
