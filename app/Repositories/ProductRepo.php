@@ -460,6 +460,9 @@ class ProductRepo implements ProductInterface
         $sold->axis      =   $request['axis'];
         $sold->addition  =   $request['addition'];
 
+        $sold->price    =   $request['price'];
+        $sold->cost     =   $request['cost'];
+
         $sold->mono_pd    =   $request['mono_pd'];
         $sold->segment_h  =   $request['segment_h'];
 

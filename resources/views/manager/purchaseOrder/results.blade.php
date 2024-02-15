@@ -47,7 +47,7 @@
                                 <tbody>
                                     @foreach ($products_array as $key=> $product)
                                     <tr>
-                                        <td style="width:50px;"><span>{{sprintf('%04d',$product)}}</span></td>
+                                        <td style="width:50px;"><span>{{s printf('%04d',$product) }}</span></td>
                                         <span hidden>{{$prod=\App\Models\Product::where('id',$product)->select('*')->first()}}</span>
                                         <span hidden>{{$power=\App\Models\Power::where(['product_id'=>$product])->select('*')->first()}}</span>
                                         <?php $prod=\App\Models\Product::where('id',$product)->select('*')->first(); ?>
