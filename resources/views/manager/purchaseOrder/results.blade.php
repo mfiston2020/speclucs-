@@ -47,14 +47,15 @@
                                 <tbody>
                                     @foreach ($products_array as $key=> $product)
                                     <tr>
-                                        <td style="width:50px;"><span>{{s printf('%04d',$product) }}</span></td>
+                                        <td style="width:50px;"><span>{{sprintf('%04d',$product) }}</span></td>
                                         <span hidden>{{$prod=\App\Models\Product::where('id',$product)->select('*')->first()}}</span>
                                         <span hidden>{{$power=\App\Models\Power::where(['product_id'=>$product])->select('*')->first()}}</span>
                                         <?php $prod=\App\Models\Product::where('id',$product)->select('*')->first(); ?>
                                         <span
                                             hidden>{{$power=\App\Models\Power::where(['product_id'=>$product])->select('*')->first()}}</span>
                                         <td>
-                                            <h6>{{$prod->product_name}} {{initials($prod->product_name)=='SV'?'':$prod->power->eye}}</h6>
+                                            <h6>{{$prod->product_name}}
+                                                {{$prod->category_id==1?initials($prod->product_name)=='SV'?'':$prod->power->eye:''}}</h6>
                                             <small class="text-muted">
                                                 @if ($power)
                                                 @if (initials($prod->product_name)=='SV')

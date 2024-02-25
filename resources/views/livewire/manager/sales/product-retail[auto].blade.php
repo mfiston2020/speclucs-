@@ -28,9 +28,9 @@
 
             @if ($isCloudOrder=='yes')
                 {{-- personal information --}}
-                <div class="card">
+                <div class="card border border-dark">
                     <div class="card-header">
-                        Cloud Information
+                        <span class="h4 text-primary">Cloud Information</span>
                         {{-- <button wire:click=showModal>shwi</button> --}}
                     </div>
 
@@ -82,9 +82,9 @@
             @else
 
             {{-- personal information --}}
-            <div class="card">
+            <div class="card border border-dark">
                 <div class="card-header">
-                    Customer Information
+                    <span class="h4 text-primary">Customer Information</span>
                 </div>
 
                 <div class="card-body">
@@ -199,9 +199,9 @@
 
             {{-- lens --}}
             <div class="col-md-12 col-sm-12 mt-2">
-                <div class="card">
+                <div class="card border border-dark">
                     <div class="card-header">
-                        Lens
+                        <span class="h4 text-primary">Lens</span>
                     </div>
                     <div class="card-body">
 
@@ -354,9 +354,9 @@
 
             {{-- frame div --}}
             <div class="col-md-12 col-sm-12 mt-2">
-                <div class="card">
+                <div class="card border border-dark">
                     <div class="card-header">
-                        Frame
+                        <span class="h4 text-primary">Frame</span>
                     </div>
                     <div class="card-body">
 
@@ -442,9 +442,9 @@
 
             {{-- accessories div --}}
             <div class="col-md-12 col-sm-12 mt-2">
-                <div class="card">
+                <div class="card border border-dark">
                     <div class="card-header">
-                        Accessories & Other Products
+                        <span class="h4 text-primary">Accessories & Other Products</span>
                     </div>
                     <div class="card-body">
 
@@ -464,7 +464,6 @@
                                                 </option>
                                             @endforeach
                                         </select>
-                                        <img src={{asset('dashboard/assets/images/loading2.gif')}} width="20" wire:loading wire:target="accessory"/>
                                     </div>
                                 </div>
 
@@ -593,16 +592,13 @@
 
             @if ($showPaymentSection)
                 <div class="col-md-12 col-sm-12 mt-2">
-                    <div class="card d-flex">
+                    <div class="card d-flex border border-dark">
 
                         <div class="card-header d-flex justify-content-between items-center">
-                            <span>
-                                Insurance / Patient Payment
-                                @if ($autoL || $autoR)
-                                    | <strong class="text-warning">Lens Price Automatically Generated</strong>
-                                @endif
+                            {{-- <span> --}}
+                                <span class="h4 text-primary">Insurance / Patient Payment</span>
 
-                            </span>
+                            {{-- </span> --}}
                             <h5>
                                 @php
                                     $payment = $patient_payment_frame + $patient_payment_lens + $accessory_total_amount;
@@ -631,31 +627,29 @@
                                                     </span>
                                                 </h6>
                                             @else
-                                                <label class="badge {{$autoR?'badge-secondary':'badge-danger'}} badge-pill ml-2">
-                                                    @if ($autoR)
-                                                        Auto
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </label>
+                                                @if ($autoR)
+                                                    <label class="badge badge-warning badge-pill ml-2">Auto | {{format_money($rightPriceRange->price)}}</label>
+                                                @else
+                                                   <label class="badge badge-danger badge-pill ml-2">N/A</label>
+                                                @endif
                                             @endif
                                             <br>
                                             <span>L</span>
                                             @if ($leftLen)
-                                                <h6>Stock: <span class="text-primary">{{$leftLenQty}}</span> |
-                                                    Requested: <span class="text-primary">{{is_null($leftBooked)?'0':$leftBooked}}</span> |
-                                                    Available: <span class="text-primary">
-                                                        {{$leftLenQty-$leftBooked<0?'0':$leftLenQty-$leftBooked}}
+                                                <h6>Stock: <span class="text-primary">{{ $leftLenQty }}</span> |
+                                                    Requested:
+                                                    <span class="text-primary">{{ is_null($leftBooked)?'0':$leftBooked }}</span> |
+                                                    Available:
+                                                    <span class="text-primary">
+                                                        {{ $leftLenQty-$leftBooked<0?'0':$leftLenQty-$leftBooked }}
                                                     </span>
                                                 </h6>
                                             @else
-                                                <label class="badge {{$autoL?'badge-secondary':'badge-danger'}} badge-pill ml-2">
-                                                    @if ($autoL)
-                                                        Auto
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </label>
+                                                @if ($autoL)
+                                                    <label class="badge badge-warning badge-pill ml-2">Auto | {{format_money($leftPriceRange->price)}}</label>
+                                                @else
+                                                   <label class="badge badge-danger badge-pill ml-2">N/A</label>
+                                                @endif
                                             @endif
                                         </div>
 
@@ -692,55 +686,53 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endif
-                            @if ($frame_total_amount!=null)
                                 <hr>
-                                <div class="row">
-                                    <!--/span-->
-                                    <div class="d-flex flex-col items-center">
-                                        <div class="col-md-2 col-sm-12">
-                                            <label></label>
-                                            <br>
-                                            <span>Frame Name</span>
-                                            <br>
-                                            <span></span>
-                                        </div>
+                            @endif
+                            <div class="row">
+                                <!--/span-->
+                                <div class="d-flex flex-col items-center">
+                                    <div class="col-md-2 col-sm-12">
+                                        <label></label>
+                                        <br>
+                                        <span>Frame Name</span>
+                                        <br>
+                                        <span></span>
+                                    </div>
 
-                                        <div class="form-group col-2">
-                                            <label>Total Amount</label>
-                                            <input type="text" class="form-control" id="frame_final_total"
-                                                placeholder="Total Amount"
-                                                value="{{ format_money($frame_total_amount) }}" readonly>
-                                        </div>
+                                    <div class="form-group col-2">
+                                        <label>Total Amount</label>
+                                        <input type="text" class="form-control" id="frame_final_total"
+                                            placeholder="Total Amount"
+                                            value="{{ format_money($frame_total_amount) }}" readonly>
+                                    </div>
 
-                                        <div class="form-group col-2">
-                                            <label>Insurance Percentage</label>
-                                            <input type="text" min="0" max="100" class="form-control"
-                                                id="insurance_percentage_frame" placeholder="Ins. %"
-                                                wire:model="insurance_percentage_frame">
-                                        </div>
+                                    <div class="form-group col-2">
+                                        <label>Insurance Percentage</label>
+                                        <input type="text" min="0" max="100" class="form-control"
+                                            id="insurance_percentage_frame" placeholder="Ins. %"
+                                            wire:model="insurance_percentage_frame">
+                                    </div>
 
-                                        <div class="form-group col-2">
-                                            <label>Ins Apprv</label>
-                                            <input type="text" class="form-control" id="insurance_approved_frame"
-                                                placeholder="approved Amt" wire:model="insurance_approved_frame">
-                                        </div>
+                                    <div class="form-group col-2">
+                                        <label>Ins Apprv</label>
+                                        <input type="text" class="form-control" id="insurance_approved_frame"
+                                            placeholder="approved Amt" wire:model="insurance_approved_frame">
+                                    </div>
 
-                                        <div class="form-group col-2">
-                                            <label>Ins Payment</label>
-                                            <input type="text" class="form-control" id="insurance_payment_frame"
-                                                placeholder="Ins. payment" wire:model.lazy="insurance_payment_frame"
-                                                readonly>
-                                        </div>
+                                    <div class="form-group col-2">
+                                        <label>Ins Payment</label>
+                                        <input type="text" class="form-control" id="insurance_payment_frame"
+                                            placeholder="Ins. payment" wire:model.lazy="insurance_payment_frame"
+                                            readonly>
+                                    </div>
 
-                                        <div class="form-group col-2">
-                                            <label>Pt Payment</label>
-                                            <input type="text" class="form-control" id="patient_payment_frame"
-                                                placeholder="Pt. Payment" wire:model="patient_payment_frame" readonly>
-                                        </div>
+                                    <div class="form-group col-2">
+                                        <label>Pt Payment</label>
+                                        <input type="text" class="form-control" id="patient_payment_frame"
+                                            placeholder="Pt. Payment" wire:model="patient_payment_frame" readonly>
                                     </div>
                                 </div>
-                            @endif
+                            </div>
 
 
                             <div class="row d-flex justify-content-around items-center mt-4">
@@ -793,22 +785,6 @@
 </div>
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/libs/select2/dist/css/select2.min.css')}}">
-    <style>
-      .blink {
-        animation: blink-animation 1s steps(5, start) infinite;
-        -webkit-animation: blink-animation 1s steps(5, start) infinite;
-      }
-      @keyframes blink-animation {
-        to {
-          visibility: hidden;
-        }
-      }
-      @-webkit-keyframes blink-animation {
-        to {
-          visibility: hidden;
-        }
-      }
-    </style>
 @endpush
 
 @push('scripts')

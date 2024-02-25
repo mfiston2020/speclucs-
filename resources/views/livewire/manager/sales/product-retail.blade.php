@@ -627,29 +627,19 @@
                                                     </span>
                                                 </h6>
                                             @else
-                                                @if ($autoR)
-                                                    <label class="badge badge-warning badge-pill ml-2">Auto | {{format_money($rightPriceRange->price)}}</label>
-                                                @else
-                                                   <label class="badge badge-danger badge-pill ml-2">N/A</label>
-                                                @endif
+                                                <label class="badge badge-danger badge-pill ml-2">N/A</label>
                                             @endif
                                             <br>
                                             <span>L</span>
                                             @if ($leftLen)
-                                                <h6>Stock: <span class="text-primary">{{ $leftLenQty }}</span> |
-                                                    Requested:
-                                                    <span class="text-primary">{{ is_null($leftBooked)?'0':$leftBooked }}</span> |
-                                                    Available:
-                                                    <span class="text-primary">
-                                                        {{ $leftLenQty-$leftBooked<0?'0':$leftLenQty-$leftBooked }}
+                                                <h6>Stock: <span class="text-primary">{{$leftLenQty}}</span> |
+                                                    Requested: <span class="text-primary">{{is_null($leftBooked)?'0':$leftBooked}}</span> |
+                                                    Available: <span class="text-primary">
+                                                        {{$leftLenQty-$leftBooked<0?'0':$leftLenQty-$leftBooked}}
                                                     </span>
                                                 </h6>
                                             @else
-                                                @if ($autoL)
-                                                    <label class="badge badge-warning badge-pill ml-2">Auto | {{format_money($leftPriceRange->price)}}</label>
-                                                @else
-                                                   <label class="badge badge-danger badge-pill ml-2">N/A</label>
-                                                @endif
+                                                <label class="badge badge-danger badge-pill ml-2">N/A</label>
                                             @endif
                                         </div>
 

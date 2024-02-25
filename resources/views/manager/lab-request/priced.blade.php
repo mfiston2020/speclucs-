@@ -30,7 +30,7 @@
                     <div class="row">
                         <h4 class="card-title">
                             Priced Products
-                            <span class="badge badge-danger badge-pill">{{ count($requests_priced) }}</span>
+                            <span class="badge badge-danger badge-pill">{{ number_format(count($requests_priced)) }}</span>
                         </h4>
                     </div>
                     {{-- ============================== --}}

@@ -31,7 +31,7 @@
                             <h4 class="card-title">
                                 Requests
                                 <span class="badge badge-danger badge-pill ml-2">
-                                    {{ count($requests_supplier) }}</h4>
+                                    {{ number_format(count($requests_supplier)) }}</h4>
                                 </span>
                         </div>
                         {{-- ============================== --}}

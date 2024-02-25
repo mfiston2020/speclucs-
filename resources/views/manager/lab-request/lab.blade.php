@@ -29,7 +29,7 @@
                                 <a href="#new-orders" class="nav-link active" data-toggle="tab" aria-expanded="false">
                                     New Orders
                                     <span class="badge badge-danger badge-pill">
-                                        {{ count($requests) }}
+                                        {{ number_format(count($requests)) }}
                                     </span>
                                 </a>
                             </li>

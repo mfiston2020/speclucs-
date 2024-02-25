@@ -44,7 +44,7 @@
                                     <span class="hidden-xs-down">
                                         Requested Products
                                         <span class="badge badge-danger badge-pill">
-                                            {{ count($requests) }}
+                                            {{ number_format(count($requests)) }}
                                         </span>
                                     </span>
                                 </a>

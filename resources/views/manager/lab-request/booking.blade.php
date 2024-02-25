@@ -53,7 +53,7 @@
                                             <a href="#incomplete-orders" class="nav-link active" data-toggle="tab"
                                                 aria-expanded="false">
                                                 Booking(s)
-                                                <span class="badge badge-danger badge-pill">{{count($bookings)}}</span>
+                                                <span class="badge badge-danger badge-pill">{{number_format(count($bookings))}}</span>
                                             </a>
                                         </li>
                                     </ul>

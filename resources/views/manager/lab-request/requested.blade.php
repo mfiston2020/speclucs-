@@ -29,7 +29,7 @@
                         <div class="row">
                             <h4 class="card-title">All Requested Products
                                 <span class="badge badge-danger badge-pill ml-2">
-                                    {{count($invoicess)}}
+                                    {{number_format(count($invoicess))}}
                                 </span>
                             </h4>
                         </div>
