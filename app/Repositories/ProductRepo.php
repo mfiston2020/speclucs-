@@ -29,6 +29,7 @@ class ProductRepo implements ProductInterface
 
     function searchProduct(array $productDescription)
     {
+        // dd($productDescription);
         if ($productDescription['productType'] == 'lens') {
             $lensTypeFull   =   LensType::find($productDescription['type']);
 
@@ -63,6 +64,7 @@ class ProductRepo implements ProductInterface
                         return 'product-not-found';
                     }
                 } else {
+
                     if (
                         $productDescription['type']!=null && $productDescription['index']!=null &&
                         $productDescription['chromatic']!=null && $productDescription['coating']!=null &&
@@ -74,14 +76,15 @@ class ProductRepo implements ProductInterface
                             ->where('chromatics_id', $productDescription['chromatic'])
                             ->where('coating_id', $productDescription['coating'])
                             ->where('sphere', format_values($productDescription['sphere']))
-                            // ->where('cylinder', format_values($productDescription['cylinder']))
+                            ->where('cylinder', format_values($productDescription['cylinder']))
                             ->where('axis', format_values($productDescription['axis']))
                             ->where('add', format_values($productDescription['addition']))
-                            ->where('eye', $productDescription['eye'])
+                            ->where('eye', $productDescription['eye']=='right'?'R':'L')
                             ->where('company_id', userInfo()->company_id)
                             ->select('product_id')->first();
 
                         $productResult    =   \App\Models\Product::find($product_id);
+                        // dd($productResult);
                         if (!$productResult) {
                             return 'product-not-found';
                         } else {
