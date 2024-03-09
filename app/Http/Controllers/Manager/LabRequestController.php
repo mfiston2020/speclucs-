@@ -396,10 +396,12 @@ class LabRequestController extends Controller
                 $invoice   =   $invoices->where('id',$invoiceId)->first();
                 $unavailableProductsCount   =   count($invoice->unavailableproducts);
 
+                // dd($unavailableProductsCount);
+
 
                 if ($unavailableProductsCount==2) {
-                // dd($unavailableProductsCount);
                     $lenT   =   $lensType->where('id',$invoice->unavailableproducts[0]->type_id)->pluck('name')->first();
+                    // dd($lenT);
 
                     // checking for the lens type to know how to compare them
                     if (initials($lenT)=='SV') {
@@ -414,6 +416,7 @@ class LabRequestController extends Controller
                                                             ->where('sphere',format_values($invoice->unavailableproducts[0]->sphere))
                                                             ->where('cylinder',format_values($invoice->unavailableproducts[0]->cylinder))->first();
                                 // when product is found
+
                                 if (!is_null($f_product_id)) {
                                     foreach ($invoice->unavailableproducts as $key => $unProduct) {
                                         $unProduct->update([
@@ -427,7 +430,7 @@ class LabRequestController extends Controller
                                     $prdt       =   Product::find($newProduct->id);
                                     $pstock     =   $prdt->stock;
 
-                                    $prdt->stock = 1;
+                                    $prdt->stock = $unavailableProductsCount;
                                     $prdt->save();
 
                                     foreach ($invoice->unavailableproducts as $key => $unProduct) {

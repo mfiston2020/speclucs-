@@ -614,11 +614,12 @@
                                 <div class="row">
                                     <!--/span-->
                                     <div class="d-flex flex-col items-center">
-                                        <div class="col-md-2 col-sm-12">
+                                        {{-- display lens info --}}
+                                        {{-- <div class="col-md-2 col-sm-12">
                                             <label>Lens</label>
                                             <br>
                                             <span>R</span>
-                                            {{-- <br> --}}
+                                            {{-- <br> --}
                                             @if ($rightLen)
                                                 <h6>Stock: <span class="text-primary">{{$rightLenQty}}</span> |
                                                     Requested: <span class="text-primary">{{is_null($rightBooked)?0:$rightBooked}}</span> |
@@ -640,6 +641,46 @@
                                                 </h6>
                                             @else
                                                 <label class="badge badge-danger badge-pill ml-2">N/A</label>
+                                            @endif
+                                        </div> --}}
+
+                                        {{-- display lens info with auto pricing --}}
+                                        <div class="col-md-2 col-sm-12">
+                                            <label>Lens</label>
+                                            <br>
+                                            <span>R</span>
+                                            {{-- <br> --}}
+                                            @if ($rightLen)
+                                                <h6>Stock: <span class="text-primary">{{$rightLenQty}}</span> |
+                                                    Requested: <span class="text-primary">{{is_null($rightBooked)?0:$rightBooked}}</span> |
+                                                    Available: <span class="text-primary">
+                                                        {{$rightLenQty-$rightBooked<0?'0':$rightLenQty-$rightBooked}}
+                                                    </span>
+                                                </h6>
+                                            @else
+                                                @if ($autoR)
+                                                    <label class="badge badge-warning badge-pill ml-2">Auto | {{format_money($rightPriceRange->price)}}</label>
+                                                @else
+                                                   <label class="badge badge-danger badge-pill ml-2">N/A</label>
+                                                @endif
+                                            @endif
+                                            <br>
+                                            <span>L</span>
+                                            @if ($leftLen)
+                                                <h6>Stock: <span class="text-primary">{{ $leftLenQty }}</span> |
+                                                    Requested:
+                                                    <span class="text-primary">{{ is_null($leftBooked)?'0':$leftBooked }}</span> |
+                                                    Available:
+                                                    <span class="text-primary">
+                                                        {{ $leftLenQty-$leftBooked<0?'0':$leftLenQty-$leftBooked }}
+                                                    </span>
+                                                </h6>
+                                            @else
+                                                @if ($autoL)
+                                                    <label class="badge badge-warning badge-pill ml-2">Auto | {{format_money($leftPriceRange->price)}}</label>
+                                                @else
+                                                   <label class="badge badge-danger badge-pill ml-2">N/A</label>
+                                                @endif
                                             @endif
                                         </div>
 

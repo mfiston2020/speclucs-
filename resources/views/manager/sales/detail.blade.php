@@ -188,7 +188,8 @@
                                                 {{ format_money(0) }}
                                             </td>
                                             <td>
-                                                {{ format_money($product->total_amount) }}
+                                                {{ format_money($product->price*$product->quantity) }}
+                                                {{-- {{ format_money($product->total_amount) }} --}}
                                             </td>
                                         </tr>
                                     @endforeach

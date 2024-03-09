@@ -53,14 +53,14 @@ class PricingController extends Controller
         $pricing->index_id      =   $request->index;
         $pricing->chromatics_id =   $request->chromatics;
         $pricing->coating_id    =   $request->coating;
-        $pricing->sphere_min    =   $request->sphere_min;
-        $pricing->sphere_max    =   $request->sphere_max;
-        $pricing->cylinder_min  =   $request->cylinder_min;
-        $pricing->cylinder_max  =   $request->cylinder_max;
-        $pricing->axis_min      =   $request->axis_min;
-        $pricing->axis_max      =   $request->axis_max;
-        $pricing->add_min       =   $request->add_min;
-        $pricing->add_max       =   $request->add_max;
+        $pricing->sphere_min    =   format_values($request->sphere_min);
+        $pricing->sphere_max    =   format_values($request->sphere_max);
+        $pricing->cylinder_min  =   format_values($request->cylinder_min);
+        $pricing->cylinder_max  =   format_values($request->cylinder_max);
+        $pricing->axis_min      =   format_values($request->axis_min);
+        $pricing->axis_max      =   format_values($request->axis_max);
+        $pricing->add_min       =   format_values($request->add_min);
+        $pricing->add_max       =   format_values($request->add_max);
         $pricing->eye           =   $request->eye;
         $pricing->price         =   $request->lens_price;
 
