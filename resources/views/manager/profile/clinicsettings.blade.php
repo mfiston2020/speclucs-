@@ -99,7 +99,7 @@
                                                     <th>Addition To</th>
                                                     <th>cost</th>
                                                     <th>Price</th>
-                                                    {{-- <th>Total Sold</th> --}}
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -115,6 +115,13 @@
                                                         <td>{{$pricing->addition_to}}</td>
                                                         <td>{{format_money($pricing->cost)}}</td>
                                                         <td>{{format_money($pricing->price)}}</td>
+                                                        <td>
+                                                            <form action="{{route('manager.clinic.pricing.remove',Crypt::encrypt($pricing->id))}}" method="post" onsubmit="return confirm('Are You sure ?')">
+                                                                @csrf
+                                                                {{ method_field('DELETE') }}
+                                                                <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                                            </form>
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>

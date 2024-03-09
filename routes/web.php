@@ -126,6 +126,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     // ============================== all routes for Clinic settings [ Lens Pricing ] =============================
     Route::post('/lensPricing', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'lensPricingSave'])->name('clinic.settings.lens.pricing.save');
+    Route::delete('/remove/lensPricing/{id}', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'destroy'])->name('clinic.pricing.remove');
 
     // exam routes
     Route::post('/clinic_exam', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'save_clinic_exam'])->name('clinic.exam.save');
@@ -426,6 +427,7 @@ Route::group(['middleware' => 'supplier', 'prefix' => 'supplier'], function () {
     Route::get('/pricing', [\App\Http\Controllers\Supplier\PricingController::class, 'index'])->name('supplier.pricing.index');
     Route::get('/addpricing', [\App\Http\Controllers\Supplier\PricingController::class, 'add'])->name('supplier.pricing.add');
     Route::post('/savepricing', [\App\Http\Controllers\Supplier\PricingController::class, 'save'])->name('supplier.pricing.save');
+
 
     // =============== all routes for Tarrif ========================
     Route::get('/orders', [\App\Http\Controllers\Supplier\OrdersController::class, 'index'])->name('supplier.orders.index');

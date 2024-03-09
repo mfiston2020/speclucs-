@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Supplier;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class PricingController extends Controller
 {
@@ -66,7 +67,7 @@ class PricingController extends Controller
 
         try {
             $pricing->save();
-            return redirect()->route('supplier.pricing.index')->with('successMsg','Product Tarrif Created Successfully');
+            return redirect()->route('supplier.pricing.index')->with('successMsg','Product Tarrif Created');
         } catch (\Throwable $th) {
             return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
         }

@@ -241,4 +241,9 @@ class ClinicSettingController extends Controller
         }
     }
 
+    function destroy($id){
+        LensPricing::find(Crypt::decrypt($id))->delete();
+        return redirect()->back()->with('successMsg','Product Tarrif Removed!');
+    }
+
 }
