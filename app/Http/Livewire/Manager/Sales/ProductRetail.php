@@ -11,6 +11,7 @@ use App\Models\PhotoCoating;
 use App\Models\PhotoIndex;
 use App\Models\Product;
 use App\Models\SoldProduct;
+use App\Models\TrackOrderRecord;
 use App\Repositories\ProductRepo;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -321,21 +322,23 @@ class ProductRetail extends Component
             return;
         } else {
 
-            // if ($this->insurance_approved_frame >= $this->frame_total_amount) {
-            //     $this->insurance_payment_frame    =   $this->frame_total_amount;
-            // }
+            if ($this->insurance_approved_frame < $this->frame_total_amount) {
+                // $this->insurance_payment_frame    =   $this->frame_total_amount;
+                $this->insurance_payment_frame    =   ($this->insurance_approved_frame  *   $this->insurance_percentage_frame) / 100;
+            }
 
-            // if ($this->insurance_approved_frame < $this->frame_total_amount) {
-            $this->insurance_payment_frame    =   ($this->insurance_approved_frame  *   $this->insurance_percentage_frame) / 100;
-            // }
+            if ($this->insurance_approved_frame >= $this->frame_total_amount) {
+                $this->insurance_payment_frame    =   ($this->frame_total_amount  *   $this->insurance_percentage_frame) / 100;
+            }
 
-            // if ($this->insurance_approved_lens >= $this->total_lens_amount) {
-            //     $this->insurance_payment_lens    =   $this->total_lens_amount;
-            // }
+            if ($this->insurance_approved_lens < $this->total_lens_amount) {
+                // $this->insurance_payment_lens    =   $this->total_lens_amount;
+                $this->insurance_payment_lens    =   ($this->insurance_approved_lens  *   $this->insurance_percentage_lens) / 100;
+            }
 
-            // if ($this->in/surance_approved_lens < $this->total_lens_amount) {
-            $this->insurance_payment_lens    =   ($this->insurance_approved_lens  *   $this->insurance_percentage_lens) / 100;
-            // }
+            if ($this->insurance_approved_lens >= $this->total_lens_amount) {
+                $this->insurance_payment_lens    =   ($this->total_lens_amount  *   $this->insurance_percentage_lens) / 100;
+            }
 
             if ($this->insurance_payment_lens > $this->total_lens_amount) {
                 $this->insurance_payment_lens    =   $this->total_lens_amount;
@@ -439,6 +442,12 @@ class ProductRetail extends Component
 
             $invoice->save();
 
+            TrackOrderRecord::create([
+                'status'        =>  $this->invoiceStatus,
+                'user_id'       =>  auth()->user()->id,
+                'invoice_id'    =>  $invoice->id,
+            ]);
+
             if ($this->lens_type || $this->lens_coating || $this->lens_chromatic) {
                 if ($this->leftLenFound && $this->rightLenFound) {
                     $this->save('lens', 'available', $invoice->id, 'left');
@@ -494,9 +503,9 @@ class ProductRetail extends Component
             $sold->insurance_id =   $this->insurance_type == 'private' ? null : $this->insurance_type;
             $sold->percentage   =   $this->insurance_type == 'private' ? 0 : $this->insurance_percentage_lens;
 
-            $sold->patient_payment   =   $this->patient_payment_lens;
+            $sold->patient_payment   =   $this->patient_payment_lens / 2;
             $sold->approved_amount   =   $this->insurance_approved_lens;
-            $sold->insurance_payment =   $this->insurance_payment_lens;
+            $sold->insurance_payment =   $this->insurance_payment_lens / 2;
             $sold->save();
 
             $total  += $sold->total_amount;

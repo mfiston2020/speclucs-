@@ -76,6 +76,18 @@
                     </li>
 
                     <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#detailed-invoices" role="tab">
+                            <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                            <span class="hidden-xs-down">
+                                Invoiced Invoice
+                                <span class="badge badge-danger badge-pill">
+                                    {{ count($invoices) }}
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#summarized-invoices" role="tab">
                             <span class="hidden-sm-up"><i class="ti-home"></i></span>
                             <span class="hidden-xs-down">
@@ -98,13 +110,11 @@
                 <div class="card">
                     <div class="card-body">
 
-                        {{-- <h4 class="card-title">{{ numbsserToWord(90007895) }}</h4> --}}
+                        {{-- <h4 class="card-title">{{ numberToWord(90007895) }}</h4> --}}
                         {{-- <hr> --}}
-                        <a href="#"
-                            class="ml-2 btn btn-sm waves-effect waves-light btn-rounded btn-outline-success"
-                            style="align-items: right;">
+                        <button onclick="exportAll('xls');" class="ml-2 btn btn-sm waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
                             <i class="fa fa-download"></i> Download
-                        </a>
+                        </button>
                         <hr>
                         <div class="table-responsive">
                             <form wire:submit.prevent="addInvoiceCredit">
@@ -112,7 +122,9 @@
                                     style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <th>
+                                                <input type="checkbox" onclick="checkUncheckrequestId(this)"/>
+                                            </th>
                                             <th>S/N</th>
                                             <th>Date</th>
                                             <th>Ins. Number</th>
@@ -131,8 +143,7 @@
                                         @foreach ($invoices as $key => $invoice)
                                             <tr>
                                                 <th>
-                                                    <input type="checkbox" name="requestid[]"
-                                                        value="{{ $invoice->id }}" />
+                                                    <input wire:model="invoicesIds" type="checkbox" value="{{$invoice->id}}"/>
                                                 </th>
                                                 <th>{{ $key + 1 }}</th>
                                                 <th>{{ date('Y-m-d', strtotime($invoice->created_at)) }}</th>
@@ -161,8 +172,8 @@
                                 <button class="btn btn-primary mr-3" type="submit">
                                     Submit Invoice Credit(s)
                                 </button>
+                                <a href="#!" wire:click="createInvoiceSummary" class="btn btn-success">Create Invoice</a>
                             </form>
-                            <button class="btn btn-success">Create Invoice</button>
                         </div>
                     </div>
                 </div>
@@ -172,7 +183,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="zero_config" class="table table-striped table-bordered nowrap"
+                            <table id="zero_" class="table table-striped table-bordered nowrap"
                                 style="width:100%">
                                 <thead>
                                     <tr>
@@ -204,4 +215,22 @@
     <script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
+
+    <script>
+        function exportAll(type) {
+
+            $('#zero_config').tableExport({
+                filename: 'table_%DD%-%MM%-%YY%-month(%MM%)',
+                format: type
+            });
+        }
+
+        function checkUncheckrequestId(checkBox) {
+            get = document.getElementsByName('requestid[]');
+            for (var i = 0; i < get.length; i++) {
+                get[i].checked = checkBox.checked;
+            }
+        }
+    </script>
 @endpush

@@ -350,6 +350,8 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/trackOrder', [\App\Http\Controllers\Manager\OrderInvoicesController::class, 'trackOrder'])->name('order.track');
     Route::post('/trackingOrder', [\App\Http\Controllers\Manager\OrderInvoicesController::class, 'trackingOrder'])->name('order.tracking');
 
+    Route::get('/track/request/{id}', [\App\Http\Controllers\Manager\OrderInvoicesController::class, 'trackRequest'])->name('request.tracking');
+
     // ====================== Routes about Orders Credits ==========================
     Route::get('/Credits', [\App\Http\Controllers\Manager\OrderCreditsController::class, 'index'])->name('credit');
     Route::get('/myCredits', [\App\Http\Controllers\Manager\OrderCreditsController::class, 'myCredits'])->name('my.credit');

@@ -9,7 +9,7 @@ use Livewire\Component;
 
 class InsuranceInvoice extends Component
 {
-    public $insurances, $insurance, $invoices, $invoicesIds, $credits = array(), $allData, $showData = false, $start_date, $end_date;
+    public $insurances, $insurance, $invoices, $invoicesIds = [], $credits = array(), $allData, $showData = false, $start_date, $end_date;
 
 
     protected $rules    =   [
@@ -26,6 +26,7 @@ class InsuranceInvoice extends Component
 
         $this->invoices =   Invoice::where('company_id', Auth::user()->company_id)
             ->where('insurance_id', $validated['insurance'])
+            ->whereNotNull('gender')
             ->whereDate('created_at', '>=', $fromDate)
             ->whereDate('created_at', '<=', $toDate)
             ->withsum('soldproduct', 'total_amount')
@@ -38,6 +39,10 @@ class InsuranceInvoice extends Component
     function addInvoiceCredit()
     {
         dd($this->credits);
+    }
+
+    function createInvoiceSummary(){
+        dd($this->invoicesIds);
     }
 
     function mount()

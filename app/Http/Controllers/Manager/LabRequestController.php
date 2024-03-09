@@ -11,12 +11,13 @@ use App\Repositories\ProductRepo;
 use App\Models\UnavailableProduct;
 use App\Http\Controllers\Controller;
 use App\Models\LensType;
+use App\Models\TrackOrderRecord;
 use App\Repositories\StockTrackRepo;
 use Illuminate\Support\Facades\Crypt;
 
 class LabRequestController extends Controller
 {
-    private $stocktrackRepo, $allProduct,$userDatail;
+    private $stocktrackRepo;
 
     public function __construct()
     {
@@ -153,6 +154,12 @@ class LabRequestController extends Controller
             'sent_to_lab' => now(),
         ]);
 
+        TrackOrderRecord::create([
+            'status'        =>  'sent to lab',
+            'user_id'       =>  auth()->user()->id,
+            'invoice_id'    =>  Crypt::decrypt($id),
+        ]);
+
         return redirect()->back()->with('successMsg', 'Order sent to Lab!');
     }
 
@@ -283,6 +290,12 @@ class LabRequestController extends Controller
                     'received_by_seller' => now(),
                 ]);
 
+                TrackOrderRecord::create([
+                    'status'        =>  'received',
+                    'user_id'       =>  auth()->user()->id,
+                    'invoice_id'    =>  $value,
+                ]);
+
                 foreach ($invoice->soldproduct as $key => $sold) {
                     $product    =   $allProduct->where('id', $sold->product_id)->first();
                     // $stockVariation = $product->stock - 1;
@@ -305,6 +318,12 @@ class LabRequestController extends Controller
                 Invoice::find($value)->update([
                     'status' => 'collected',
                     'received_by_patient' => now(),
+                ]);
+
+                TrackOrderRecord::create([
+                    'status'        =>  'collected',
+                    'user_id'       =>  auth()->user()->id,
+                    'invoice_id'    =>  $value,
                 ]);
 
                 foreach ($invoice->soldproduct as $key => $sold) {
@@ -342,6 +361,12 @@ class LabRequestController extends Controller
             'set_price' => now(),
         ]);
 
+        TrackOrderRecord::create([
+            'status'        =>  $invoice != null ? 'Confirmed' : 'priced',
+            'user_id'       =>  auth()->user()->id,
+            'invoice_id'    =>  $value,
+        ]);
+
         return redirect()->back()->with('successMsg', 'Order price set!');
     }
 
@@ -352,6 +377,12 @@ class LabRequestController extends Controller
             'payment_approval' => now(),
         ]);
 
+        TrackOrderRecord::create([
+            'status'        =>  'Confirmed',
+            'user_id'       =>  auth()->user()->id,
+            'invoice_id'    =>  Crypt::decrypt($id),
+        ]);
+
         return redirect()->back()->with('successMsg', 'Order Payment confirmed');
     }
 
@@ -360,6 +391,12 @@ class LabRequestController extends Controller
         Invoice::find(Crypt::decrypt($id))->update([
             'status' => 'Canceled',
             'canceled' => now(),
+        ]);
+
+        TrackOrderRecord::create([
+            'status'        =>  'Canceled',
+            'user_id'       =>  auth()->user()->id,
+            'invoice_id'    =>  Crypt::decrypt($id),
         ]);
 
         return redirect()->back()->with('successMsg', 'Order Canceled!');
@@ -374,6 +411,12 @@ class LabRequestController extends Controller
                 Invoice::find($value)->update([
                     'status' => 'sent to supplier',
                     'sent_to_supplier' => now(),
+                ]);
+
+                TrackOrderRecord::create([
+                    'status'        =>  'sent to supplier',
+                    'user_id'       =>  auth()->user()->id,
+                    'invoice_id'    =>  $value,
                 ]);
             }
             return redirect()->back()->with('successMsg', 'Request Sent To Supplier!');
@@ -561,65 +604,4 @@ class LabRequestController extends Controller
             return redirect()->back()->with('successMsg', 'Request sent to Lab!');
         }
     }
-
-    // function sendRequestTolab(Request $request)
-    // {
-    //     $f_product_id   =   null;
-    //     $productRepo    =   new ProductRepo();
-    //     $lensType       =   LensType::all();
-    //     $powers         =   Power::where('company_id',userInfo()->company_id)->get();
-
-    //     if ($request->requestId == null) {
-    //         return redirect()->back()->with('warningMsg', 'Select at least one Order!');
-    //     } else {
-    //         foreach ($request->requestId as $key => $value) {
-
-    //             $products   = Invoice::where('id', $value)->with('unavailableproducts')->first();
-
-    //             foreach ($products->unavailableproducts as $count=> $sold) {
-    //                 $lenT   =   $lensType->where('id',$sold->type_id)->pluck('name')->first();
-
-    //                 if ($count>0) {
-    //                     if (initials($lenT)=='SV') {
-    //                         $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->first();
-    //                     } else {
-    //                         $f_product_id   =   $powers->where('type_id',$sold->type_id)->where('chromatics_id',$sold->chromatic_id)->where('coating_id',$sold->coating_id)->where('sphere',format_values($sold->sphere))->where('cylinder',format_values($sold->cylinder))->where('axis',format_values($sold->axis))->where('add',format_values($sold->addition))->first();
-    //                     }
-    //                 }
-
-    //                 if (is_null($f_product_id))
-    //                 {
-    //                     $newProduct = $productRepo->saveUnavailableToStock($sold->toArray());
-    //                     $prdt    =   Product::find($newProduct->id);
-    //                     $pstock=$prdt->stock;
-
-    //                     $prdt->stock += 1;
-    //                     $prdt->save();
-
-    //                     UnavailableProduct::where('id',$sold->id)->update([
-    //                         'product_id' => $prdt->id,
-    //                     ]);
-
-    //                     $this->stocktrackRepo->saveTrackRecord($prdt->id, $pstock, '1', 1, 'received from supplier', 'rm', 'in');
-    //                 }
-    //                 if (!is_null($f_product_id)){
-    //                     $prdt    =   Product::find($f_product_id->product_id);
-
-    //                     $sto    =   $prdt->stock;
-    //                     $prdt->stock += 1;
-
-    //                     $prdt->save();
-
-    //                     UnavailableProduct::where('id',$sold->id)->update([
-    //                         'product_id' => $prdt->id,
-    //                     ]);
-
-    //                     $this->stocktrackRepo->saveTrackRecord($f_product_id->product_id, $sto, '1', 1, 'received from supplier', 'rm', 'in');
-    //                 }
-    //             }
-    //             $this->sendToLab(Crypt::encrypt($value));
-    //         }
-    //         return redirect()->back()->with('successMsg', 'Request sent to Lab!');
-    //     }
-    // }
 }

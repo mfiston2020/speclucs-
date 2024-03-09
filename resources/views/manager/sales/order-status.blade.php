@@ -51,6 +51,7 @@
                                         <th>#</th>
                                         <th>Request # </th>
                                         <th>Patient Name</th>
+                                        <th>Track Order</th>
                                         <th>Request Date</th>
                                         <th>Request Age</th>
                                         <th>Status</th>
@@ -81,6 +82,11 @@
                                                     @endif
                                                 @endif
 
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('manager.request.tracking', Crypt::encrypt($request->id)) }}">
+                                                    Track #{{ sprintf('SPCL-%04d', $request->id) }}
+                                                </a>
                                             </td>
                                             {{-- <td>
                                                 -

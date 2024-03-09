@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use App\Models\TrackOrderRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class OrderInvoicesController extends Controller
 {
@@ -104,5 +107,12 @@ class OrderInvoicesController extends Controller
         }
 
 
+    }
+
+    function trackRequest($id){
+        $invoice    =   Invoice::where('id',Crypt::decrypt($id))->select('id')->first();
+        $request    =   TrackOrderRecord::where('invoice_id',Crypt::decrypt($id))->orderBy('created_at','asc')->get();
+
+        return view('manager.lab-request.track',compact('request','invoice'));
     }
 }
