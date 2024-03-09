@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Models\TrackOrderRecord;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Notification;
 
@@ -149,6 +150,11 @@ class OrdersController extends Controller
         $order->status  =   'canceled';
         try {
             $order->save();
+            TrackOrderRecord::create([
+                'status'        =>  'Canceled',
+                'user_id'       =>  auth()->user()->id,
+                'invoice_id'    =>  $order->id,
+            ]);
             // $notification   =   \App\Models\SupplierNotify::where('order_id', Crypt::decrypt($id));
             // $notification->delete();
             return redirect()->back()->with('successMsg', 'Order Canceled!');
@@ -253,10 +259,15 @@ class OrdersController extends Controller
         try {
             $invoice->status='canceled';
             $invoice->save();
+            TrackOrderRecord::create([
+                'status'        =>  'Canceled',
+                'user_id'       =>  auth()->user()->id,
+                'invoice_id'    =>  $invoice->id,
+            ]);
             return redirect()->back()->with('successMsg','Order Canceled!');
         } catch (\Throwable $th) {
             return redirect()->back()->with('errorMsg','Oops! Something went wrong!'.$th);
         }
     }
-    
+
 }

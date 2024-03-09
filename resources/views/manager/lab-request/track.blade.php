@@ -82,7 +82,7 @@
                             @foreach ($request as $key=> $state)
                                 <li class="list-inline-item event-list">
                                     <div class="px-2">
-                                        <div class="event-date bg-{{$key%2==0?'primary':'info'}} text-white">
+                                        <div class="event-date bg-{{$state->status=='Canceled'?'danger':($key%2==0?'primary':'info')}} text-white">
                                             {{$state->status}}
                                         </div>
                                         <h5 class="font-size-16">Done By {{$state->doneBy->name}}</h5>
