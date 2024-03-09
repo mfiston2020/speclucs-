@@ -79,7 +79,9 @@ class ProductRepo implements ProductInterface
                             ->where('cylinder', format_values($productDescription['cylinder']))
                             ->where('axis', format_values($productDescription['axis']))
                             ->where('add', format_values($productDescription['addition']))
-                            ->where('eye', $productDescription['eye']=='right'?'R':'L')
+                            ->where('eye', $productDescription['type']=='3'?
+                                                                            ($productDescription['eye']=='right'?'Right':'Left'):
+                                                                            ($productDescription['eye']=='right'?'R':'L'))
                             ->where('company_id', userInfo()->company_id)
                             ->select('product_id')->first();
 
