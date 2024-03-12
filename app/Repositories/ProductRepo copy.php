@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interface\ProductInterface;
 use App\Models\CompanyInformation;
+use App\Models\LensPricing;
 use App\Models\LensType;
 use App\Models\Order;
 use App\Models\Power;

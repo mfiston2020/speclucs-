@@ -145,7 +145,7 @@
                                 <h6 class="font-light text-muted">{{__('manager/dashboard.current_stock_value')}}</h6>
                             </div>
                             <!-- column -->
-                            <div class="col-lg-8">
+                            <div class="col-lg-8 overflow-x-scroll">
                                 <div class="campaign ct-charts"></div>
                             </div>
                             <!-- column -->

@@ -136,13 +136,26 @@ class ProductRetail extends Component
 
     // if product not found give price if it's in the pricing range
     function autoPricingLeft(){
-        if (initials($this->lensType->where('id',$this->lens_type)->pluck('name')->first())!='SV') {
-            // L
-            $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',format_values($this->l_sphere))->where('sphere_to','>=',format_values($this->l_sphere))->where('cylinder_from','<=',format_values($this->l_cylinder))->where('cylinder_to','>=',format_values($this->l_cylinder))->where('addition_from','<=',format_values($this->l_addition))->where('addition_to','>=',format_values($this->l_addition))->select('price','cost')->first();
-        } else {
-            // L
-            $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',format_values($this->l_sphere))->where('sphere_to','>=',format_values($this->l_sphere))->where('cylinder_from','<=',format_values($this->l_cylinder))->where('cylinder_to','>=',format_values($this->l_cylinder))->select('price','cost')->first();
-        }
+
+        $left_data  =   [
+            'productType'   => 'lens',
+            // lens description
+            'type'      =>  $this->lens_type,
+            'index'     =>  $this->lens_index,
+            'coating'   =>  $this->lens_coating,
+            'chromatic' =>  $this->lens_chromatic,
+
+            // right side
+            'sphere'      =>  $this->l_sphere,
+            'cylinder'    =>  $this->l_cylinder,
+            'axis'        =>  $this->l_axis,
+            'addition'    =>  $this->l_addition,
+            'eye'    =>  'left',
+        ];
+
+        $repo   =   new ProductRepo();
+       $this->leftPriceRange    =   $repo->searchUnavailableProduct($left_data);
+
         if (is_null($this->leftPriceRange)) {
             $this->autoL =   false;
         } else {
@@ -153,21 +166,32 @@ class ProductRetail extends Component
 
     // if product not found give price if it's in the pricing range
     function autoPricingRight(){
-        if (initials($this->lensType->where('id',$this->lens_type)->pluck('name')->first())!='SV') {
-            // R
-            $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',format_values($this->r_sphere))->where('sphere_to','>=',format_values($this->r_sphere))->where('cylinder_from','<=',format_values($this->r_cylinder))->where('cylinder_to','>=',format_values($this->r_cylinder))->where('addition_from','<=',format_values($this->r_addition))->where('addition_to','>=',format_values($this->r_addition))->select('price','cost')->first();
-        } else {
-            // R
-            $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)->where('index_id',$this->lens_index)->where('chromatic_id',$this->lens_chromatic)->where('coating_id',$this->lens_coating)->where('sphere_from','<=',format_values($this->r_sphere))->where('sphere_to','>=',format_values($this->r_sphere))->where('cylinder_from','<=',format_values($this->r_cylinder))->where('cylinder_to','>=',format_values($this->r_cylinder))->select('price','cost')->first();
-        }
+
+        $repo   =   new ProductRepo();
+        $right_data  =   [
+            // lens description
+            'type'      =>  $this->lens_type,
+            'index'     =>  $this->lens_index,
+            'coating'   =>  $this->lens_coating,
+            'chromatic' =>  $this->lens_chromatic,
+
+            // right side
+            'sphere'      =>  $this->r_sphere,
+            'cylinder'    =>  $this->r_cylinder,
+            'axis'        =>  $this->r_axis,
+            'addition'    =>  $this->r_addition,
+            'eye'    =>  'right',
+        ];
+
+       $this->rightPriceRange    =   $repo->searchUnavailableProduct($right_data);
+
+    //    dd($this->rightPriceRange);
 
         if (is_null($this->rightPriceRange)) {
             $this->autoR =   false;
         } else {
             $this->autoR =   true;
         }
-
-        // dd($this->rightPriceRange);
         return $this->rightPriceRange ?? 0;
     }
 
@@ -233,8 +257,6 @@ class ProductRetail extends Component
 
             $this->rightLenInfo =   $right_len_Results;
             $this->leftLenInfo =   $left_len_Results;
-
-            // dd($left_len_Results[0]->id);
 
             $this->rightLenFound    =   $right_len_Results == 'product-not-found' ? false : true;
             $this->rightLen         =   $right_len_Results == 'product-not-found' ? false : true;

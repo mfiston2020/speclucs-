@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interface\ProductInterface;
 use App\Models\CompanyInformation;
+use App\Models\LensPricing;
 use App\Models\LensType;
 use App\Models\Order;
 use App\Models\Power;
@@ -102,6 +103,36 @@ class ProductRepo implements ProductInterface
         } else {
             return   \App\Models\Product::find($productDescription['product_id']);
         }
+    }
+
+
+    // search for unavailable products
+    function searchUnavailableProduct(array $productDescription){
+        if (initials(LensType::find($productDescription['type'])->pluck('name')->first())!='SV') {
+            $priceRange = LensPricing::where('type_id',$productDescription['type'])
+                                                ->where('index_id',$productDescription['index'])
+                                                ->where('chromatic_id',$productDescription['chromatic'])
+                                                ->where('coating_id',$productDescription['coating'])
+                                                ->where('sphere_from','>=',format_values($productDescription['sphere']))
+                                                ->where('sphere_to','<=',format_values($productDescription['sphere']))
+                                                ->where('cylinder_from','>=',format_values($productDescription['cylinder']))
+                                                ->where('cylinder_to','<=',format_values($productDescription['cylinder']))
+                                                ->where('addition_from','>=',format_values($productDescription['addition']))
+                                                ->where('addition_to','<=',format_values($productDescription['addition']))
+                                                ->select('*')->first();
+        } else {
+            $priceRange = LensPricing::where('type_id',$productDescription['type'])
+                                                ->where('index_id',$productDescription['index'])
+                                                ->where('chromatic_id',$productDescription['chromatic'])
+                                                ->where('coating_id',$productDescription['coating'])
+                                                ->where('sphere_from','>=',format_values($productDescription['sphere']))
+                                                ->where('sphere_to','<=',format_values($productDescription['sphere']))
+                                                ->where('cylinder_from','>=',format_values($productDescription['cylinder']))
+                                                ->where('cylinder_to','<=',format_values($productDescription['cylinder']))
+                                                ->select('*')->first();
+        }
+
+        return $priceRange;
     }
 
     // save products

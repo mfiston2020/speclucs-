@@ -4,17 +4,19 @@ namespace App\Interface;
 
 interface ProductInterface
 {
-    function addUnavailableProduct(array $productInfo);
-
     function productMatrix(array $request);
 
     function sellPendingOrder(array $request);
 
+    function saveUnavailableToStock(array $product);
+
     function searchProduct(array $productDescription);
+
+    function addUnavailableProduct(array $productInfo);
 
     function makeLabOrder(array $request, string $product_id);
 
-    function saveProduct(array $request, string $category, array $pending, bool $isOrder);
+    function searchUnavailableProduct(array $productDescription);
 
-    function saveUnavailableToStock(array $product);
+    function saveProduct(array $request, string $category, array $pending, bool $isOrder);
 }
