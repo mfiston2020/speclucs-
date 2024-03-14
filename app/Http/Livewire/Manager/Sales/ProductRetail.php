@@ -184,6 +184,7 @@ class ProductRetail extends Component
                                                 ->where('addition_from','>=',format_values($this->r_addition))
                                                 ->where('addition_to','<=',format_values($this->r_addition))
                                                 ->select('price','cost')->first();
+
         } else {
             // R
             $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)
@@ -202,8 +203,6 @@ class ProductRetail extends Component
         } else {
             $this->autoR =   true;
         }
-
-        // dd($this->rightPriceRange);
         return $this->rightPriceRange ?? 0;
     }
 

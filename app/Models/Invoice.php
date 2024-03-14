@@ -43,4 +43,12 @@ class Invoice extends Model
     {
         return $this->hasMany(UnavailableProduct::class);
     }
+
+    function isAsuranceInvoice(){
+        return $this->hasOne(InsuranceSumaryInvoices::class);
+    }
+
+    function hasbeeninvoiced(){
+        return InsuranceSumaryInvoices::where('invoice_id',$this->id)->exists();
+    }
 }

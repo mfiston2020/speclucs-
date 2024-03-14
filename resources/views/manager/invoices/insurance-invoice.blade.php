@@ -14,8 +14,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-            @livewire('manager.invoice.insurance-invoice')
-        </div>
+        @livewire('manager.invoice.insurance-invoice')
     </div>
 </div>
 @endsection

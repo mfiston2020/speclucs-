@@ -134,7 +134,7 @@
                                             <th>Affiliate Names</th>
                                             <th>T. Amnt</th>
                                             <th>Ins Amnt </th>
-                                            <th>Credit </th>
+                                            {{-- <th>Credit </th> --}}
                                             <th>Tt. Credit </th>
                                             <th>Final Tt. </th>
                                         </tr>
@@ -143,7 +143,9 @@
                                         @foreach ($invoices as $key => $invoice)
                                             <tr>
                                                 <th>
-                                                    <input wire:model="invoicesIds" type="checkbox" value="{{$invoice->id}}"/>
+                                                    @if ($invoice->hasbeeninvoiced()==null)
+                                                        <input class="invoicesID" wire:model="invoicesIds.{{$key}}.chekboxId" type="checkbox" value="{{$invoice->id}}"/>
+                                                    @endif
                                                 </th>
                                                 <th>{{ $key + 1 }}</th>
                                                 <th>{{ date('Y-m-d', strtotime($invoice->created_at)) }}</th>
@@ -155,10 +157,9 @@
                                                 <th>{{ format_money($invoice->soldproduct_sum_total_amount) }}</th>
                                                 <th>{{ format_money($invoice->soldproduct_sum_insurance_payment) }}
                                                 </th>
-                                                <th>
-                                                    <input type="text" wire:changed="addInvoiceCredit"
-                                                        id="">
-                                                </th>
+                                                {{-- <th>
+                                                    <input type="text" wire:model="invoiceCredit.{{$key}}.amount" id="">
+                                                </th> --}}
                                                 <th>
                                                     {{ format_money($invoice->soldproduct_sum_insurance_payment) }}
                                                 </th>
@@ -227,7 +228,7 @@
         }
 
         function checkUncheckrequestId(checkBox) {
-            get = document.getElementsByName('requestid[]');
+            get = document.getElementsByClassName('invoicesID');
             for (var i = 0; i < get.length; i++) {
                 get[i].checked = checkBox.checked;
             }
