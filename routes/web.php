@@ -141,6 +141,10 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/clinic_complaint_remove/{id}', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'save_complaint_remove'])->name('complaint.remove');
 
     // Complaint routes
+    Route::post('/clinic_hospital', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'save_clinic_hospital'])->name('clinic.hospital.save');
+    Route::get('/clinic_hospital_remove/{id}', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'save_hospital_remove'])->name('hospital.remove');
+
+    // Complaint routes
     Route::post('/clinic_history', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'save_clinic_history'])->name('clinic.history.save');
     Route::get('/clinic_history_remove/{id}', [\App\Http\Controllers\Manager\ClinicSettingController::class, 'save_history_remove'])->name('history.remove');
 

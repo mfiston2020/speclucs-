@@ -38,8 +38,9 @@ class PurchaseOrderController extends Controller
         foreach ($products as $product) {
             // array_push($pro_array,$product->id);
             $sold   =   \App\Models\SoldProduct::where('product_id', $product->id)->where('company_id', userInfo()->company_id)
-                ->whereDate('created_at', '>=', date('Y-m-d', strtotime($request->from . '-1day')))
-                ->whereDate('created_at', '<=', date('Y-m-d', strtotime($request->to . '+1day')))
+                        ->whereBetween('created_at',[date('Y-m-d', strtotime($request->from)),date('Y-m-d', strtotime($request->to))])
+                // ->whereDate('created_at', '>=', date('Y-m-d', strtotime($request->from . '-1day')))
+                // ->whereDate('created_at', '<=', date('Y-m-d', strtotime($request->to . '+1day')))
                 ->get();
 
             foreach ($sold as $key => $value) {
@@ -47,6 +48,8 @@ class PurchaseOrderController extends Controller
             }
         }
         $products_array =   array_unique($pro_array);
+
+        // dd($products_array);
 
         return view('manager.purchaseOrder.results', compact('products_array', 'suppliers', 'category', 'from', 'to'));
     }

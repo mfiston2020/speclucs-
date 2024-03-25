@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Manager\Sales;
 
+use App\Models\Hospital;
 use App\Models\Insurance;
 use App\Models\Invoice;
 use App\Models\LensPricing;
@@ -20,10 +21,10 @@ use Livewire\Component;
 class ProductRetail extends Component
 {
     // repository
-    public $informationMessage,$autoL=false,$autoR=false;
+    public $informationMessage,$autoL=false,$autoR=false,$hide_r_axis=false,$hide_l_axis=false;
 
     // variables for cloud
-    public $cloud_id, $hospital_name;
+    public $cloud_id, $hospital_name,$visionCenters,$visionCenter;
 
     // client information variables
     public $firstname, $lastname, $tin_number, $phone;
@@ -38,7 +39,7 @@ class ProductRetail extends Component
     public $lens_type, $lens_index, $lens_coating, $lens_chromatic;
 
     // ============== lens variable managemnt =========
-    public $r_sphere, $r_cylinder, $r_axis, $r_addition, $r_segment_height, $r_mono_pd;
+    public $r_sphere, $r_cylinder, $r_axis, $r_addition, $r_segment_height, $r_mono_pd,$r_sign,$l_sign;
 
     public $l_sphere, $l_cylinder, $l_axis, $l_addition, $l_segment_height, $l_mono_pd;
 
@@ -136,14 +137,17 @@ class ProductRetail extends Component
 
     // if product not found give price if it's in the pricing range
     function autoPricingLeft(){
+
+        $left_sphere = $this->l_sphere==0?$this->l_sphere:($this->r_sign=='minus' ? -1*abs($this->l_sphere):abs($this->l_sphere));
+
         if (initials($this->lensType->where('id',$this->lens_type)->pluck('name')->first())!='SV') {
             // L
             $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)
                                                 ->where('index_id',$this->lens_index)
                                                 ->where('chromatic_id',$this->lens_chromatic)
                                                 ->where('coating_id',$this->lens_coating)
-                                                ->where('sphere_from','>=',format_values($this->l_sphere))
-                                                ->where('sphere_to','<=',format_values($this->l_sphere))
+                                                ->where('sphere_from','>=',format_values($left_sphere))
+                                                ->where('sphere_to','<=',format_values($left_sphere))
                                                 ->where('cylinder_from','>=',format_values($this->l_cylinder))
                                                 ->where('cylinder_to','<=',format_values($this->l_cylinder))
                                                 ->where('addition_from','>=',format_values($this->l_addition))
@@ -155,8 +159,8 @@ class ProductRetail extends Component
                                                 ->where('index_id',$this->lens_index)
                                                 ->where('chromatic_id',$this->lens_chromatic)
                                                 ->where('coating_id',$this->lens_coating)
-                                                ->where('sphere_from','>=',format_values($this->l_sphere))
-                                                ->where('sphere_to','<=',format_values($this->l_sphere))
+                                                ->where('sphere_from','>=',format_values($left_sphere))
+                                                ->where('sphere_to','<=',format_values($left_sphere))
                                                 ->where('cylinder_from','>=',format_values($this->l_cylinder))
                                                 ->where('cylinder_to','<=',format_values($this->l_cylinder))
                                                 ->select('price','cost')->first();
@@ -171,14 +175,17 @@ class ProductRetail extends Component
 
     // if product not found give price if it's in the pricing range
     function autoPricingRight(){
+
+        $right_sphere = $this->r_sphere==0?$this->r_sphere:($this->r_sign=='minus' ? -1*abs($this->r_sphere):abs($this->r_sphere));
+
         if (initials($this->lensType->where('id',$this->lens_type)->pluck('name')->first())!='SV') {
             // R
             $this->rightPriceRange = LensPricing::where('type_id',$this->lens_type)
                                                 ->where('index_id',$this->lens_index)
                                                 ->where('chromatic_id',$this->lens_chromatic)
                                                 ->where('coating_id',$this->lens_coating)
-                                                ->where('sphere_from','>=',format_values($this->r_sphere))
-                                                ->where('sphere_to','<=',format_values($this->r_sphere))
+                                                ->where('sphere_from','>=',format_values($right_sphere))
+                                                ->where('sphere_to','<=',format_values($right_sphere))
                                                 ->where('cylinder_from','>=',format_values($this->r_cylinder))
                                                 ->where('cylinder_to','<=',format_values($this->r_cylinder))
                                                 ->where('addition_from','>=',format_values($this->r_addition))
@@ -191,8 +198,8 @@ class ProductRetail extends Component
                                                     ->where('index_id',$this->lens_index)
                                                     ->where('chromatic_id',$this->lens_chromatic)
                                                     ->where('coating_id',$this->lens_coating)
-                                                    ->where('sphere_from','>=',format_values($this->r_sphere))
-                                                    ->where('sphere_to','<=',format_values($this->r_sphere))
+                                                    ->where('sphere_from','>=',format_values($right_sphere))
+                                                    ->where('sphere_to','<=',format_values($right_sphere))
                                                     ->where('cylinder_from','>=',format_values($this->r_cylinder))
                                                     ->where('cylinder_to','<=',format_values($this->r_cylinder))
                                                     ->select('price','cost')->first();
@@ -215,6 +222,10 @@ class ProductRetail extends Component
     // checking product availability
     function checkAvailability()
     {
+
+        $left_sphere = $this->l_sphere==0?$this->l_sphere:($this->l_sign=='minus' ? -1*abs($this->l_sphere):abs($this->l_sphere));
+        $right_sphere = $this->r_sphere==0?$this->r_sphere:($this->r_sign=='minus' ? -1*abs($this->r_sphere):abs($this->r_sphere));
+
         if ($this->lens_type && $this->lens_coating && $this->lens_chromatic && $this->lens_index) {
             $this->searchProduct    =   true;
         } elseif ($this->lens_type || $this->lens_coating || $this->lens_chromatic || $this->lens_index) {
@@ -238,10 +249,10 @@ class ProductRetail extends Component
                 'chromatic' =>  $this->lens_chromatic,
 
                 // right side
-                'sphere'      =>  $this->r_sphere,
-                'cylinder'    =>  $this->r_cylinder,
-                'axis'        =>  $this->r_axis,
-                'addition'    =>  $this->r_addition,
+                'sphere'      =>  format_values($right_sphere),
+                'cylinder'    =>  format_values($this->r_cylinder),
+                'axis'        =>  format_values($this->r_axis),
+                'addition'    =>  format_values($this->r_addition),
                 'eye'    =>  'right',
             ];
 
@@ -254,12 +265,13 @@ class ProductRetail extends Component
                 'chromatic' =>  $this->lens_chromatic,
 
                 // right side
-                'sphere'      =>  $this->l_sphere,
-                'cylinder'    =>  $this->l_cylinder,
-                'axis'        =>  $this->l_axis,
-                'addition'    =>  $this->l_addition,
+                'sphere'      =>  format_values($left_sphere),
+                'cylinder'    =>  format_values($this->l_cylinder),
+                'axis'        =>  format_values($this->l_axis),
+                'addition'    =>  format_values($this->l_addition),
                 'eye'    =>  'left',
             ];
+            // dd($left_data);
 
             $repo   =   new ProductRepo();
 
@@ -518,6 +530,11 @@ class ProductRetail extends Component
     // function to save product in the database
     function save($type, $availability, $invoiceId, $eye = '')
     {
+
+        $left_sphere = $this->l_sphere==0?$this->l_sphere:($this->l_sign=='minus' ? -1*abs($this->l_sphere):abs($this->l_sphere));
+        $right_sphere = $this->r_sphere==0?$this->r_sphere:($this->r_sign=='minus' ? -1*abs($this->r_sphere):abs($this->r_sphere));
+
+
         $total = 0;
 
         if ($availability == 'available' && $type == 'lens') {
@@ -534,6 +551,7 @@ class ProductRetail extends Component
             $sold->total_amount =   $eye == 'right' ? $this->rightLenInfo[0]->price : $this->leftLenInfo[0]->price;
             $sold->segment_h    =   $eye == 'right' ? $this->r_segment_height : $this->l_segment_height;
             $sold->mono_pd      =   $eye == 'right' ? $this->r_mono_pd : $this->l_mono_pd;
+            $sold->axis         =   $eye == 'right' ? $this->r_axis : $this->l_axis;
             $sold->is_private   =   $this->insurance_type == 'private' ? 'yes' : null;
             $sold->insurance_id =   $this->insurance_type == 'private' ? null : $this->insurance_type;
             $sold->percentage   =   $this->insurance_type == 'private' ? 0 : $this->insurance_percentage_lens;
@@ -556,7 +574,7 @@ class ProductRetail extends Component
                 'chromatic' => $this->lens_chromatic,
 
                 'eye'       => $eye,
-                'sphere'    => $eye == 'right' ? $this->r_sphere : $this->l_sphere,
+                'sphere'    => $eye == 'right' ? $right_sphere : $left_sphere,
                 'cylinder'  => $eye == 'right' ? $this->r_cylinder : $this->l_cylinder,
                 'axis'      => $eye == 'right' ? $this->r_axis : $this->l_axis,
                 'addition'  => $eye == 'right' ? $this->r_addition : $this->l_addition,
@@ -626,6 +644,27 @@ class ProductRetail extends Component
         redirect('/manager/editSales/' . Crypt::encrypt($invoiceId))->with('successMsg', 'Invoice ');
     }
 
+    function updated($type){
+        if($type=='r_cylinder'){
+            if($this->r_cylinder==0){
+                $this->hide_r_axis=true;
+                $this->r_axis=0;
+            }else{
+                $this->r_axis=null;
+                $this->hide_r_axis=false;
+            }
+        }
+        if($type=='l_cylinder'){
+            if($this->l_cylinder==0){
+                $this->hide_l_axis=true;
+                $this->l_axis=0;
+            }else{
+                $this->l_axis=null;
+                $this->hide_l_axis=false;
+            }
+        }
+    }
+
     // mount
     function mount()
     {
@@ -633,6 +672,7 @@ class ProductRetail extends Component
         $this->lensIndex            =   PhotoIndex::all();
         $this->lensCoating          =   PhotoCoating::all();
         $this->lensChromaticAspect  =   PhotoChromatics::all();
+        $this->visionCenters        =   Hospital::where('company_id', userInfo()->company_id)->get();
         $this->isCloudOrder         =   userInfo()->permissions == 'lab' ? 'yes' : 'no';
         $this->insuranceList        =   Insurance::where('company_id', userInfo()->company_id)->get();
 

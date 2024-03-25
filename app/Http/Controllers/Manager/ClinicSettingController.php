@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Hospital;
 use App\Models\LensPricing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,9 +33,10 @@ class ClinicSettingController extends Controller
         $complaint          =   \App\Models\Complaint::where('company_id',Auth::user()->company_id)->get();
         $histories          =   \App\Models\History::where('company_id',Auth::user()->company_id)->get();
         $pricings           =   LensPricing::where('company_id',Auth::user()->company_id)->get();
+        $hospitals          =   Hospital::where('company_id',Auth::user()->company_id)->get();
 
         return view('manager.profile.clinicsettings',compact(
-            'drugs','exams','insurances','insurance_exams','complaint','histories','pricings'
+            'drugs','exams','insurances','insurance_exams','complaint','histories','pricings','hospitals'
         ));
     }
 
@@ -244,6 +246,21 @@ class ClinicSettingController extends Controller
     function destroy($id){
         LensPricing::find(Crypt::decrypt($id))->delete();
         return redirect()->back()->with('successMsg','Product Tarrif Removed!');
+    }
+
+    function save_clinic_hospital(Request $request){
+
+        $this->validate($request,[
+            'hospital_name' =>  'required',
+        ]);
+
+        $hospital   =   new Hospital();
+
+        $hospital->hospital_name   =   $request->hospital_name;
+        $hospital->company_id      =   Auth::user()->company_id;
+        $hospital->save();
+
+        return redirect()->back()->with('successMsg','Hospital Added!');
     }
 
 }

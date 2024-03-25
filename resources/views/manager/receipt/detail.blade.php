@@ -136,6 +136,7 @@
                                                 <td class="text-right"> {{ format_money($product->price * $product->quantity) }} </td>
                                             </tr>
                                         @endforeach
+
                                         @foreach ($invoice->soldproduct as $key => $product)
                                             @php
                                                 $prod = $products->where('id', $product->product_id)->first();
@@ -156,8 +157,8 @@
                                                         @else
                                                             <span>{{ $prod->power->sphere }} /
                                                                 {{ $prod->power->cylinder }}
-                                                                *{{ $prod->power->axis }}
-                                                                {{ $prod->power->add }}</span>
+                                                                *{{ initials($prod->product_name) == 'SV'?$product->axis:$prod->power->axis }}
+                                                                {{initials($prod->product_name) == 'SV'?'': $prod->power->add }}</span>
                                                         @endif
                                                     @endif
                                                 </td>

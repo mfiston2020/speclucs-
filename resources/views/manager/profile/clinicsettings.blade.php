@@ -19,7 +19,7 @@
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item ">
                     <a class="nav-link active" data-toggle="tab" href="#lens-pricing" role="tab">
-                        <span class="hidden-sm-up"><i class="ti-email"></i></span>
+                        <span class="hidden-sm-up"><i class="ti-control-record"></i></span>
                         <span class="hidden-xs-down">Lens Pricing</span>
                     </a>
                 </li>
@@ -37,25 +37,36 @@
                         <span class="hidden-xs-down">Insurance</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#insurance_" role="tab">
                         <span class="hidden-sm-up"><i class="ti-email"></i></span>
                         <span class="hidden-xs-down">Insurance %</span></a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#complaint" role="tab">
                         <span class="hidden-sm-up"><i class="ti-comment-alt"></i></span>
                         <span class="hidden-xs-down">Complaint</span></a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#history" role="tab">
                         <span class="hidden-sm-up"><i class="ti-time"></i></span>
                         <span class="hidden-xs-down">History</span></a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#drugs" role="tab">
                         <span class="hidden-sm-up"><i class="ti-email"></i></span>
                         <span class="hidden-xs-down">Drugs</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#hospitals" role="tab">
+                        <span class="hidden-sm-up"><i class="ti-support"></i></span>
+                        <span class="hidden-xs-down">Hospitals</span>
                     </a>
                 </li>
             </ul>
@@ -472,6 +483,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="tab-pane p-20" id="insurance_" role="tabpanel">
                     <div class="row mt-3">
                         <div class="col-md-8 col-sm-12">
@@ -607,6 +619,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="tab-pane p-20" id="complaint" role="tabpanel">
                     <div class="row mt-3">
                         <div class="col-md-8 col-sm-12">
@@ -705,6 +718,106 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="tab-pane p-20" id="hospitals" role="tabpanel">
+                    <div class="row mt-3">
+                        <div class="col-md-8 col-sm-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <h4 class="card-title">Hospital List</h4>
+                                    </div>
+                                    <hr>
+
+                                    <div class="table-responsive">
+                                        <table id="zero_config"
+                                            class="table table-striped table-bordered nowrap"
+                                            style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Hospital Name</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($hospitals as $key=> $hospital)
+                                                <tr>
+                                                    <td>{{$key+1}}</td>
+                                                    <td>{{ $hospital->hospital_name }}</td>
+                                                    <td class="text-right">
+                                                        {{-- <a href="" class="btn btn-primary btn-sm">Edit</a> --}}
+                                                        <a href="#" data-toggle="modal" data-target="#delete-complaint-{{$key}}" class="btn btn-danger btn-sm">Delete</a>
+                                                    </td>
+                                                </tr>
+                                                <div id="delete-complaint-{{$key}}" class="modal fade" tabindex="-1"
+                                                    role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title" id="myModalLabel"><i
+                                                                        class="fa fa-exclamation-triangle"></i> Warning
+                                                                </h4>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-hidden="true">×</button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h4>Are you sure You want to delete
+                                                                    <strong class="text-warning">{{$hospital->name}}</strong>???
+                                                                </h4>
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <a href="{{route('manager.complaint.remove',Crypt::encrypt($hospital->id))}}"
+                                                                    class="btn btn-info waves-effect">Yes</a>
+                                                                <button type="button"
+                                                                    class="btn btn-danger waves-effect"
+                                                                    data-dismiss="modal">No</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Add Hospital</h4>
+                                    <hr>
+
+                                    <form class="form-horizontal" action="{{route('manager.clinic.hospital.save')}}"
+                                        method="POST" id="exam-form">
+                                        @csrf
+                                        <div class="card-body">
+
+                                            <div class="form-group row">
+                                                <label for="hospital_name"
+                                                    class="col-sm-4 text-right control-label col-form-label">Hospital
+                                                    name</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="hospital_name" class="form-control"
+                                                        placeholder="hospital name" name="hospital_name" required
+                                                        value="{{old('hospital_name')}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="form-group m-b-0 text-right">
+                                            <button id="submitButton" type="submit"
+                                                class="btn btn-info waves-effect waves-light">Save Hospital</button>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="tab-pane p-20" id="history" role="tabpanel">
                     <div class="row mt-3">
                         <div class="col-md-8 col-sm-12">
@@ -803,6 +916,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="tab-pane p-20" id="drugs" role="tabpanel">
                     <div class="alert alert-info alert-rounded col-lg-7 col-md-9 col-sm-12">
                         <b><i class="fa fa-info-circle"></i> Info! </b>Feature Coming soon!!

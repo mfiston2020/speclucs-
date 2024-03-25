@@ -44,10 +44,27 @@
                             </div>
 
                             <!--/span-->
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Hospital Name</label>
                                     <input type="text" wire:model.lazy="hospital_name" class="form-control">
+                                </div>
+                            </div> --}}
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Insurance</label>
+                                    <select class="form-control @error('hospital_name') is-invalid @enderror custom-select"
+                                        wire:model.lazy='hospital_name' required>
+                                        <option value="">** Select Hospital **</option>
+                                        @foreach ($visionCenters as $visionCenter)
+                                            <option value="{{ $visionCenter->hospital_name }}">{{ $visionCenter->hospital_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('hospital_name')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -207,7 +224,7 @@
                             <!--/span-->
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
-                                    <select class="form-control" wire:model.lazy="lens_type">
+                                    <select class="form-control" wire:model="lens_type">
                                         <option value="">
                                             *** Select Type ***
                                         </option>
@@ -270,13 +287,83 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="rightEye"
-                                            wire:model.lazy="rightEye">
+                                            wire:model.lazy="rightEye" disabled>
                                         <label class="custom-control-label" for="rightEye">Right</label>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
+
+                                    <div class="form-group col-3">
+                                        <select class="form-control" wire:model.lazy="r_sign">
+                                            <option value="">
+                                                * SIGN *
+                                            </option>
+                                            <option value="minus">-</option>
+                                            <option value="plus">+</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-3">
+                                        <select class="form-control" wire:model.lazy="r_sphere">
+                                            <option value="">
+                                                * SPHERE *
+                                            </option>
+                                            @for ($i=0.00;  $i<= 25.00; $i+=0.25)
+                                                <option value="{{ $i }}">{{ number_format($i,2,'.') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-3">
+                                        <select class="form-control" wire:model.lazy="r_cylinder">
+                                            <option value="">
+                                                * CYL *
+                                            </option>
+                                            @for ($i=0.00;  $i>= -10.00; $i-=0.25)
+                                                <option value="{{ $i }}">{{ number_format($i,2,'.') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-3">
+                                        <select class="form-control" wire:model.lazy="r_axis" {{$hide_r_axis?'disabled':''}}>
+                                            <option value="">
+                                                * AXIS *
+                                            </option>
+                                            @for ($i=0;  $i<= 180; $i+=1)
+                                                {{-- <option value="{{ $i }}">{{ sprintf('%03d',$i) }}</option> --}}
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+
+                                    @if ($lens_type!='2')
+                                        <div class="form-group col-3">
+                                            <select class="form-control" wire:model.lazy="r_addition">
+                                                <option value="">
+                                                    * ADD *
+                                                </option>
+                                                @for ($i=1;  $i<= 4; $i+=0.25)
+                                                    {{-- <option value="{{ $i }}">{{ sprintf('%03d',$i) }}</option> --}}
+                                                    <option value="{{ $i }}">{{ number_format($i,2,'.') }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                    @endif
+
                                     <div class="form-group col-4">
+                                        <select class="form-control" wire:model.lazy="r_segment_height">
+                                            <option value="">
+                                                * SEG H *
+                                            </option>
+                                            @for ($i=10;  $i<= 35; $i+=1)
+                                                {{-- <option value="{{ $i }}">{{ sprintf('%03d',$i) }}</option> --}}
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    {{-- <div class="form-group col-4">
                                         <input type="text" class="form-control" id="right_s" placeholder="Sph"
                                             wire:model.lazy="r_sphere">
                                     </div>
@@ -295,7 +382,7 @@
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="r_segment_height"
                                             placeholder="Seg Height" wire:model.lazy="r_segment_height">
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="r_mono_pd"
                                             placeholder="Mono PD" wire:model.lazy="r_mono_pd">
@@ -310,13 +397,82 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="leftEye"
-                                            wire:model="leftEye">
+                                            wire:model="leftEye" disabled>
                                         <label class="custom-control-label" for="leftEye">Left</label>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
+                                    <div class="form-group col-3">
+                                        <select class="form-control" wire:model.lazy="l_sign">
+                                            <option value="">
+                                                * SIGN *
+                                            </option>
+                                            <option value="minus">-</option>
+                                            <option value="plus">+</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-3">
+                                        <select class="form-control" wire:model.lazy="l_sphere">
+                                            <option value="">
+                                                * SPHERE *
+                                            </option>
+                                            @for ($i=0.00;  $i<= 25.00; $i+=0.25)
+                                                <option value="{{ $i }}">{{ number_format($i,2,'.') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-3">
+                                        <select class="form-control" wire:model.lazy="l_cylinder">
+                                            <option value="">
+                                                * CYL *
+                                            </option>
+                                            @for ($i=0.00;  $i>= -10.00; $i-=0.25)
+                                                <option value="{{ $i }}">{{ number_format($i,2,'.') }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-3">
+                                        <select class="form-control" wire:model.lazy="l_axis" {{$hide_l_axis?'disabled':''}}>
+                                            <option value="">
+                                                * AXIS *
+                                            </option>
+                                            @for ($i=0;  $i<= 180; $i+=1)
+                                                {{-- <option value="{{ $i }}">{{ sprintf('%03d',$i) }}</option> --}}
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+
+                                    @if ($lens_type!='2')
+                                        <div class="form-group col-3">
+                                            <select class="form-control" wire:model.lazy="l_addition">
+                                                <option value="">
+                                                    * ADD *
+                                                </option>
+                                                @for ($i=1;  $i<= 4; $i+=0.25)
+                                                    {{-- <option value="{{ $i }}">{{ sprintf('%03d',$i) }}</option> --}}
+                                                    <option value="{{ $i }}">{{ number_format($i,2,'.') }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                    @endif
+
                                     <div class="form-group col-4">
+                                        <select class="form-control" wire:model.lazy="l_segment_height">
+                                            <option value="">
+                                                * SEG H *
+                                            </option>
+                                            @for ($i=10;  $i<= 35; $i+=1)
+                                                {{-- <option value="{{ $i }}">{{ sprintf('%03d',$i) }}</option> --}}
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    {{-- <div class="form-group col-4">
                                         <input type="text" class="form-control" id="left_s" placeholder="Sph"
                                             wire:model.lazy="l_sphere">
                                     </div>
@@ -335,7 +491,7 @@
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="l_segment_height"
                                             placeholder="Seg Height" wire:model.lazy="l_segment_height">
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="l_mono_pd"
                                             placeholder="Mono PD" wire:model.lazy="l_mono_pd">
