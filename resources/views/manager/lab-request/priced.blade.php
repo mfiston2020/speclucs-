@@ -62,6 +62,7 @@
                                 <th>Request # </th>
                                 <th>CLOUD ID</th>
                                 <th>Patient Name</th>
+                                <th>Source</th>
                                 <th>Description</th>
                                 <th>Right Eye</th>
                                 <th>Left Eye</th>
@@ -113,6 +114,9 @@
                                                     {{$request->client_name}}
                                                 @endif
                                             @endif
+                                        </td>
+                                        <td>
+                                            {{ $request->supplier }}
                                         </td>
                                         @php
                                             $availability_right = true;

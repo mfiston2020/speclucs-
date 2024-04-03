@@ -37,6 +37,15 @@
                                             aria-hidden="true">×</span> </button>
                                 </div>
                             @endif
+                            {{-- ================ reset password message =============== --}}
+                            @if (session('warningMsg'))
+                                <div class="alert alert-warning alert-rounded">
+                                    {{ session('warningMsg') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                            @endif
                             <div class="input-group mb-3 status-error">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="ti-user"></i></span>

@@ -220,6 +220,17 @@
                                     </div>
                                 </div>
 
+                                <div class="m-b-30 bt-switch">
+                                    <div class="form-group">
+                                        <label for="option1">Vision Center</label><br>
+                                        <label class="switch">
+                                            <input type="checkbox" id="visionCenter" {{($company->is_vision_center=='1')?'checked':''}} name="vision_center">
+                                            <span></span>
+                                            <input type="hidden" name="company_id" value="{{$company->id}}">
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <div class="m-b-30 row">
                                   <div class="col-6">
                                     <div class="form-group">
@@ -234,6 +245,7 @@
                                     </div>
                                   </div>
                                 </div>
+
                                 <hr>
                                 <div class="form-group m-b-0 text-left">
                                   <button type="submit" class="btn btn-info waves-effect waves-light">Save</button>
@@ -241,7 +253,7 @@
                             </form>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

@@ -78,6 +78,7 @@
                                                                     <th>Request # </th>
                                                                     <th>Cloud ID</th>
                                                                     <th>Patient Name</th>
+                                                                    <th>Source</th>
                                                                     <th>Request Date</th>
                                                                     <th>Request Age</th>
                                                                     <th>Description</th>
@@ -125,6 +126,9 @@
                                                                                                     {{$request->client_name}}
                                                                                                 @endif
                                                                                             @endif
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            {{ $request->supplier }}
                                                                                         </td>
                                                                                         <td>
                                                                                             {{ date('Y-m-d H:i', strtotime($request->created_at)) }}

@@ -3,7 +3,134 @@
 @section('title','Manager\'s Profile')
 
 @push('css')
+    <style>
+        .switch {
+    cursor: pointer;
+    }
+    .switch input {
+    display: none;
+    }
+    .switch input + span {
+    width: 48px;
+    height: 28px;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    display: block;
+    position: relative;
+    background: #FF4651;
+    box-shadow: 0 8px 16px -1px rgba(255, 70, 81, 0.2);
+    }
+    .switch input + span:before, .switch input + span:after {
+    content: "";
+    display: block;
+    position: absolute;
+    transition: all 0.3s ease;
+    }
+    .switch input + span:before {
+    top: 5px;
+    left: 5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    border: 5px solid #fff;
+    }
+    .switch input + span:after {
+    top: 5px;
+    left: 32px;
+    width: 6px;
+    height: 18px;
+    border-radius: 40%;
+    transform-origin: 50% 50%;
+    background: #fff;
+    opacity: 0;
+    }
+    .switch input + span:active {
+    transform: scale(0.92);
+    }
+    .switch input:checked + span {
+    background: #48EA8B;
+    box-shadow: 0 8px 16px -1px rgba(72, 234, 139, 0.2);
+    }
+    .switch input:checked + span:before {
+    width: 0px;
+    border-radius: 3px;
+    margin-left: 27px;
+    border-width: 3px;
+    background: #fff;
+    }
+    .switch input:checked + span:after {
+    -webkit-animation: blobChecked 0.35s linear forwards 0.2s;
+            animation: blobChecked 0.35s linear forwards 0.2s;
+    }
+    .switch input:not(:checked) + span:before {
+    -webkit-animation: blob 0.85s linear forwards 0.2s;
+            animation: blob 0.85s linear forwards 0.2s;
+    }
 
+    @-webkit-keyframes blob {
+    0%, 100% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(1.12, 0.94);
+    }
+    60% {
+        transform: scale(0.96, 1.06);
+    }
+    }
+
+    @keyframes blob {
+    0%, 100% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(1.12, 0.94);
+    }
+    60% {
+        transform: scale(0.96, 1.06);
+    }
+    }
+    @-webkit-keyframes blobChecked {
+    0% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+    30% {
+        transform: scaleX(1.44);
+    }
+    70% {
+        transform: scaleX(1.18);
+    }
+    50%, 99% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scaleX(1);
+        opacity: 0;
+    }
+    }
+    @keyframes blobChecked {
+    0% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+    30% {
+        transform: scaleX(1.44);
+    }
+    70% {
+        transform: scaleX(1.18);
+    }
+    50%, 99% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scaleX(1);
+        opacity: 0;
+    }
+    }
+    </style>
 @endpush
 
 {{-- ==== Breadcumb ======== --}}
@@ -76,6 +203,10 @@
                             <a class="nav-link" id="pills-bank-tab" data-toggle="pill" href="#bank" role="tab"
                                 aria-controls="pills-bank" aria-selected="false">Bank Detail</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-bank-tab" data-toggle="pill" href="#supplier" role="tab"
+                                aria-controls="pills-bank" aria-selected="false">Supplier(s)</a>
+                        </li>
                     @endif
                 </ul>
                 <!-- Tabs -->
@@ -146,6 +277,7 @@
                         </div>
                     </div>
                     @if (userInfo()->permissions=='manager')
+
                         <div class="tab-pane fade" id="last-month" role="tabpanel" aria-labelledby="pills-profile-tab">
                             <div class="card-body">
                                 <form class="form-horizontal form-material" method="POST"
@@ -203,6 +335,7 @@
                                 </form>
                             </div>
                         </div>
+
                         <div class="tab-pane fade" id="bank" role="tabpanel" aria-labelledby="pills-bank-tab">
                             <div class="card-body">
                                 <form class="form-horizontal form-material" method="POST"
@@ -239,6 +372,37 @@
                                     <div class="form-group">
                                         <div class="col-sm-12">
                                             <button class="btn btn-success">Update Bank Details</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="supplier" role="tabpanel" aria-labelledby="pills-bank-tab">
+                            <div class="card-body">
+                                {{-- <hr> --}}
+                                <h5>Account Settings</h5>
+                                <hr>
+                                <form class="form-horizontal form-material" action="{{route('manager.profile.password')}}" method="POST">
+                                    @csrf
+
+                                    <div class="m-b-30 bt-switch">
+                                        <div class="form-group">
+                                            <label for="option1">Can Supply</label><br>
+                                            <label class="switch">
+                                                <input type="checkbox" id="supplier" {{($user_info->supplier_state=='1')?'checked':''}}>
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="m-b-30 bt-switch">
+                                        <div class="form-group">
+                                            <label for="option1">Allow Clients To See My Stock</label><br>
+                                            <label class="switch">
+                                                <input type="checkbox" id="stock" {{($user_info->show_stock=='1')?'checked':''}}>
+                                                <span></span>
+                                            </label>
                                         </div>
                                     </div>
                                 </form>

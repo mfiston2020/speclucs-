@@ -20,6 +20,14 @@ class Admin
         if(!auth()->check()) {
             return redirect(route('login'));
         }
+        if (Auth::user()) {
+            if (userInfo()->role!='admin') {
+                if (getuserCompanyInfo()->status!='active') {
+                    Auth::logout();
+                    return redirect()->route('login')->with('warningMsg','Account Suspended! Contact The Admin [+250 782 009 474')->withInput();
+                }
+            }
+        }
         if(Auth::user()->role=='admin')
         {
             return $next($request);

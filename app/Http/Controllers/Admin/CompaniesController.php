@@ -12,7 +12,6 @@ class CompaniesController extends Controller
     public function index(){
 
         $companies  =   \App\Models\CompanyInformation::all();
-        // return $companies;
         return view('admin.company.index',compact('companies'));
     }
 
@@ -23,7 +22,6 @@ class CompaniesController extends Controller
 
     public function save(Request $request)
     {
-        // return 'hello';
         $this->validate($request,[
             'company_name'=>'required',
             'company_email'=>'required',
@@ -37,11 +35,11 @@ class CompaniesController extends Controller
 
         $company    =   new \App\Models\CompanyInformation();
 
-        $company->company_name  =   $request->company_name;
-        $company->company_phone  =   $request->company_phone;
-        $company->company_email  =   $request->company_email;
-        $company->company_street  =   $request->company_street;
-        $company->company_tin_number  =   $request->tin_number;
+        $company->company_name      =   $request->company_name;
+        $company->company_phone     =   $request->company_phone;
+        $company->company_email     =   $request->company_email;
+        $company->company_street    =   $request->company_street;
+        $company->company_tin_number=   $request->tin_number;
 
         try {
             $company->save();
@@ -50,7 +48,7 @@ class CompaniesController extends Controller
             $id     =   $company->id;
 
             $user->company_id   =   $id;
-            $user->name         = $request->director_name;
+            $user->name         =   $request->director_name;
             $user->email        =   $request->director_email;
             $user->role         =   'manager';
             $user->permissions  =   'manager';
@@ -118,9 +116,10 @@ class CompaniesController extends Controller
     {
         $company  =   \App\Models\CompanyInformation::find($request->company_id);
 
-        $clinic_state   =   $request->clinic;
-        $sms_state      =   $request->sms;
-        $sms            =   (int)$company->sms_quantity + (int)$request->additional_sms;
+        $clinic_state           =   $request->clinic;
+        $vision_center_state    =   $request->vision_center;
+        $sms_state              =   $request->sms;
+        $sms                    =   (int)$company->sms_quantity + (int)$request->additional_sms;
 
         if ($clinic_state)
         {
@@ -138,9 +137,19 @@ class CompaniesController extends Controller
             $sms_state  =   '0';
         }
 
-        $company->is_clinic =   $clinic_state;
-        $company->can_send_sms  =   $sms_state;
-        $company->sms_quantity  =   $sms;
+        if ($vision_center_state)
+        {
+            $vision_center_state  =   '1';
+        }
+        else{
+            $vision_center_state  =   '0';
+        }
+
+        $company->is_clinic         =   $clinic_state;
+        $company->can_send_sms      =   $sms_state;
+        $company->is_vision_center  =   $vision_center_state;
+        $company->sms_quantity      =   $sms;
+
         try
         {
             $company->save();

@@ -61,7 +61,8 @@ class LabRequestController extends Controller
 
     function indexWithTye($type){
         $isOutOfStock   =   null;
-        $invoices          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id','desc')->with('soldproduct')->get();
+
+        // dd($invoices[0]->supplier);
 
         $lens_type          =   \App\Models\LensType::all();
         $index              =   \App\Models\PhotoIndex::all();
@@ -70,12 +71,20 @@ class LabRequestController extends Controller
 
         if ($type=='requested') {
 
-            $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->where('status','requested')->orderBy('id','desc')->whereDoesntHave('unavailableProducts')->get();
-
-            // dd(count($invoicess));
+            $invoicess          =   Invoice::where('company_id', userInfo()->company_id)
+                                            ->orwhere('supplier_id', userInfo()->company_id)
+                                            ->where('status','requested')
+                                            ->orderBy('id','desc')
+                                            ->whereDoesntHave('unavailableProducts')->get();
 
             return view('manager.lab-request.requested',compact('invoicess','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
+
+        $invoices          =   Invoice::where('company_id', userInfo()->company_id)
+                                        ->orwhere('supplier_id', userInfo()->company_id)
+                                        ->orderBy('id','desc')
+                                        ->with('soldproduct')
+                                        ->get();
 
         if ($type=='booking') {
 
