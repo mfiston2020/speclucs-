@@ -171,7 +171,7 @@
                     <small class="text-muted">Name </small>
                     <h6>{{$company->company_name}}</h6>
                     <small class="text-muted">Country </small>
-                    <h6>{{$company->country->name}}</h6>
+                    <h6>{{$company->country?->name}}</h6>
                     <small class="text-muted">Email address </small>
                     <h6>{{$company->company_email}}</h6>
                     <small class="text-muted p-t-30 db">Phone</small>
