@@ -9,10 +9,9 @@
 
 @section('content')
 
-    @php
+    {{-- @php
         $prodss = \App\Models\Product::where('company_id', Auth::user()->company_id)->with('power')->select('*')->first();
-        // dd($prod);
-    @endphp
+    @endphp --}}
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-8">
@@ -65,28 +64,24 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $key => $product)
-                                    @php
-                                        $prod = $prodss->where(['id' => $product->product_id])->first();
-                                        // dd($product);
-                                    @endphp
                                         <tr>
                                             <td style="width:50px;">
-                                                @if ($prod->category_id==1)
+                                                @if ($product->product->category_id==1)
                                                     <span class="round"> {{ Oneinitials($product->eye??'-') }}</span>
                                                 @else
                                                     <span class="round">P</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <h6>{{ lensDescription($prod->product_name) }}</h6>
+                                                <h6>{{ lensDescription($product->product->product_name) }}</h6>
                                                 <small class="text-muted">
-                                                    @if ($prod->power)
-                                                        @if (initials($prod->product_name) == 'SV')
-                                                            <span> {{ $prod->power->sphere }} / {{ $prod->power->cylinder }}</span>
+                                                    @if ($product->product->power)
+                                                        @if (initials($product->product->product_name) == 'SV')
+                                                            <span> {{ $product->product->power->sphere }} / {{ $product->product->power->cylinder }}</span>
                                                         @else
                                                             <span>
-                                                                {{ $prod->power->sphere }} / {{ $prod->power->cylinder }}
-                                                                *{{ $prod->power->axis }} {{ $prod->power->add }}{{ $prod->power->addition }}
+                                                                {{ $product->product->power->sphere }} / {{ $product->product->power->cylinder }}
+                                                                *{{ $product->product->power->axis }} {{ $product->product->power->add }}{{ $product->product->power->addition }}
                                                             </span>
                                                         @endif
                                                     @endif
@@ -119,7 +114,7 @@
                                                             aria-hidden="true">×</button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <h4>{{ $prod->product_name }} have {{ $product->quantity }}
+                                                        <h4>{{ $product->product->product_name }} have {{ $product->quantity }}
                                                             quantity!
                                                             continue??</h4>
 

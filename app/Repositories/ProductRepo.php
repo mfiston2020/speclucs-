@@ -30,7 +30,7 @@ class ProductRepo implements ProductInterface
 
     function searchProduct(array $productDescription)
     {
-        // dd($productDescription);
+        // dd($productDescription['supplier']);
         if ($productDescription['productType'] == 'lens') {
             $lensTypeFull   =   LensType::find($productDescription['type']);
 
@@ -52,7 +52,8 @@ class ProductRepo implements ProductInterface
                             ->where('sphere', format_values($productDescription['sphere']))
                             ->where('cylinder', format_values($productDescription['cylinder']))
                             ->where('eye', 'any')
-                            ->where('company_id', userInfo()->company_id)
+                            ->where('company_id', $productDescription['supplier'])
+                            // ->where('company_id', userInfo()->company_id)
                             ->select('product_id')->first();
 
                         $productResult   =   \App\Models\Product::find($product_id);
@@ -83,7 +84,8 @@ class ProductRepo implements ProductInterface
                             ->where('eye', $productDescription['type']=='3'?
                                                                             ($productDescription['eye']=='right'?'Right':'Left'):
                                                                             ($productDescription['eye']=='right'?'R':'L'))
-                            ->where('company_id', userInfo()->company_id)
+                            // ->where('company_id', userInfo()->company_id)
+                            ->where('company_id', $productDescription['supplier'])
                             ->select('product_id')->first();
 
                         $productResult    =   \App\Models\Product::find($product_id);

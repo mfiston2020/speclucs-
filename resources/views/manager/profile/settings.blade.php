@@ -183,7 +183,7 @@
                                 {{-- <hr> --}}
                                 <h5>Account Settings</h5>
                                 <hr>
-                                
+
                                 <div class="alert alert-rounded col-lg-12 col-md-12 col-sm-12" id="alert-show">
                                     <b id="setting-error-name">Error! </b>
                                     <span id="setting-error-message"></span>
@@ -198,7 +198,7 @@
                                         <div class="form-group">
                                             <label for="option1">Can Supply</label><br>
                                             <label class="switch">
-                                                <input type="checkbox" id="supplier" {{($user_info->supplier_state=='1')?'checked':''}}>
+                                                <input type="checkbox" id="supplier" {{(getuserCompanyInfo()->can_supply=='1')?'checked':''}}>
                                                 <span></span>
                                             </label>
                                         </div>
@@ -268,6 +268,7 @@
 
                     if (data == 'error') {
                         $("#alert-show").show();
+                        document.getElementById("alert-show").classList.add('alert-success');
                         document.getElementById("alert-show").classList.add('alert-danger');
                         $('#setting-error-name').text('Error');
                         $('#setting-error-message').text('Something Went Wrong!');
@@ -275,9 +276,13 @@
 
                     if (data == 'success') {
                         $("#alert-show").show();
+                        document.getElementById("alert-show").classList.remove('alert-danger');
                         document.getElementById("alert-show").classList.add('alert-success');
                         $('#setting-error-name').text('Success! ');
                         $('#setting-error-message').text('Status Successfully changed!');
+                    }else{
+
+                        $("#alert-show").hide();
                     }
                 },
                 error: function (data) {

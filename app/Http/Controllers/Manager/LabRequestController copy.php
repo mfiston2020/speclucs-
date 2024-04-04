@@ -72,7 +72,7 @@ class LabRequestController extends Controller
         if ($type=='requested') {
 
             $invoicess          =   Invoice::where('company_id', userInfo()->company_id)
-                                            // ->orwhere('supplier_id', userInfo()->company_id)
+                                            ->orwhere('supplier_id', userInfo()->company_id)
                                             ->where('status','requested')
                                             ->orderBy('id','desc')
                                             ->whereDoesntHave('unavailableProducts')->get();

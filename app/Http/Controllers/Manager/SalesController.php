@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use App\Models\SoldProduct;
 use App\Models\UnavailableProduct;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -108,7 +109,7 @@ class SalesController extends Controller
         $id =   Crypt::decrypt($id);
 
         $invoice    =   \App\Models\Invoice::find($id);
-        $products   =   DB::table('sold_products')->select('*')->where('invoice_id', $id)->orderBy('eye','desc')->get();
+        $products   =   SoldProduct::where('invoice_id', $id)->orderBy('eye','desc')->get();
 
         $na_products        =   UnavailableProduct::where('invoice_id', $id)->whereIn('status', ['pending', 'approved'])->orderBy('eye','desc')->get();
         $has_na_products    =   UnavailableProduct::where('invoice_id', $id)->where('status', 'sold')->count();

@@ -114,7 +114,7 @@
                                                                     </td>
 
                                                                     <td class="text-start">
-                                                                        {{ $request->supplier }}
+                                                                        {{ $request->supplier->company_name }}
                                                                     </td>
 
                                                                     <td class="text-start">
@@ -158,6 +158,7 @@
                                                                                             @endif
                                                                                         @endif
                                                                                         {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
+                                                                                        - <span class="text-warning">FROM</span> [{{$request->supplier->company_name}}]
                                                                                     </h4>
                                                                                     <br>
 
@@ -344,28 +345,30 @@
                                                                                     @endif
                                                                                 @endif
                                                                             </div>
-                                                                            <div
-                                                                                class="modal-footer d-flex justify-content-between">
+                                                                            @if (is_null($request->supplier_id))
+                                                                                <div
+                                                                                    class="modal-footer d-flex justify-content-between">
 
-                                                                                    @if ($isOutOfStock=='yes')
-                                                                                        <center><h4 class="text-danger">Product out of stock</h4></center>
-                                                                                    @else
-                                                                                        <button type="button"
-                                                                                            class="btn btn-danger waves-effect text-left"
-                                                                                            data-dismiss="modal">
-                                                                                            Close
-                                                                                        </button>
-                                                                                        <button type="button"
-                                                                                            class="btn btn-success waves-effect text-left"
-                                                                                            id="print">Print</button>
-                                                                                        <a href="{{ route('manager.send.request.lab', Crypt::encrypt($request->id)) }}"
-                                                                                            onclick="return confirm('are you sure?')"
-                                                                                            class="btn btn-info waves-effect text-left">
-                                                                                            Send to Lab
-                                                                                        </a>
+                                                                                        @if ($isOutOfStock=='yes')
+                                                                                            <center><h4 class="text-danger">Product out of stock</h4></center>
+                                                                                        @else
+                                                                                            <button type="button"
+                                                                                                class="btn btn-danger waves-effect text-left"
+                                                                                                data-dismiss="modal">
+                                                                                                Close
+                                                                                            </button>
+                                                                                            <button type="button"
+                                                                                                class="btn btn-success waves-effect text-left"
+                                                                                                id="print">Print</button>
+                                                                                            <a href="{{ route('manager.send.request.lab', Crypt::encrypt($request->id)) }}"
+                                                                                                onclick="return confirm('are you sure?')"
+                                                                                                class="btn btn-info waves-effect text-left">
+                                                                                                Send to Lab
+                                                                                            </a>
 
-                                                                                    @endif
-                                                                            </div>
+                                                                                        @endif
+                                                                                </div>
+                                                                            @endif
                                                                         </div>
                                                                         <!-- /.modal-content -->
                                                                     </div>

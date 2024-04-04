@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Manager;
 
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Models\CompanyInformation;
+use App\Models\Country;
+use App\Models\SupplierNotify;
+use App\Models\SupplyRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -13,9 +17,12 @@ class ProfileController extends Controller
 {
     function index()
     {
+        $countries  =   Country::all();
         $user_info  =   \App\Models\User::find(Auth::user()->id);
         $company    =   \App\Models\CompanyInformation::find(Auth::user()->company_id);
-        return view('manager.profile.index',compact('user_info','company'));
+        $suppliers  =   CompanyInformation::whereNull('is_vision_center')->where('can_supply','1')->whereNot('id',userInfo()->company_id)->where('status','active')->where('country_id',$user_info->company->country_id)->get();
+
+        return view('manager.profile.index',compact('user_info','company','countries','suppliers'));
     }
 
     public function username(Request $request)
@@ -119,6 +126,7 @@ class ProfileController extends Controller
         $company->company_email         =   $request->company_email;
         $company->company_street        =   $request->company_street;
         $company->company_tin_number    =   $request->company_tin_number;
+        $company->country_id            =   $request->country;
 
 
 
@@ -168,5 +176,44 @@ class ProfileController extends Controller
         {
             return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
         }
+    }
+
+    function request_supply($id){
+
+        try
+        {
+            SupplyRequest::create([
+                'user_id'       =>  userInfo()->id,
+                'supplier_id'   =>  decrypt($id),
+                'request_from'  =>  userInfo()->company_id,
+            ]);
+
+            $notification   =   new SupplierNotify();
+            $notification->company_id   =   Auth::user()->company_id;
+            $notification->supplier_id  =   decrypt($id);
+            $notification->notification =   'New Supply Request';
+            $notification->save();
+
+            return redirect()->back()->with('successMsg','Supply Request sent the button will change green on confirmation!');
+        }
+        catch (\Throwable $th){
+            return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! '.$th);
+        }
+    }
+
+    function request_supply_reply($id,$reply){
+
+        SupplyRequest::where('id',decrypt($id))->update([
+            'status'=>$reply
+        ]);
+
+        $notification   =   new SupplierNotify();
+        $notification->company_id   =   Auth::user()->company_id;
+        $notification->supplier_id  =   decrypt($id);
+        $notification->notification =   'Your Request was '.$reply;
+        $notification->save();
+
+
+        return redirect()->back()->with('successMsg','Request was '.$reply.'!');
     }
 }

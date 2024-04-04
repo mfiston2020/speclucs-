@@ -170,6 +170,8 @@
                         class="" width="150" /> <br>
                     <small class="text-muted">Name </small>
                     <h6>{{$company->company_name}}</h6>
+                    <small class="text-muted">Country </small>
+                    <h6>{{$company->country->name}}</h6>
                     <small class="text-muted">Email address </small>
                     <h6>{{$company->company_email}}</h6>
                     <small class="text-muted p-t-30 db">Phone</small>
@@ -191,7 +193,7 @@
                 <!-- Tabs -->
                 <ul class="nav nav-pills custom-pills" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="pills-timeline-tab" data-toggle="pill" href="#current-month"
+                        <a class="nav-link {{(getuserCompanyInfo()->countSupplyRequests())<=0?'active':''}}" id="pills-timeline-tab" data-toggle="pill" href="#current-month"
                             role="tab" aria-controls="pills-timeline" aria-selected="true">Profile Settings</a>
                     </li>
                     @if (userInfo()->permissions=='manager')
@@ -208,10 +210,20 @@
                                 aria-controls="pills-bank" aria-selected="false">Supplier(s)</a>
                         </li>
                     @endif
+                    @if (getuserCompanyInfo()->can_supply=='1')
+                        <li class="nav-item">
+                            <a class="nav-link {{(getuserCompanyInfo()->countSupplyRequests())>0?'active':''}}" id="pills-bank-tab" data-toggle="pill" href="#supplier-requests" role="tab"
+                                aria-controls="pills-bank" aria-selected="false">Supply Request(s)
+                                <span class="badge badge-danger badge-pill">
+                                    {{ number_format((getuserCompanyInfo()->countSupplyRequests())) }}
+                                </span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
                 <!-- Tabs -->
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="current-month" role="tabpanel"
+                    <div class="tab-pane fade  {{(getuserCompanyInfo()->countSupplyRequests())<=0?'show active':''}}" id="current-month" role="tabpanel"
                         aria-labelledby="pills-timeline-tab">
                         <div class="card-body">
                             <form class="form-horizontal form-material" method="POST"
@@ -257,15 +269,14 @@
                                 <div class="form-group">
                                     <label for="example-email" class="col-md-12">New Password</label>
                                     <div class="col-md-12">
-                                        <input type="password" class="form-control form-control-line" name="password"
-                                            id="example-email">
+                                        <input type="password" class="form-control form-control-line" name="password">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="example-email" class="col-md-12">Confirm Password</label>
                                     <div class="col-md-12">
                                         <input type="password" class="form-control form-control-line"
-                                            name="password_confirmation" id="example-email">
+                                            name="password_confirmation">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -290,6 +301,21 @@
                                                 class="form-control form-control-line" value="{{$company->company_name}}">
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-12">Country</label>
+                                        <div class="col-md-12">
+                                            <select name="country" id="" class="form-control">
+                                                <option value="">** Select Country **</option>
+                                                @foreach ($countries as $country)
+                                                    <option value="{{ $country->id }}" {{$company->country_id==$country->id?'selected':''}}>
+                                                        {{ $country->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <div class="form-group">
                                         <label class="col-md-12">Company Email</label>
                                         <div class="col-md-12">
@@ -297,6 +323,7 @@
                                                 class="form-control form-control-line" value="{{$company->company_email}}">
                                         </div>
                                     </div>
+
                                     <div class="form-group">
                                         <label class="col-md-12">Company Phone</label>
                                         <div class="col-md-12">
@@ -304,6 +331,7 @@
                                                 class="form-control form-control-line" value="{{$company->company_phone}}">
                                         </div>
                                     </div>
+
                                     <div class="form-group">
                                         <label class="col-md-12">Company Street</label>
                                         <div class="col-md-12">
@@ -362,6 +390,8 @@
                                                 class="form-control form-control-line" value="{{$company->account_number}}">
                                         </div>
                                     </div>
+
+
                                     <div class="form-group">
                                         <label class="col-md-12">Swift Code</label>
                                         <div class="col-md-12">
@@ -369,6 +399,7 @@
                                                 class="form-control form-control-line" value="{{$company->swift_code}}">
                                         </div>
                                     </div>
+
                                     <div class="form-group">
                                         <div class="col-sm-12">
                                             <button class="btn btn-success">Update Bank Details</button>
@@ -381,30 +412,81 @@
                         <div class="tab-pane fade" id="supplier" role="tabpanel" aria-labelledby="pills-bank-tab">
                             <div class="card-body">
                                 {{-- <hr> --}}
-                                <h5>Account Settings</h5>
+                                <h5>Supplier Listing</h5>
+                                <hr>
+                                <div class="row">
+                                    @forelse ($suppliers as $supplier)
+                                        <div class="m-b-30 bt-switch col-6">
+                                            <div class="form-group">
+                                                <label for="option1">{{ $supplier->company_name }}</label>
+                                                @php
+                                                    $supplyState=$supplier->supplying->where('request_from',userInfo()->company_id)->pluck('status')->first();
+                                                @endphp
+
+                                                    @if (is_null($supplyState))
+                                                        | <a href="{{ route('manager.profile.supplier.request',encrypt($supplier->id))}}" class="btn btn-sm btn-outline-success rounded" onclick="return confirm('Are you sure?')">Request</a>
+                                                    @else
+                                                        <span @class([
+                                                            'text-warning' => $supplyState=='pending',
+                                                            'text-success' => $supplyState=='approved',
+                                                            'text-danger' => $supplyState=='declined',
+                                                            ])>| {{$supplyState}}</span>
+                                                    @endif
+                                                    <br>
+                                                <div>
+                                                    <label class="switch">
+                                                        <input disabled type="checkbox" {{$supplyState=='approved'?'checked':''}}>
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="alert alert-warning col-12">No Supplier In your Region!</div>
+                                    @endforelse
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if (getuserCompanyInfo()->can_supply=='1')
+                        <div class="tab-pane fade {{(getuserCompanyInfo()->countSupplyRequests())>0?'show active':''}}" id="supplier-requests" role="tabpanel" aria-labelledby="pills-bank-tab">
+                            <div class="card-body">
+                                {{-- <hr> --}}
+                                <h5>Supplier Listing</h5>
                                 <hr>
                                 <form class="form-horizontal form-material" action="{{route('manager.profile.password')}}" method="POST">
                                     @csrf
 
-                                    <div class="m-b-30 bt-switch">
-                                        <div class="form-group">
-                                            <label for="option1">Can Supply</label><br>
-                                            <label class="switch">
-                                                <input type="checkbox" id="supplier" {{($user_info->supplier_state=='1')?'checked':''}}>
-                                                <span></span>
-                                            </label>
-                                        </div>
+                                    <div class="row">
+                                        @forelse (getuserCompanyInfo()->supplying as $demands)
+                                            <div class="m-b-30 bt-switch col-6">
+                                                <div class="form-group">
+                                                    <label for="option1">
+                                                        {{ $demands->requestCompany->company_name }}
+                                                    </label>
+                                                    <div>
+                                                        @if ($demands->status=='pending')
+                                                            <a href="{{ route('manager.profile.supplier.reply',[encrypt($demands->id),'approved'])}}" class="btn btn-sm btn-outline-success rounded" onclick="return confirm('Are you sure?')">Accept</a>
+                                                            |
+                                                            <a href="{{ route('manager.profile.supplier.reply',[encrypt($demands->id),'declined'])}}" class="btn btn-sm btn-outline-danger rounded" onclick="return confirm('Are you sure?')">Decline</a>
+                                                        @else
+                                                            <span @class([
+                                                                'text-warning' => $demands->status=='pending',
+                                                                'text-success' => $demands->status=='approved',
+                                                                'text-danger' => $demands->status=='declined',
+                                                                ])> {{$demands->status}}</span>
+                                                        @endif
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <div class="alert alert-warning col-12">No Requests at the time!</div>
+                                        @endforelse
                                     </div>
 
-                                    <div class="m-b-30 bt-switch">
-                                        <div class="form-group">
-                                            <label for="option1">Allow Clients To See My Stock</label><br>
-                                            <label class="switch">
-                                                <input type="checkbox" id="stock" {{($user_info->show_stock=='1')?'checked':''}}>
-                                                <span></span>
-                                            </label>
-                                        </div>
-                                    </div>
                                 </form>
                             </div>
                         </div>

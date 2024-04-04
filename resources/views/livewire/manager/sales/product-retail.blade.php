@@ -3,26 +3,28 @@
     <form wire:submit.prevent="saveOrder">
         <div class="col-md-12 col-sm-12 mt-2">
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <h4 class="card-title">
-                            @if (userInfo()->permissions=='seller' || userInfo()->permissions=='manager')
-                                <a wire:click="hideCloud('no')" class="btn btn-primary btn-rounded text-white">
-                                    <i @class(['badge badge-pill badge-danger'=>$isCloudOrder=='no'])> {{$isCloudOrder=='no'?'-':''}}</i>
-                                    <i class="mdi mdi-cart-plus"></i> Customer Order
-                                </a>
-                            @endif
-                            @if (userInfo()->permissions=='lab' || userInfo()->permissions=='manager')
-                                <a wire:click="hideCloud('yes')" class="btn btn-success btn-rounded text-white">
-                                    <i @class(['badge badge-pill badge-danger'=>$isCloudOrder=='yes'])>{{$isCloudOrder=='yes'?'-':''}}</i>
-                                    <i class="mdi mdi-clock-fast"></i> Cloud Order
-                                </a>
-                            @endif
-                        </h4>
+            @if (getUserCompanyInfo()->is_vision_center!='1')
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <h4 class="card-title">
+                                @if (userInfo()->permissions=='seller' || userInfo()->permissions=='manager')
+                                    <a wire:click="hideCloud('no')" class="btn btn-primary btn-rounded text-white">
+                                        <i @class(['badge badge-pill badge-danger'=>$isCloudOrder=='no'])> {{$isCloudOrder=='no'?'-':''}}</i>
+                                        <i class="mdi mdi-cart-plus"></i> Customer Order
+                                    </a>
+                                @endif
+                                @if (userInfo()->permissions=='lab' || userInfo()->permissions=='manager')
+                                    <a wire:click="hideCloud('yes')" class="btn btn-success btn-rounded text-white">
+                                        <i @class(['badge badge-pill badge-danger'=>$isCloudOrder=='yes'])>{{$isCloudOrder=='yes'?'-':''}}</i>
+                                        <i class="mdi mdi-clock-fast"></i> Cloud Order
+                                    </a>
+                                @endif
+                            </h4>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
             @if ($isCloudOrder=='yes')
                 {{-- personal information --}}
@@ -205,6 +207,30 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
+
+                        @if (getUserCompanyInfo()->is_vision_center=='1')
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Supplier</label>
+                                    <select style="width: 100%; height:2rem;"  class="form-control @error('supplier') is-invalid @enderror custom-select"
+                                        wire:model.lazy='supplier' required>
+                                        <option value="">** Select Supplier **</option>
+                                        @if (count($suppliers) > 0)
+
+                                            @foreach ($suppliers as $sup)
+                                                <option value="{{ $sup->supplier->id }}">{{ $sup->supplier->company_name }}
+                                                </option>
+                                            @endforeach
+
+                                        @endif
+                                    </select>
+                                    @error('supplier')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <img src={{asset('dashboard/assets/images/loading2.gif')}} width="20" wire:loading wire:target="supplier"/>
+                            </div>
+                        @endif
                     </div>
 
                 </div>
@@ -338,14 +364,13 @@
                                         </select>
                                     </div>
 
-                                    @if ($lens_type!='2')
+                                    @if ( $lens_type!='2' )
                                         <div class="form-group col-3">
                                             <select class="form-control" wire:model.lazy="r_addition">
                                                 <option value="">
                                                     * ADD *
                                                 </option>
                                                 @for ($i=1;  $i<= 4; $i+=0.25)
-                                                    {{-- <option value="{{ $i }}">{{ sprintf('%03d',$i) }}</option> --}}
                                                     <option value="{{ $i }}">{{ number_format($i,2,'.') }}</option>
                                                 @endfor
                                             </select>
@@ -719,7 +744,8 @@
 
 
                         <div class="row d-flex justify-content-center items-center mt-4">
-                            @if ($accessory != null && $accessory_quantity<=$accessory_stock )
+                            @if ($accessory_quantity<=$accessory_stock )
+                            {{-- @if ($accessory != null && $accessory_quantity<=$accessory_stock ) --}}
                                 @if (!is_null($frame_stock) && (int)$frame_stock-(int)$ordered_frames<0)
                                     <h5 class="text-warning">Frame Quantity Not Available </h5>
                                 @else
@@ -735,7 +761,19 @@
                                     </button>
                                 @endif
                             @else
-                                <h5 class="text-danger">Surpassed Available Quantity</h5>
+                                @if (getUserCompanyInfo()->is_vision_center=='1')
+                                    <button wire:loading.attr="disabled" class="btn btn-sm btn-primary" type="button" wire:click="checkAvailability">
+                                        <span wire:loading.remove wire:target="checkAvailability">
+                                            Check Product Availability
+                                        </span>
+                                        <span wire:loading wire:target="checkAvailability">
+                                            Checking... <img src="{{ asset('dashboard/assets/images/loading2.gif') }}"
+                                                width="20" />
+                                        </span>
+                                    </button>
+                                @else
+                                    <h5 class="text-danger">Surpassed Available Quantity</h5>
+                                @endif
                             @endif
                         </div>
 

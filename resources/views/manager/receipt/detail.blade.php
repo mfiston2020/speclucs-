@@ -138,9 +138,6 @@
                                         @endforeach
 
                                         @foreach ($invoice->soldproduct as $key => $product)
-                                            @php
-                                                $prod = $products->where('id', $product->product_id)->first();
-                                            @endphp
                                             <tr>
                                                 <td class="text-center">
                                                     @if ($product->eye!=null)
@@ -149,16 +146,16 @@
                                                         -
                                                     @endif
                                                 </td>
-                                                <td>{{ $prod->product_name }} | {{ lensDescription($prod->description) }}
-                                                    @if ($prod->power)
-                                                        @if (initials($prod->product_name) == 'SV' && is_null($prod->power->cylinder))
-                                                            <span> {{ $prod->power->sphere }} /
-                                                                {{ $prod->power->cylinder }}</span>
+                                                <td>{{ $product->product->product_name }} | {{ lensDescription($product->product->description) }}
+                                                    @if ($product->product->power)
+                                                        @if (initials($product->product->product_name) == 'SV' && is_null($product->product->power->cylinder))
+                                                            <span> {{ $product->product->power->sphere }} /
+                                                                {{ $product->product->power->cylinder }}</span>
                                                         @else
-                                                            <span>{{ $prod->power->sphere }} /
-                                                                {{ $prod->power->cylinder }}
-                                                                *{{ initials($prod->product_name) == 'SV'?$product->axis:$prod->power->axis }}
-                                                                {{initials($prod->product_name) == 'SV'?'': $prod->power->add }}</span>
+                                                            <span>{{ $product->product->power->sphere }} /
+                                                                {{ $product->product->power->cylinder }}
+                                                                *{{ initials($product->product->product_name) == 'SV'?$product->axis:$product->product->power->axis }}
+                                                                {{initials($product->product->product_name) == 'SV'?'': $product->product->power->add }}</span>
                                                         @endif
                                                     @endif
                                                 </td>

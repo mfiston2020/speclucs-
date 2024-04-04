@@ -108,6 +108,9 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::post('/profile/Bank', [\App\Http\Controllers\Manager\ProfileController::class, 'bankDetail'])->name('bank.company');
     Route::post('/profile/sms/message', [\App\Http\Controllers\Manager\ProfileController::class, 'sms_message'])->name('profile.sms.message');
 
+    Route::get('/profile/supplier/request/{id}', [\App\Http\Controllers\Manager\ProfileController::class, 'request_supply'])->name('profile.supplier.request');
+    Route::get('/profile/supplier/reply/{id}/{reply}', [\App\Http\Controllers\Manager\ProfileController::class, 'request_supply_reply'])->name('profile.supplier.reply');
+
     // ================= All product routes =========================
     Route::get('/product', [\App\Http\Controllers\Manager\ProductsController::class, 'index'])->name('product');
     Route::post('/saveProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'save'])->name('product.save');

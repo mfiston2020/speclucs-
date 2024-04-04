@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\CompanyInformation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -32,23 +33,23 @@ class SettingsController extends Controller
 
     public function supplierConfirm()
     {
-        $user_info  =   \App\Models\User::find(Auth::user()->id);
+        $user_info  =   CompanyInformation::find(userInfo()->company_id);
         $state  =   0;
-        if ($user_info->supplier_state==0)
+        if ($user_info->can_supply==0)
         {
             $state  =   '1';
         }
         else{
             $state  =   '0';
         }
-        $user_info->supplier_state =   $state;
+        $user_info->can_supply =   $state;
         try {
             $user_info->save();
             return response()->json('success');
         }
         catch (\Throwable $th)
         {
-            return response()->json('error');
+            return response()->json('error'.$th);
         }
     }
 

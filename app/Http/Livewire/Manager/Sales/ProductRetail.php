@@ -12,6 +12,7 @@ use App\Models\PhotoCoating;
 use App\Models\PhotoIndex;
 use App\Models\Product;
 use App\Models\SoldProduct;
+use App\Models\SupplyRequest;
 use App\Models\TrackOrderRecord;
 use App\Repositories\ProductRepo;
 use Illuminate\Support\Facades\Crypt;
@@ -25,6 +26,9 @@ class ProductRetail extends Component
 
     // variables for cloud
     public $cloud_id, $hospital_name,$visionCenters,$visionCenter;
+
+    // variables for visionCenter
+    public $suppliers,$supplier;
 
     // client information variables
     public $firstname, $lastname, $tin_number, $phone;
@@ -71,6 +75,33 @@ class ProductRetail extends Component
     function hideCloud($value)
     {
         $this->isCloudOrder =   $value;
+    }
+
+    function updatedSupplier(){
+        $companyId  =   !is_null($this->supplier)?$this->supplier:getuserCompanyInfo()->id;
+        // non lens products
+        $this->frameList  =   Product::where('company_id', $companyId)->where('category_id', '2')->orderBy('product_name', 'ASC')->get();
+
+        $this->accessoriesList  =   Product::where('company_id', $companyId)->whereNotIn('category_id', ['1', '2'])->get();
+
+        if (!is_null($this->supplier)) {
+
+            $this->frame_quantity       =   null;
+            $this->frame_stock          =   null;
+            $this->frame_unit_price     =   null;
+            $this->frame_location       =   null;
+            $this->frame_total_amount   =   0;
+
+            // ==============================
+
+            $this->accessory_quantity       =  null;
+            $this->accessory_stock          =   null;
+            $this->accessory_unit_price     =   null;
+            $this->accessory_location       =   null;
+            $this->accessory_total_amount   = 0;
+        }
+
+
     }
 
     // searching for frame
@@ -253,7 +284,8 @@ class ProductRetail extends Component
                 'cylinder'    =>  format_values($this->r_cylinder),
                 'axis'        =>  format_values($this->r_axis),
                 'addition'    =>  format_values($this->r_addition),
-                'eye'    =>  'right',
+                'supplier'    =>  !is_null($this->supplier)?$this->supplier:getuserCompanyInfo()->id,
+                'eye'         =>  'right',
             ];
 
             $left_data  =   [
@@ -269,7 +301,8 @@ class ProductRetail extends Component
                 'cylinder'    =>  format_values($this->l_cylinder),
                 'axis'        =>  format_values($this->l_axis),
                 'addition'    =>  format_values($this->l_addition),
-                'eye'    =>  'left',
+                'supplier'    =>  !is_null($this->supplier)?$this->supplier:getuserCompanyInfo()->id,
+                'eye'         =>  'left',
             ];
             // dd($left_data);
 
@@ -485,6 +518,7 @@ class ProductRetail extends Component
             $invoice->insurance_id      =   $this->insurance_type == 'private' ? null : $this->insurance_type;
             $invoice->status            =   $this->invoiceStatus;
             $invoice->total_amount      =   0;
+            $invoice->supplier_id       =   $this->supplier;
             $invoice->insurance_card_number =   $this->insurance_number;
 
             $invoice->save();
@@ -672,9 +706,10 @@ class ProductRetail extends Component
         $this->lensIndex            =   PhotoIndex::all();
         $this->lensCoating          =   PhotoCoating::all();
         $this->lensChromaticAspect  =   PhotoChromatics::all();
+        $this->suppliers            =   SupplyRequest::where('request_from',getuserCompanyInfo()->id)->where('status','approved')->get();
         $this->visionCenters        =   Hospital::where('company_id', userInfo()->company_id)->get();
         $this->isCloudOrder         =   userInfo()->permissions == 'lab' ? 'yes' : 'no';
-        $this->insuranceList        =   Insurance::where('company_id', userInfo()->company_id)->get();
+        $this->insuranceList        =   Insurance::get();
 
         // non lens products
         $this->frameList  =   Product::where('company_id', userInfo()->company_id)->where('category_id', '2')->orderBy('product_name', 'ASC')->get();

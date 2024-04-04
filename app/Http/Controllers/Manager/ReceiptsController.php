@@ -225,9 +225,9 @@ class ReceiptsController extends Controller
 
         $companyInfo    =   getuserCompanyInfo();
 
-        $products    =   Product::where('company_id', $companyInfo->id)->first();
+        // $products    =   Product::where('company_id', $companyInfo->id)->first();
 
-        return view('manager.receipt.detail', compact('invoice', 'companyInfo', 'products'));
+        return view('manager.receipt.detail', compact('invoice', 'companyInfo'));
     }
 
     public function newProduct(Request $request)
