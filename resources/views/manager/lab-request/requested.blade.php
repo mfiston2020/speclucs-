@@ -114,7 +114,7 @@
                                                                     </td>
 
                                                                     <td class="text-start">
-                                                                        {{ $request->supplier->company_name }}
+                                                                        {{ $request->supplier?->company_name }}
                                                                     </td>
 
                                                                     <td class="text-start">
