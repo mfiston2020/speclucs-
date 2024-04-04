@@ -148,6 +148,9 @@
                                                                             @endif
                                                                         @endif
                                                                         {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
+                                                                        @if (!is_null($request->supplier_id))
+                                                                            - <span class="text-warning">FROM</span> [{{$request->supplier->company_name}}]
+                                                                        @endif
                                                                     </h4>
                                                                     <br>
 
@@ -313,16 +316,16 @@
                                                                 <hr>
                                                                 @if ($products)
                                                                     @foreach ($request->soldproduct as $product)
-                                                                        @php
+                                                                        {{-- @php
                                                                             $invoice_product = $products->where('id', $product->product_id)->first();
-                                                                        @endphp
-                                                                        @if ($invoice_product->category_id == 2)
+                                                                        @endphp --}}
+                                                                        @if ($product->product->category_id == 2)
                                                                             <div class="row mb-2">
                                                                                 <div class="col-6">
                                                                                     <span class="text-capitalize">
-                                                                                        {{ $invoice_product->product_name }}
+                                                                                        {{ $product->product->product_name }}
                                                                                         -
-                                                                                        {{ $invoice_product->description }}
+                                                                                        {{ $product->product->description }}
                                                                                     </span>
                                                                                 </div>
                                                                                 <div class="col-3">
@@ -349,17 +352,17 @@
                                                                 {{-- for accessories --}}
                                                                 @if ($products)
                                                                     @foreach ($request->soldproduct as $product)
-                                                                        @php
+                                                                        {{-- @php
                                                                             $invoice_product = $products->where('id', $product->product_id)->first();
-                                                                        @endphp
+                                                                        @endphp --}}
 
-                                                                        @if ($invoice_product->category_id != 2 && $invoice_product->category_id != 1)
+                                                                        @if ($product->product->category_id != 2 && $product->product->category_id != 1)
                                                                             <div class="row mb-2">
                                                                                 <div class="col-3">
                                                                                     <span class="text-capitalize">
-                                                                                        {{ $invoice_product->product_name }}
+                                                                                        {{ $product->product->product_name }}
                                                                                         -
-                                                                                        {{ $invoice_product->description }}
+                                                                                        {{ $product->product->description }}
                                                                                     </span>
                                                                                 </div>
                                                                                 <div class="col-3">
@@ -390,81 +393,83 @@
                                                                         @endif
                                                                     @endforeach
                                                                 @endif
-                                                                <hr>
-                                                                <h4 class="text-info">Operations</h4>
-                                                                <hr>
-                                                                <form method="post" id="priceSettingForm"
-                                                                    onsubmit="return submitPricing();"
-                                                                    action="{{ route('manager.sent.request.to.addprice') }}">
-                                                                    @csrf
-                                                                    @foreach ($request->unavailableproducts as $unavail)
-                                                                        <h5>{{ Oneinitials($unavail->eye) }}
-                                                                        </h5>
-                                                                        <input type="hidden" name="invoiceID"
-                                                                            value="{{ $request->id }}" />
-                                                                        <input type="hidden" name="prodId[]"
-                                                                            value="{{ $unavail->id }}" />
-                                                                        <div class="row">
-                                                                            <div class="col-sm-12 col-md-3">
-                                                                                <div class="form-group">
-                                                                                    <label for="inputlname"
-                                                                                        class="control-label col-form-label">Cost</label>
-                                                                                    <input type="text"
-                                                                                        class="form-control"
-                                                                                        name="cost[]"
-                                                                                        id="inputlname"
-                                                                                        value="{{$unavail->cost}}"
-                                                                                        placeholder="cost"
-                                                                                        required>
+                                                                @if (is_null($request->supplier_id))
+                                                                    <hr>
+                                                                    <h4 class="text-info">Operations</h4>
+                                                                    <hr>
+                                                                    <form method="post" id="priceSettingForm"
+                                                                        onsubmit="return submitPricing();"
+                                                                        action="{{ route('manager.sent.request.to.addprice') }}">
+                                                                        @csrf
+                                                                        @foreach ($request->unavailableproducts as $unavail)
+                                                                            <h5>{{ Oneinitials($unavail->eye) }}
+                                                                            </h5>
+                                                                            <input type="hidden" name="invoiceID"
+                                                                                value="{{ $request->id }}" />
+                                                                            <input type="hidden" name="prodId[]"
+                                                                                value="{{ $unavail->id }}" />
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 col-md-3">
+                                                                                    <div class="form-group">
+                                                                                        <label for="inputlname"
+                                                                                            class="control-label col-form-label">Cost</label>
+                                                                                        <input type="text"
+                                                                                            class="form-control"
+                                                                                            name="cost[]"
+                                                                                            id="inputlname"
+                                                                                            value="{{$unavail->cost}}"
+                                                                                            placeholder="cost"
+                                                                                            required>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 col-md-3">
-                                                                                <div class="form-group">
-                                                                                    <label for="inputname"
-                                                                                        class="control-label col-form-label">
-                                                                                        Price</label>
-                                                                                    <input type="text"
-                                                                                        class="form-control"
-                                                                                        id="inputname"
-                                                                                        name="price[]"
-                                                                                        value="{{$unavail->price}}"
-                                                                                        placeholder="price"
-                                                                                        required>
+                                                                                <div class="col-sm-12 col-md-3">
+                                                                                    <div class="form-group">
+                                                                                        <label for="inputname"
+                                                                                            class="control-label col-form-label">
+                                                                                            Price</label>
+                                                                                        <input type="text"
+                                                                                            class="form-control"
+                                                                                            id="inputname"
+                                                                                            name="price[]"
+                                                                                            value="{{$unavail->price}}"
+                                                                                            placeholder="price"
+                                                                                            required>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 col-md-3">
-                                                                                <div class="form-group">
-                                                                                    <label for="inputlname"
-                                                                                        class="control-label col-form-label">Location</label>
-                                                                                    <input type="text"
-                                                                                        class="form-control"
-                                                                                        id="inputlname"
-                                                                                        name="location[]"
-                                                                                        placeholder="Location">
+                                                                                <div class="col-sm-12 col-md-3">
+                                                                                    <div class="form-group">
+                                                                                        <label for="inputlname"
+                                                                                            class="control-label col-form-label">Location</label>
+                                                                                        <input type="text"
+                                                                                            class="form-control"
+                                                                                            id="inputlname"
+                                                                                            name="location[]"
+                                                                                            placeholder="Location">
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 col-md-3">
-                                                                                <div class="form-group">
-                                                                                    <label for="inputlname"
-                                                                                        class="control-label col-form-label">Supplier</label>
-                                                                                    <select class="form-control"
-                                                                                        id="inputlname"
-                                                                                        name="supplier[]">
-                                                                                        <option value="">
-                                                                                            select
-                                                                                            supplier
-                                                                                        </option>
-                                                                                        @foreach ($suppliers as $supplier)
-                                                                                            <option
-                                                                                                value="{{ $supplier->id }}">
-                                                                                                {{ $supplier->name }}
+                                                                                <div class="col-sm-12 col-md-3">
+                                                                                    <div class="form-group">
+                                                                                        <label for="inputlname"
+                                                                                            class="control-label col-form-label">Supplier</label>
+                                                                                        <select class="form-control"
+                                                                                            id="inputlname"
+                                                                                            name="supplier[]">
+                                                                                            <option value="">
+                                                                                                select
+                                                                                                supplier
                                                                                             </option>
-                                                                                        @endforeach
-                                                                                    </select>
+                                                                                            @foreach ($suppliers as $supplier)
+                                                                                                <option
+                                                                                                    value="{{ $supplier->id }}">
+                                                                                                    {{ $supplier->name }}
+                                                                                                </option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    @endforeach
+                                                                        @endforeach
+                                                                @endif
                                                             </div>
                                                             <div
                                                                 class="modal-footer d-flex justify-content-between">
@@ -473,14 +478,16 @@
                                                                     data-dismiss="modal">
                                                                     Close
                                                                 </button>
-                                                                <button type="button"
-                                                                    onclick="printModal({{ $key }})"
-                                                                    class="btn btn-success waves-effect text-left"
-                                                                    id="print">Print</button>
-                                                                <button
-                                                                    class="btn btn-info waves-effect text-left">
-                                                                    Set Price
-                                                                </button>
+                                                                @if (is_null($request->supplier_id))
+                                                                    <button type="button"
+                                                                        onclick="printModal({{ $key }})"
+                                                                        class="btn btn-success waves-effect text-left"
+                                                                        id="print">Print</button>
+                                                                    <button
+                                                                        class="btn btn-info waves-effect text-left">
+                                                                        Set Price
+                                                                    </button>
+                                                                @endif
                                                             </div>
                                                             </form>
                                                         </div>
