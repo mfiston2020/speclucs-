@@ -149,7 +149,7 @@
                                                                         @endif
                                                                         {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                         @if (!is_null($request->supplier_id))
-                                                                            - <span class="text-warning">FROM</span> [{{$request->supplier->company_name}}]
+                                                                            - <span class="text-warning">Supplier:</span> [{{$request->supplier->company_name}}]
                                                                         @endif
                                                                     </h4>
                                                                     <br>
