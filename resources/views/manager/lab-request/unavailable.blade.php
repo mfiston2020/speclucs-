@@ -67,6 +67,7 @@
                                                         <th>Patient Name</th>
                                                         <th>Request Date</th>
                                                         <th>Request Age</th>
+                                                        <th>Source</th>
                                                         <th>Status</th>
                                                         <th></th>
                                                     </tr>
@@ -101,6 +102,9 @@
                                                                 </td>
                                                                 <td>
                                                                     {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
+                                                                </td>
+                                                                <td class="text-start">
+                                                                    {{ $request->supplier?->company_name }}
                                                                 </td>
                                                                 <td class="text-start">
                                                                     <span @class([
