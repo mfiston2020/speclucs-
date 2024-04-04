@@ -76,7 +76,7 @@
                                                                 <th>Patient Name</th>
                                                                 <th>Request Date</th>
                                                                 <th>Request Age</th>
-                                                                <th>Source</th>
+                                                                <th>Supplier</th>
                                                                 <th>Status</th>
                                                                 <th></th>
                                                             </tr>
