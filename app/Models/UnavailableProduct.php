@@ -19,7 +19,11 @@ class UnavailableProduct extends Model
     ];
 
     function product(){
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class,'product_id');
+    }
+
+    function lookforproduct($product){
+        return Product::where('id',$product)->first();
     }
 
     function invoice()

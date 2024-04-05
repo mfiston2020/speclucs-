@@ -34,6 +34,10 @@ class Invoice extends Model
         return $this->hasMany(SoldProduct::class);
     }
 
+    function company(){
+        return $this->belongsTo(CompanyInformation::class,'company_id');
+    }
+
     function supplier(){
         return $this->belongsTo(CompanyInformation::class,'supplier_id');
     }

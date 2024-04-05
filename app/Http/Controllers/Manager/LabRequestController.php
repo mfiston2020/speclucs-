@@ -89,28 +89,36 @@ class LabRequestController extends Controller
                                         ->with('soldproduct')
                                         ->get();
 
+        $invoices_out          =   Invoice::where('supplier_id', userInfo()->company_id)
+                                        ->orderBy('id','desc')
+                                        ->with('soldproduct')
+                                        ->get();
+
         if ($type=='booking') {
 
             $bookings   =   $invoices->where('status', 'booked')->all();
+            $bookings_out   =   $invoices_out->where('status', 'booked')->all();
 
-            return view('manager.lab-request.booking',compact('bookings','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
+            return view('manager.lab-request.booking',compact('bookings','bookings_out','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
 
         if ($type=='priced') {
 
             // priced
             $requests_priced    =   $invoices->whereIn('status', ['priced', 'Confirmed'])->all();
+            $requests_priced_out    =   $invoices_out->whereIn('status', ['priced', 'Confirmed'])->all();
 
-            return view('manager.lab-request.priced',compact('requests_priced','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
+            return view('manager.lab-request.priced',compact('requests_priced','requests_priced_out','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
 
         if ($type=='po-sent') {
         // sent to supplier
         $requests_supplier  =   $invoices->where('status', 'sent to supplier')->all();
+        $requests_supplier_count  =   $invoices_out->where('status', 'sent to supplier')->all();
 
         // sent to supplier
         // $requests_lab       =   $invoices->where('status', 'sent to lab')->all();
-            return view('manager.lab-request.po-sent',compact('requests_supplier','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
+            return view('manager.lab-request.po-sent',compact('requests_supplier','requests_supplier_count','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
     }
 
@@ -127,13 +135,15 @@ class LabRequestController extends Controller
 
         $requests          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);
 
+        $requests_out          =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);
 
-        $products   =   Product::where('company_id', userInfo()->company_id)->get();
-        $powers     =   Power::where('company_id', userInfo()->company_id)->get();
+
+        // $products   =   Product::where('company_id', userInfo()->company_id)->get();
+        // $powers     =   Power::where('company_id', userInfo()->company_id)->get();
 
         $suppliers  =   Supplier::where('company_id', userInfo()->company_id)->get();
 
-        return view('manager.lab-request.unavailable',compact('requests','powers','requests', 'products', 'suppliers','lens_type', 'index', 'chromatics', 'coatings'));
+        return view('manager.lab-request.unavailable',compact('requests','lens_type','requests_out', 'index', 'chromatics', 'coatings','suppliers'));
     }
 
     function sendToLab($id)
