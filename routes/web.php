@@ -93,6 +93,7 @@ Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
 // ===========================================================================
 // Route::group(['middleware'=>'manager','prefix'=>'manager','name'=>'manager.'], function()
 Route::get('/manager', [\App\Http\Controllers\Manager\DashboardController::class, 'index'])->middleware('manager')->name('manager');
+
 Route::prefix('manager')->name('manager.')->middleware('manager')->group(function () {
     // ============================== all routes for user profile =============================
     Route::get('/all_invoices', [\App\Http\Controllers\Manager\DashboardController::class, 'all_invoice'])->name('all.invoices');

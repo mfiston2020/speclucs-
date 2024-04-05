@@ -273,7 +273,7 @@
                             <i class="mdi mdi-view-dashboard"></i>
                             <span class="hide-menu">Lab Request </span>
                             <span class="badge badge-danger badge-pill ml-2">
-                                {{ number_format($requested+$booking+$priced+$sentToLab+$n_a) }}
+                                {{ number_format($requested+$booking+$priced+$sentToLab+$n_a+$from_out) }}
                             </span>
                         </a>
                         <ul aria-expanded="false" class="collapse  first-level">

@@ -72,12 +72,16 @@ class LabRequestController extends Controller
         if ($type=='requested') {
 
             $invoicess          =   Invoice::where('company_id', userInfo()->company_id)
-                                            // ->orwhere('supplier_id', userInfo()->company_id)
                                             ->where('status','requested')
                                             ->orderBy('id','desc')
                                             ->whereDoesntHave('unavailableProducts')->get();
 
-            return view('manager.lab-request.requested',compact('invoicess','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
+            $invoicess_out          =   Invoice::where('supplier_id', userInfo()->company_id)
+                                            ->where('status','requested')
+                                            ->orderBy('id','desc')
+                                            ->whereDoesntHave('unavailableProducts')->get();
+
+            return view('manager.lab-request.requested',compact('invoicess','invoicess_out','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }
 
         $invoices          =   Invoice::where('company_id', userInfo()->company_id)
