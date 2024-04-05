@@ -55,7 +55,7 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Insurance</label>
+                                    <label>Hospital Name</label>
                                     <select class="form-control @error('hospital_name') is-invalid @enderror custom-select"
                                         wire:model.lazy='hospital_name' required>
                                         <option value="">** Select Hospital **</option>

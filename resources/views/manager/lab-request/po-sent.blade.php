@@ -55,7 +55,7 @@
                                         <li class="nav-item">
                                             <a href="#complete-orders" class="nav-link active" data-toggle="tab"
                                                 aria-expanded="false">
-                                                Po Sent
+                                                Internal Po Sent
                                                 <span class="badge badge-danger badge-pill ml-2">
                                                     {{count($requests_supplier)}}
                                                 </span>
@@ -65,7 +65,7 @@
                                         <li class="nav-item">
                                             <a href="#out-complete-orders" class="nav-link" data-toggle="tab"
                                                 aria-expanded="false">
-                                                Po Sent
+                                                External Po Sent
                                                 <span class="badge badge-danger badge-pill ml-2">
                                                     {{count($requests_supplier_count)}}
                                                 </span>

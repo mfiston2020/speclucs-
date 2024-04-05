@@ -59,6 +59,7 @@
                                                 </span>
                                             </a>
                                         </li>
+
                                         <li class="ml-3 nav-item">
                                             <a href="#external_requested" class="nav-link" data-toggle="tab"
                                                 aria-expanded="false">
@@ -84,7 +85,7 @@
                                                                 <th>Patient Name</th>
                                                                 <th>Request Date</th>
                                                                 <th>Request Age</th>
-                                                                <th>Supplier</th>
+                                                                {{-- <th>Supplier</th> --}}
                                                                 <th>Status</th>
                                                                 <th></th>
                                                             </tr>
@@ -121,9 +122,9 @@
                                                                         {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
                                                                     </td>
 
-                                                                    <td class="text-start">
+                                                                    {{-- <td class="text-start">
                                                                         {{ $request->supplier?->company_name }}
-                                                                    </td>
+                                                                    </td> --}}
 
                                                                     <td class="text-start">
                                                                         <span @class([
@@ -411,7 +412,7 @@
                                                                     <th>Patient Name</th>
                                                                     <th>Request Date</th>
                                                                     <th>Request Age</th>
-                                                                    <th>Supplier</th>
+                                                                    <th>Source</th>
                                                                     <th>Status</th>
                                                                     <th></th>
                                                                 </tr>

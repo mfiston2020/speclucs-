@@ -86,7 +86,7 @@
                                                                     <th>Request # </th>
                                                                     <th>Cloud ID</th>
                                                                     <th>Patient Name</th>
-                                                                    <th>Source</th>
+                                                                    {{-- <th>Source</th> --}}
                                                                     <th>Request Date</th>
                                                                     <th>Request Age</th>
                                                                     <th>Description</th>
@@ -135,9 +135,9 @@
                                                                                                 @endif
                                                                                             @endif
                                                                                         </td>
-                                                                                        <td>
+                                                                                        {{-- <td>
                                                                                             {{ $request->supplier }}
-                                                                                        </td>
+                                                                                        </td> --}}
                                                                                         <td>
                                                                                             {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
                                                                                         </td>
@@ -1019,7 +1019,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
