@@ -71,15 +71,35 @@ class LabRequestController extends Controller
 
         if ($type=='requested') {
 
-            $invoicess          =   Invoice::where('company_id', userInfo()->company_id)
-                                            ->where('status','requested')
-                                            ->orderBy('id','desc')
-                                            ->whereDoesntHave('unavailableProducts')->get();
+            // $invoicess          =   [];
 
-            $invoicess_out          =   Invoice::where('supplier_id', userInfo()->company_id)
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $invoicess          =   Invoice::where('company_id', userInfo()->company_id)
+                                            ->where('status','requested')
+                                            ->whereNull('supplier_id')
+                                            ->orderBy('id','desc')
+                                            ->whereDoesntHave('unavailableProducts')->get();
+            }else{
+                $invoicess          =   Invoice::where('company_id', userInfo()->company_id)
+                                            ->where('status','requested')
+                                            ->whereNull('supplier_id')
+                                            ->orderBy('id','desc')
+                                            ->whereDoesntHave('unavailableProducts')->get();
+            }
+
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $invoicess_out          =   Invoice::whereNotNull('supplier_id')
+                                            ->where('status','requested')
+                                            ->where('company_id',userInfo()->company_id)
+                                            ->orderBy('id','desc')
+                                            ->whereDoesntHave('unavailableProducts')->get();
+            } else {
+                $invoicess_out          =   Invoice::where('supplier_id', userInfo()->company_id)
                                             ->where('status','requested')
                                             ->orderBy('id','desc')
                                             ->whereDoesntHave('unavailableProducts')->get();
+            }
+
 
             return view('manager.lab-request.requested',compact('invoicess','invoicess_out','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
         }

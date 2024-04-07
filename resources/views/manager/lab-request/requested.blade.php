@@ -413,7 +413,7 @@
 
 
 
-                                        @if (is_null(getUserCompanyInfo()->is_vision_center) && getUserCompanyInfo()->can_supply=='1')
+                                        {{-- @if (is_null(getUserCompanyInfo()->is_vision_center) && getUserCompanyInfo()->can_supply=='1') --}}
                                             {{-- completed and in stock --}}
                                             <div id="external_requested" class="tab-pane">
                                                 @if (count($invoicess_out)>0)
@@ -718,7 +718,7 @@
                                                                                         @endif
                                                                                     @endif
                                                                                 </div>
-                                                                                {{-- @if (!is_null($request->supplier_id) && $request->supplier_id==getUserCompanyInfo()->id) --}}
+                                                                                @if (!is_null($request->supplier_id) && $request->supplier_id==getUserCompanyInfo()->id)
                                                                                     <div class="modal-footer d-flex justify-content-between">
 
                                                                                             @if ($isOutOfStock=='yes' && $accisOutOfStock=='yes' && $frameisOutOfStock=='yes')
@@ -739,7 +739,7 @@
 
                                                                                             @endif
                                                                                     </div>
-                                                                                {{-- @endif --}}
+                                                                                @endif
                                                                             </div>
                                                                             <!-- /.modal-content -->
                                                                         </div>
@@ -754,7 +754,7 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                        @endif
+                                        {{-- @endif --}}
 
                                     </div>
                                 </div>
