@@ -150,6 +150,8 @@
                                                                     aria-hidden="true" style="display: none;">
                                                                     @php
                                                                         $isOutOfStock='no';
+                                                                        $frameisOutOfStock='no';
+                                                                        $accisOutOfStock='no';
                                                                     @endphp
                                                                     <div
                                                                         class="modal-dialog modal-xl modal-dialog-centered">
@@ -270,6 +272,13 @@
                                                                                     <hr>
                                                                                     @if ($product)
                                                                                         @foreach ($request->soldproduct as $product)
+                                                                                            @php
+
+                                                                                                if ($product->product->stock<1){
+                                                                                                    $frameisOutOfStock='yes';
+                                                                                                }
+
+                                                                                            @endphp
 
                                                                                             @if ($product->product->category_id == 2)
                                                                                                 <div class="row mb-2">
@@ -311,6 +320,13 @@
                                                                                     {{-- for accessories --}}
                                                                                     @if ($product)
                                                                                         @foreach ($request->soldproduct as $product)
+                                                                                            @php
+
+                                                                                                if ($product->product->stock<1){
+                                                                                                    $accisOutOfStock='yes';
+                                                                                                }
+
+                                                                                            @endphp
 
                                                                                             @if ($product->product->category_id != 2 && $product->product->category_id != 1)
                                                                                                 <div class="row mb-2">
@@ -360,7 +376,7 @@
                                                                                 <div
                                                                                     class="modal-footer d-flex justify-content-between">
 
-                                                                                        @if ($isOutOfStock=='yes')
+                                                                                        @if ($isOutOfStock=='yes' && $frameisOutOfStock=='yes' && $accisOutOfStock=='yes')
                                                                                             <center><h4 class="text-danger">Product out of stock</h4></center>
                                                                                         @else
                                                                                             <button type="button"
@@ -477,6 +493,8 @@
                                                                         aria-hidden="true" style="display: none;">
                                                                         @php
                                                                             $isOutOfStock='no';
+                                                                            $frameisOutOfStock='no';
+                                                                            $accisOutOfStock='no';
                                                                         @endphp
                                                                         <div
                                                                             class="modal-dialog modal-xl modal-dialog-centered">
@@ -494,7 +512,11 @@
                                                                                                 @endif
                                                                                             @endif
                                                                                             {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
-                                                                                            @if (!is_null($request->supplier_id))
+                                                                                            @if (!is_null($request->supplier_id) && userInfo()->company_id==$request->supplier_id)
+                                                                                                - <span class="text-warning">From</span> [{{$request->company->company_name}}]
+                                                                                            @endif
+
+                                                                                             @if (!is_null($request->supplier_id) && userInfo()->company_id==$request->company_id)
                                                                                                 - <span class="text-warning">Supplier</span> [{{$request->supplier->company_name}}]
                                                                                             @endif
                                                                                         </h4>
@@ -520,8 +542,6 @@
                                                                                                 if ($product->product->stock<2){
                                                                                                     $isOutOfStock='yes';
                                                                                                 }
-
-                                                                                                echo($product->product->stock);
 
                                                                                             @endphp
 
@@ -599,6 +619,13 @@
                                                                                         <hr>
                                                                                         @if ($product)
                                                                                             @foreach ($request->soldproduct as $product)
+                                                                                            @php
+
+                                                                                                if ($product->product->stock<2){
+                                                                                                    $frameisOutOfStock='yes';
+                                                                                                }
+
+                                                                                            @endphp
 
                                                                                                 @if ($product->product->category_id == 2)
                                                                                                     <div class="row mb-2">
@@ -639,7 +666,13 @@
                                                                                         <hr>
                                                                                         {{-- for accessories --}}
                                                                                         @if ($product)
-                                                                                            @foreach ($request->soldproduct as $product)
+                                                                                            @foreach ($request->soldproduct as $product)    @php
+
+                                                                                                    if ($product->product->stock<1){
+                                                                                                        $accisOutOfStock='yes';
+                                                                                                    }
+
+                                                                                                @endphp
 
                                                                                                 @if ($product->product->category_id != 2 && $product->product->category_id != 1)
                                                                                                     <div class="row mb-2">
@@ -688,12 +721,11 @@
                                                                                 {{-- @if (!is_null($request->supplier_id) && $request->supplier_id==getUserCompanyInfo()->id) --}}
                                                                                     <div class="modal-footer d-flex justify-content-between">
 
-                                                                                            @if ($isOutOfStock=='yes')
+                                                                                            @if ($isOutOfStock=='yes' && $accisOutOfStock=='yes' && $frameisOutOfStock=='yes')
                                                                                                 <center><h4 class="text-danger">Product out of stock</h4></center>
                                                                                             @else
                                                                                                 <button type="button"
-                                                                                                    class="btn btn-danger waves-effect text-left"
-                                                                                                    data-dismiss="modal">
+                                                                                                    class="btn btn-danger waves-effect text-left" data-dismiss="modal">
                                                                                                     Close
                                                                                                 </button>
                                                                                                 <button type="button"

@@ -28,10 +28,9 @@ class Invoice extends Model
         'receive_from_supplier',
     ];
 
-
     function SoldProduct()
     {
-        return $this->hasMany(SoldProduct::class);
+        return $this->hasMany(SoldProduct::class,'invoice_id');
     }
 
     function company(){

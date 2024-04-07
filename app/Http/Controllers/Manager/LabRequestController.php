@@ -150,6 +150,8 @@ class LabRequestController extends Controller
     {
         $soldProducts   =   Invoice::where('id', Crypt::decrypt($id))->with('soldproduct')->with('unavailableProducts')->first();
 
+        // dd($soldProducts);
+
         foreach ($soldProducts->unavailableProducts as $key => $unavailable) {
 
             $prdt = Product::where('id', $unavailable->product_id)->first();
@@ -188,40 +190,158 @@ class LabRequestController extends Controller
     // ====================
     function receiveOrder($type)
     {
-        $lens_type  =   \App\Models\LensType::all();
-        $index      =   \App\Models\PhotoIndex::all();
-        $chromatics =   \App\Models\PhotoChromatics::all();
-        $coatings   =   \App\Models\PhotoCoating::all();
+        // $lens_type  =   \App\Models\LensType::all();
+        // $index      =   \App\Models\PhotoIndex::all();
+        // $chromatics =   \App\Models\PhotoChromatics::all();
+        // $coatings   =   \App\Models\PhotoCoating::all();
         // ==================
-        // $products   =   Product::where('company_id', userInfo()->company_id)->with('power')->get();
 
 
         if (decrypt($type)=='new') {
             // sent to lab
-            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            } else {
+                $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                $query->with('product',function($q){
+                    $q->with(['power','category']);
+                });
+            })->paginate(100);
+            }
 
-            return view('manager.lab-request.received.new', compact('requests', 'lens_type', 'index', 'chromatics', 'coatings'));
+
+            // sent to lab
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $requests_out   =   Invoice::where('company_id', userInfo()->company_id)->whereNotNull('supplier_id')->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            }else{
+                $requests_out   =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            }
+
+            return view('manager.lab-request.received.new', compact('requests','requests_out'));
         }
 
         if (decrypt($type)=='production') {
             // in production
-            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            } else {
+                $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                $query->with('product',function($q){
+                    $q->with(['power','category']);
+                });
+            })->paginate(100);
+            }
 
-            return view('manager.lab-request.received.in-production', compact('requests', 'lens_type', 'index', 'chromatics', 'coatings'));
+
+            // in production
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $requests_out   =   Invoice::where('company_id', userInfo()->company_id)->whereNotNull('supplier_id')->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            }else{
+                $requests_out   =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            }
+            // $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
+
+            return view('manager.lab-request.received.in-production', compact('requests','requests_out'));
         }
 
         if (decrypt($type)=='completed') {
             // completed
-            $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
+            // $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
 
-            return view('manager.lab-request.received.completed', compact('requests','lens_type', 'index', 'chromatics', 'coatings'));
+
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            } else {
+                $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                $query->with('product',function($q){
+                    $q->with(['power','category']);
+                });
+            })->paginate(100);
+            }
+
+
+            // completed
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $requests_out   =   Invoice::where('company_id', userInfo()->company_id)->whereNotNull('supplier_id')->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            }else{
+                $requests_out   =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            }
+
+            return view('manager.lab-request.received.completed', compact('requests','requests_out'));
         }
 
         if (decrypt($type)=='delivered') {
             // delivered
-            $requests  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
+            // $requests  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
 
-            return view('manager.lab-request.received.delivered', compact('requests','lens_type', 'index', 'chromatics', 'coatings'));
+            // sent to lab
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            } else {
+                $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                $query->with('product',function($q){
+                    $q->with(['power','category']);
+                });
+            })->paginate(100);
+            }
+
+
+            // delivered
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $requests_out   =   Invoice::where('company_id', userInfo()->company_id)->whereNotNull('supplier_id')->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            }else{
+                $requests_out   =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
+                    $query->with('product',function($q){
+                        $q->with(['power','category']);
+                    });
+                })->paginate(100);
+            }
+
+            return view('manager.lab-request.received.delivered', compact('requests','requests_out'));
         }
 
         // // other products
@@ -243,9 +363,17 @@ class LabRequestController extends Controller
 
         // recording work in progress stock in
         foreach ($invoice->soldproduct as $key => $sold) {
+
             $product    =   $allProduct->where('id', $sold->product_id)->first();
             $stockVariation = $product->stock - 1;
             $product->save();
+
+
+            TrackOrderRecord::create([
+                'status'        =>  'in production',
+                'user_id'       =>  auth()->user()->id,
+                'invoice_id'    =>  $sold->invoice_id,
+            ]);
 
             $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', '0', 'in production', 'wip', 'in');
         }
@@ -269,6 +397,12 @@ class LabRequestController extends Controller
                 Invoice::find($value)->update([
                     'status' => 'completed',
                 ]);
+
+                TrackOrderRecord::create([
+                    'status'        =>  'completed',
+                    'user_id'       =>  auth()->user()->id,
+                    'invoice_id'    =>  $value,
+                ]);
             }
             return redirect()->back()->with('successMsg', 'Request completed!');
         }
@@ -286,6 +420,12 @@ class LabRequestController extends Controller
                 Invoice::find($value)->update([
                     'status' => 'delivered',
                     'sent_to_seller' => now(),
+                ]);
+
+                TrackOrderRecord::create([
+                    'status'        =>  'delivered',
+                    'user_id'       =>  auth()->user()->id,
+                    'invoice_id'    =>  $value,
                 ]);
 
                 foreach ($invoice->soldproduct as $key => $sold) {
