@@ -361,19 +361,18 @@ class LabRequestController extends Controller
             'received_by_lab' => now()
         ]);
 
+         TrackOrderRecord::create([
+            'status'        =>  'in Process',
+            'user_id'       =>  auth()->user()->id,
+            'invoice_id'    =>  $invoice->id,
+        ]);
+
         // recording work in progress stock in
         foreach ($invoice->soldproduct as $key => $sold) {
 
             $product    =   $allProduct->where('id', $sold->product_id)->first();
             $stockVariation = $product->stock - 1;
             $product->save();
-
-
-            TrackOrderRecord::create([
-                'status'        =>  'production',
-                'user_id'       =>  auth()->user()->id,
-                'invoice_id'    =>  $sold->invoice_id,
-            ]);
 
             $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', '0', 'in production', 'wip', 'in');
         }
