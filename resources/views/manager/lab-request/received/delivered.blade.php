@@ -766,41 +766,6 @@
                                                                                 @endforeach
                                                                             {{-- @endif --}}
                                                                         @endif
-
-
-                                                                        {{-- for frame --}}
-                                                                        @if (is_null($request->supplier_id) || $request->supplier_id==userInfo()->company_id)
-                                                                            <form
-                                                                            action="{{ route('manager.sent.request.to.complete') }}"
-                                                                            method="post">
-                                                                            @csrf
-                                                                            <input type="hidden" name="idsalfjei"
-                                                                                required
-                                                                                value="{{ Crypt::encrypt($request->id) }}">
-
-                                                                            <hr>
-                                                                            <h4 class="text-info">Operation</h4>
-                                                                    </div>
-                                                                    <div
-                                                                        class="modal-footer d-flex justify-content-between">
-                                                                        <button type="button"
-                                                                            class="btn btn-danger waves-effect text-left"
-                                                                            data-dismiss="modal">
-                                                                            Close
-                                                                        </button>
-                                                                        {{-- <button type="button"
-                                                                            class="btn btn-success waves-effect text-left"
-                                                                            data-dismiss="modal">Print</button> --}}
-
-                                                                        {{-- @if ($request->status == 'production') --}}
-                                                                            <button type="submit"
-                                                                                class="btn btn-info waves-effect text-left">
-                                                                                Complete Order
-                                                                            </button>
-                                                                        {{-- @endif --}}
-                                                                    </div>
-                                                                    </form>
-                                                                    @endif
                                                                 </div>
                                                                 <!-- /.modal-content -->
                                                             </div>

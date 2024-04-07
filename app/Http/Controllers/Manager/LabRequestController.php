@@ -370,7 +370,7 @@ class LabRequestController extends Controller
 
 
             TrackOrderRecord::create([
-                'status'        =>  'in production',
+                'status'        =>  'production',
                 'user_id'       =>  auth()->user()->id,
                 'invoice_id'    =>  $sold->invoice_id,
             ]);
