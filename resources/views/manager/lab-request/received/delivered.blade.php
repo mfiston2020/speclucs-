@@ -303,7 +303,7 @@
                                                                             @endforeach
                                                                         @endif
 
-                                                                        @if ($product->hasFrame())
+                                                                        {{-- @if ($product->hasFrame()) --}}
 
                                                                             {{-- for frame --}}
                                                                             <hr>
@@ -337,9 +337,9 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             {{-- @endif --}}
-                                                                        @endif
+                                                                        {{-- @endif --}}
 
-                                                                        @if ($product->hasAccessories())
+                                                                        {{-- @if ($product->hasAccessories()) --}}
 
                                                                             <hr>
                                                                             <h4 class="text-info">Accessories & Others</h4>
@@ -387,7 +387,7 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             {{-- @endif --}}
-                                                                        @endif
+                                                                        {{-- @endif --}}
 
 
                                                                         {{-- for frame --}}
@@ -681,7 +681,7 @@
                                                                             @endforeach
                                                                         @endif
 
-                                                                        @if ($product->hasFrame())
+                                                                        {{-- @if ($product->hasFrame()) --}}
 
                                                                             {{-- for frame --}}
                                                                             <hr>
@@ -715,9 +715,9 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             {{-- @endif --}}
-                                                                        @endif
+                                                                        {{-- @endif --}}
 
-                                                                        @if ($product->hasAccessories())
+                                                                        {{-- @if ($product->hasAccessories()) --}}
 
                                                                             <hr>
                                                                             <h4 class="text-info">Accessories & Others</h4>
@@ -765,7 +765,7 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             {{-- @endif --}}
-                                                                        @endif
+                                                                        {{-- @endif --}}
                                                                 </div>
                                                                 <!-- /.modal-content -->
                                                             </div>

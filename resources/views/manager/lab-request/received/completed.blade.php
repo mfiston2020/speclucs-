@@ -92,7 +92,7 @@
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>
                                                                 <a href="#!" data-toggle="modal"
-                                                                    data-target="#request-{{ $key }}-detail">
+                                                                    data-target="#internal-{{ $key }}-detail">
                                                                     Request #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                 </a>
                                                             </td>
@@ -129,7 +129,7 @@
                                                         {{-- modal --}}
 
                                                         <div class="modal fade bs-example-modal-lg"
-                                                            id="external-{{ $key }}-detail" tabindex="-1"
+                                                            id="internal-{{ $key }}-detail" tabindex="-1"
                                                             role="dialog" aria-labelledby="myLargeModalLabel"
                                                             aria-hidden="true" style="display: none;">
                                                             <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -316,7 +316,7 @@
                                                                             @endforeach
                                                                         @endif
 
-                                                                        @if ($product->hasFrame())
+                                                                        {{-- @if ($product->hasFrame()) --}}
 
                                                                             {{-- for frame --}}
                                                                             <hr>
@@ -350,9 +350,9 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             {{-- @endif --}}
-                                                                        @endif
+                                                                        {{-- @endif --}}
 
-                                                                        @if ($product->hasAccessories())
+                                                                        {{-- @if ($product->hasAccessories()) --}}
 
                                                                             <hr>
                                                                             <h4 class="text-info">Accessories & Others</h4>
@@ -400,7 +400,7 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             {{-- @endif --}}
-                                                                        @endif
+                                                                        {{-- @endif --}}
 
 
                                                                         {{-- for frame --}}
@@ -702,7 +702,7 @@
                                                                             @endforeach
                                                                         @endif
 
-                                                                        @if ($product->hasFrame())
+                                                                        {{-- @if ($product->hasFrame()) --}}
 
                                                                             {{-- for frame --}}
                                                                             <hr>
@@ -736,9 +736,9 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             {{-- @endif --}}
-                                                                        @endif
+                                                                        {{-- @endif --}}
 
-                                                                        @if ($product->hasAccessories())
+                                                                        {{-- @if ($product->hasAccessories()) --}}
 
                                                                             <hr>
                                                                             <h4 class="text-info">Accessories & Others</h4>
@@ -786,7 +786,7 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             {{-- @endif --}}
-                                                                        @endif
+                                                                        {{-- @endif --}}
 
 
                                                                         {{-- for frame --}}

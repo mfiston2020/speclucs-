@@ -54,14 +54,14 @@
                     <li class="nav-item">
                         <a href="#incomplete-orders" class="nav-link active" data-toggle="tab"
                             aria-expanded="false">
-                            Internal Booking(s)
+                            Internal N/A
                             <span class="badge badge-danger badge-pill">{{number_format($requests->total())}}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#external-booking-orders" class="nav-link" data-toggle="tab"
                             aria-expanded="false">
-                            External Booking(s)
+                            External N/A
                             <span class="badge badge-danger badge-pill">{{number_format($requests_out->total())}}</span>
                         </a>
                     </li>

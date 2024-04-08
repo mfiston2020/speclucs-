@@ -178,32 +178,6 @@
                                                                                                 $availability_right = false;
                                                                                             }
 
-                                                                                            if ($availability_right == true) {
-                                                                                                $type = $lens_type
-                                                                                                    ->where('id', $right_len->type_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $indx = $index
-                                                                                                    ->where('id', $right_len->index_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $ct = $coatings
-                                                                                                    ->where('id', $right_len->coating_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $chrm = $chromatics
-                                                                                                    ->where('id', $right_len->chromatic_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-                                                                                            } else {
-                                                                                                if ($right_len) {
-                                                                                                    $description = $right_len->description;
-                                                                                                }
-                                                                                            }
-
                                                                                             // left eye checking
                                                                                             $left_len = $request->unavailableproducts->where('eye', 'left')->first();
 
@@ -214,32 +188,6 @@
                                                                                                 }
                                                                                                 $left_len = $left_len->product;
                                                                                                 $availability_left = false;
-                                                                                            }
-
-                                                                                            if ($availability_left == true) {
-                                                                                                $type = $lens_type
-                                                                                                    ->where('id', $left_len->type_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $indx = $index
-                                                                                                    ->where('id', $left_len->index_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $ct = $coatings
-                                                                                                    ->where('id', $left_len->coating_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $chrm = $chromatics
-                                                                                                    ->where('id', $left_len->chromatic_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-                                                                                            } else {
-                                                                                                if ($left_len) {
-                                                                                                    $description = $left_len->description;
-                                                                                                }
                                                                                             }
                                                                                         @endphp
 
@@ -347,14 +295,9 @@
                                                                                                         @endforeach
                                                                                                         @foreach ($request->unavailableproducts as $product)
                                                                                                             @php
-                                                                                                                $invoice_product = $product;
+                                                                                                                $invoice_product = $product->product;
 
-                                                                                                                if ($availability_left == true) {
-                                                                                                                    $type = $lens_type->where('id', $left_len->type_id)->pluck('name')->first();
-                                                                                                                    $indx = $index->where('id', $left_len->index_id)->pluck('name')->first();
-                                                                                                                    $ct = $coatings->where('id', $left_len->coating_id)->pluck('name')->first();
-                                                                                                                    $chrm = $chromatics->where('id', $left_len->chromatic_id)->pluck('name')->first();
-                                                                                                                }
+
                                                                                                             @endphp
 
                                                                                                             {{-- for lens --}}
@@ -362,32 +305,32 @@
                                                                                                             <div class="row mb-2">
                                                                                                                 <div class="col-1">
                                                                                                                     <h4 class="text-capitalize">
-                                                                                                                        {{ $invoice_product->eye == null ? '' : Oneinitials($invoice_product->eye) }}
+                                                                                                                        {{ $product->eye == null ? '' : Oneinitials($product->eye) }}
                                                                                                                     </h4>
                                                                                                                 </div>
                                                                                                                 <div class="col-3">
                                                                                                                     <span>
-                                                                                                                        {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }} {{ $chrm }} {{ $ct }} {{ $indx }}
+                                                                                                                        {{ initials($product->type->name)=='BT'?'Bifocal Round Top':initials($product->type->name) }} {{ $product->uchromatic->name }} {{ $product->coating->name }} {{ $product->uindex->name }}
                                                                                                                     </span>
                                                                                                                 </div>
                                                                                                                 <div class="col-2">
-                                                                                                                    @if (initials($type) == 'SV')
-                                                                                                                        <span>{{ format_values($invoice_product->sphere) }}
+                                                                                                                    @if (initials($product->type->name) == 'SV')
+                                                                                                                        <span>{{ format_values($product->sphere) }}
                                                                                                                             /
-                                                                                                                            {{ format_values($invoice_product->cylinder) }}</span>
+                                                                                                                            {{ format_values($product->cylinder) }}</span>
                                                                                                                     @else
-                                                                                                                        <span>{{ format_values($invoice_product->sphere) }}
+                                                                                                                        <span>{{ format_values($product->sphere) }}
                                                                                                                             /
-                                                                                                                            {{ format_values($invoice_product->cylinder) }}
-                                                                                                                            *{{ format_values($invoice_product->axis) }}
-                                                                                                                            {{ $invoice_product->addition }}</span>
+                                                                                                                            {{ format_values($product->cylinder) }}
+                                                                                                                            *{{ format_values($product->axis) }}
+                                                                                                                            {{ $product->addition }}</span>
                                                                                                                     @endif
                                                                                                                 </div>
                                                                                                                 <div class="col-2 row">
                                                                                                                     <span>
                                                                                                                         <h6>Location: </h6>
                                                                                                                     </span>
-                                                                                                                    {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
+                                                                                                                    {{ $product->product?->location == null ? '-' : $product->product?->location }}
                                                                                                                 </div>
                                                                                                                 <div class="col-2 ">
                                                                                                                     <span
@@ -398,7 +341,7 @@
                                                                                                                         </h6>
                                                                                                                         <span
                                                                                                                             class="text-capitalize">
-                                                                                                                            {{ $invoice_product->mono_pd }}
+                                                                                                                            {{ $product->mono_pd }}
                                                                                                                         </span>
                                                                                                                     </span>
                                                                                                                 </div>
@@ -411,7 +354,7 @@
                                                                                                                         </h6>
                                                                                                                         <span
                                                                                                                             class="text-capitalize">
-                                                                                                                            {{ $invoice_product->segment_h }}
+                                                                                                                            {{ $product->segment_h }}
                                                                                                                         </span>
                                                                                                                     </span>
                                                                                                                 </div>

@@ -66,8 +66,8 @@ class LabRequestController extends Controller
 
         if ($type=='requested') {
 
-            $invoicess      =   $this->ordersRepo->internalOrder('requested');
-            $invoicess_out  =   $this->ordersRepo->externalOrder('requested');
+            $invoicess      =   $this->ordersRepo->internalOrder(['requested']);
+            $invoicess_out  =   $this->ordersRepo->externalOrder(['requested']);
 
 
             return view('manager.lab-request.requested',compact('invoicess','invoicess_out'));
@@ -75,24 +75,26 @@ class LabRequestController extends Controller
 
         if ($type=='booking') {
 
-            $bookings   =   $this->ordersRepo->internalOrder('booked');
-            $bookings_out   =   $this->ordersRepo->externalOrder('booked');
+            $bookings   =   $this->ordersRepo->internalOrder(['booked']);
+            $bookings_out   =   $this->ordersRepo->externalOrder(['booked']);
 
             return view('manager.lab-request.booking',compact('bookings','bookings_out'));
         }
 
         if ($type=='priced') {
 
-            $invoicess      =   $this->ordersRepo->internalOrder('Confirmed');
-            $invoicess_out  =   $this->ordersRepo->externalOrder('Confirmed');
+            $requests_priced      =   $this->ordersRepo->internalOrder(['Confirmed','priced']);
+            $requests_priced_out  =   $this->ordersRepo->externalOrder(['Confirmed','priced']);
+
+            // dd($requests_priced);
 
             return view('manager.lab-request.priced',compact('requests_priced','requests_priced_out'));
         }
 
         if ($type=='po-sent') {
 
-            $requests_supplier          =   $this->ordersRepo->internalOrder('sent to supplier');
-            $requests_supplier_count    =   $this->ordersRepo->externalOrder('sent to supplier');
+            $requests_supplier          =   $this->ordersRepo->internalOrder(['sent to supplier']);
+            $requests_supplier_count    =   $this->ordersRepo->externalOrder(['sent to supplier']);
 
             return view('manager.lab-request.po-sent',compact('requests_supplier','requests_supplier_count'));
         }

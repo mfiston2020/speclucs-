@@ -18,7 +18,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <h4 class="card-title">All Requested Products</h4>
+                            <h4 class="card-title"> All Requested Products </h4>
                         </div>
                         {{-- ============================== --}}
                         @include('manager.includes.layouts.message')
@@ -125,12 +125,12 @@
                                                                         <div>
                                                                             <h4 class="modal-title text-info">
                                                                                 @if ($request->client_id != null)
-                                                                                    {{$request->client->name}}
+                                                                                    {{ $request->client->name }}
                                                                                 @else
                                                                                     @if ($request->hospital_name!=null)
-                                                                                        [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                                                        [{{ $request->cloud_id }}] {{ $request->hospital_name }}
                                                                                     @else
-                                                                                        {{$request->client_name}}
+                                                                                        {{ $request->client_name}}
                                                                                     @endif
                                                                                 @endif
                                                                             </h4>
@@ -142,9 +142,7 @@
                                                                                 #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                             </h4>
                                                                         </div>
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="modal"
-                                                                            aria-hidden="true">×</button>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <h4 class="text-info">Lens</h4>
@@ -295,7 +293,7 @@
                                                                             @endforeach
                                                                         @endif
 
-                                                                        @if ($product->hasFrame())
+                                                                        {{-- @if ($request->hasFrame()) --}}
 
                                                                             {{-- for frame --}}
                                                                             <hr>
@@ -329,9 +327,9 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             {{-- @endif --}}
-                                                                        @endif
+                                                                        {{-- @endif --}}
 
-                                                                        @if ($product->hasAccessories())
+                                                                        {{-- @if ($request->hasAccessories()) --}}
 
                                                                             <hr>
                                                                             <h4 class="text-info">Accessories & Others</h4>
@@ -379,7 +377,7 @@
                                                                                     @endif
                                                                                 @endforeach
                                                                             {{-- @endif --}}
-                                                                        @endif
+                                                                        {{-- @endif --}}
 
 
                                                                         {{-- for frame --}}
