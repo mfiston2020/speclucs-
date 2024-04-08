@@ -467,16 +467,16 @@ class LabRequestController extends Controller
         } else {
             foreach ($request->requestid as $key => $value) {
                 $invoice    =   Invoice::where('id', $value)->with('soldproduct')->first();
-                // Invoice::find($value)->update([
-                //     'status' => 'collected',
-                //     'received_by_patient' => now(),
-                // ]);
+                Invoice::find($value)->update([
+                    'status' => 'collected',
+                    'received_by_patient' => now(),
+                ]);
 
-                // TrackOrderRecord::create([
-                //     'status'        =>  'collected',
-                //     'user_id'       =>  auth()->user()->id,
-                //     'invoice_id'    =>  $value,
-                // ]);
+                TrackOrderRecord::create([
+                    'status'        =>  'collected',
+                    'user_id'       =>  auth()->user()->id,
+                    'invoice_id'    =>  $value,
+                ]);
 
                 foreach ($invoice->soldproduct as $key => $sold) {
                     $product    =   Product::where('id', $sold->product_id)->first();
