@@ -268,7 +268,7 @@
                                                                                     <hr>
                                                                                     <h4 class="text-info">Frame</h4>
                                                                                     <hr>
-                                                                                    @if ($product)
+                                                                                    {{-- @if ($product) --}}
                                                                                         @foreach ($request->soldproduct as $product)
                                                                                             @php
 
@@ -304,7 +304,7 @@
                                                                                                 </div>
                                                                                             @endif
                                                                                         @endforeach
-                                                                                    @endif
+                                                                                    {{-- @endif --}}
                                                                                 {{-- @endif --}}
 
                                                                                 {{-- @if ($product->hasAccessories()) --}}
