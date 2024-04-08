@@ -431,7 +431,7 @@ class LabRequestController extends Controller
 
     function receiveRequest(Request $request)
     {
-        $allProduct =   Product::where('company_id', userInfo()->company_id)->get();
+        // $allProduct =   Product::where('company_id', userInfo()->company_id)->get();
         if ($request->requestid == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
         } else {
@@ -449,12 +449,12 @@ class LabRequestController extends Controller
                 // ]);
 
                 foreach ($invoice->soldproduct as $key => $sold) {
-                    $product    =   $allProduct->where('id', $sold->product_id)->first();
+                    $product    =   Product::where('id', $sold->product_id)->first();
                     // $stockVariation = $product->stock - 1;
 
-                    dd($allProduct);
+                    dd($product->id);
 
-                    $this->stocktrackRepo->saveTrackRecord( $sold->product_id, $product->stock, '1', '0', 'received', 'fg', 'in');
+                    $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', '0', 'received', 'fg', 'in');
                 }
             }
             return redirect()->back()->with('successMsg', 'Request Received!');
