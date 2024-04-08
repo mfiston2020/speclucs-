@@ -265,9 +265,7 @@
 
                                                                                 {{-- for frame --}}
                                                                                 {{-- @if ($product->hasFrame()) --}}
-                                                                                    @if ($product->hasLens())
-                                                                                        <hr>
-                                                                                    @endif
+                                                                                    <hr>
                                                                                     <h4 class="text-info">Frame</h4>
                                                                                     <hr>
                                                                                     @if ($product)
@@ -300,7 +298,7 @@
                                                                                                     <div class="col-3">
                                                                                                         <span
                                                                                                             class="text-capitalize">
-                                                                                                            {{ $product->location == null ? '-' : $product->location }}
+                                                                                                            {{ $product->product->location == null ? '-' : $product->product->location }}
                                                                                                         </span>
                                                                                                     </div>
                                                                                                 </div>
@@ -310,9 +308,7 @@
                                                                                 {{-- @endif --}}
 
                                                                                 {{-- @if ($product->hasAccessories()) --}}
-                                                                                    @if ($product->hasFrame())
                                                                                         <hr>
-                                                                                    @endif
                                                                                     <h4 class="text-info">Accessories &
                                                                                         Others
                                                                                     </h4>
