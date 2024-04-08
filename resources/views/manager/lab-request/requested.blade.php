@@ -314,7 +314,7 @@
                                                                                     </h4>
                                                                                     <hr>
                                                                                     {{-- for accessories --}}
-                                                                                    @if ($product)
+                                                                                    {{-- @if ($product) --}}
                                                                                         @foreach ($request->soldproduct as $product)
                                                                                             @php
 
@@ -365,7 +365,7 @@
                                                                                                 </div>
                                                                                             @endif
                                                                                         @endforeach
-                                                                                    @endif
+                                                                                    {{-- @endif --}}
                                                                                 {{-- @endif --}}
                                                                             </div>
                                                                             @if (is_null($request->supplier_id))
