@@ -452,9 +452,9 @@ class LabRequestController extends Controller
                     $product    =   $allProduct->where('id', $sold->product_id)->first();
                     // $stockVariation = $product->stock - 1;
 
-                    dd($sold);
+                    dd($allProduct);
 
-                    $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', '0', 'received', 'fg', 'in');
+                    $this->stocktrackRepo->saveTrackRecord( $sold->product_id, $product->stock, '1', '0', 'received', 'fg', 'in');
                 }
             }
             return redirect()->back()->with('successMsg', 'Request Received!');
