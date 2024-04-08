@@ -437,22 +437,20 @@ class LabRequestController extends Controller
         } else {
             foreach ($request->requestid as $key => $value) {
                 $invoice    =   Invoice::where('id', $value)->with('soldproduct')->first();
-                // Invoice::find($value)->update([
-                //     'status' => 'received',
-                //     'received_by_seller' => now(),
-                // ]);
+                Invoice::find($value)->update([
+                    'status' => 'received',
+                    'received_by_seller' => now(),
+                ]);
 
-                // TrackOrderRecord::create([
-                //     'status'        =>  'received',
-                //     'user_id'       =>  auth()->user()->id,
-                //     'invoice_id'    =>  $value,
-                // ]);
+                TrackOrderRecord::create([
+                    'status'        =>  'received',
+                    'user_id'       =>  auth()->user()->id,
+                    'invoice_id'    =>  $value,
+                ]);
 
                 foreach ($invoice->soldproduct as $key => $sold) {
                     $product    =   Product::where('id', $sold->product_id)->first();
                     // $stockVariation = $product->stock - 1;
-
-                    dd($product->id);
 
                     $this->stocktrackRepo->saveTrackRecord($product->id, $product->stock, '1', '0', 'received', 'fg', 'in');
                 }
