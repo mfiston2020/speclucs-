@@ -264,7 +264,7 @@
                                                                                 {{-- @endif --}}
 
                                                                                 {{-- for frame --}}
-                                                                                @if ($product->hasFrame())
+                                                                                {{-- @if ($product->hasFrame()) --}}
                                                                                     @if ($product->hasLens())
                                                                                         <hr>
                                                                                     @endif
@@ -307,9 +307,9 @@
                                                                                             @endif
                                                                                         @endforeach
                                                                                     @endif
-                                                                                @endif
+                                                                                {{-- @endif --}}
 
-                                                                                @if ($product->hasAccessories())
+                                                                                {{-- @if ($product->hasAccessories()) --}}
                                                                                     @if ($product->hasFrame())
                                                                                         <hr>
                                                                                     @endif
@@ -370,7 +370,7 @@
                                                                                             @endif
                                                                                         @endforeach
                                                                                     @endif
-                                                                                @endif
+                                                                                {{-- @endif --}}
                                                                             </div>
                                                                             @if (is_null($request->supplier_id))
                                                                                 <div
@@ -611,10 +611,8 @@
                                                                                     {{-- @endif --}}
 
                                                                                     {{-- for frame --}}
-                                                                                    @if ($product->hasFrame())
-                                                                                        @if ($product->hasLens())
-                                                                                            <hr>
-                                                                                        @endif
+                                                                                    {{-- @if ($product->hasFrame()) --}}
+                                                                                        <hr>
                                                                                         <h4 class="text-info">Frame</h4>
                                                                                         <hr>
                                                                                         @if ($product)
@@ -647,19 +645,18 @@
                                                                                                         <div class="col-3">
                                                                                                             <span
                                                                                                                 class="text-capitalize">
-                                                                                                                {{ $product->location == null ? '-' : $product->location }}
+                                                                                                                {{ $product->product->location == null ? '-' : $product->product->location }}
                                                                                                             </span>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 @endif
                                                                                             @endforeach
                                                                                         @endif
-                                                                                    @endif
+                                                                                    {{-- @endif --}}
 
-                                                                                    @if ($product->hasAccessories())
-                                                                                        @if ($product->hasFrame())
-                                                                                            <hr>
-                                                                                        @endif
+                                                                                    {{-- @if ($product->hasAccessories()) --}}
+                                                                                    <hr>
+
                                                                                         <h4 class="text-info">Accessories &
                                                                                             Others
                                                                                         </h4>
@@ -716,7 +713,7 @@
                                                                                                 @endif
                                                                                             @endforeach
                                                                                         @endif
-                                                                                    @endif
+                                                                                    {{-- @endif --}}
                                                                                 </div>
                                                                                 @if (!is_null($request->supplier_id) && $request->supplier_id==getUserCompanyInfo()->id)
                                                                                     <div class="modal-footer d-flex justify-content-between">
