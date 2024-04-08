@@ -431,8 +431,6 @@ class LabRequestController extends Controller
 
     function receiveRequest(Request $request)
     {
-        dd('skhfsdh');
-
         $allProduct =   Product::where('company_id', userInfo()->company_id)->get();
         if ($request->requestid == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
