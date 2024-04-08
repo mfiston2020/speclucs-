@@ -19,7 +19,6 @@ class UnavailableProduct extends Model
         'location',
         'supplier_id',
         'product_id'
-
     ];
 
     function type(){

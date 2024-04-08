@@ -12,16 +12,18 @@ use App\Models\UnavailableProduct;
 use App\Http\Controllers\Controller;
 use App\Models\LensType;
 use App\Models\TrackOrderRecord;
+use App\Repositories\InvoiceRepo;
 use App\Repositories\StockTrackRepo;
 use Illuminate\Support\Facades\Crypt;
 
 class LabRequestController extends Controller
 {
-    private $stocktrackRepo;
+    private $stocktrackRepo,$ordersRepo;
 
     public function __construct()
     {
         $this->stocktrackRepo = new StockTrackRepo();
+        $this->ordersRepo       =   new InvoiceRepo();
     }
     // ===============
 
@@ -62,100 +64,72 @@ class LabRequestController extends Controller
     function indexWithTye($type){
         $isOutOfStock   =   null;
 
-        // dd($invoices[0]->supplier);
-
-        $lens_type          =   \App\Models\LensType::all();
-        $index              =   \App\Models\PhotoIndex::all();
-        $coatings           =   \App\Models\PhotoCoating::all();
-        $chromatics         =   \App\Models\PhotoChromatics::all();
-
         if ($type=='requested') {
 
-            // $invoicess          =   [];
-
-            if (getuserCompanyInfo()->is_vision_center=='1') {
-                $invoicess          =   Invoice::where('company_id', userInfo()->company_id)
-                                            ->where('status','requested')
-                                            ->whereNull('supplier_id')
-                                            ->orderBy('id','desc')
-                                            ->whereDoesntHave('unavailableProducts')->get();
-            }else{
-                $invoicess          =   Invoice::where('company_id', userInfo()->company_id)
-                                            ->where('status','requested')
-                                            ->whereNull('supplier_id')
-                                            ->orderBy('id','desc')
-                                            ->whereDoesntHave('unavailableProducts')->get();
-            }
-
-            if (getuserCompanyInfo()->is_vision_center=='1') {
-                $invoicess_out          =   Invoice::whereNotNull('supplier_id')
-                                            ->where('status','requested')
-                                            ->where('company_id',userInfo()->company_id)
-                                            ->orderBy('id','desc')
-                                            ->whereDoesntHave('unavailableProducts')->get();
-            } else {
-                $invoicess_out          =   Invoice::where('supplier_id', userInfo()->company_id)
-                                            ->where('status','requested')
-                                            ->orderBy('id','desc')
-                                            ->whereDoesntHave('unavailableProducts')->get();
-            }
+            $invoicess      =   $this->ordersRepo->internalOrder('requested');
+            $invoicess_out  =   $this->ordersRepo->externalOrder('requested');
 
 
-            return view('manager.lab-request.requested',compact('invoicess','invoicess_out','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
+            return view('manager.lab-request.requested',compact('invoicess','invoicess_out'));
         }
-
-        $invoices          =   Invoice::where('company_id', userInfo()->company_id)
-                                        ->orderBy('id','desc')
-                                        ->with('soldproduct')
-                                        ->get();
-
-        $invoices_out          =   Invoice::where('supplier_id', userInfo()->company_id)
-                                        ->orderBy('id','desc')
-                                        ->with('soldproduct')
-                                        ->get();
 
         if ($type=='booking') {
 
-            $bookings   =   $invoices->where('status', 'booked')->all();
-            $bookings_out   =   $invoices_out->where('status', 'booked')->all();
+            $bookings   =   $this->ordersRepo->internalOrder('booked');
+            $bookings_out   =   $this->ordersRepo->externalOrder('booked');
 
-            return view('manager.lab-request.booking',compact('bookings','bookings_out','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
+            return view('manager.lab-request.booking',compact('bookings','bookings_out'));
         }
 
         if ($type=='priced') {
 
-            // priced
-            $requests_priced    =   $invoices->whereIn('status', ['priced', 'Confirmed'])->all();
-            $requests_priced_out    =   $invoices_out->whereIn('status', ['priced', 'Confirmed'])->all();
+            $invoicess      =   $this->ordersRepo->internalOrder('Confirmed');
+            $invoicess_out  =   $this->ordersRepo->externalOrder('Confirmed');
 
-            return view('manager.lab-request.priced',compact('requests_priced','requests_priced_out','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
+            return view('manager.lab-request.priced',compact('requests_priced','requests_priced_out'));
         }
 
         if ($type=='po-sent') {
-        // sent to supplier
-        $requests_supplier  =   $invoices->where('status', 'sent to supplier')->all();
-        $requests_supplier_count  =   $invoices_out->where('status', 'sent to supplier')->all();
 
-        // sent to supplier
-        // $requests_lab       =   $invoices->where('status', 'sent to lab')->all();
-            return view('manager.lab-request.po-sent',compact('requests_supplier','requests_supplier_count','lens_type', 'index', 'chromatics', 'coatings','isOutOfStock'));
+            $requests_supplier          =   $this->ordersRepo->internalOrder('sent to supplier');
+            $requests_supplier_count    =   $this->ordersRepo->externalOrder('sent to supplier');
+
+            return view('manager.lab-request.po-sent',compact('requests_supplier','requests_supplier_count'));
         }
     }
 
     function naOrders(){
 
+        if (getuserCompanyInfo()->is_vision_center=='1') {
+            $requests          =   Invoice::where('company_id', userInfo()->company_id)
+                                        ->where('status','requested')
+                                        ->whereNull('supplier_id')
+                                        ->orderBy('id','desc')
+                                        ->has('unavailableProducts')->paginate(50);
+        }else{
+            $requests          =   Invoice::where('company_id', userInfo()->company_id)
+                                        ->where('status','requested')
+                                        ->whereNull('supplier_id')
+                                        ->orderBy('id','desc')
+                                        ->has('unavailableProducts')->paginate(50);
+        }
 
-        $isOutOfStock       =   null;
-        $lens_type          =   \App\Models\LensType::all();
-        $index              =   \App\Models\PhotoIndex::all();
-        $coatings           =   \App\Models\PhotoCoating::all();
-        $chromatics         =   \App\Models\PhotoChromatics::all();
+        if (getuserCompanyInfo()->is_vision_center=='1') {
+            $requests_out          =   Invoice::whereNotNull('supplier_id')
+                                        ->where('status','requested')
+                                        ->where('company_id',userInfo()->company_id)
+                                        ->orderBy('id','desc')
+                                        ->has('unavailableProducts')->paginate(50);
+        } else {
+            $requests_out          =   Invoice::where('supplier_id', userInfo()->company_id)
+                                        ->where('status','requested')
+                                        ->orderBy('id','desc')
+                                        ->has('unavailableProducts')->paginate(50);
+        }
 
+        // $requests          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);
 
-
-        $requests          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);
-
-        $requests_out          =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);
+        // $requests_out          =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);
 
 
         // $products   =   Product::where('company_id', userInfo()->company_id)->get();
@@ -163,7 +137,7 @@ class LabRequestController extends Controller
 
         $suppliers  =   Supplier::where('company_id', userInfo()->company_id)->get();
 
-        return view('manager.lab-request.unavailable',compact('requests','lens_type','requests_out', 'index', 'chromatics', 'coatings','suppliers'));
+        return view('manager.lab-request.unavailable',compact('requests','requests_out','suppliers'));
     }
 
     function sendToLab($id)
@@ -363,11 +337,6 @@ class LabRequestController extends Controller
 
             return view('manager.lab-request.received.delivered', compact('requests','requests_out'));
         }
-
-        // // other products
-        // $other_orders  =   Invoice::where('company_id', userInfo()->company_id)->whereNotIn('status', ['delivered', 'sent to lab', 'in production', 'completed'])->orderBy('created_at', 'desc')->with('unavailableproducts')->with('client')->with('soldproduct')->get();
-
-
     }
 
     // ========================================
