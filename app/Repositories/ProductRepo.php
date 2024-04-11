@@ -126,19 +126,19 @@ class ProductRepo implements ProductInterface
         }
 
 
-        if ($usage > $prod->stock && $usage>0) {
+        if (($usage*3) > $prod->stock && $usage>0) {
             $quantityEfficiency =   $prod->stock-$usage;
             $inventoryEfficiency    =   ($prod->stock/($usage*3))*100;
         }
-        if ($usage < $prod->stock && $prod->stock>0) {
+        if (($usage*3) < $prod->stock && $prod->stock>0) {
             $quantityEfficiency =   $prod->stock-$usage;
             $inventoryEfficiency    =   (($usage*3)/$prod->stock)*100;
         }
-        if ($usage>0 && $prod->stock==0) {
+        if (($usage*3)>0 && $prod->stock && $prod->stock==0) {
             $quantityEfficiency =   $prod->stock-$usage;
             $inventoryEfficiency    =   0;
         }
-        if ($usage==0 && $prod->stock==0) {
+        if (($usage*3)==0 && $prod->stock && $prod->stock==0) {
             $quantityEfficiency =   $prod->stock-$usage;
             $inventoryEfficiency    =   0;
         }
