@@ -25,7 +25,7 @@ class ProductRepo implements ProductInterface
 
     public function __construct()
     {
-        $this->products = Product::all();
+        $this->products = Product::where('company_id',auth()->user()->company_id)->with('soldproducts')->get();
     }
 
     function searchProduct(array $productDescription)
@@ -105,6 +105,93 @@ class ProductRepo implements ProductInterface
         } else {
             return   \App\Models\Product::find($productDescription['product_id']);
         }
+    }
+
+    // function to show the product stock efficiency
+    function productStockEfficiency(string $product_id){
+        $tobeReturned=   [];
+        $usage      =   0;
+        $status     =   0;
+        $quantityEfficiency   =   0;
+        $inventoryEfficiency            =   0;
+
+        $prod   =   $this->products->where('id',$product_id)->first();
+
+        if (count($prod->soldproducts)>0) {
+            foreach ($prod->soldproducts as $key => $productusage) {
+                $usage  +=   $productusage->quantity;
+            }
+        } else {
+            $usage=0;
+        }
+
+
+        if ($usage > $prod->stock && $usage>0) {
+            $quantityEfficiency =   $prod->stock-$usage;
+            $inventoryEfficiency    =   ($prod->stock/($usage*3))*100;
+        }
+        if ($usage < $prod->stock && $prod->stock>0) {
+            $quantityEfficiency =   $prod->stock-$usage;
+            $inventoryEfficiency    =   (($usage*3)/$prod->stock)*100;
+        }
+        if ($usage>0 && $prod->stock==0) {
+            $quantityEfficiency =   $prod->stock-$usage;
+            $inventoryEfficiency    =   0;
+        }
+        if ($usage==0 && $prod->stock==0) {
+            $quantityEfficiency =   $prod->stock-$usage;
+            $inventoryEfficiency    =   0;
+        }
+
+
+        // crititcal
+        if ($inventoryEfficiency<=40 && $quantityEfficiency<=0) {
+            $status =   'critical';
+        }
+
+        // High
+        if ($inventoryEfficiency>40 && $inventoryEfficiency<=70 && $quantityEfficiency<=0) {
+            $status =   'high';
+        }
+
+        // Medium
+        if ($inventoryEfficiency>70 && $inventoryEfficiency<=100 && $quantityEfficiency<=0) {
+            $status =   'medium';
+        }
+        // =============================================================
+
+        // Medium
+        if ($inventoryEfficiency>70 && $inventoryEfficiency<=100 && $quantityEfficiency>0) {
+            $status =   'medium';
+        }
+
+        // Low
+        if ($inventoryEfficiency>40 && $inventoryEfficiency<=70 && $quantityEfficiency<=0) {
+            $status =   'low';
+        }
+
+        // Over
+        if ($inventoryEfficiency<=40 && $quantityEfficiency<=0) {
+            $status =   'over';
+        }
+
+        // Discountinue
+        if ($usage==0 && $prod->stock==0) {
+            $status =   'Discontinued';
+        }
+
+        $po   =   [
+            'category'  =>  $prod->category_id,
+            'stock'     =>  $prod->stock,
+            'usage'     =>  $usage,
+            'minStock'  =>  $usage,
+            'QtyTKeep'  =>  $usage*3,
+            'status'    =>  $status,
+            'QtyEfficiency'     =>  $prod->stock-$usage,
+            'efficiency_ratio'  =>  round($inventoryEfficiency,2).'%',
+        ];
+
+        return $po;
     }
 
 

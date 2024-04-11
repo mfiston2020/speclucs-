@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -15,7 +14,6 @@
     <link href="{{ asset('dashboard/assets/extra-libs/c3/c3.min.css')}}" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="{{ asset('dashboard/assets/dist/css/style.min.css')}}" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="{{ asset('dashboard/assets/dist/css/custom-style.min.css') }}"> --}}
     @stack('css')
     @livewireStyles
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -53,7 +51,9 @@
                         <div class="d-flex align-items-center">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item text-capitalize"><a href="/">{{__('navigation.dashboard')}}</a></li>
+                                    <li class="breadcrumb-item text-capitalize">
+                                        <a href="/">{{__('navigation.dashboard')}}</a>
+                                    </li>
                                     <li class="breadcrumb-item active" aria-current="page">@yield('current')</li>
                                 </ol>
                             </nav>

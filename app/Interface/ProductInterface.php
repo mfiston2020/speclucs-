@@ -14,6 +14,8 @@ interface ProductInterface
 
     function addUnavailableProduct(array $productInfo);
 
+    function productStockEfficiency(string $product_id);
+
     function makeLabOrder(array $request, string $product_id);
 
     function searchUnavailableProduct(array $productDescription);

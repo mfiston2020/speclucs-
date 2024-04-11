@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -18,8 +19,7 @@ class DashboardController extends Controller
                                                     ->orderBy('sold','DESC')
                                                     ->get();
 
-        $payment_method   =   DB::table('transactions')
-                                                        ->select(DB::raw('sum(amount) as expenses, payment_method_id'))
+        $payment_method   =   DB::table('transactions')->select(DB::raw('sum(amount) as expenses, payment_method_id'))
                                                         ->where('company_id',Auth::user()->company_id)
                                                         ->groupBy('payment_method_id')
                                                         ->where('type','=','expense')

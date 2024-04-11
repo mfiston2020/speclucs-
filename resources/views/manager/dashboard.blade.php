@@ -20,14 +20,20 @@
 {{-- === End of breadcumb == --}}
 
 @section('content')
+
+
+
 <span hidden>{{$company=\App\Models\CompanyInformation::find(Auth::user()->company_id)}}</span>
 @if (userInfo()->permissions=='manager')
     <div class="container-fluid">
 
+
         <div class="row">
             <div class="col-12">
+                <livewire:no-internet/>
                 <!-- Row -->
                 <div class="row">
+
                     <div class="col-lg-3 col-md-6">
                         <div class="card border-bottom border-info">
                             <div class="card-body">
@@ -44,12 +50,13 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-lg-3 col-md-6">
                         <div class="card border-bottom border-cyan">
                             <div class="card-body">
                                 <div class="d-flex no-block align-items-center justify-content-between">
                                     <div>
-                                        <h2>{{count(\App\Models\Invoice::where('company_id',Auth::user()->company_id)->get())}}
+                                        <h2>{{number_format(count(\App\Models\Invoice::where('company_id',Auth::user()->company_id)->get()))}}
                                         </h2>
                                         <h6 class="text-cyan">{{__('navigation.invoice')}}</h6>
                                     </div>
@@ -60,6 +67,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-lg-3 col-md-6">
                         <div class="card border-bottom border-success">
                             <div class="card-body">
@@ -76,6 +84,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-lg-3 col-md-6">
                         <div class="card border-bottom border-orange">
                             <div class="card-body">
@@ -92,10 +101,14 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <!-- End Row -->
             </div>
         </div>
+
+        <livewire:manager.dashboard.stock-analysis-chart lazy="on-load" />
+
         <!-- ============================================================== -->
         <!-- Sales chart -->
         <!-- ============================================================== -->
@@ -357,8 +370,6 @@
                 labels: data.months,
                 series: [
                     data.product_count,
-                    // data.product_income
-                    // [0, 3, 1, 2,]
                 ]
             }, {
                 low: 0,
