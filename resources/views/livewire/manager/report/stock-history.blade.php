@@ -85,7 +85,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    <span wire:loading.remove>Search</span>
+                    <span wire:loading.remove wire:target='searchInformation'>Search</span>
                     <span wire:loading wire:target='searchInformation'>Searching...</span>
                 </button>
             </div>
@@ -121,20 +121,18 @@
                                 <tr>
                                     <td>{{ $product->id }}</td>
                                     {{-- <td>date</td> --}}
-                                    <td>{{ \App\Models\Category::where(['id' => $product->category_id])->pluck('name')->first() }}
+                                    <td>{{ $product->category->name }}
                                     </td>
                                     <td>{{ $product->product_name }}</td>
-                                    <span
-                                        hidden>{{ $power = \App\Models\Power::where(['product_id' => $product->id])->where('company_id', Auth::user()->company_id)->select('*')->first() }}</span>
 
                                     <td>{{ lensDescription($product->description) }}</td>
                                     <td>
-                                        @if ($power)
+                                        @if (is_null($product->power))
                                             @if (initials($product->product_name) == 'SV')
-                                                <span>{{ $power->sphere }} / {{ $power->cylinder }}</span>
+                                                <span>{{ $product->power->sphere }} / {{ $product->power->cylinder }}</span>
                                             @else
-                                                <span>{{ $power->sphere }} / {{ $power->cylinder }}
-                                                    *{{ $power->axis }} {{ $power->add }}</span>
+                                                <span>{{ $product->power->sphere }} / {{ $product->power->cylinder }}
+                                                    *{{ $product->power->axis }} {{ $product->power->add }}</span>
                                             @endif
                                         @else
                                             <span>-</span>
@@ -147,7 +145,7 @@
                                         <a href="#!" class="update" data-name="stock" data-type="text"
                                             data-pk="{{ $product->id }}"
                                             data-title="Enter Product Name">
-                                            {{$soldProducts->where('product_id',$product->id)->where('operation','in')->sum('incoming')}}
+                                            {{ $product->productTrack->where('operation','in')->sum('incoming')}}
                                         </a>
                                     </td>
 
@@ -158,7 +156,8 @@
                                         <a href="#!" class="update" data-name="stock" data-type="text"
                                             data-pk="{{ $product->id }}"
                                             data-title="Enter Product Name">
-                                            {{$soldProducts->where('product_id',$product->id)->where('operation','out')->sum('incoming')}}
+                                            {{ $product->productTrack->where('operation','out')->sum('incoming')}}
+                                            {{-- {{$soldProducts->where('product_id',$product->id)->where('operation','out')->sum('incoming')}} --}}
                                         </a>
 
                                     </td>

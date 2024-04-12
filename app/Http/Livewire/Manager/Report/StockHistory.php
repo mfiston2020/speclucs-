@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Manager\Report;
 use App\Models\Category;
 use App\Models\LensType;
 use App\Models\Product;
-use App\Models\TrackStockRecord;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -60,26 +59,35 @@ class StockHistory extends Component
             $carbonDate =   Carbon::create($this->start_date);
             $dateDiff   =   $carbonDate->diffInDays($this->end_date);
             $this->daysCount    =   $dateDiff;
-            // dd($dateDiff);
             $dates = [];
             for ($sDate = 1; $sDate <= $dateDiff; $sDate++) {
                 $carbonDate =   Carbon::create($this->start_date);
                 array_push($this->dateList, $carbonDate->addDay($sDate)->format('Y-m-d'));
             }
 
+
+            $productResult =   Product::where('company_id', userInfo()->company_id)
+                                        ->with(['power','category:name','productTrack'])
+                                        ->orderBy('created_at','asc')
+                                        ->where('category_id',$this->category)
+                                        ->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))
+                                        ->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))
+                                        ->select('id','category_id','product_name','description','cost','price')
+                                        ->get();
+
             if ($this->category=='1') {
-                $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('created_at','asc')->where('category_id',$this->category)->where('product_name',$this->lens_type)->get();
+                $this->products =   Product::where('company_id', userInfo()->company_id)
+                                        ->with(['power','category','productTrack'])
+                                        ->orderBy('created_at','asc')
+                                        ->where('product_name',$this->lens_type)
+                                        ->where('category_id',$this->category)
+                                        ->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))
+                                        ->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))
+                                        ->select('id','category_id','product_name','description','cost','price')
+                                        ->get();
             } else {
-                $this->products =   Product::where('company_id', userInfo()->company_id)->orderBy('created_at','asc')->where('category_id',$this->category)->get();
+                $this->products =   $productResult;
             }
-
-            // dd($this->products);
-
-            $this->soldProducts =   TrackStockRecord::where('company_id', userInfo()->company_id)->with('product')->whereHas('product',function($query){
-                $query->where('category_id',$this->category);
-            })->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))->get();
-
-            // dd($this->soldProducts);
 
             if (count($this->products) <= 0) {
                 $this->searchFoundSomething = 'no';
@@ -87,6 +95,7 @@ class StockHistory extends Component
                 $this->searchFoundSomething = 'yes';
             }
         }
+        // dd($this->products[0]->productTrack->where('operation','out')->sum('incoming'));
 
         $this->result   =   true;
     }

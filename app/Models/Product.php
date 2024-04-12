@@ -33,6 +33,10 @@ class Product extends Model
         return $this->BelongsTo(Category::class);
     }
 
+    function productTrack(){
+        return $this->hasMany(TrackStockRecord::class,'product_id');
+    }
+
     function power()
     {
         return $this->hasOne(Power::class);
