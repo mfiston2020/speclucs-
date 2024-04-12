@@ -20,12 +20,14 @@ class ProductRepo implements ProductInterface
 
     public String $message  =   '';
     public bool $showProductDetails  =   false;
-    public $products;
+    public $products,$productList;
 
 
     public function __construct()
     {
-        $this->products = Product::where('company_id',auth()->user()->company_id)->with('soldproducts')->get();
+        // $this->products = Product::where('company_id',auth()->user()->company_id)->with('soldproducts')->get();
+
+        $this->productList    =   Product::where('company_id',auth()->user()->company_id)->withOnly('soldproducts:id,quantity')->select('id','stock')->get();
     }
 
     function searchProduct(array $productDescription)
@@ -108,88 +110,96 @@ class ProductRepo implements ProductInterface
     }
 
     // function to show the product stock efficiency
-    function productStockEfficiency(string $product_id){
-        $tobeReturned=   [];
-        $usage      =   0;
-        $status     =   0;
-        $quantityEfficiency   =   0;
-        $inventoryEfficiency            =   0;
+    function productStockEfficiency(string $product_id,int $usag,int $stoc,int $cat){
 
-        $prod   =   $this->products->where('id',$product_id)->first();
+        $tobeReturned       =   [];
+        $usage              =   0;
+        $status             =   0;
+        $quantityEfficiency =   0;
+        $inventoryEfficiency=   0;
+        $usage              =   $usag;
+        $stock              =   $stoc;
+        $category_id        =   $cat;
 
-        if (count($prod->soldproducts)>0) {
-            foreach ($prod->soldproducts as $key => $productusage) {
-                $usage  +=   $productusage->quantity;
-            }
-        } else {
-            $usage=0;
+        // $prod   =   $this->productList->where('id',$product_id)->first();
+
+        // dd($soldproducts);
+
+        // if (count($soldproducts)>0) {
+        //     foreach ($soldproducts as $key => $productusage) {
+        //         $usage  +=   $productusage->quantity;
+        //     }
+        // } else {
+        //     $usage=0;
+        // }
+
+
+        if (($usage*3) > $stock && $usage>0) {
+            $quantityEfficiency =   $stock-$usage;
+            $inventoryEfficiency    =   ($stock/($usage*3))*100;
         }
-
-
-        if (($usage*3) > $prod->stock && $usage>0) {
-            $quantityEfficiency =   $prod->stock-$usage;
-            $inventoryEfficiency    =   ($prod->stock/($usage*3))*100;
+        if (($usage*3) < $stock && $stock>0) {
+            $quantityEfficiency =   $stock-$usage;
+            $inventoryEfficiency    =   (($usage*3)/$stock)*100;
         }
-        if (($usage*3) < $prod->stock && $prod->stock>0) {
-            $quantityEfficiency =   $prod->stock-$usage;
-            $inventoryEfficiency    =   (($usage*3)/$prod->stock)*100;
-        }
-        if (($usage*3)>0 && $prod->stock && $prod->stock==0) {
-            $quantityEfficiency =   $prod->stock-$usage;
+        if (($usage*3)>0 && $stock && $stock==0) {
+            $quantityEfficiency =   $stock-$usage;
             $inventoryEfficiency    =   0;
         }
-        if (($usage*3)==0 && $prod->stock && $prod->stock==0) {
-            $quantityEfficiency =   $prod->stock-$usage;
+        if (($usage*3)==0 && $stock && $stock==0) {
+            $quantityEfficiency =   $stock-$usage;
             $inventoryEfficiency    =   0;
         }
 
 
         // crititcal
-        if ($inventoryEfficiency<=40 && $quantityEfficiency<=0) {
+        if ($inventoryEfficiency<=40 && $quantityEfficiency<0) {
             $status =   'critical';
         }
 
         // High
-        if ($inventoryEfficiency>40 && $inventoryEfficiency<=70 && $quantityEfficiency<=0) {
+        if ($inventoryEfficiency>40 && $inventoryEfficiency<=70 && $quantityEfficiency<0) {
             $status =   'high';
         }
 
         // Medium
-        if ($inventoryEfficiency>70 && $inventoryEfficiency<=100 && $quantityEfficiency<=0) {
+        if ($inventoryEfficiency>70 && $inventoryEfficiency<=100 && $quantityEfficiency<0) {
             $status =   'medium';
         }
         // =============================================================
 
         // Medium
-        if ($inventoryEfficiency>70 && $inventoryEfficiency<=100 && $quantityEfficiency>0) {
+        if ($inventoryEfficiency>70 && $inventoryEfficiency<=100 && $quantityEfficiency>=0) {
             $status =   'medium';
         }
 
         // Low
-        if ($inventoryEfficiency>40 && $inventoryEfficiency<=70 && $quantityEfficiency<=0) {
+        if ($inventoryEfficiency>40 && $inventoryEfficiency<=70 && $quantityEfficiency>=0) {
             $status =   'low';
         }
 
         // Over
-        if ($inventoryEfficiency<=40 && $quantityEfficiency<=0) {
+        if ($inventoryEfficiency<=40 && $quantityEfficiency>=0) {
             $status =   'over';
         }
 
         // Discountinue
-        if ($usage==0 && $prod->stock==0) {
+        if ($usage==0 && $stock==0) {
             $status =   'Discontinued';
         }
 
         $po   =   [
-            'category'  =>  $prod->category_id,
-            'stock'     =>  $prod->stock,
+            'category'  =>  $category_id,
+            'stock'     =>  $stock,
             'usage'     =>  $usage,
             'minStock'  =>  $usage,
             'QtyTKeep'  =>  $usage*3,
             'status'    =>  $status,
-            'QtyEfficiency'     =>  $prod->stock-$usage,
+            'QtyEfficiency'     =>  $stock-$usage,
             'efficiency_ratio'  =>  round($inventoryEfficiency,2).'%',
         ];
+
+        // dd($po);
 
         return $po;
     }

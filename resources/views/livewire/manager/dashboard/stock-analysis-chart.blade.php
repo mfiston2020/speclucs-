@@ -130,32 +130,32 @@
                                 <div class="row m-t-20">
                                     <div class="col-3 border-right">
                                         <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $accessoryData['accessories_critical'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_critical'] }}</h3>
                                         <span>Critical</span>
                                     </div>
                                     <div class="col-2 border-right">
                                         <i class="fa fa-circle text-orange"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $accessoryData['accessories_high'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_high'] }}</h3>
                                         <span>High</span>
                                     </div>
                                     <div class="col-2 border-right">
                                         <i class="fa fa-circle text-success"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $accessoryData['accessories_medium'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_medium'] }}</h3>
                                         <span>Medium</span>
                                     </div>
                                     <div class="col-2 border-right">
                                         <i class="fa fa-circle text-primary"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $accessoryData['accessories_low'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_low'] }}</h3>
                                         <span>Low</span>
                                     </div>
                                     <div class="col-3">
                                         <i class="fa fa-circle text-info"></i>
-                                        <h3 class="m-b-0 font-info">{{ $accessoryData['accessories_over'] }}</h3>
+                                        <h3 class="m-b-0 font-info">{{ $accessoriesData['accessories_over'] }}</h3>
                                         <span>Over Stock</span>
                                     </div>
                                     <div class="col-3">
                                         <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-danger">{{ $accessoryData['accessories_discontinued'] }}</h3>
+                                        <h3 class="m-b-0 font-danger">{{ $accessoriesData['accessories_discontinued'] }}</h3>
                                         <span>Double Zero</span>
                                     </div>
                                 </div>

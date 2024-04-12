@@ -10,8 +10,8 @@ use Livewire\Component;
 
 class StockAnalysisChart extends Component
 {
-    public $timeframe,$supply,$order_date,$delivery_date,$products=[];
-    public $lensData=[],$frameData=[],$accessoryData=[];
+    public $timeframe,$supply,$order_date,$delivery_date,$products=[],$productstatus=[];
+    public $lensData=[],$frameData=[],$accessoriesData=[];
 
     public $lensC=0,$lensH=0,$lensM=0,$lensL=0,$lensO=0,$lensD;
     public $frameC=0,$frameH=0,$frameM=0,$frameL=0,$frameO=0,$frameD=0;
@@ -42,23 +42,29 @@ class StockAnalysisChart extends Component
     }
 
     function getProductData(){
+        $this->productstatus=[];
         $productRepo  =   new ProductRepo();
-        foreach ($this->products as $key => $product) {
 
-            $fromPo =   $productRepo->productStockEfficiency($product->id);
+        // $fromPo =   $productRepo->productStockEfficiency($this->products[100]->id,$this->products[100]->soldproducts->sum('quantity'),$this->products[100]->stock,$this->products[100]->category_id);
+
+        foreach ($this->products as $key=> $product) {
+
+            $fromPo =   $productRepo->productStockEfficiency($product->id,$product->soldproducts->sum('quantity'),$product->stock,$product->category_id);
 
             // lens
             if ($fromPo['category']=='1') {
                 $this->lensData=[
-                    'lens_critical' =>  $fromPo['status']=='critical'?$this->lensC++:$this->lensC,
-                    'lens_high'     =>  $fromPo['status']=='high'?$this->lensH++:$this->lensH,
-                    'lens_medium'   =>  $fromPo['status']=='medium'?$this->lensM++:$this->lensM,
-                    'lens_low'      =>  $fromPo['status']=='low'?$this->lensL++:$this->lensL,
-                    'lens_over'     =>  $fromPo['status']=='over'?$this->lensO++:$this->lensO,
-                    'lens_discontinued'=>  $fromPo['status']=='Discontinued'?$this->lensD++:$this->lensD,
+                    'lens_critical'     =>  $fromPo['status']=='critical'?$this->lensC +=1:$this->lensC,
+                    'lens_high'         =>  $fromPo['status']=='high'?$this->lensH +=1:$this->lensH,
+                    'lens_medium'       =>  $fromPo['status']=='medium'?$this->lensM +=1:$this->lensM,
+                    'lens_low'          =>  $fromPo['status']=='low'?$this->lensL +=1:$this->lensL,
+                    'lens_over'         =>  $fromPo['status']=='over'?$this->lensO +=1:$this->lensO,
+                    'lens_discontinued' =>  $fromPo['status']=='Discontinued'?$this->lensD +=1:$this->lensD,
                 ];
 
-                if ($fromPo['status']=='critical') {
+                array_push($this->productstatus,$fromPo['status']);
+
+                if ($fromPo['status']=='0') {
                    dd($fromPo);
                 }
             }
@@ -66,32 +72,35 @@ class StockAnalysisChart extends Component
             // frame
             if ($fromPo['category']=='2') {
                 $this->frameData=[
-                    'frame_critical' =>  $fromPo['status']=='critical'?$this->frameC++:$this->frameC,
-                    'frame_high'     =>  $fromPo['status']=='high'?$this->frameH++:$this->frameH,
-                    'frame_medium'   =>  $fromPo['status']=='medium'?$this->frameM++:$this->frameM,
-                    'frame_low'      =>  $fromPo['status']=='low'?$this->frameL++:$this->frameL,
-                    'frame_over'     =>  $fromPo['status']=='over'?$this->frameO++:$this->frameO,
-                    'frame_discontinued'     =>  $fromPo['status']=='Discontinued'?$this->frameD++:$this->frameD,
-                ];
-            }else{
-                $this->accessoryData=[
-                    'accessories_critical' =>  $fromPo['status']=='critical'?$this->accessoriesC++:$this->accessoriesC,
-                    'accessories_high'     =>  $fromPo['status']=='high'?$this->accessoriesH++:$this->accessoriesH,
-                    'accessories_medium'   =>  $fromPo['status']=='medium'?$this->accessoriesM++:$this->accessoriesM,
-                    'accessories_low'      =>  $fromPo['status']=='low'?$this->accessoriesL++:$this->accessoriesL,
-                    'accessories_over'     =>  $fromPo['status']=='over'?$this->accessoriesO++:$this->accessoriesO,
-                    'accessories_discontinued'     =>  $fromPo['status']=='Discontinued'?$this->accessoriesD++:$this->accessoriesD,
+                    'frame_critical' =>  $fromPo['status']=='critical'?$this->frameC +=1:$this->frameC,
+                    'frame_high'     =>  $fromPo['status']=='high'?$this->frameH +=1:$this->frameH,
+                    'frame_medium'   =>  $fromPo['status']=='medium'?$this->frameM +=1:$this->frameM,
+                    'frame_low'      =>  $fromPo['status']=='low'?$this->frameL +=1:$this->frameL,
+                    'frame_over'     =>  $fromPo['status']=='over'?$this->frameO +=1:$this->frameO,
+                    'frame_discontinued'     =>  $fromPo['status']=='Discontinued'?$this->frameD +=1:$this->frameD,
                 ];
             }
+
+            if ($fromPo['category']>2) {
+                $this->accessoriesData=[
+                    'accessories_critical' =>  $fromPo['status']=='critical'?$this->accessoriesC +=1:$this->accessoriesC,
+                    'accessories_high'     =>  $fromPo['status']=='high'?$this->accessoriesH +=1:$this->accessoriesH,
+                    'accessories_medium'   =>  $fromPo['status']=='medium'?$this->accessoriesM +=1:$this->accessoriesM,
+                    'accessories_low'      =>  $fromPo['status']=='low'?$this->accessoriesL +=1:$this->accessoriesL,
+                    'accessories_over'     =>  $fromPo['status']=='over'?$this->accessoriesO +=1:$this->accessoriesO,
+                    'accessories_discontinued'     =>  $fromPo['status']=='Discontinued'?$this->accessoriesD +=1:$this->accessoriesD,
+                ];
+            }
+
         }
+        // dd(($this->lensData));
 
         // dd($this->lensData);
         $this->dispatchBrowserEvent('refreshChart');
     }
 
     function mount(){
-        $productRepo  =   new ProductRepo();
-        $this->products =   Product::where('company_id',auth()->user()->company_id)->with('soldProducts')->get();
+        $this->products =   Product::where('company_id',auth()->user()->company_id)->with('soldproducts')->select('id','stock','category_id')->get();
 
         $this->lensData=[
             'lens_critical' =>  0,
@@ -110,7 +119,7 @@ class StockAnalysisChart extends Component
             'frame_over'     =>  0,
             'frame_discontinued'     =>  0,
         ];
-        $this->accessoryData=[
+        $this->accessoriesData=[
             'accessories_critical' =>  0,
             'accessories_high'     =>  0,
             'accessories_medium'   =>  0,
@@ -118,6 +127,8 @@ class StockAnalysisChart extends Component
             'accessories_over'     =>  0,
             'accessories_discontinued'     =>  0,
         ];
+
+        $this->getProductData();
     }
 
     public function render()

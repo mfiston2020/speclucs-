@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use App\Models\Product;
+use App\Models\SoldProduct;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -11,8 +13,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $product    =   DB::table('sold_products')
-                                                    ->select(DB::raw('sum(quantity) as sold, product_id'))
+        $product    =   DB::table('sold_products')->select(DB::raw('sum(quantity) as sold, product_id'))
                                                     ->where('company_id',Auth::user()->company_id)
                                                     ->groupBy('product_id')
                                                     ->limit(5)
