@@ -65,16 +65,6 @@ class StockHistory extends Component
                 array_push($this->dateList, $carbonDate->addDay($sDate)->format('Y-m-d'));
             }
 
-
-            $productResult =   Product::where('company_id', userInfo()->company_id)
-                                        ->with(['power','category:name','productTrack'])
-                                        ->orderBy('created_at','asc')
-                                        ->where('category_id',$this->category)
-                                        ->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))
-                                        ->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))
-                                        ->select('id','category_id','product_name','description','cost','price')
-                                        ->get();
-
             if ($this->category=='1') {
                 $this->products =   Product::where('company_id', userInfo()->company_id)
                                         ->with(['power','category','productTrack'])
@@ -86,7 +76,14 @@ class StockHistory extends Component
                                         ->select('id','category_id','product_name','description','cost','price')
                                         ->get();
             } else {
-                $this->products =   $productResult;
+                $this->products =   Product::where('company_id', userInfo()->company_id)
+                                        ->with(['category','productTrack'])
+                                        ->orderBy('created_at','asc')
+                                        ->where('category_id',$this->category)
+                                        ->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))
+                                        ->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))
+                                        ->select('id','category_id','product_name','description','cost','price')
+                                        ->get();
             }
 
             if (count($this->products) <= 0) {
@@ -95,7 +92,7 @@ class StockHistory extends Component
                 $this->searchFoundSomething = 'yes';
             }
         }
-        // dd($this->products[0]->power);
+        // dd($this->products[0]->category);
 
         $this->result   =   true;
     }
