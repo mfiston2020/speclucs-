@@ -50,10 +50,7 @@ class ClosingReport extends Component
         if ($this->category=='1') {
 
             $this->products =   Product::where('company_id', userInfo()->company_id)
-                                        ->with(['power','category'])
-                                        ->with('productTrack',function($query){
-                                            $query->where('operation','in')->sum('incoming');
-                                        })
+                                        ->with(['power','category','productTrack'])
                                         ->where('product_name',$this->lens_type)
                                         ->where('category_id',$this->category)
                                         ->orderBy('created_at','asc')
@@ -61,14 +58,10 @@ class ClosingReport extends Component
                                         ->get();
         }else{
             $this->products =   Product::where('company_id', userInfo()->company_id)
-                                        ->with(['category','productTrack'=>function($query){
-                                            $query->whereDate('created_at','>=',date('Y-m-d',strtotime($this->closing_date)))
-                                                    ->whereDate('created_at','<=',date('Y-m-d',strtotime($this->dateNow.'-1day')))
-                                                    ->where('operation','in')->sum('incoming');
-                                        }])
-                                        ->orderBy('created_at','asc')
-                                        ->where('category_id',$this->category)
+                                        ->with(['category','productTrack'])
                                         ->select('id','category_id','product_name','description','cost','price')
+                                        ->where('category_id',$this->category)
+                                        ->orderBy('created_at','asc')
                                         ->get();
         }
 
@@ -79,12 +72,6 @@ class ClosingReport extends Component
         }
 
         $this->result   =   true;
-
-        // foreach ($this->products as $key => $prod) {
-        //     if (!$prod->productTrack->isEmpty()) {
-        //         dd(;
-        //     }
-        // }
     }
 
     public function render()

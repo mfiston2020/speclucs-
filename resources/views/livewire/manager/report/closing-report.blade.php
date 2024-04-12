@@ -22,7 +22,6 @@
                             <div class="input-group">
                                 <input type="date" class="form-control" placeholder="mm/dd/yyyy"
                                     wire:model.lazy='closing_date'>
-                                <img src="{{asset('dashboard/assets/images/loading.gif')}}" width="40" wire:loading wire:target='searchInformation'/>
                             </div>
                             @error('closing_date')
                                 <span class="text-danger">{{ $message }}</span>
@@ -69,6 +68,9 @@
                     <span wire:loading.remove wire:target=searchInformation>Search</span>
                     <span wire:loading wire:target='searchInformation'>Searching...</span>
                 </button>
+
+                <img src="{{asset('dashboard/assets/images/loading.gif')}}" width="40" wire:loading wire:target='searchInformation'/>
+
             </div>
         </form>
     </div>
@@ -115,16 +117,16 @@
                                     }
                                     else{
                                         $instock    =   $product->productTrack
-                                                        ->where('created_at','>=',date('Y-m-d',strtotime($this->closing_date)))
-                                                        ->where('created_at','<=',date('Y-m-d',strtotime($this->dateNow.'-1day')))
+                                                        ->where('created_at','>=',date('Y-m-d',strtotime($closing_date)))
+                                                        ->where('created_at','<=',date('Y-m-d',strtotime($dateNow.'-1day')))
                                                         ->where('operation','in')
                                                         ->sum('incoming');
 
                                         $outstock    =   $product->productTrack
-                                                        ->where('created_at','>=',date('Y-m-d',strtotime($this->closing_date)))
-                                                        ->where('created_at','<=',date('Y-m-d',strtotime($this->dateNow.'-1day')))
-                                                        ->where('operation','out')
-                                                        ->sum('incoming');
+                                                        ->where('created_at','>=',date('Y-m-d',strtotime($closing_date)))
+                                                        ->where('created_at','<=',date('Y-m-d',strtotime($dateNow.'-1day')))
+                                                        ->where('operation','in')
+                                                        ->sum('incoming');;
 
                                         $closingStock   =  $product->stock - $instock + $outstock;
                                     }
