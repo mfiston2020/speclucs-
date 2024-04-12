@@ -95,7 +95,7 @@ class StockHistory extends Component
                 $this->searchFoundSomething = 'yes';
             }
         }
-        // dd($this->products[0]->productTrack->where('operation','out')->sum('incoming'));
+        // dd($this->products[0]->power);
 
         $this->result   =   true;
     }

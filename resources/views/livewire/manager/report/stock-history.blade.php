@@ -104,7 +104,6 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                {{-- <th>Date</th> --}}
                                 <th>Category</th>
                                 <th>Product</th>
                                 <th>Description</th>
@@ -120,14 +119,13 @@
 
                                 <tr>
                                     <td>{{ $product->id }}</td>
-                                    {{-- <td>date</td> --}}
                                     <td>{{ $product->category->name }}
                                     </td>
                                     <td>{{ $product->product_name }}</td>
 
                                     <td>{{ lensDescription($product->description) }}</td>
                                     <td>
-                                        @if (is_null($product->power))
+                                        @if (!is_null($product->power))
                                             @if (initials($product->product_name) == 'SV')
                                                 <span>{{ $product->power->sphere }} / {{ $product->power->cylinder }}</span>
                                             @else
@@ -150,25 +148,19 @@
                                     </td>
 
                                     <td>
-                                        {{-- @php
-                                            $stockout   =   ;
-                                        @endphp --}}
                                         <a href="#!" class="update" data-name="stock" data-type="text"
                                             data-pk="{{ $product->id }}"
                                             data-title="Enter Product Name">
                                             {{ $product->productTrack->where('operation','out')->sum('incoming')}}
-                                            {{-- {{$soldProducts->where('product_id',$product->id)->where('operation','out')->sum('incoming')}} --}}
                                         </a>
 
                                     </td>
                                 </tr>
-                                {{-- <span hidden>{{ $closingStock = 0 }}</span> --}}
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th>#</th>
-                                {{-- <th>Date</th> --}}
                                 <th>Category</th>
                                 <th>Product</th>
                                 <th>Description</th>
