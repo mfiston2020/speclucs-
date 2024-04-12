@@ -27,7 +27,7 @@ class ProductRepo implements ProductInterface
     {
         // $this->products = Product::where('company_id',auth()->user()->company_id)->with('soldproducts')->get();
 
-        $this->productList    =   Product::where('company_id',auth()->user()->company_id)->withOnly('soldproducts:id,quantity')->select('id','stock')->get();
+        // $this->productList    =   Product::where('company_id',auth()->user()->company_id)->withOnly('soldproducts:id,quantity')->select('id','stock')->get();
     }
 
     function searchProduct(array $productDescription)

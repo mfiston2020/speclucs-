@@ -33,7 +33,6 @@
                 <livewire:no-internet/>
                 <!-- Row -->
                 <div class="row">
-
                     <div class="col-lg-3 col-md-6">
                         <div class="card border-bottom border-info">
                             <div class="card-body">
@@ -101,7 +100,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <!-- End Row -->
             </div>
@@ -200,52 +198,11 @@
                                     <div>
                                         <span>{{__('manager/dashboard.cost_of_good_sold')}}</span>
                                         <h3 class="font-medium m-b-0">
-                                            @php
-                                                $total_product_cost =   0;
-
-                                                $products =   \App\Models\SoldProduct::where('company_id',Auth::user()->company_id)
-                                                                        ->whereYear('created_at',date('Y'))->select('product_id','quantity')->get();
-                                                foreach ($products as $key => $product_cost) {
-                                                    $total_product_cost +=  \App\Models\Product::where('id',$product_cost->product_id)->pluck('cost')->first()*$product_cost->quantity;
-                                                }
-
-                                            @endphp
                                             {{format_money($total_product_cost)}}
                                         </h3>
                                     </div>
                                 </div>
                             </div>
-                            <!-- col -->
-                            <!-- col -->
-                            {{-- <div class="col-lg-3 col-md-6">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="m-r-10"><span class="text-info display-5"><i
-                                                class="mdi mdi-shopping"></i></span></div>
-                                    <div>
-                                        <span>{{__('manager/dashboard.receivables')}}</span>
-                                        <h3 class="font-medium m-b-0">
-                                            {{format_money(\App\Models\Invoice::where('company_id',Auth::user()->company_id)->select('*')
-                                                                ->sum('due'))}}
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div> --}}
-                            <!-- col -->
-                            <!-- col -->
-                            {{-- <div class="col-lg-3 col-md-6">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="m-r-10">
-                                        <span class="text-primary display-5"><i
-                                                class="mdi mdi-wallet"></i></span></div>
-                                    <div><span>{{__('manager/dashboard.payables')}}</span>
-                                        <h3 class="font-medium m-b-0">
-                                            {{format_money(\App\Models\Receipt::where('company_id',Auth::user()->company_id)->select('*')
-                                                                ->where('status','<>','paid')->sum('total_cost'))}}
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div> --}}
-                            <!-- col -->
                         </div>
                     </div>
                 </div>

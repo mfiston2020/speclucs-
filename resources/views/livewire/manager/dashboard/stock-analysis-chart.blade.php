@@ -2,7 +2,7 @@
     <div class="col-12">
         <img src="{{ asset('dashboard/assets/images/loading.gif')}}" height="150" wire:loading wire:target="timeframe" class="mb-4"/>
         <!-- Row -->
-        <div class="row" wire:loading.remove wire:target="timeframe">
+        {{-- <div class="row" wire:loading.remove wire:target="timeframe">
             <div class="col-4">
                 <div class="card">
                     <div class="card-body">
@@ -24,7 +24,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row" wire:loading.remove wire:target="timeframe">
             <div class="col-sm-12 col-md-4">
@@ -36,35 +36,35 @@
                                 <h4 class="card-title">Lens Summary</h4>
                                 {{-- <h5 class="card-subtitle m-b-0">Total Earnings of the Month</h5> --}}
                                 <div class="row m-t-20">
-                                    <div class="col-3 border-right">
+                                    <div class="col-4 border-right">
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <h3 class="m-b-0 font-danger">{{ $lensData['lens_discontinued'] }}</h3>
+                                        <span>Double Zero</span>
+                                    </div>
+                                    <div class="col-4 border-right">
                                         <i class="fa fa-circle text-danger"></i>
                                         <h3 class="m-b-0 font-medium">{{ $lensData['lens_critical'] }}</h3>
                                         <span>Critical</span>
                                     </div>
-                                    <div class="col-2 border-right">
+                                    <div class="col-4">
                                         <i class="fa fa-circle text-orange"></i>
                                         <h3 class="m-b-0 font-medium">{{ $lensData['lens_high'] }}</h3>
                                         <span>High</span>
                                     </div>
-                                    <div class="col-2 border-right">
+                                    <div class="col-4 border-right">
                                         <i class="fa fa-circle text-success"></i>
                                         <h3 class="m-b-0 font-medium">{{ $lensData['lens_medium'] }}</h3>
                                         <span>Medium</span>
                                     </div>
-                                    <div class="col-2 border-right">
+                                    <div class="col-4 border-right">
                                         <i class="fa fa-circle text-primary"></i>
                                         <h3 class="m-b-0 font-medium">{{ $lensData['lens_low'] }}</h3>
                                         <span>Low</span>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <i class="fa fa-circle text-info"></i>
                                         <h3 class="m-b-0 font-info">{{ $lensData['lens_over'] }}</h3>
                                         <span>Over Stock</span>
-                                    </div>
-                                    <div class="col-3">
-                                        <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-danger">{{ $lensData['lens_discontinued'] }}</h3>
-                                        <span>Double Zero</span>
                                     </div>
                                 </div>
                             </div>
@@ -82,35 +82,35 @@
                                 <h4 class="card-title">Frame Summary</h4>
                                 {{-- <h5 class="card-subtitle m-b-0">Total Earnings of the Month</h5> --}}
                                 <div class="row m-t-20">
-                                    <div class="col-3 border-right">
+                                    <div class="col-4 border-right">
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <h3 class="m-b-0 font-danger">{{ $frameData['frame_discontinued'] }}</h3>
+                                        <span>Double Zero</span>
+                                    </div>
+                                    <div class="col-4 border-right">
                                         <i class="fa fa-circle text-danger"></i>
                                         <h3 class="m-b-0 font-medium">{{ $frameData['frame_critical'] }}</h3>
                                         <span>Critical</span>
                                     </div>
-                                    <div class="col-2 border-right">
+                                    <div class="col-4">
                                         <i class="fa fa-circle text-orange"></i>
                                         <h3 class="m-b-0 font-medium">{{ $frameData['frame_high'] }}</h3>
                                         <span>High</span>
                                     </div>
-                                    <div class="col-2 border-right">
+                                    <div class="col-4 border-right">
                                         <i class="fa fa-circle text-success"></i>
                                         <h3 class="m-b-0 font-medium">{{ $frameData['frame_medium'] }}</h3>
                                         <span>Medium</span>
                                     </div>
-                                    <div class="col-2 border-right">
+                                    <div class="col-4 border-right">
                                         <i class="fa fa-circle text-primary"></i>
                                         <h3 class="m-b-0 font-medium">{{ $frameData['frame_low'] }}</h3>
                                         <span>Low</span>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <i class="fa fa-circle text-info"></i>
                                         <h3 class="m-b-0 font-info">{{ $frameData['frame_over'] }}</h3>
                                         <span>Over Stock</span>
-                                    </div>
-                                    <div class="col-3">
-                                        <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-danger">{{ $frameData['frame_discontinued'] }}</h3>
-                                        <span>Double Zero</span>
                                     </div>
                                 </div>
                             </div>
@@ -128,35 +128,35 @@
                                 <h4 class="card-title">Accessories Summary</h4>
                                 {{-- <h5 class="card-subtitle m-b-0">Total Earnings of the Month</h5> --}}
                                 <div class="row m-t-20">
-                                    <div class="col-3 border-right">
+                                    <div class="col-4 border-right">
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <h3 class="m-b-0 font-danger">{{ $accessoriesData['accessories_discontinued'] }}</h3>
+                                        <span>Double Zero</span>
+                                    </div>
+                                    <div class="col-4 border-right">
                                         <i class="fa fa-circle text-danger"></i>
                                         <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_critical'] }}</h3>
                                         <span>Critical</span>
                                     </div>
-                                    <div class="col-2 border-right">
+                                    <div class="col-4">
                                         <i class="fa fa-circle text-orange"></i>
                                         <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_high'] }}</h3>
                                         <span>High</span>
                                     </div>
-                                    <div class="col-2 border-right">
+                                    <div class="col-4 border-right">
                                         <i class="fa fa-circle text-success"></i>
                                         <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_medium'] }}</h3>
                                         <span>Medium</span>
                                     </div>
-                                    <div class="col-2 border-right">
+                                    <div class="col-4 border-right">
                                         <i class="fa fa-circle text-primary"></i>
                                         <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_low'] }}</h3>
                                         <span>Low</span>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <i class="fa fa-circle text-info"></i>
                                         <h3 class="m-b-0 font-info">{{ $accessoriesData['accessories_over'] }}</h3>
                                         <span>Over Stock</span>
-                                    </div>
-                                    <div class="col-3">
-                                        <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-danger">{{ $accessoriesData['accessories_discontinued'] }}</h3>
-                                        <span>Double Zero</span>
                                     </div>
                                 </div>
                             </div>
@@ -164,6 +164,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
         <!-- End Row -->
 

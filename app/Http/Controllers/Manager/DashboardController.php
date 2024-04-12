@@ -13,6 +13,18 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $total_product_cost =   0;
+        $total_product_cost =   0;
+        $total_prod         =   [];
+
+        $soldproducts   =   SoldProduct::where('company_id',userInfo()->company_id)->with('product',function($query){
+            $query->select('id','cost','price');
+        })->select('product_id','quantity')->whereYear('created_at',date('Y'))->get();
+
+        foreach ($soldproducts as $key => $sold) {
+            $total_product_cost +=  $sold->product->cost * $sold->quantity;
+        }
+
         $product    =   DB::table('sold_products')->select(DB::raw('sum(quantity) as sold, product_id'))
                                                     ->where('company_id',Auth::user()->company_id)
                                                     ->groupBy('product_id')
@@ -35,7 +47,7 @@ class DashboardController extends Controller
         $customerInvoices    =   \App\Models\Invoice::where('client_id','<>','')->where('company_id',Auth::user()->company_id)
                                     ->where('payment','=',NULL)->limit(5)->orderBy('total_amount','DESC')->get();
 
-        return view('manager.dashboard',compact('product','expenses','payment_method','expenses_count','customerInvoices'));
+        return view('manager.dashboard',compact('product','expenses','payment_method','expenses_count','customerInvoices','total_product_cost'));
     }
 
     public function all_invoice()
