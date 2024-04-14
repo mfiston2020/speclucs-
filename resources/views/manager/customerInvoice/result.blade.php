@@ -48,6 +48,7 @@
                                         <th>Order Date</th>
                                         <th>Delivery Date</th>
                                         <th>Order Number</th>
+                                        <th>Client</th>
                                         <th>Lens Total</th>
                                         <th>Frame Total</th>
                                         <th>Accessories Total</th>
@@ -70,6 +71,17 @@
                                             <a href="{{route('manager.sales.edit',Crypt::encrypt($invoice->id))}}">
                                                 ORDER #{{ sprintf('%04d',$invoice->id) }}
                                             </a>
+                                        </td>
+                                        <td>
+                                            @if ($invoice->client_id != null)
+                                                {{$invoice->client->name}}
+                                            @else
+                                                @if ($invoice->hospital_name!=null)
+                                                [{{$invoice->cloud_id}}] {{$invoice->hospital_name}}
+                                                @else
+                                                    {{$invoice->client_name}}
+                                                @endif
+                                            @endif
                                         </td>
                                         <td>{{ $invoice->sumOfCategorizedproduct()['l_available']?format_money($invoice->sumOfCategorizedproduct()['lens']):'-' }}</td>
                                         <td>{{$invoice->sumOfCategorizedproduct()['f_available']?format_money($invoice->sumOfCategorizedproduct()['frame']):'-'}}</td>

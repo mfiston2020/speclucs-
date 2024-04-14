@@ -28,6 +28,8 @@ class CustomerInvoice extends Controller
             'customer'=>'required',
         ]);
 
+        // $supplier
+
         if (!$request->from==null){
             $client_id  =   $request->customer;
 
@@ -36,6 +38,7 @@ class CustomerInvoice extends Controller
                                             ->where('company_id',Auth::user()->company_id)
                                             ->where('invoiceState','=',NULL)
                                             ->where('payment','=',NULL)
+                                                ->orderBy('created_at','desc')
                                             ->select('*')
                                             ->get();
 
@@ -44,6 +47,7 @@ class CustomerInvoice extends Controller
             {
                 $from   =   $request->from;
                 $to     =   $request->to;
+
 
                 $customerInvoice    =   Invoice::where('supplier_id',Auth::user()->company_id)
                                                 ->where('invoiceState','=',NULL)
@@ -54,6 +58,7 @@ class CustomerInvoice extends Controller
                                                 })
                                                 ->whereIn('status',['received','delivered','collected'])
                                                 ->where('payment','=',NULL)
+                                                ->orderBy('created_at','desc')
                                                 ->select('*')
                                                 ->get();
 
@@ -180,7 +185,7 @@ class CustomerInvoice extends Controller
                     $hassupplier=true;
                 }
             }
-            dd($total_invoice_amount);
+            // dd($total_invoice_amount);
 
             $statement_invoice  =   new \App\Models\InvoiceStatement();
 
