@@ -49,6 +49,7 @@ class Invoice extends Model
         $categoriesTotal['l_available']=$lensthere;
         $categoriesTotal['f_available']=$framethere;
         $categoriesTotal['a_available']=$accthere;
+        $categoriesTotal['total']=0;
 
         $soldP = $this->soldproduct()->where('invoice_id',$this->id)->with('product:id,category_id,price')->select('id','product_id')->get();
         $category   =   Category::select('id','name')->get();
