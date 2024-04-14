@@ -63,7 +63,17 @@
                                         hidden>{{$customer=\App\Models\Customer::where('id',$order->client_id)->where('company_id',Auth::user()->company_id)->select('*')->first()}}</span>
                                     {{-- ============================================================== --}}
 
-                                    <td>{{\App\Models\Customer::where('id',$order->client_id)->where('company_id',Auth::user()->company_id)->pluck('name')->first()}}</td>
+                                    <td>
+                                        @if ($order->client_id != null)
+                                            {{$order->client->name}}
+                                        @else
+                                            @if ($order->hospital_name!=null)
+                                            [{{$order->cloud_id}}] {{$order->hospital_name}}
+                                            @else
+                                                {{$order->client_name}}
+                                            @endif
+                                        @endif
+                                    </td>
                                     {{-- <td>{{\App\Models\Customer::where('id',$client_id)->pluck('name')->first()}}</td> --}}
                                     <td>{{date('Y-m-d',strtotime($order->created_at))}}</td>
                                     <td>{{date('Y-m-d',strtotime($statement->created_at))}}</td>
