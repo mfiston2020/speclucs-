@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\ProductRepo;
 use Illuminate\Http\Request;
@@ -52,6 +53,8 @@ class LensStockController extends Controller
         $add_max    =   [];
         $add_min    =   [];
 
+        // dd(Category::where('name','Lens')->pluck('id')->first());
+
         $productStock   =   array();
 
         // ================ getting the value of seleected items ========
@@ -61,7 +64,7 @@ class LensStockController extends Controller
         $ct     =   $request->coating;
 
         $productListing   =   Product::where('company_id',$companyId)
-                                        ->where('category_id','1')
+                                        ->where('category_id',Category::where('name','Lens')->pluck('id')->first())
                                         ->with('power')->select('id','stock')
                                         ->get();
 
@@ -80,7 +83,9 @@ class LensStockController extends Controller
             $productStock   =   [];
             foreach($productListing as $result){
 
-                // dd($index);
+                if (is_null($result->power)) {
+                    continue;
+                }
                 // dd($)
 
                 if (initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())=='SV' && $result->power->index_id==$ix && $result->power->type_id==$lt && $result->power->chromatics_id==$chrm && $result->power->coating_id==$ct) {
