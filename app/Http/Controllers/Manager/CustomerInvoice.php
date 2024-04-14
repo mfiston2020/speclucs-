@@ -484,8 +484,8 @@ class CustomerInvoice extends Controller
             return redirect()->route('manager.cutomerInvoice')->with('warningMsg','There are no invoices at the moment!');
         }
 
-        $customer   =   \App\Models\Customer::findOrFail($request->customer);
-        $customer2   =   \App\Models\CompanyInformation::findOrFail($request->customer);
+        $customer   =   \App\Models\Customer::find($request->customer);
+        $customer2   =   \App\Models\CompanyInformation::find($request->customer);
 
         foreach ($invoices as $key => $invoice) {
             $invoice_numbers[]    =   \App\Models\Invoice::where('statement_id',$invoice->id)->where('company_id',Auth::user()->company_id)->select('*')->first();
@@ -641,8 +641,8 @@ class CustomerInvoice extends Controller
                                                     ,'products.description')
                                         ->get();
 
-        $customer   =   \App\Models\Customer::findOrFail($invoice_customer->customer_id);
-        $customer2   =   \App\Models\CompanyInformation::findOrFail($invoice_customer->customer_id);
+        $customer   =   \App\Models\Customer::find($invoice_customer->customer_id);
+        $customer2   =   \App\Models\CompanyInformation::find($invoice_customer->customer_id);
 
         // return $all_products;
 
