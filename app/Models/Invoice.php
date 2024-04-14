@@ -37,9 +37,18 @@ class Invoice extends Model
     {
         $categoriesTotal    = [];
 
+        $lensthere=false;
+        $framethere=false;
+        $accthere=false;
+
         $lensTotal  = 0;
         $frameTotal = 0;
         $accessoriesTotal= 0;
+
+
+        $categoriesTotal['l_available']=$lensthere;
+        $categoriesTotal['f_available']=$framethere;
+        $categoriesTotal['a_available']=$accthere;
 
         $soldP = $this->soldproduct()->where('invoice_id',$this->id)->with('product:id,category_id,price')->select('id','product_id')->get();
         $category   =   Category::select('id','name')->get();
@@ -51,16 +60,33 @@ class Invoice extends Model
                 if ($categoriesTotal || $categoriesTotal['lens']) {
                     $categoriesTotal['lens']    +=$value->product->price;
                 }
+                $lensthere=true;
             }
             if ($value->product->category_id==$category->where('name','Frame')->pluck('id')->first()) {
                 $categoriesTotal['frame']   = $frameTotal+$value->product->price;
+                $framethere=true;
             }
             if ($value->product->category_id!=$category->where('name','Lens')->pluck('id')->first() && $value->product->category_id!=$category->where('name','Frame')->pluck('id')->first()) {
                 $categoriesTotal['accessories'] = $accessoriesTotal+$value->product->price;
+                $accthere=true;
             }
         }
 
-        // $categoriesTotal['total']   = $categoriesTotal['lens']+$categoriesTotal['frame']+$categoriesTotal['accessories'];
+        if ($lensthere) {
+            $categoriesTotal['l_available']=$lensthere;
+            $categoriesTotal['total']   += $categoriesTotal['lens'];
+        }
+
+        if ($framethere) {
+            $categoriesTotal['f_available']=$lensthere;
+            $categoriesTotal['total']   += $categoriesTotal['frame'];
+        }
+
+        if ($framethere) {
+            $categoriesTotal['a_available']=$lensthere;
+            $categoriesTotal['total']   += $categoriesTotal['accessories'];
+        }
+        // $categoriesTotal['total']   = $lensthere?$categoriesTotal['lens']+$categoriesTotal['frame']+$categoriesTotal['accessories'];
         return $categoriesTotal;
     }
 

@@ -71,10 +71,10 @@
                                                 ORDER #{{ sprintf('%04d',$invoice->id) }}
                                             </a>
                                         </td>
-                                        <td>{{ format_money($invoice->sumOfCategorizedproduct()['lens']) }}</td>
-                                        <td>{{format_money($invoice->sumOfCategorizedproduct()['frame'])}}</td>
-                                        <td>{{format_money($invoice->sumOfCategorizedproduct()['accessories'])}}</td>
-                                        <td>{{format_money($invoice->totalAmount())}}</td>
+                                        <td>{{ $invoice->sumOfCategorizedproduct()['l_available']?format_money($invoice->sumOfCategorizedproduct()['lens']):'-' }}</td>
+                                        <td>{{$invoice->sumOfCategorizedproduct()['l_available']?format_money($invoice->sumOfCategorizedproduct()['frame']):'-'}}</td>
+                                        <td>{{$invoice->sumOfCategorizedproduct()['l_available']?format_money($invoice->sumOfCategorizedproduct()['accessories']):'-'}}</td>
+                                        <td>{{$invoice->sumOfCategorizedproduct()['l_available']?format_money($invoice->totalAmount()):'-'}}</td>
                                         <td><span class="text-success">{{$invoice->status}}</span></td>
                                         <span hidden>{{$total=$total+$invoice->total_amount}}</span>
                                     </tr>
