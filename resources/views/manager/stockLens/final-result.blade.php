@@ -163,13 +163,13 @@
                             <i class="fa fa-download"></i> Export To Excel
                         </a>
                         <hr>
-                        @if (initials($lt)=='SV')
+                        @if(initials($lt)=='BT')
                             <div class="table-responsive colheaders" role="region" aria-labelledby="HeadersRow" tabindex="0">
                                 <table id="zero_config" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>SPH \ CYL</th>
-                                            @for ($i = $cylinder_max; $i >= $cylinder_min; $i=$i-0.25)
+                                            <th>SPH \ ADD</th>
+                                            @for ($i = $add_max; $i >= $add_min; $i=$i-0.25)
                                                 <th>{{$i}}</th>
                                             @endfor
                                         </tr>
@@ -178,7 +178,7 @@
                                         @for ($i = $sphere_max; $i >= $sphere_min; $i=$i-0.25)
                                             <tr>
                                                 <th>{{$i}}</th>
-                                                @for ($j = $cylinder_max; $j >= $cylinder_min; $j=$j-0.25)
+                                                @for ($j = $add_max; $j >= $add_min; $j=$j-0.25)
                                                     @php
                                                         $product_stock    =   $productStock[format_values($i)][format_values($j)];
                                                     @endphp
@@ -210,13 +210,15 @@
                                     </tbody>
                                 </table>
                             </div>
-                        @elseif(initials($lt)=='BT')
+                        @endif
+
+                        @if (initials($lt)=='SV')
                             <div class="table-responsive colheaders" role="region" aria-labelledby="HeadersRow" tabindex="0">
                                 <table id="zero_config" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>SPH \ ADD</th>
-                                            @for ($i = $add_max; $i >= $add_min; $i=$i-0.25)
+                                            <th>SPH \ CYL</th>
+                                            @for ($i = $cylinder_max; $i >= $cylinder_min; $i=$i-0.25)
                                                 <th>{{$i}}</th>
                                             @endfor
                                         </tr>
@@ -225,7 +227,7 @@
                                         @for ($i = $sphere_max; $i >= $sphere_min; $i=$i-0.25)
                                             <tr>
                                                 <th>{{$i}}</th>
-                                                @for ($j = $add_max; $j >= $add_min; $j=$j-0.25)
+                                                @for ($j = $cylinder_max; $j >= $cylinder_min; $j=$j-0.25)
                                                     @php
                                                         $product_stock    =   $productStock[format_values($i)][format_values($j)];
                                                     @endphp
@@ -337,10 +339,6 @@
                             </div>
                         @endif
                     </div>
-                </div>
-
-                <div>
-
                 </div>
             @endif
         </div>
