@@ -60,7 +60,7 @@ class Invoice extends Model
             }
         }
 
-        $categoriesTotal['total']   = $categoriesTotal['lens']+$categoriesTotal['frame']+$categoriesTotal['accessories'];
+        // $categoriesTotal['total']   = $categoriesTotal['lens']+$categoriesTotal['frame']+$categoriesTotal['accessories'];
         return $categoriesTotal;
     }
 
