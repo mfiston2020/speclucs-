@@ -38,32 +38,32 @@
                                 <div class="row m-t-20">
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-danger">{{ $lensData['lens_discontinued'] }}</h3>
+                                        <h3 class="m-b-0 font-danger">{{  number_format($lensData['lens_discontinued']) }}</h3>
                                         <span>Double Zero</span>
                                     </div>
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $lensData['lens_critical'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{  number_format($lensData['lens_critical']) }}</h3>
                                         <span>Critical</span>
                                     </div>
                                     <div class="col-4">
                                         <i class="fa fa-circle text-orange"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $lensData['lens_high'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{  number_format($lensData['lens_high']) }}</h3>
                                         <span>High</span>
                                     </div>
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-success"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $lensData['lens_medium'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{  number_format($lensData['lens_medium']) }}</h3>
                                         <span>Medium</span>
                                     </div>
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-primary"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $lensData['lens_low'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{  number_format($lensData['lens_low']) }}</h3>
                                         <span>Low</span>
                                     </div>
                                     <div class="col-4">
                                         <i class="fa fa-circle text-info"></i>
-                                        <h3 class="m-b-0 font-info">{{ $lensData['lens_over'] }}</h3>
+                                        <h3 class="m-b-0 font-info">{{  number_format($lensData['lens_over']) }}</h3>
                                         <span>Over Stock</span>
                                     </div>
                                 </div>
@@ -84,32 +84,32 @@
                                 <div class="row m-t-20">
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-danger">{{ $frameData['frame_discontinued'] }}</h3>
+                                        <h3 class="m-b-0 font-danger">{{  number_format($frameData['frame_discontinued']) }}</h3>
                                         <span>Double Zero</span>
                                     </div>
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $frameData['frame_critical'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{  number_format($frameData['frame_critical']) }}</h3>
                                         <span>Critical</span>
                                     </div>
                                     <div class="col-4">
                                         <i class="fa fa-circle text-orange"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $frameData['frame_high'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{  number_format($frameData['frame_high']) }}</h3>
                                         <span>High</span>
                                     </div>
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-success"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $frameData['frame_medium'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{  number_format($frameData['frame_medium']) }}</h3>
                                         <span>Medium</span>
                                     </div>
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-primary"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $frameData['frame_low'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{  number_format($frameData['frame_low']) }}</h3>
                                         <span>Low</span>
                                     </div>
                                     <div class="col-4">
                                         <i class="fa fa-circle text-info"></i>
-                                        <h3 class="m-b-0 font-info">{{ $frameData['frame_over'] }}</h3>
+                                        <h3 class="m-b-0 font-info">{{  number_format($frameData['frame_over']) }}</h3>
                                         <span>Over Stock</span>
                                     </div>
                                 </div>
@@ -130,32 +130,32 @@
                                 <div class="row m-t-20">
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-danger">{{ $accessoriesData['accessories_discontinued'] }}</h3>
+                                        <h3 class="m-b-0 font-danger">{{ number_format($accessoriesData['accessories_discontinued']) }}</h3>
                                         <span>Double Zero</span>
                                     </div>
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-danger"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_critical'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{ number_format($accessoriesData['accessories_critical']) }}</h3>
                                         <span>Critical</span>
                                     </div>
                                     <div class="col-4">
                                         <i class="fa fa-circle text-orange"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_high'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{ number_format($accessoriesData['accessories_high']) }}</h3>
                                         <span>High</span>
                                     </div>
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-success"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_medium'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{ number_format($accessoriesData['accessories_medium']) }}</h3>
                                         <span>Medium</span>
                                     </div>
                                     <div class="col-4 border-right">
                                         <i class="fa fa-circle text-primary"></i>
-                                        <h3 class="m-b-0 font-medium">{{ $accessoriesData['accessories_low'] }}</h3>
+                                        <h3 class="m-b-0 font-medium">{{ number_format($accessoriesData['accessories_low']) }}</h3>
                                         <span>Low</span>
                                     </div>
                                     <div class="col-4">
                                         <i class="fa fa-circle text-info"></i>
-                                        <h3 class="m-b-0 font-info">{{ $accessoriesData['accessories_over'] }}</h3>
+                                        <h3 class="m-b-0 font-info">{{ number_format($accessoriesData['accessories_over']) }}</h3>
                                         <span>Over Stock</span>
                                     </div>
                                 </div>
@@ -180,8 +180,8 @@
         window.addEventListener('DOMContentLoaded', e => {
             stockAnalysis();
             // stockAnalysispie();
-            // {{ $lensData['lens_critical'] }},{{ $frameData['frame_critical'] }},{{ $accessoryData['accessories_critical'] }}
-            console.log({{$lensData['lens_critical']}})
+            // {{  number_format($lensData['lens_critical']) }},{{  number_format($frameData['frame_critical']) }},{{ $accessoryData['accessories_critical'] }}
+            console.log({{ number_format($lensData['lens_critical']}}))
         })
 
         window.addEventListener('refreshChart', event => {
@@ -191,7 +191,7 @@
             } else {
                 chart = new Chart(ctx);
             }
-            console.log({{$lensData['lens_critical']}})
+            console.log({{ number_format($lensData['lens_critical']}}))
         })
 
         //  window.addEventListener('refreshChart', function() {
@@ -199,7 +199,7 @@
         //     var myLineChart = new Chart(ctx);
         //     myLineChart.destroy();
 
-        //     console.log({{$lensData['lens_critical']}})
+        //     console.log({{ number_format($lensData['lens_critical']}}))
 
         //     stockAnalysis();
         // });
