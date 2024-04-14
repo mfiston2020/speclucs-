@@ -17,8 +17,11 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <h4 class="card-title"> <a href="{{url()->previous()}}"><i
-                                    class="fa fa-arrow-alt-circle-left"></i></a> Statement Invoice</h4>
+                        <h4 class="card-title">
+                            <a href="{{url()->previous()}}">
+                                <i class="fa fa-arrow-alt-circle-left"></i>
+                            </a> Statement Invoice
+                        </h4>
                     </div>
                 </div>
             </div>
@@ -47,13 +50,24 @@
                             <h3>Statement Invoice</h3>
                         </div>
                         <div class="pull-right text-right">
-                            <address>
-                                <p class="m-t-30"><b>Name :</b> {{$customer->name}}</p>
-                                    <p class="m-t-30"><b>Phone :</b> {{$customer->phone}}</p>
-                                        {{-- <p class="m-t-30"><b>TIN Number :</b> {{$customer->tin_number}}</p> --}}
-                                <p><b>Due Date :</b> <i class="fa fa-calendar"></i>
-                                    {{date('Y-m-d H:m:s',strtotime($customer->updated_at))}}</p>
-                            </address>
+                            @if ($invoice_customer->source=='vision center')
+                                <address>
+                                    <p class="m-t-30"><b>Name :</b> {{$customer2->company_name}}</p>
+                                        <p class="m-t-30"><b>Phone :</b> {{$customer2->company_phone}}</p>
+                                            {{-- <p class="m-t-30"><b>TIN Number :</b> {{$customer2->tin_number}}</p> --}}
+                                    <p><b>Due Date :</b> <i class="fa fa-calendar"></i>
+                                        {{date('Y-m-d H:m:s',strtotime($customer2->updated_at))}}</p>
+                                </address>
+                            @else
+                                <address>
+                                    <p class="m-t-30"><b>Name :</b> {{$customer->name}}</p>
+                                        <p class="m-t-30"><b>Phone :</b> {{$customer->phone}}</p>
+                                            {{-- <p class="m-t-30"><b>TIN Number :</b> {{$customer->tin_number}}</p> --}}
+                                    <p>
+                                        <b>Due Date :</b> <i class="fa fa-calendar"></i>
+                                        {{date('Y-m-d H:m:s',strtotime($customer->updated_at))}}</p>
+                                </address>
+                            @endif
                         </div>
                     </div>
 

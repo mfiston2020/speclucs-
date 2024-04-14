@@ -33,6 +33,40 @@ class Invoice extends Model
         return $this->hasMany(SoldProduct::class,'invoice_id');
     }
 
+    function sumOfCategorizedproduct()
+    {
+        $categoriesTotal    = [];
+
+        $lensTotal  = 0;
+        $frameTotal = 0;
+        $accessoriesTotal= 0;
+
+        $soldP = $this->soldproduct()->where('invoice_id',$this->id)->with('product:id,category_id,price')->select('id','product_id')->get();
+
+        foreach ($soldP as $key => $value) {
+
+            if ($value->product->category_id=='1') {
+                $categoriesTotal['lens']    = $lensTotal + $value->product->price;
+                if ($categoriesTotal || $categoriesTotal['lens']) {
+                    $categoriesTotal['lens']    +=$value->product->price;
+                }
+            }
+            if ($value->product->category_id=='2') {
+                $categoriesTotal['frame']   = $frameTotal+$value->product->price;
+            }
+            if ($value->product->category_id!='1' && $value->product->category_id!='2') {
+                $categoriesTotal['accessories'] = $accessoriesTotal+$value->product->price;
+            }
+        }
+
+        $categoriesTotal['total']   = $categoriesTotal['lens']+$categoriesTotal['frame']+$categoriesTotal['accessories'];
+        return $categoriesTotal;
+    }
+
+    function totalAmount(){
+        return $this->soldproduct()->where('invoice_id',$this->id)->sum('unit_price');
+    }
+
     function company(){
         return $this->belongsTo(CompanyInformation::class,'company_id');
     }
@@ -57,5 +91,9 @@ class Invoice extends Model
 
     function hasbeeninvoiced(){
         return InsuranceSumaryInvoices::where('invoice_id',$this->id)->exists();
+    }
+
+    function orderrecord(){
+        return $this->hasMany(TrackOrderRecord::class,'invoice_id');
     }
 }

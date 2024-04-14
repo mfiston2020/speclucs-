@@ -22,8 +22,10 @@
 
                     <div class="card-body">
                         <div class="row">
-                            <h4 class="card-title"> <a href="{{url()->previous()}}"><i
-                                        class="fa fa-arrow-alt-circle-left"></i></a> All Customer Orders</h4>
+                            <h4 class="card-title">
+                                <a href="{{url()->previous()}}"><i class="fa fa-arrow-alt-circle-left"></i></a>
+                                All Customer Orders
+                            </h4>
                         </div>
                         <hr>
                         {{-- ================================= --}}
@@ -44,45 +46,35 @@
                                             </div>
                                         </th>
                                         <th>Order Date</th>
+                                        <th>Delivery Date</th>
                                         <th>Order Number</th>
-                                        <th>Type Quantity</th>
-                                        <th>Total Stock</th>
+                                        <th>Lens Total</th>
+                                        <th>Frame Total</th>
+                                        <th>Accessories Total</th>
                                         <th>Total Amount</th>
-                                        {{-- <th>Payment</th> --}}
                                         <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($customerInvoice as $key=> $invoice)
+                                    @foreach ( $customerInvoice as $key=> $invoice )
                                     <tr>
-                                        <span
-                                            hidden>{{$client=\App\Models\Customer::where(['id'=>$invoice->client_id])->where('company_id',Auth::user()->company_id)->pluck('name')->first()}}</span>
-                                        <span
-                                            hidden>{{$products=\App\Models\SoldProduct::where(['invoice_id'=>$invoice->id])->where('company_id',Auth::user()->company_id)->select('product_id')->get()}}</span>
-                                        @foreach ($products as $item)
-                                        <span hidden>{{$allProduct[]=$item}}</span>
-                                        @endforeach
                                         <td>
                                             <div class="form-check form-check-inline align-content-center">
                                                 <input class="form-check-input allCheckbox" type="checkbox"
                                                     name="invoice[]" id="inlineCheckbox1" value="{{$invoice->id}}">
                                             </div>
                                         </td>
-                                        <td>{{date('Y-m-d',strtotime($invoice->created_at))}}</td>
+                                        <td>{{ date('Y-m-d',strtotime($invoice->created_at)) }}</td>
+                                        <td>{{ date('Y-m-d',strtotime($invoice->orderrecord[0]->created_at)) }}</td>
                                         <td>
-                                            <a href="{{route('manager.sales.edit',Crypt::encrypt($invoice->id))}}">ORDER
-                                                #{{sprintf('%04d',$invoice->reference_number)}}</a></td>
-                                        <td>{{count(array_unique($allProduct))}}</td>
-                                        <td>{{\App\Models\SoldProduct::where(['invoice_id'=>$invoice->id])->where('company_id',Auth::user()->company_id)->select('*')->sum('quantity')}}
+                                            <a href="{{route('manager.sales.edit',Crypt::encrypt($invoice->id))}}">
+                                                ORDER #{{ sprintf('%04d',$invoice->id) }}
+                                            </a>
                                         </td>
-                                        <td>{{format_money($invoice->total_amount)}}</td>
-                                        {{-- <td><span class="text-{{($invoice->payment!='')?'success':'warning'}}">
-                                        @if ($invoice->payment!='')
-                                        {{$invoice->payment}}
-                                        @else
-                                        Unpaid
-                                        @endif
-                                        </span></td> --}}
+                                        <td>{{ format_money($invoice->sumOfCategorizedproduct()['lens']) }}</td>
+                                        <td>{{format_money($invoice->sumOfCategorizedproduct()['frame'])}}</td>
+                                        <td>{{format_money($invoice->sumOfCategorizedproduct()['accessories'])}}</td>
+                                        <td>{{format_money($invoice->totalAmount())}}</td>
                                         <td><span class="text-success">{{$invoice->status}}</span></td>
                                         <span hidden>{{$total=$total+$invoice->total_amount}}</span>
                                     </tr>
@@ -98,7 +90,8 @@
                             {{-- <a href="#" id="save" class="btn btn-default btn-outline"> <span><i
                                 class="fa fa-save"></i> Save Invoice</span> </a> --}}
                             <button type="submit" class="btn btn-success waves-effect waves-light text-white">
-                                <i class="fa fa-save"></i> Save Invoice</button>
+                                <i class="fa fa-save"></i> Save Invoice
+                            </button>
                             {{-- <a id="sendEmail" href="#" class="btn btn-secondary waves-effect waves-light text-white">Send as email</a>
                             <img src="{{ asset('dashboard/assets/images/loading.gif')}}" alt="" height="50px"
                             width="50px"
@@ -209,9 +202,6 @@ method="POST" hidden>
 <script>
     $('#loading').hide();
     $("#sendEmail").on('click', function () {
-        // $('#loading').show();
-        // $(this).disabled=true;
-
         checkbox();
     });
 

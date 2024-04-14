@@ -5,152 +5,48 @@
 @push('css')
 
 <style>
+    table{
+        height:20% !important;
+    }
+    table thead th {
+    /* padding: 3px; */
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    /* width: 25vw; */
+    background: #414755;
+    color: white;
+    }
+    table thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    }
+    table tbody th {
+    position: sticky;
+    left: 0;
+    background: #414755;
+    color: white;
+    z-index: 1;
+    }
+    caption {
+    text-align: left;
+    padding: 0.25rem;
+    position: sticky;
+    left: 0;
+    }
 
-table {
-  margin: 1em 0;
-  border-collapse: collapse;
-  border: 0.1em solid #d6d6d6;
-}
-
-caption {
-  text-align: left;
-  font-style: italic;
-  padding: 0.25em 0.5em 0.5em 0.5em;
-}
-
-th,
-td {
-  padding: 0.25em 0.5em 0.25em 1em;
-  vertical-align: text-top;
-  text-align: left;
-  text-indent: -0.5em;
-}
-
-th {
-  vertical-align: bottom;
-  background-color: #666;
-  color: #fff;
-}
-
-tr:nth-child(even) th[scope=row] {
-  background-color: #f2f2f2;
-}
-
-tr:nth-child(odd) th[scope=row] {
-  background-color: #fff;
-}
-
-tr:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-tr:nth-child(odd) {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-td:nth-of-type(2) {
-  font-style: italic;
-}
-
-th:nth-of-type(3),
-td:nth-of-type(3) {
-  text-align: right;
-}
-
-/* Fixed Headers */
-
-th {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-th[scope=row] {
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  z-index: 1;
-}
-
-th[scope=row] {
-  vertical-align: top;
-  color: inherit;
-  background-color: inherit;
-  background: linear-gradient(90deg, transparent 0%, transparent calc(100% - .05em), #d6d6d6 calc(100% - .05em), #d6d6d6 100%);
-}
-
-th:not([scope=row]):first-child {
-  left: 0;
-  z-index: 3;
-  background: linear-gradient(90deg, #666 0%, #666 calc(100% - .05em), #ccc calc(100% - .05em), #ccc 100%);
-}
-
-/* Scrolling wrapper */
-
-div[tabindex="0"][aria-labelledby][role="region"] {
-  overflow: auto;
-}
-
-div[tabindex="0"][aria-labelledby][role="region"]:focus {
-  box-shadow: 0 0 .5em rgba(0,0,0,.5);
-  outline: .1em solid rgba(0,0,0,.1);
-}
-
-div[tabindex="0"][aria-labelledby][role="region"] table {
-  margin: 0;
-}
-
-div[tabindex="0"][aria-labelledby][role="region"].rowheaders {
-  background:
-    linear-gradient(to right, transparent 30%, rgba(255,255,255,0)),
-    linear-gradient(to right, rgba(255,255,255,0), white 70%) 0 100%,
-    radial-gradient(farthest-side at 0% 50%, rgba(0,0,0,0.2), rgba(0,0,0,0)),
-    radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.2), rgba(0,0,0,0)) 0 100%;
-  background-repeat: no-repeat;
-  background-color: #fff;
-  background-size: 4em 100%, 4em 100%, 1.4em 100%, 1.4em 100%;
-  background-position: 0 0, 100%, 0 0, 100%;
-  background-attachment: local, local, scroll, scroll;
-}
-
-div[tabindex="0"][aria-labelledby][role="region"].colheaders {
-  background:
-    linear-gradient(white 30%, rgba(255,255,255,0)),
-    linear-gradient(rgba(255,255,255,0), white 70%) 0 100%,
-    radial-gradient(farthest-side at 50% 0, rgba(0,0,0,.2), rgba(0,0,0,0)),
-    radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,.2), rgba(0,0,0,0)) 0 100%;
-  background-repeat: no-repeat;
-  background-color: #fff;
-  background-size: 100% 4em, 100% 4em, 100% 1.4em, 100% 1.4em;
-  background-attachment: local, local, scroll, scroll;
-}
-
-/* Strictly for making the scrolling happen. */
-
-th[scope=row] {
-  min-width: 40vw;
-}
-
-@media all and (min-width: 30em) {
-  th[scope=row] {
-    min-width: 20em;
-  }
-}
-
-th[scope=row] + td {
-  min-width: 24em;
-}
-
-/* div[tabindex="0"][aria-labelledby][role="region"]:nth-child(3) {
-  max-height: 200em;
-} */
-
-div[tabindex="0"][aria-labelledby][role="region"]:nth-child(7) {
-  max-height: 35em;
-  margin: 0 1em;
-}
+    [role="region"][aria-labelledby][tabindex] {
+    width: 100%;
+    max-height: 98vh;
+    overflow: auto;
+    }
+    [role="region"][aria-labelledby][tabindex]:focus {
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.5);
+    outline: 0;
+    }
 </style>
+
 @endpush
 
 {{-- ==== Breadcumb ======== --}}
@@ -160,6 +56,7 @@ div[tabindex="0"][aria-labelledby][role="region"]:nth-child(7) {
 
 @section('content')
 <div class="container-fluid">
+
     <div class="row">
         <div class="col-sm-12 col-lg-12">
             <form action="{{route('manager.search.lens.stock')}}" method="post">
@@ -245,27 +142,29 @@ div[tabindex="0"][aria-labelledby][role="region"]:nth-child(7) {
 
     <div class="row">
         <div class="col-sm-12 col-lg-12">
-            @if ($results->isEmpty())
-                {{-- <div class="card"> --}}
-                    {{-- <div class="card-body"> --}}
-                        {{-- ====== input error message ========== --}}
-                        @include('manager.includes.layouts.message')
-                        {{-- ====================================== --}}
-                    {{-- </div> --}}
-                {{-- </div> --}}
+            @if (count($productStock)<=0)
+                {{-- ====== input error message ========== --}}
+                @include('manager.includes.layouts.message')
+                {{-- ====================================== --}}
             @else
                 <div class="card">
                     <div class="card-body">
-                      <span hidden>{{$type=\App\Models\LensType::where(['id'=>$lt])->pluck('name')->first()}}</span>
-                      <span hidden>{{$indx=\App\Models\PhotoIndex::where(['id'=>$ix])->pluck('name')->first()}}</span>
-                      <span hidden>{{$chro=\App\Models\PhotoChromatics::where(['id'=>$chrm])->pluck('name')->first()}}</span>
-                      <span hidden>{{$coat=\App\Models\PhotoCoating::where(['id'=>$ct])->pluck('name')->first()}}</span>
-                        <h4 class="card-title" style="text-transform: uppercase">{{$type." ".$indx." ".$chro." ".$coat}}</h4>
+
+                        <div class="row">
+                            <h4 class="card-title col-6" style="text-transform: uppercase">{{$lt." ".$ix." ".$chrm." ".$ct}}</h4>
+                            <div class="col-6 float-right">
+                                <span class="label label-danger">0</span>
+                                <span class="label label-warning">1-9</span>
+                                <span class="label label-success">10 and above</span>
+                            </div>
+                        </div>
+
+                        <a onclick="exportAll('xls');" href="#" type="button" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                            <i class="fa fa-download"></i> Export To Excel
+                        </a>
                         <hr>
-                        {{-- {{$results}} --}}
-                        @if (initials($type)=='SV')
+                        @if (initials($lt)=='SV')
                             <div class="table-responsive colheaders" role="region" aria-labelledby="HeadersRow" tabindex="0">
-                            <div>
                                 <table id="zero_config" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -280,43 +179,39 @@ div[tabindex="0"][aria-labelledby][role="region"]:nth-child(7) {
                                             <tr>
                                                 <th>{{$i}}</th>
                                                 @for ($j = $cylinder_max; $j >= $cylinder_min; $j=$j-0.25)
-                                                <span hidden>{{$product_id=\App\Models\Power::where(['cylinder'=>format_values($j)])->where('company_id',Auth::user()->company_id)->where(['sphere'=>format_values($i)])
-                                                                        ->where('type_id',$lt)
-                                                                        ->where('index_id',$ix)
-                                                                        ->where('chromatics_id',$chrm)
-                                                                        ->where('coating_id',$ct)
-                                                                        ->select('product_id')->get()}}</span>
-
-                                                @php
-                                                    $stock    =   0;
-
-                                                    foreach ($product_id as $key => $id_) {
-                                                        $p1=\App\Models\Product::where(['id'=>$id_->product_id])->select('*')->sum('stock');
-
-                                                        $stock+=$p1;
-                                                    }
-                                                @endphp
-
-                                                <td>
-                                                    @if ($stock==0)
-                                                        <center>
-                                                            <span>-</span>
-                                                        </center>
-                                                    @else
-                                                        <center>
-                                                            <span class="label label-success">{{$stock}}</span>
-                                                        </center>
-                                                    @endif
-                                                </td>
+                                                    @php
+                                                        $product_stock    =   $productStock[format_values($i)][format_values($j)];
+                                                    @endphp
+                                                    <td>
+                                                        @if (is_null($product_stock))
+                                                            <center>
+                                                                <span label-success>-</span>
+                                                            </center>
+                                                        @else
+                                                            <center>
+                                                                @if ($product_stock>0)
+                                                                    <span @class(['label',
+                                                                    'label-warning'=>$product_stock<10 && $product_stock>=1,
+                                                                    'label-success'=>$product_stock>=10 ,
+                                                                    ])>
+                                                                        {{ !is_null($product_stock)?$product_stock:'-' }}
+                                                                    </span>
+                                                                @else
+                                                                    <span class="label label-danger">
+                                                                        0
+                                                                    </span>
+                                                                @endif
+                                                            </center>
+                                                        @endif
+                                                    </td>
                                                 @endfor
                                             </tr>
                                         @endfor
                                     </tbody>
                                 </table>
                             </div>
-
-                        @elseif (initials($type)=='BT')
-                            <div>
+                        @elseif(initials($lt)=='BT')
+                            <div class="table-responsive colheaders" role="region" aria-labelledby="HeadersRow" tabindex="0">
                                 <table id="zero_config" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -331,25 +226,31 @@ div[tabindex="0"][aria-labelledby][role="region"]:nth-child(7) {
                                             <tr>
                                                 <th>{{$i}}</th>
                                                 @for ($j = $add_max; $j >= $add_min; $j=$j-0.25)
-                                                <span hidden>{{$product_id=\App\Models\Power::where(['add'=>format_values($j)])->where('company_id',Auth::user()->company_id)->where(['sphere'=>format_values($i)])
-                                                                        ->where('type_id',$lt)
-                                                                        ->where('index_id',$ix)
-                                                                        ->where('chromatics_id',$chrm)
-                                                                        ->where('coating_id',$ct)
-                                                                        ->pluck('product_id')->first()}}</span>
-
-                                                <span hidden>{{$stock=\App\Models\Product::where(['id'=>$product_id])->select('*')->sum('stock')}}</span>
-                                                <td>
-                                                    @if ($stock==0)
-                                                        <center>
-                                                            <span>-</span>
-                                                        </center>
-                                                    @else
-                                                        <center>
-                                                            <span class="label label-success">{{$stock}}</span>
-                                                        </center>
-                                                    @endif
-                                                </td>
+                                                    @php
+                                                        $product_stock    =   $productStock[format_values($i)][format_values($j)];
+                                                    @endphp
+                                                    <td>
+                                                        @if (is_null($product_stock))
+                                                            <center>
+                                                                <span label-success>-</span>
+                                                            </center>
+                                                        @else
+                                                            <center>
+                                                                @if ($product_stock>0)
+                                                                    <span @class(['label',
+                                                                    'label-warning'=>$product_stock<10 && $product_stock>=1,
+                                                                    'label-success'=>$product_stock>=10 ,
+                                                                    ])>
+                                                                        {{ !is_null($product_stock)?$product_stock:'-' }}
+                                                                    </span>
+                                                                @else
+                                                                    <span class="label label-danger">
+                                                                        0
+                                                                    </span>
+                                                                @endif
+                                                            </center>
+                                                        @endif
+                                                    </td>
                                                 @endfor
                                             </tr>
                                         @endfor
@@ -358,13 +259,12 @@ div[tabindex="0"][aria-labelledby][role="region"]:nth-child(7) {
                             </div>
                         @else
                             <div class="table-responsive colheaders" role="region" aria-labelledby="HeadersRow" tabindex="0">
-                                <div>
                                 <table id="zero_config" class="table table-striped table-bordered">
                                     <thead>
                                     <tr>
-                                        <th>EYE</th>
+                                        <th >EYE</th>
                                         @for ($i = $add_min; $i <= $add_max; $i=$i+0.25)
-                                            <th><center>R</center></th>
+                                            <th style="position: sticky;top: 0;z-index: 1;"><center>R</center></th>
                                             <th><center>L</center></th>
                                         @endfor
                                     </tr>
@@ -380,130 +280,55 @@ div[tabindex="0"][aria-labelledby][role="region"]:nth-child(7) {
                                             <tr>
                                             <th><center>{{$i}}</center></th>
                                             @for ($j = $add_min; $j <= $add_max; $j=$j+0.25)
-
-                                                    @php
-                                                        $counter_r=0;
-                                                        $counter_l=0;
-                                                        $final_stock_r=0;
-                                                        $final_stock_l=0;
-                                                        foreach ($products_id_array_ as $item){
-                                                            if ($item['eye']=='right' && $item['sphere']==$i && $item['add']==$j){
-
-                                                                $counter_r++;
-                                                                $final_stock_r=$counter_r>=2?$final_stock_r+=$item['stock']:$item['stock'];
-
-                                                            }
-                                                            if ($item['eye']=='left' && $item['sphere']==$i && $item['add']==$j){
-
-                                                                $counter_l++;
-                                                                $final_stock_l=$counter_l>=2?$final_stock_l+=$item['stock']:$item['stock'];
-
-                                                            }
-                                                        }
-                                                    @endphp
+                                                @php
+                                                    $product_stock_right    =   $productStock[format_values($i)][format_values($j)]['Right'];
+                                                    $product_stock_left    =   $productStock[format_values($i)][format_values($j)]['Left'];
+                                                @endphp
                                                 <td>
-                                                    <center>
-                                                        @if ($final_stock_r==0)
-                                                            -
-                                                        @else
-                                                            <span class="label label-success">{{$final_stock_r}}</span>
-                                                        @endif
-                                                    </center>
-                                                </td>
-
-                                                <td>
-                                                    <center>
-                                                        @if ($final_stock_l==0)
-                                                            -
-                                                        @else
-                                                            <span class="label label-success">{{$final_stock_l}}</span>
-                                                        @endif
-                                                    </center>
-                                                </td>
-
-
-                                            {{-- @foreach ($products_id_array as $product_id)
-
-                                            @endforeach --}}
-
-                                                {{-- <td>
-                                                    @foreach ($products_id_array as $product_id)
-                                                        <span hidden>{{$stock=\App\Models\Product::where(['id'=>$product_id->product_id])
-                                                                                                ->where('company_id',Auth::user()->company_id)
-                                                                                                ->select('*')->sum('stock')}}</span>
-
-                                                        @php
-
-                                                            foreach ($products_id_array as $key => $value) {
-                                                                $p1=\App\Models\Product::where(['id'=>$product_id->product_id])->where('company_id',Auth::user()->company_id)->select('*')->sum('stock');
-
-                                                                $stock+=$p1;
-                                                            }
-
-                                                        @endphp
-
-
-                                                        @if ($product_id->sphere==$i && $product_id->add==$j)
-
-                                                        {{-- <span hidden>{{$eye=\App\Models\Power::where(['sphere'=>format_values($i)])
-                                                                                            ->where('type_id',$lt)
-                                                                                            ->where('index_id',$ix)
-                                                                                            ->where('chromatics_id',$chrm)
-                                                                                            ->where('coating_id',$ct)
-                                                                                            ->where('product_id',$product_id->product_id)
-                                                                                            ->where('company_id',Auth::user()->company_id)
-                                                                                            ->where(['add'=>format_values($j)])
-                                                                                            ->pluck('eye')->first()}}
-                                                                                            </span> --}
-                                                            @if ($product_id->eye=='right')
-                                                                @if ($stock==0)
-                                                                    <center>
-                                                                        <span>-</span>
-                                                                    </center>
-                                                                @else
-                                                                    <center>
-                                                                        <span class="label label-success">{{$stock}}</span>
-                                                                    </center>
-                                                                @endif
-                                                            @endif
-                                                        @endif
-                                                    @endforeach
-                                                </td>
-
-                                                <td>
-                                                    @foreach ($products_id_array as $product_id)
-                                                    <span hidden>{{$stock=\App\Models\Product::where(['id'=>$product_id->product_id])
-                                                                                                ->where('company_id',Auth::user()->company_id)
-                                                                                                ->select('*')->sum('stock')}}</span>
-
-
-                                                        @if ($product_id->sphere==$i && $product_id->add==$j)
-
-                                                        {{-- <span hidden>{{$eye=\App\Models\Power::where(['sphere'=>format_values($i)])
-                                                                                            ->where('type_id',$lt)
-                                                                                            ->where('index_id',$ix)
-                                                                                            ->where('chromatics_id',$chrm)
-                                                                                            ->where('coating_id',$ct)
-                                                                                            ->where('product_id',$product_id->product_id)
-                                                                                            ->where('company_id',Auth::user()->company_id)
-                                                                                            ->where(['add'=>format_values($j)])
-                                                                                            ->pluck('eye')->first()}}
-                                                                                            </span> --}
-                                                            @if ($product_id->eye=='left')
-                                                            @if ($stock==0)
-                                                                <center>
-                                                                <span>-</span>
-                                                                </center>
+                                                    @if (is_null($product_stock_right))
+                                                        <center>
+                                                            <span label-success>-</span>
+                                                        </center>
+                                                    @else
+                                                        <center>
+                                                            @if ($product_stock_right>0)
+                                                                <span @class(['label',
+                                                                'label-warning'=>$product_stock_right<10 && $product_stock_right>=1,
+                                                                'label-success'=>$product_stock_right>=10 ,
+                                                                ])>
+                                                                    {{ !is_null($product_stock_right)?$product_stock_right:'-' }}
+                                                                </span>
                                                             @else
-                                                                <center>
-                                                                <span class="label label-success">{{$stock}}</span>
-                                                                </center>
+                                                                <span class="label label-danger">
+                                                                    0
+                                                                </span>
                                                             @endif
-                                                            @endif
-                                                        @endif
-                                                    @endforeach
-                                                </td> --}}
+                                                        </center>
+                                                    @endif
+                                                </td>
 
+                                                <td>
+                                                    @if (is_null($product_stock_left))
+                                                        <center>
+                                                            <span label-success>-</span>
+                                                        </center>
+                                                    @else
+                                                        <center>
+                                                            @if ($product_stock_left>0)
+                                                                <span @class(['label',
+                                                                'label-warning'=>$product_stock_left<10 && $product_stock_left>=1,
+                                                                'label-success'=>$product_stock_left>=10 ,
+                                                                ])>
+                                                                    {{ !is_null($product_stock_left)?$product_stock_left:'-' }}
+                                                                </span>
+                                                            @else
+                                                                <span class="label label-danger">
+                                                                    0
+                                                                </span>
+                                                            @endif
+                                                        </center>
+                                                    @endif
+                                                </td>
                                             @endfor
                                             </tr>
                                         @endfor
@@ -513,16 +338,14 @@ div[tabindex="0"][aria-labelledby][role="region"]:nth-child(7) {
                         @endif
                     </div>
                 </div>
+
                 <div>
 
-                  <a onclick="exportAll('xls');" href="#" type="button" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
-                    <i class="fa fa-download"></i> Export To Excel</a>
                 </div>
             @endif
         </div>
     </div>
 </div>
-    </div>
 @endsection
 
 @push('scripts')

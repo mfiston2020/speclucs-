@@ -63,25 +63,23 @@
                                         hidden>{{$customer=\App\Models\Customer::where('id',$order->client_id)->where('company_id',Auth::user()->company_id)->select('*')->first()}}</span>
                                     {{-- ============================================================== --}}
 
-                                    <td>{{\App\Models\Customer::where('id',$order->client_id)->where('company_id',Auth::user()->company_id)->pluck('name')->first()}}
-                                    </td>
-                                    <td>{{\App\Models\Customer::where('id',$client_id)->pluck('name')->first()}}
-                                    </td>
+                                    <td>{{\App\Models\Customer::where('id',$order->client_id)->where('company_id',Auth::user()->company_id)->pluck('name')->first()}}</td>
+                                    {{-- <td>{{\App\Models\Customer::where('id',$client_id)->pluck('name')->first()}}</td> --}}
                                     <td>{{date('Y-m-d',strtotime($order->created_at))}}</td>
                                     <td>{{date('Y-m-d',strtotime($statement->created_at))}}</td>
                                     <td>INVOICE # {{sprintf('%04d',$statement->invoice_number)}}</td>
                                     <td>ORDER # {{sprintf('%04d',$order->reference_number)}}</td>
-                                    <td>{{\App\Models\Category::where('id',$product->category_id)->pluck('name')->first()}}
+                                    <td>{{$product->category->name}}
                                     </td>
                                     <td>{{$product->product_name}}</td>
                                     <td>{{lensDescription($product->description)}}</td>
                                     <td>
                                         @if ($power)
                                         @if (initials($product->product_name)=='SV')
-                                        <span>{{$power->sphere}} / {{$power->cylinder}}</span>
+                                        <span>{{$product->power->sphere}} / {{$product->power->cylinder}}</span>
                                         @else
-                                        <span>{{$power->sphere}} / {{$power->cylinder}} *{{$power->axis}}
-                                            {{$power->add}}</span>
+                                        <span>{{$product->power->sphere}} / {{$product->power->cylinder}} *{{$product->power->axis}}
+                                            {{$product->power->add}}</span>
                                         @endif
                                         @else
                                         <center><span>-</span></center>

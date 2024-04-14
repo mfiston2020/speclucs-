@@ -17,8 +17,11 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <h4 class="card-title"> <a href="{{url()->previous()}}"><i
-                                    class="fa fa-arrow-alt-circle-left"></i></a> Order Invoice Summary</h4>
+                        <h4 class="card-title">
+                            <a href="{{url()->previous()}}">
+                                <i class="fa fa-arrow-alt-circle-left"></i>
+                            </a> Order Invoice Summary
+                        </h4>
                     </div>
                 </div>
             </div>
@@ -31,29 +34,38 @@
 
                     <div class="col-md-12 d-flex justify-content-between">
                         <div class="pull-left">
-                                <span hidden>{{$company=\App\Models\CompanyInformation::where(['id'=>Auth::user()->company_id])->select('*')->first()}}</span>
-                            <img src="{{ asset('documents/logos/'.$company->logo)}}" style="height: 150px">
+                            <img src="{{ asset('documents/logos/'.getUserCompanyInfo()->logo)}}" style="height: 150px">
                             <address>
-                                @if (Auth::user()->company_id!=3)
-                                    <h3> &nbsp;<b class="text-danger">{{$company->company_name}}</b></h3>
-                                @endif
-                                <p class="text-muted m-l-5"><strong class="text-black-50">TIN:</strong> {{$company->company_tin_number}}
-                                    {{-- <br /><span></span> {{$company->company_street}} --}}
-                                    <br /><strong class="text-black-50">Phone Number:</strong> {{$company->company_phone}}
-                                    <br /><strong class="text-black-50">Email:</strong> {{$company->company_email}}</p>
+                                {{-- @if (Auth::user()->company_id!=3) --}}
+                                    <h3> &nbsp;<b class="text-danger">{{getUserCompanyInfo()->company_name}}</b></h3>
+                                {{-- @endif --}}
+                                <p class="text-muted m-l-5"><strong class="text-black-50">TIN:</strong> {{getUserCompanyInfo()->company_tin_number}}
+                                    {{-- <br /><span></span> {{getUserCompanyInfo()->company_street}} --}}
+                                    <br /><strong class="text-black-50">Phone Number:</strong> {{getUserCompanyInfo()->company_phone}}
+                                    <br /><strong class="text-black-50">Email:</strong> {{getUserCompanyInfo()->company_email}}</p>
                             </address>
                         </div>
                         <div>
                             <h3>Statement Invoice List</h3>
                         </div>
                         <div class="pull-right text-right">
-                            <address>
-                                <p class="m-t-30"><b>Name :</b> {{$customer->name}}</p>
-                                    <p class="m-t-30"><b>Phone :</b> {{$customer->phone}}</p>
-                                        {{-- <p class="m-t-30"><b>TIN Number :</b> {{$customer->tin_number}}</p> --}}
-                                <p><b>Due Date :</b> <i class="fa fa-calendar"></i>
-                                    {{date('Y-m-d H:m:s',strtotime($customer->updated_at))}}</p>
-                            </address>
+                            @if (count($invoices->where('source','vision center')->all())>0)
+                                <address>
+                                    <p class="m-t-30"><b>Name :</b> {{$customer2->company_name}}</p>
+                                        <p class="m-t-30"><b>Phone :</b> {{$customer2->company_phone}}</p>
+                                            {{-- <p class="m-t-30"><b>TIN Number :</b> {{$customer2->tin_number}}</p> --}}
+                                    <p><b>Invoice Date :</b> <i class="fa fa-calendar"></i>
+                                        {{date('Y-m-d H:m:s')}}</p>
+                                </address>
+                            @else
+                                <address>
+                                    <p class="m-t-30"><b>Name :</b> {{$customer->name}}</p>
+                                        <p class="m-t-30"><b>Phone :</b> {{$customer->phone}}</p>
+                                            {{-- <p class="m-t-30"><b>TIN Number :</b> {{$customer->tin_number}}</p> --}}
+                                    <p><b>Invoice Date :</b> <i class="fa fa-calendar"></i>
+                                        {{date('Y-m-d H:m:s')}}</p>
+                                </address>
+                            @endif
                         </div>
                     </div>
 
@@ -102,7 +114,7 @@
                                                     Statement  #{{sprintf('%04d',$invoice->id)}}
                                                 </a>
                                             </td>
-                                            <span hidden>{{$total=\App\Models\Invoice::where('statement_id',$invoice->id)->select('*')->sum('total_amount')}}</span>
+                                            <span hidden>{{$total=$invoice->total_amount}}</span>
 
                                             @if ($invoice->status!='invoiced')
                                                 <span hidden>{{$paid+=$total}}</span>

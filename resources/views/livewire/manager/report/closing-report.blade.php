@@ -22,6 +22,7 @@
                             <div class="input-group">
                                 <input type="date" class="form-control" placeholder="mm/dd/yyyy"
                                     wire:model.lazy='closing_date'>
+                                <img src="{{asset('dashboard/assets/images/loading.gif')}}" width="40" wire:loading wire:target='searchInformation'/>
                             </div>
                             @error('closing_date')
                                 <span class="text-danger">{{ $message }}</span>
@@ -68,9 +69,6 @@
                     <span wire:loading.remove wire:target=searchInformation>Search</span>
                     <span wire:loading wire:target='searchInformation'>Searching...</span>
                 </button>
-
-                <img src="{{asset('dashboard/assets/images/loading.gif')}}" width="40" wire:loading wire:target='searchInformation'/>
-
             </div>
         </form>
     </div>
@@ -78,6 +76,13 @@
     @if ($result && count($products) > 0)
 
         <div class="card">
+            @php
+                $dateNow = now();
+                $stockTracker   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($closing_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($dateNow.'-1day')))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
+
+                $stockTracker2   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($closing_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($dateNow)))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
+            @endphp
+
             <div class="card-body">
                 <a onclick="exportAll('xls');" href="#" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
                     <i class="fa fa-download"></i> Export To Excel
@@ -116,17 +121,9 @@
                                         $openingStock   =   0;
                                     }
                                     else{
-                                        $instock    =   $product->productTrack
-                                                        ->where('created_at','>=',date('Y-m-d',strtotime($closing_date)))
-                                                        ->where('created_at','<=',date('Y-m-d',strtotime($dateNow.'-1day')))
-                                                        ->where('operation','in')
-                                                        ->sum('incoming');
-
-                                        $outstock    =   $product->productTrack
-                                                        ->where('created_at','>=',date('Y-m-d',strtotime($closing_date)))
-                                                        ->where('created_at','<=',date('Y-m-d',strtotime($dateNow.'-1day')))
-                                                        ->where('operation','in')
-                                                        ->sum('incoming');;
+                                        // dd($stockTracker->where('product_id',$product->id)->all());
+                                        $instock    =   $stockTracker->where('product_id',$product->id)->where('operation','in')->sum('incoming');
+                                        $outstock    =   $stockTracker->where('product_id',$product->id)->where('operation','out')->sum('incoming');
 
                                         $closingStock   =  $product->stock - $instock + $outstock;
                                     }
@@ -155,8 +152,12 @@
                                     </td>
                                     <td>{{ format_money($product->price) }}</td>
                                     <td>{{ format_money($product->cost) }}</td>
+
                                     <td>
-                                        <a href="" class="update" data-name="stock" data-type="text" data-pk="{{ $product->id }}" data-title="Enter Product Name">{{ $closingStock }}</a>
+                                        <a href="" class="update" data-name="stock" data-type="text"
+                                            data-pk="{{ $product->id }}"
+                                            data-title="Enter Product Name">{{ $closingStock }}</a>
+
                                     </td>
                                 </tr>
                                 <span hidden>{{ $closingStock = 0 }}</span>
@@ -176,6 +177,13 @@
                             </tr>
                         </tfoot>
                     </table>
+                    {{-- <hr>
+                    <button class="btn btn-primary btn-rounded mb-2" wire:click="loadMore">
+                        <span wire:loading wire:target="loadMore">
+                            <img src="{{asset('dashboard/assets/images/loading2.gif')}}" width="20" alt=""> Loading...
+                        </span>
+                        <span wire:loading.remove>Load More</span>
+                    </button> --}}
                 </div>
             </div>
 

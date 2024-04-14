@@ -38,12 +38,23 @@
                                         <select class="select2 form-control custom-select"
                                             style="width: 100%; height:36px;" name="customer" id="customer">
                                             <option value="">Select</option>
-                                            @foreach ($customers as $customer)
-                                            <option value="{{$customer->id}}"
-                                                {{(old('customer')==$customer->id)?'selected':''}}>
-                                                {{$customer->name}}
-                                            </option>
-                                            @endforeach
+                                            <optgroup label="Vision Centers">
+                                                @foreach ($visionCenters as $visionCenter)
+                                                    <option value="{{$visionCenter->requestCompany->id}}"
+                                                        {{(old('customer')==$visionCenter->requestCompany->id)?'selected':''}}>
+                                                        {{$visionCenter->requestCompany->company_name}}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                            <optgroup label="Customers">
+                                                @foreach ($customers as $customer)
+                                                    <option value="{{$customer->id}}"
+                                                        {{(old('customer')==$customer->id)?'selected':''}}>
+                                                        {{$customer->name}}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+
                                         </select>
                                     </div>
                                 </div>
@@ -102,12 +113,22 @@
                                         <select class="select2 form-control custom-select"
                                             style="width: 100%; height:36px;" name="customer" id="customer">
                                             <option value="">Select</option>
-                                            @foreach ($customers as $customer)
-                                            <option value="{{$customer->id}}"
-                                                {{(old('customer')==$customer->id)?'selected':''}}>
-                                                {{$customer->name}}
-                                            </option>
-                                            @endforeach
+                                            <optgroup label="Vision Centers">
+                                                @foreach ($visionCenters as $visionCenter)
+                                                    <option value="{{$visionCenter->requestCompany->id}}"
+                                                        {{(old('customer')==$visionCenter->requestCompany->id)?'selected':''}}>
+                                                        {{$visionCenter->requestCompany->company_name}}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                            <optgroup label="Customers">
+                                                @foreach ($customers as $customer)
+                                                    <option value="{{$customer->id}}"
+                                                        {{(old('customer')==$customer->id)?'selected':''}}>
+                                                        {{$customer->name}}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
                                         </select>
                                     </div>
                                 </div>
@@ -166,12 +187,23 @@
                                             style="width: 100%; height:36px;" name="customer_name">
                                             <option value="">Select</option>
                                             <option value="any">Any</option>
-                                            @foreach ($customers as $customer)
-                                            <option value="{{$customer->id}}"
-                                                {{(old('customer_name')==$customer->id)?'selected':''}}>
-                                                {{$customer->name}}
-                                            </option>
-                                            @endforeach
+                                            <option value="">Select</option>
+                                            <optgroup label="Vision Centers">
+                                                @foreach ($visionCenters as $visionCenter)
+                                                    <option value="{{$visionCenter->requestCompany->id}}"
+                                                        {{(old('customer')==$visionCenter->requestCompany->id)?'selected':''}}>
+                                                        {{$visionCenter->requestCompany->company_name}}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                            <optgroup label="Customers">
+                                                @foreach ($customers as $customer)
+                                                    <option value="{{$customer->id}}"
+                                                        {{(old('customer')==$customer->id)?'selected':''}}>
+                                                        {{$customer->name}}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
                                         </select>
                                     </div>
                                 </div>

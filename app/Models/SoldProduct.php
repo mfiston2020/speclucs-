@@ -9,6 +9,11 @@ class SoldProduct extends Model
 {
     use HasFactory;
 
+    function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
     function product()
     {
         return $this->belongsTo(Product::class);
@@ -41,4 +46,20 @@ class SoldProduct extends Model
             return false;
         }
     }
+
+    // function totalLensAmount($invoice){
+    //     return $this->product()->where('invoice_id',$invoice)->sum('unit_price');
+    // }
+
+    // function totalFrameAmount(){
+    //     return $this->SoldProduct()->with('product',function($q){
+    //         $q->where('category_id','2');
+    //     })->where('invoice_id',$this->id)->sum('unit_price');
+    // }
+
+    // function totalAccessoriesAmount(){
+    //     return $this->SoldProduct()->with('product',function($q){
+    //         $q->where('category_id','2');
+    //     })->where('invoice_id',$this->id)->sum('unit_price');
+    // }
 }
