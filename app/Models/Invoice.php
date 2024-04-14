@@ -83,7 +83,7 @@ class Invoice extends Model
             $categoriesTotal['total']   += $categoriesTotal['frame'];
         }
 
-        if ($framethere) {
+        if ($accthere) {
             $categoriesTotal['a_available']=$lensthere;
             $categoriesTotal['total']   += $categoriesTotal['accessories'];
         }
