@@ -118,13 +118,11 @@ class LensStockController extends Controller
                     $productStock[format_values($result->power->sphere)][format_values($result->power->add)]    = $result->stock;
                 }
 
-                if(initials(
-                    $lens_type->where('id',$request->lens_type)->pluck('name')->first())!='SV'
-                    && initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())!='BT'
-                    && $result->power->index_id==$ix
-                    && $result->power->type_id==$lt
-                    && $result->power->chromatics_id==$chrm
-                    && $result->power->coating_id==$ct
+                if(initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())!='BT'
+                    && $result->power->index_id     ==  $ix
+                    && $result->power->type_id      ==  $lt
+                    && $result->power->coating_id   ==  $ct
+                    && $result->power->chromatics_id==  $chrm
                     ){
                     // array to store all values of power separately
                     $add[]      =   $result->power->add;

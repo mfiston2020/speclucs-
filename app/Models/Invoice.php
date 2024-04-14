@@ -42,19 +42,20 @@ class Invoice extends Model
         $accessoriesTotal= 0;
 
         $soldP = $this->soldproduct()->where('invoice_id',$this->id)->with('product:id,category_id,price')->select('id','product_id')->get();
+        $category   =   Category::select('id','name')->get();
 
         foreach ($soldP as $key => $value) {
 
-            if ($value->product->category_id=='1') {
+            if ($value->product->category_id== $category->where('name','Lens')->pluck('id')->first()) {
                 $categoriesTotal['lens']    = $lensTotal + $value->product->price;
                 if ($categoriesTotal || $categoriesTotal['lens']) {
                     $categoriesTotal['lens']    +=$value->product->price;
                 }
             }
-            if ($value->product->category_id=='2') {
+            if ($value->product->category_id==$category->where('name','Frame')->pluck('id')->first()) {
                 $categoriesTotal['frame']   = $frameTotal+$value->product->price;
             }
-            if ($value->product->category_id!='1' && $value->product->category_id!='2') {
+            if ($value->product->category_id!=$category->where('name','Lens')->pluck('id')->first() && $value->product->category_id!=$category->where('name','Frame')->pluck('id')->first()) {
                 $categoriesTotal['accessories'] = $accessoriesTotal+$value->product->price;
             }
         }
