@@ -81,6 +81,7 @@ class LensStockController extends Controller
             foreach($productListing as $result){
 
                 // dd($index);
+                // dd($)
 
                 if (initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())=='SV' && $result->power->index_id==$ix && $result->power->type_id==$lt && $result->power->chromatics_id==$chrm && $result->power->coating_id==$ct) {
 
@@ -147,7 +148,7 @@ class LensStockController extends Controller
             $lt     =   $lens_type->where('id',$request->lens_type)->pluck('name')->first();
             $ix     =   $index->where('id',$request->index)->pluck('name')->first();
             $chrm   =   $chromatics->where('id',$request->chromatics)->pluck('name')->first();
-            $ct     =   $coatings->where('id',$request->coatings)->pluck('name')->first();
+            $ct     =   $coatings->where('id',$request->coating)->pluck('name')->first();
 
 
             if (initials($lt)=='SV') {
