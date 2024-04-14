@@ -77,6 +77,7 @@ class LensStockController extends Controller
             return redirect()->route('manager.lens.stock',0)->with('warningMsg','No Result Found This search')->withInput();
         }
         else{
+            $productStock   =   [];
             foreach($productListing as $result){
 
                 if (initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())=='SV' && $result->power->index_id==$ix && $result->power->type_id==$lt && $result->power->chromatics_id==$chrm && $result->power->coating_id==$ct) {
@@ -88,7 +89,14 @@ class LensStockController extends Controller
                     $productStock[format_values($result->power->sphere)][format_values($result->power->cylinder)]    = $result->stock;
                 }
 
-                elseif (initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())=='BT' && $result->power->index_id==$ix && $result->power->type_id==$lt && $result->power->chromatics_id==$chrm && $result->power->coating_id==$ct) {
+                elseif (initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())=='BT'
+                && $result->power->index_id==$ix
+                && $result->power->type_id==$lt
+                && $result->power->chromatics_id==$chrm
+                && $result->power->coating_id==$ct
+                ) {
+
+                    dd($lt);
 
                     // array to store all values of power separately
                     $add[] =   $result->power->add;
@@ -97,7 +105,7 @@ class LensStockController extends Controller
                     $productStock[format_values($result->power->sphere)][format_values($result->power->add)]    = $result->stock;
                 }
 
-                if(initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())!='SV' && initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())=='BT'){
+                if(initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())!='SV' && initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())!='BT'){
                     // array to store all values of power separately
                     $add[]      =   $result->power->add;
                     $eye[]      =   $result->power->eye;
@@ -113,6 +121,7 @@ class LensStockController extends Controller
                 }
             }
 
+            // dd($productStock);
             if (count($productStock)<=0)
             {
                 return redirect()->route('manager.lens.stock',0)->with('warningMsg','No Result Found This search')->withInput();

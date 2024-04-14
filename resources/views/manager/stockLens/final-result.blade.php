@@ -181,6 +181,10 @@
                                                 @for ($j = $add_max; $j >= $add_min; $j=$j-0.25)
                                                     @php
                                                         $product_stock    =   $productStock[format_values($i)][format_values($j)];
+
+                                                        // if(is_array($product_stock)){
+                                                        //     dd($product_stock);
+                                                        // }
                                                     @endphp
                                                     <td>
                                                         @if (is_null($product_stock))
@@ -189,7 +193,7 @@
                                                             </center>
                                                         @else
                                                             <center>
-                                                                @if ($product_stock>0)
+                                                                @if ($product_stock>0 && !is_array($product_stock))
                                                                     <span @class(['label',
                                                                     'label-warning'=>$product_stock<10 && $product_stock>=1,
                                                                     'label-success'=>$product_stock>=10 ,
@@ -259,7 +263,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                        @else
+                        @endif
+                        @if (initials($lt)!='SV' && initials($lt)!='BT')
                             <div class="table-responsive colheaders" role="region" aria-labelledby="HeadersRow" tabindex="0">
                                 <table id="zero_config" class="table table-striped table-bordered">
                                     <thead>
