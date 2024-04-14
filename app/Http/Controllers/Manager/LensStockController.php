@@ -88,7 +88,12 @@ class LensStockController extends Controller
                 }
                 // dd($)
 
-                if (initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())=='SV' && $result->power->index_id==$ix && $result->power->type_id==$lt && $result->power->chromatics_id==$chrm && $result->power->coating_id==$ct) {
+                if (initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())=='SV'
+                && $result->power->index_id==$ix
+                && $result->power->type_id==$lt
+                && $result->power->chromatics_id==$chrm
+                && $result->power->coating_id==$ct
+                ) {
 
                     // array to store all values of power separately
                     $sphere[] =   $result->power->sphere;
@@ -113,7 +118,14 @@ class LensStockController extends Controller
                     $productStock[format_values($result->power->sphere)][format_values($result->power->add)]    = $result->stock;
                 }
 
-                if(initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())!='SV' && initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())!='BT'){
+                if(initials(
+                    $lens_type->where('id',$request->lens_type)->pluck('name')->first())!='SV'
+                    && initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())!='BT'
+                    && $result->power->index_id==$ix
+                    && $result->power->type_id==$lt
+                    && $result->power->chromatics_id==$chrm
+                    && $result->power->coating_id==$ct
+                    ){
                     // array to store all values of power separately
                     $add[]      =   $result->power->add;
                     $eye[]      =   $result->power->eye;
@@ -189,8 +201,6 @@ class LensStockController extends Controller
                     }
                 }
             }
-
-            // dd($sphere_max);
 
             return view('manager.stockLens.final-result',
             compact('productStock','lens_type','index','chromatics','coatings','sphere','sphere_max','sphere_min',
