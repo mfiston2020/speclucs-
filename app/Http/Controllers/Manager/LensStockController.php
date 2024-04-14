@@ -80,6 +80,8 @@ class LensStockController extends Controller
             $productStock   =   [];
             foreach($productListing as $result){
 
+                dd($index);
+
                 if (initials($lens_type->where('id',$request->lens_type)->pluck('name')->first())=='SV' && $result->power->index_id==$ix && $result->power->type_id==$lt && $result->power->chromatics_id==$chrm && $result->power->coating_id==$ct) {
 
                     // array to store all values of power separately
@@ -96,7 +98,7 @@ class LensStockController extends Controller
                 && $result->power->coating_id==$ct
                 ) {
 
-                    dd($lt);
+                    // dd($lt);
 
                     // array to store all values of power separately
                     $add[] =   $result->power->add;
