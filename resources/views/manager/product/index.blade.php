@@ -52,11 +52,11 @@
                                         style="align-items: right;">
                                         <i class="fa fa-plus"></i> New Product
                                     </a>
-                                    {{-- <a onclick="exportAll('xls');" href="#"
+                                    <a onclick="exportAll('xls');" href="#"
                                         class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success"
                                         style="align-items: right;">
                                         <i class="fa fa-download"></i> Export To Excel
-                                    </a> --}}
+                                    </a>
                                     <a href="{{ route('manager.product.import') }}"
                                         class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-primary"
                                         style="align-items: right;">
@@ -78,7 +78,7 @@
 
                         <div class="table-responsive">
                             {{ $products->links() }}
-                            <table id="" class="table table-striped table-bordered">
+                            <table id="zero_config" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -87,6 +87,7 @@
                                         <th>Description</th>
                                         <th>Power</th>
                                         <th>Price [RWF]</th>
+                                        <th>Wholesale Price [RWF]</th>
                                         <th>cost</th>
                                         <th>Stock</th>
                                         <th>Location</th>
@@ -124,6 +125,10 @@
                                             @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
                                                 <td>
                                                     <a href="#!" class="update" data-name="price" data-type="text" data-pk="{{ $product->id }}" data-title="Enter Product Name">{{ $product->price }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="#!" class="update" data-name="wholesaleprice" data-type="text" data-pk="{{ $product->id }}" data-title="Enter Product Name">{{ $product->wholesale_price }}
                                                     </a>
                                                 </td>
                                                 <td>
@@ -189,6 +194,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('scripts')

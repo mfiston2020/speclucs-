@@ -59,7 +59,7 @@ return [
         |
         */
         'properties'             => [
-            'creator'        => '',
+            'creator'        => 'speclucs',
             'lastModifiedBy' => '',
             'title'          => '',
             'description'    => '',
@@ -137,7 +137,7 @@ return [
         |
         */
         'properties'  => [
-            'creator'        => '',
+            'creator'        => 'SPECLUCS',
             'lastModifiedBy' => '',
             'title'          => '',
             'description'    => '',

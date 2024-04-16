@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Exports\Manager\ProductsExport;
+use App\Exports\ProductExport;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Imports\Product\ImportOtherProduct;
@@ -219,5 +221,11 @@ class ProductsController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('errorMsg', 'Oops! something Went Wrong!');
         }
+    }
+
+    function exportProducts(){
+        // dd('sdjfld');
+        // return view('productExport');
+        return Excel::download(new ProductsExport,''.getUserCompanyInfo()->company_name.'-Products.xlsx');
     }
 }

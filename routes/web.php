@@ -263,7 +263,8 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::post('/fetchReceipt', [\App\Http\Controllers\Manager\PaymentsController::class, 'fetchReceipt'])->name('fetchReceipt');
 
     // ====================== all routes about export and import =======================
-    Route::get('/productExport', [\App\Http\Controllers\Manager\ProductsController::class, 'export'])->name('product.export');
+    Route::get('/exportProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'exportProducts'])->name('product.export');
+    // Route::get('/exportProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'exportProducts'])->name('product.export');
 
     // ====================== all routes about Lens Matrix viewing =======================
     Route::get('/lensStock/{lensStock}', [\App\Http\Controllers\Manager\LensStockController::class, 'index'])->name('lens.stock');
