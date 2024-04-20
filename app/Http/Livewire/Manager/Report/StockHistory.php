@@ -67,21 +67,24 @@ class StockHistory extends Component
 
             if ($this->category=='1') {
                 $this->products =   Product::where('company_id', userInfo()->company_id)
-                                        ->with(['power','category','productTrack'])
+                                        ->with(['power','category'])
+                                        ->with('productTrack',function($query){
+                                            $query->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))
+                                                    ->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')));
+                                        })
                                         ->orderBy('created_at','asc')
                                         ->where('product_name',$this->lens_type)
                                         ->where('category_id',$this->category)
-                                        ->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))
-                                        ->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))
                                         ->select('id','category_id','product_name','description','cost','price')
                                         ->get();
             } else {
                 $this->products =   Product::where('company_id', userInfo()->company_id)
-                                        ->with(['category','productTrack'])
-                                        ->orderBy('created_at','asc')
+                                        ->with(['category'])
+                                        ->with('productTrack',function($query){
+                                            $query->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))
+                                                    ->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')));
+                                        })->orderBy('created_at','asc')
                                         ->where('category_id',$this->category)
-                                        ->whereDate('created_at', '>=', date('Y-m-d', strtotime($this->start_date)))
-                                        ->whereDate('created_at', '<=', date('Y-m-d', strtotime($this->end_date . '+1day')))
                                         ->select('id','category_id','product_name','description','cost','price')
                                         ->get();
             }

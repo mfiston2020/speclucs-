@@ -21,16 +21,56 @@
     <!-- Sales chart -->
     <div class="row">
         <!-- column -->
-        <div class="card col-12">
-            <div class="card-body">
-                {{-- <h4 class="m-b-20">Write a reply</h4> --}}
-                <form method="post">
-                    {{-- <button type="button"
-                        class="m-t-20 btn waves-effect waves-light btn-success">Reply</button> --}}
-                    <a href="{{ route('manager.user.add')}}" class="m-t-20 btn waves-effect waves-light btn-info"> <i class="fas fa-user-plus"></i> | Add New User</a>
-                </form>
+
+        @if (getUserCompanyInfo()->subscription_type=='bronze')
+            <div class="card col-12">
+                <div class="card-body">
+                    <h4 class="m-b-20 text-warning">Your current plan does not support multiple users! Take Advantage and upgrade</h4>
+                    <form method="post">
+                        {{-- <button type="button"
+                            class="m-t-20 btn waves-effect waves-light btn-success">Reply</button> --}}
+                        <a href="#!" class="m-t-20 btn waves-effect waves-light btn-info"> <i class="fas fa-chart-line"></i> PLANS</a>
+                    </form>
+                </div>
             </div>
-        </div>
+        @elseif (getUserCompanyInfo()->subscription_type=='silver')
+            @if (count($users)<=3)
+                <div class="card col-12">
+                    <div class="card-body">
+                        {{-- <h4 class="m-b-20">Write a reply</h4> --}}
+                            <form method="post">
+                                {{-- <button type="button"
+                                    class="m-t-20 btn waves-effect waves-light btn-success">Reply</button> --}}
+                                <a href="{{ route('manager.user.add')}}" class="m-t-20 btn waves-effect waves-light btn-info"> <i class="fas fa-chart-line"></i> | Add New User</a>
+                            </form>
+                    </div>
+                </div>
+            @else
+                <div class="card col-12">
+                    <div class="card-body">
+                        <h4 class="m-b-20 text-warning">Your current plan does not support more than 3 users! Take Advantage and upgrade</h4>
+                        <form method="post">
+                            {{-- <button type="button"
+                                class="m-t-20 btn waves-effect waves-light btn-success">Reply</button> --}}
+                            <a href="#!" class="m-t-20 btn waves-effect waves-light btn-info"> <i class="fas fa-user-plus"></i> PLANS</a>
+                        </form>
+                    </div>
+                </div>
+            @endif
+
+        @elseif (getUserCompanyInfo()->subscription_type=='gold')
+            <div class="card col-12">
+                <div class="card-body">
+                    {{-- <h4 class="m-b-20">Write a reply</h4> --}}
+                        <form method="post">
+                            {{-- <button type="button"
+                                class="m-t-20 btn waves-effect waves-light btn-success">Reply</button> --}}
+                            <a href="{{ route('manager.user.add')}}" class="m-t-20 btn waves-effect waves-light btn-info"> <i class="fas fa-user-plus"></i> | Add New User</a>
+                        </form>
+                </div>
+            </div>
+        @endif
+
         @if ($users->isEmpty())
             <h3>No Users found</h3>
         @else

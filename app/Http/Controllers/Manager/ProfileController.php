@@ -127,6 +127,7 @@ class ProfileController extends Controller
         $company->company_street        =   $request->company_street;
         $company->company_tin_number    =   $request->company_tin_number;
         $company->country_id            =   $request->country;
+        $company->currency              =   $request->currency;
 
 
 

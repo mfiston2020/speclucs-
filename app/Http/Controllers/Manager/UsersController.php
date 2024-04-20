@@ -25,6 +25,7 @@ class UsersController extends Controller
 
     public function index()
     {
+
         $users  =   \App\Models\User::where('company_id',Auth::user()->company_id)->where('id','<>',Auth::user()->id)->get();
         return view('manager.users.index',compact('users'));
     }

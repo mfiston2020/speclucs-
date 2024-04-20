@@ -4,18 +4,19 @@ use App\Models\CompanyInformation;
 
 function format_money($money)
 {
+    $currency   =   getuserCompanyInfo()->currency=='USD'?'$':getuserCompanyInfo()->currency;
     if (!$money) {
-        return "RWF 0.00";
+        return $currency." 0.00";
     }
 
     $money = number_format($money, 2);
 
     if (strpos($money, '-') !== false) {
         $formatted = explode('-', $money);
-        return "-RWF $formatted[1]";
+        return "-".$currency." $formatted[1]";
     }
 
-    return "RWF $money ";
+    return $currency." $money ";
 }
 
 function format_numbers($money)

@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('company_information', function (Blueprint $table) {
-            $table->string('subscription_type',20)->after('status')->default('gold');
-            $table->date('usage_period')->nullable();
+            $table->string('currency')->default('RWF')->after('sms_quantity');
         });
     }
 
@@ -27,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('company_information', function (Blueprint $table) {
-            //
+            $table->dropColumn('currency');
         });
     }
 };

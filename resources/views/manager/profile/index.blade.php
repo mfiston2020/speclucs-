@@ -165,7 +165,7 @@
                     <hr>
                 </div>
                 <div class="card-body">
-                    <h4>About The Company</h4><br>
+                    <h4>About The Company - <span class="text-warning">{{$company->currency}}</span> </h4><br>
                     <center class="m-t-30"> <img src="{{ asset('documents/logos/'.$company->logo)}}"
                         class="" width="150" /> <br>
                     <small class="text-muted">Name </small>
@@ -354,6 +354,22 @@
                                                 class="form-control form-control-line"
                                                 value="{{$company->company_logo}}">
                                         </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-12">Currency</label>
+                                        <div class="col-md-12">
+                                            <select name="currency" id="" class="form-control">
+                                                <option value="">** Select Currency **</option>
+                                                <option value="RWF" {{$company->currency_id=='RWF'?'selected':''}}>
+                                                    RWF
+                                                </option>
+                                                <option value="USD" {{$company->currency_id=='USD'?'selected':''}}>
+                                                    USD
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <span class="h5 text-danger"><b>Changing currency does not convert, it only add currency symbol </b></span>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-12">
