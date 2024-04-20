@@ -14,7 +14,7 @@ interface ProductInterface
 
     function addUnavailableProduct(array $productInfo);
 
-    function productStockEfficiency(string $product_id,int $usag,int $stoc,int $cat);
+    function productStockEfficiency(string $product_id,int $usag,int $stoc,int $cat,int $days=null);
 
     function makeLabOrder(array $request, string $product_id);
 

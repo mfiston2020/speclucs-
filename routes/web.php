@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Livewire\Manager\PurchaseOrder;
 use App\Http\Livewire\Manager\Report\AdjustMentReport;
 use App\Http\Livewire\Manager\Report\ClosingReport;
 use App\Http\Livewire\Manager\Report\ProductReport;
@@ -372,9 +373,10 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::post('/acceptCredits', [\App\Http\Controllers\Manager\OrderCreditsController::class, 'acceptcredit'])->name('accept.credit');
 
     // ====================== Routes about Purchase Orders ==========================
-    Route::get('/purchase order', [\App\Http\Controllers\Manager\PurchaseOrderController::class, 'index'])->name('po');
-    Route::get('/purchase_order', [\App\Http\Controllers\Manager\PurchaseOrderController::class, 'proceed'])->name('proceed');
-    Route::post('/purchase_order_quotation', [\App\Http\Controllers\Manager\PurchaseOrderController::class, 'quotation'])->name('quotation');
+    Route::get('/purchaseOrder',PurchaseOrder::class)->name('po');
+    // Route::get('/purchase order', [\App\Http\Controllers\Manager\PurchaseOrderController::class, 'index'])->name('po');
+    // Route::get('/purchase_order', [\App\Http\Controllers\Manager\PurchaseOrderController::class, 'proceed'])->name('proceed');
+    // Route::post('/purchase_order_quotation', [\App\Http\Controllers\Manager\PurchaseOrderController::class, 'quotation'])->name('quotation');
 
     // ====================== Routes about Quotations ==========================
     Route::get('/quations', [\App\Http\Controllers\Manager\QuotationsController::class, 'index'])->name('quations');

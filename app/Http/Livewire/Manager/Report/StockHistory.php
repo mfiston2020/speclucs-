@@ -47,8 +47,7 @@ class StockHistory extends Component
         }
     }
 
-    function searchInformation()
-    {
+    function searchInformation(){
         $this->resetData();
         $this->validate();
 
@@ -100,14 +99,12 @@ class StockHistory extends Component
         $this->result   =   true;
     }
 
-    function resetData()
-    {
+    function resetData(){
         $this->productListing = [];
         $this->dateList = [];
     }
 
-    public function render()
-    {
+    public function render(){
         // $this->searchInformation();
         $this->categories   =   Category::get();
         return view('livewire.manager.report.stock-history')->layout('livewire.livewire-slot');
