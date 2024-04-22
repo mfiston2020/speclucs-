@@ -11,7 +11,7 @@ use Livewire\Component;
 
 class InsuranceInvoice extends Component
 {
-    public $insurances, $insurance, $invoices, $invoicesIds=[],$invoicesAmounts=[],$invoiceCredit=[], $credits = array(), $allData, $showData = false, $start_date, $end_date;
+    public $insurances, $insurance, $invoices,$invoiced, $invoicesIds=[],$invoicesAmounts=[],$invoiceCredit=[], $credits = array(), $allData, $showData = false, $start_date, $end_date;
 
 
     protected $rules    =   [
@@ -43,16 +43,24 @@ class InsuranceInvoice extends Component
             ->withsum('soldproduct', 'insurance_payment')
             ->orderBy('created_at', 'DESC')->get();
 
+        $this->invoiced =   $this->invoices->where('invoice_status','invoiced');;
+
         $this->showData =   true;
     }
 
     function addInvoiceCredit()
     {
+        $this->searchInformation();
+
+        // dd('ljsljelj');
     }
 
     function createInvoiceSummary(){
 
-        if (!InsuranceInvoiceSumary::whereMonth('created_at',date('m'))->exists()) {
+
+        if (!InsuranceInvoiceSumary::whereMonth('created_at',date('m-Y'))->whereYear('created_at',date('Y'))->exists()) {
+
+            // dd('found');
             $summary =   InsuranceInvoiceSumary::create([
                 'company_id'    =>  userInfo()->company_id,
                 'user_id'   =>  userInfo()->id,
@@ -77,7 +85,8 @@ class InsuranceInvoice extends Component
                 };
             }
         }else{
-            $invoiceSumary  =   InsuranceInvoiceSumary::whereMonth('created_at',date('m'))->first();
+            // dd('not-found');
+            $invoiceSumary  =   InsuranceInvoiceSumary::whereMonth('created_at',date('m'))->whereYear('created_at',date('Y'))->first();
 
             foreach ($this->invoicesIds as $key => $invoice) {
                 if($invoice['chekboxId']!=false){
@@ -99,15 +108,13 @@ class InsuranceInvoice extends Component
         }
 
         $this->searchInformation();
-
-        $this->invoicesIds=[];
     }
 
-    function mount()
-    {
-        $this->invoicesIds  =   [];
-        $this->insurances   =   Insurance::where('company_id', userInfo()->company_id)->select('id', 'insurance_name')->get();
-    }
+    // function mount()
+    // {
+    //     $this->invoicesIds  =   [];
+    //     $this->insurances   =   Insurance::where('company_id', userInfo()->company_id)->select('id', 'insurance_name')->get();
+    // }
 
     public function render()
     {

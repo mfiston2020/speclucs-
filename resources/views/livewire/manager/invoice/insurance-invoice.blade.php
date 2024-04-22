@@ -173,7 +173,10 @@
                                 <button class="btn btn-primary mr-3" type="submit">
                                     Submit Invoice Credit(s)
                                 </button>
-                                <a href="#!" wire:click="createInvoiceSummary" class="btn btn-success">Create Invoice</a>
+                                <a href="#!" wire:click="createInvoiceSummary" class="btn btn-success">
+                                    <span wire:loading.remove wire:target="createInvoiceSummary">Create Invoice</span>
+                                    <span wire:loading wire:target="createInvoiceSummary">Creating Invoice....</span>
+                                </a>
                             </form>
                         </div>
                     </div>

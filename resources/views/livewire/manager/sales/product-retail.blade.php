@@ -685,7 +685,7 @@
                                 </div>
                             </div>
 
-                            <hr>
+                            {{-- <hr>
                             <div class="col-12">
                                 <div class="d-flex flex-column border p-2 col-3 rounded" style="border-left: 3px solid #3BBEA6 !important;">
                                     <div class="d-flex mb-2 justify-content-between">
@@ -697,7 +697,7 @@
                                         <span>1,000</span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
 
 
