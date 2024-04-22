@@ -174,7 +174,7 @@
                                 $po =   $productRepo->productStockEfficiency($product->id,$product->soldproducts->sum('quantity'),$product->stock,$product->category_id,$leadTime);
 
                                 $leadTimeQuantity   =   ($po['usage']*$leadTime)/$totalDays;
-                                $orderQuantity      =   (($po['usage']*2)+$leadTime)-$po['stock'];
+                                $orderQuantity      =   floor((($po['usage']*2)+$leadTimeQuantity)-$po['stock']);
 
 
 

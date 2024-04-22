@@ -133,7 +133,7 @@ class ProductRepo implements ProductInterface
         //     $usage=0;
         // }
 
-        
+
 
 
         if (($usage*3) > $stock && $usage>0) {
@@ -190,12 +190,17 @@ class ProductRepo implements ProductInterface
             $status =   'Discontinued';
         }
 
+
+        // $leadTimeQuantity   =   ($po['usage']*$leadTime)/$totalDays;
+        // $orderQuantity      =   (($po['usage']*2)+$leadTime)-$po['stock'];
+
         $po   =   [
             'category'  =>  $category_id,
             'stock'     =>  $stock,
             'usage'     =>  $usage,
             'minStock'  =>  $usage,
             'QtyTKeep'  =>  $usage*3,
+            'status'    =>  $status,
             'status'    =>  $status,
             'QtyEfficiency'     =>  $stock-$usage,
             'efficiency_ratio'  =>  round($inventoryEfficiency,2).'%',
