@@ -52,7 +52,7 @@ class InsuranceInvoice extends Component
     {
         $this->searchInformation();
 
-        // dd('ljsljelj');
+        dd('ljsljelj');
     }
 
     function createInvoiceSummary(){
@@ -60,7 +60,7 @@ class InsuranceInvoice extends Component
 
         if (!InsuranceInvoiceSumary::whereMonth('created_at',date('m-Y'))->whereYear('created_at',date('Y'))->exists()) {
 
-            // dd('found');
+            dd('found');
             $summary =   InsuranceInvoiceSumary::create([
                 'company_id'    =>  userInfo()->company_id,
                 'user_id'   =>  userInfo()->id,
@@ -85,7 +85,7 @@ class InsuranceInvoice extends Component
                 };
             }
         }else{
-            // dd('not-found');
+            dd('not-found');
             $invoiceSumary  =   InsuranceInvoiceSumary::whereMonth('created_at',date('m'))->whereYear('created_at',date('Y'))->first();
 
             foreach ($this->invoicesIds as $key => $invoice) {
