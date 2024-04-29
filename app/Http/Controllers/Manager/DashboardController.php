@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
-use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\SoldProduct;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +16,14 @@ class DashboardController extends Controller
         $total_product_cost =   0;
         $total_prod         =   [];
 
+        dd(Product::with('soldProducts')->get());
+
+
         $soldproducts   =   SoldProduct::where('company_id',userInfo()->company_id)->with('product',function($query){
             $query->select('id','cost','price');
         })->select('product_id','quantity')->whereYear('created_at',date('Y'))->get();
 
-        foreach ($soldproducts as $key => $sold) {
+        foreach ($soldproducts as $key => $sold){
             $total_product_cost +=  $sold->product->cost * $sold->quantity;
         }
 

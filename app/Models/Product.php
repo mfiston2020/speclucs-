@@ -24,9 +24,9 @@ class Product extends Model
         'deffective_stock',
     ];
 
-    protected $hidden = [
-        'product_name',
-    ];
+    // protected $hidden = [
+    //     'product_name',
+    // ];
 
     function category()
     {
@@ -53,5 +53,9 @@ class Product extends Model
 
     function stockRecords(){
         return $this->hasMany(TrackStockRecord::class);
+    }
+
+    function costOfGoodSold($year){
+        return $this->soldProducts->where('product_id',$this->id)->where('created_at',$year)->sum('quantity');
     }
 }

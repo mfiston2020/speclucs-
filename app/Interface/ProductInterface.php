@@ -4,8 +4,6 @@ namespace App\Interface;
 
 interface ProductInterface
 {
-    function productMatrix(array $request);
-
     function sellPendingOrder(array $request);
 
     function saveUnavailableToStock(array $product);

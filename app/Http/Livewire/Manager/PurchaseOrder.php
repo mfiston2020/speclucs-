@@ -45,7 +45,7 @@ class PurchaseOrder extends Component
         $this->products     =   Product::where('company_id',auth()->user()->company_id)
                                         ->with(['soldproducts'=>function ($query) use ($today){
                                             $query->whereBetween('created_at',[date('Y-m-d',strtotime($today . '-'.$this->totalDays.'day')),date('Y-m-d',strtotime($today))]);
-                                        },'category:id,name','power'])
+                                        },'category:id,name','power:sphere,cylinder,axis,add,eye'])
                                         ->select('id','product_name','description','stock','cost','category_id')
                                         ->where('category_id',$this->category)
                                         ->get();

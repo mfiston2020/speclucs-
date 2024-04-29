@@ -56,7 +56,7 @@
                                 <div class="card-body">
                                     <div class="d-flex no-block align-items-center justify-content-between">
                                         <div>
-                                            <h2>{{number_format(count(\App\Models\Invoice::where('company_id',Auth::user()->company_id)->get()))}}
+                                            <h2>{{number_format((\App\Models\Invoice::where('company_id',Auth::user()->company_id)->count()))}}
                                             </h2>
                                             <h6 class="text-cyan">{{__('navigation.invoice')}}</h6>
                                         </div>
@@ -73,7 +73,7 @@
                                 <div class="card-body">
                                     <div class="d-flex no-block align-items-center justify-content-between">
                                         <div>
-                                            <h2>{{count(\App\Models\Supplier::where('company_id',Auth::user()->company_id)->get())}}
+                                            <h2>{{\App\Models\Supplier::where('company_id',Auth::user()->company_id)->count()}}
                                             </h2>
                                             <h6 class="text-success">{{__('navigation.suppliers')}}</h6>
                                         </div>
@@ -90,7 +90,7 @@
                                 <div class="card-body">
                                     <div class="d-flex no-block align-items-center justify-content-between">
                                         <div>
-                                            <h2>{{\App\Models\CompanyInformation::where('id',Auth::user()->company_id)->pluck('sms_quantity')->first()}}
+                                            <h2>{{getUserCompanyInfo()->sms_quantity}}
                                             </h2>
                                             <h6 class="text-orange">{{__('navigation.sms')}}</h6>
                                         </div>
@@ -256,10 +256,10 @@
                             <ul class="list-group list-group-flush">
                                 @foreach ($expenses as $item)
                                 <li class="list-group-item d-flex justify-content-between align-items-center justify-content-between">
-                                    {{\App\Models\Transactions::where(['id'=>$item->id])->where('company_id',Auth::user()->company_id)->pluck('title')->first()}}
+                                    {{$item->title}}
                                     <span
                                         class="badge badge-light badge-pill">{{
-                                            format_money(\App\Models\Transactions::where(['id'=>$item->id])->where('company_id',Auth::user()->company_id)->pluck('amount')->first())}}</span>
+                                            format_money($item->amount)}}</span>
                                 </li>
                                 @endforeach
                             </ul>

@@ -43,13 +43,16 @@ class StockAnalysisChart extends Component
 
     function getProductData(){
         $this->productstatus=[];
+
+        $companyId   =   userInfo()->company_id;
+
         $productRepo  =   new ProductRepo();
 
         // $fromPo =   $productRepo->productStockEfficiency($this->products[100]->id,$this->products[100]->soldproducts->sum('quantity'),$this->products[100]->stock,$this->products[100]->category_id);
 
         foreach ($this->products as $key=> $product) {
 
-            $fromPo =   $productRepo->productStockEfficiency($product->id,$product->soldproducts->sum('quantity'),$product->stock,$product->category_id);
+            $fromPo =   $productRepo->productStockEfficiency($product->id,$product->soldproducts->sum('quantity'),$product->stock,$product->category_id,null,$companyId);
 
             // lens
             if ($fromPo['category']=='1') {
@@ -93,14 +96,11 @@ class StockAnalysisChart extends Component
             }
 
         }
-        // dd(($this->lensData));
-
-        // dd($this->lensData);
         $this->dispatchBrowserEvent('refreshChart');
     }
 
     function mount(){
-        $this->products =   Product::where('company_id',auth()->user()->company_id)->with('soldproducts')->select('id','stock','category_id')->get();
+        $this->products =   Product::where('company_id',auth()->user()->company_id)->with('soldproducts:id,quantity')->select('id','stock','category_id')->get();
 
         $this->lensData=[
             'lens_critical' =>  0,
