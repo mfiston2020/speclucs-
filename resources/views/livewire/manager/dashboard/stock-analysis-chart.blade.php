@@ -2,7 +2,7 @@
     <div class="col-12">
         <img src="{{ asset('dashboard/assets/images/loading.gif')}}" height="150" wire:loading wire:target="timeframe" class="mb-4"/>
         <!-- Row -->
-        <div class="row" wire:loading.remove wire:target="timeframe">
+        {{-- <div class="row" wire:loading.remove wire:target="timeframe">
             <div class="col-4">
                 <div class="card">
                     <div class="card-body">
@@ -24,7 +24,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row" wire:loading.remove wire:target="timeframe">
             <div class="col-sm-12 col-md-4">

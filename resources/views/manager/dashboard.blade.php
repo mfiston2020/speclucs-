@@ -5,15 +5,7 @@
 @push('css')
 
 @endpush
-{{-- al business information must be kept private unless you want to see them all the dashboard itmes must be removed and add a company logo
 
-    invoice
-    =======
-
-    invoice must have all product all products
-    and a detail of everything that was done on a particular invoice for a customer
-
-    --}}
 {{-- ==== Breadcumb ======== --}}
 @section('current', __('navigation.dashboard') )
 @section('page_name',__('navigation.dashboard'))
@@ -39,7 +31,7 @@
                                 <div class="card-body">
                                     <div class="d-flex no-block align-items-center justify-content-between">
                                         <div>
-                                            <h2>{{number_format(\App\Models\Product::where('company_id',Auth::user()->company_id)->count())}}
+                                            <h2>{{number_format(count($products))}}
                                             </h2>
                                             <h6 class="text-info">{{__('navigation.product_nav')}}</h6>
                                         </div>
@@ -56,7 +48,7 @@
                                 <div class="card-body">
                                     <div class="d-flex no-block align-items-center justify-content-between">
                                         <div>
-                                            <h2>{{number_format((\App\Models\Invoice::where('company_id',Auth::user()->company_id)->count()))}}
+                                            <h2>{{number_format($invoices)}}
                                             </h2>
                                             <h6 class="text-cyan">{{__('navigation.invoice')}}</h6>
                                         </div>
@@ -73,7 +65,7 @@
                                 <div class="card-body">
                                     <div class="d-flex no-block align-items-center justify-content-between">
                                         <div>
-                                            <h2>{{\App\Models\Supplier::where('company_id',Auth::user()->company_id)->count()}}
+                                            <h2>{{number_format($suppliers)}}
                                             </h2>
                                             <h6 class="text-success">{{__('navigation.suppliers')}}</h6>
                                         </div>
@@ -133,28 +125,12 @@
                                 <!-- column -->
                                 <div class="col-lg-4">
 
-                                <?php
-                                    $totalValue=0;
-                                    $earning=0;
-                                    $Anual_income =   \App\Models\SoldProduct::where('company_id',Auth::user()->company_id)->whereYear('created_at',date('Y'))->get();
-                                    foreach ($Anual_income as $key => $value) {
-                                        $income =   $value->total_amount-($value->quantity*(\App\Models\Product::where('id',$value->product_id)->pluck('cost')->first()));
-                                        $earning+=$income;
-                                    }
-                                ?>
                                     @if ($earning>0)
                                     <h1 class="m-b-0 m-t-30">{{format_money($earning)}}</h1>
                                     @else
                                     <h1 class="m-b-0 m-t-30" style="color: red">{{format_money($earning)}}</h1>
                                     @endif
                                     <h6 class="font-light text-muted">{{__('manager/dashboard.annual_gros_profit')}}</h6>
-                                    <span
-                                        hidden>{{$pro  =   \App\Models\Product::where('company_id',Auth::user()->company_id)->select('*')->get()}}</span>
-
-                                    @foreach ($pro as $pro)
-                                    <span hidden>{{$amount =   $pro->cost*$pro->stock}}</span>
-                                    <span hidden>{{$totalValue =   $totalValue+$amount}}</span>
-                                    @endforeach
                                     <h3 class="m-t-30 m-b-0">{{format_money($totalValue)}}</h3>
                                     <h6 class="font-light text-muted">{{__('manager/dashboard.current_stock_value')}}</h6>
                                 </div>
@@ -174,15 +150,7 @@
 
                                 <div class="col-lg-6 col-md-6">
                                     <div class="d-flex align-items-center justify-content-between">
-                                        {{-- <div class="m-r-10"><span class="text-orange display-5"><i
-                                                    class="mdi mdi-wallet"></i></span></div> --}}
-                                        <span hidden
-                                            >{{$pro  =   \App\Models\Transactions::where('company_id',Auth::user()->company_id)->
-                                                                whereYear('created_at',date('Y'))->select('*')->get()}}</span>
-                                        @foreach ($pro as $pro)
-                                        <span hidden>{{$amount =   $pro->cost*$pro->stock}}</span>
-                                        <span hidden>{{$totalValue =   $totalValue+$amount}}</span>
-                                        @endforeach
+
                                         <div>
                                             <span>Total Sales</span>
                                             <h3 class="font-medium m-b-0">
@@ -230,8 +198,8 @@
                             <ul class="list-group list-group-flush">
                                 @foreach ($product as $item)
                                     <li class="list-group-item d-flex justify-content-between align-items-center justify-content-between">
-                                        {{\App\Models\Product::where(['id'=>$item->product_id])->where('company_id',Auth::user()->company_id)->pluck('product_name')->first()}}
-                                        {{\App\Models\Product::where(['id'=>$item->product_id])->where('company_id',Auth::user()->company_id)->pluck('description')->first()}}
+                                        {{$products->where('id',$item->product_id)->pluck('product_name')->first()}}
+                                        {{$products->where('id',$item->product_id)->pluck('description')->first()}}
                                         <span class="badge badge-light badge-pill">{{number_format($item->sold)}}</span>
                                     </li>
                                 @endforeach
