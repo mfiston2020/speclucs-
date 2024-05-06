@@ -834,7 +834,7 @@
                                                                                 @endif
                                                                             @endforeach
                                                                         {{-- @endif --}}
-                                                                        @if (is_null($request->supplier_id))
+                                                                        @if (is_null($request->supplier_id) || $request->supplier_id==userInfo()->company_id)
                                                                             <hr>
                                                                             <h4 class="text-info">Operations</h4>
                                                                             <hr>
