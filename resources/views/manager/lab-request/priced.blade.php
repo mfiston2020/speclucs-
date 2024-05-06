@@ -539,12 +539,12 @@
 
                                         <div id="external_requested" class="tab-pane">
                                             @if (count($requests_priced_out)>0)
-                                                <button onclick="exportAll('xls','Priced Lens');" class="btn btn-success float-right mb-3">
+                                                <button onclick="exportAllExternal('xls','External Priced Lens');" class="btn btn-success float-right mb-3">
                                                     <i class="fa fa-cloud-download-alt"></i>
                                                     Excel
                                                 </button>
                                                 <div class="table-responsive mt-4">
-                                                    <table id="priced-table" class="table table-striped table-bordered nowrap" style="width:100%">
+                                                    <table id="external-priced-table" class="table table-striped table-bordered nowrap" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th> <input type="checkbox" onclick="checkUncheckrequestId(this)"> </th>
@@ -578,7 +578,7 @@
                                                                             @endif
                                                                         </td>
                                                                         <td>
-                                                                            <a href="#!" data-toggle="modal" data-target="#proddd-{{ $key }}-detail">
+                                                                            <a href="#!" data-toggle="modal" data-target="#prod-{{ $key }}-detail">
                                                                                 Request #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                             </a>
                                                                         </td>
@@ -709,7 +709,7 @@
 
                                                                     {{-- modal --}}
 
-                                                                    <div class="modal fade bs-example-modal-lg" id="proddd-{{ $key }}-detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                                                                    <div class="modal fade bs-example-modal-lg" id="prod-{{ $key }}-detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
                                                                         @php
                                                                             $isOutOfStock='no';
                                                                         @endphp
@@ -1038,6 +1038,14 @@
             get[i].checked = checkBox.checked;
         }
 
+    }
+
+    function exportAllExternal(type, tableName) {
+
+        $('#external-priced-table').tableExport({
+            filename: tableName + '_%DD%-%mm%-%YY%',
+            format: type
+        });
     }
 
     function exportAll(type, tableName) {

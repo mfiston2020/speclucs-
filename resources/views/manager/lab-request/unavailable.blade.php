@@ -919,7 +919,7 @@
                                                                             data-dismiss="modal">
                                                                             Close
                                                                         </button>
-                                                                        @if (is_null($request->supplier_id))
+                                                                        @if (is_null($request->supplier_id) || $request->supplier_id==userInfo()->company_id)
                                                                             <button type="button"
                                                                                 onclick="printModal({{ $key }})"
                                                                                 class="btn btn-success waves-effect text-left"
