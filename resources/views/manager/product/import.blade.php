@@ -14,6 +14,7 @@
 @section('content')
 
     <div class="container-fluid">
+        @include('manager.includes.layouts.message')
         <!-- Sales chart -->
         <div class="row">
             <div class="col-md-6 col-sm-12">
@@ -80,18 +81,18 @@
 
             <div class="col-md-6 col-sm-12">
 
-                <form action="{{ route('manager.product.import.save') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('manager.update.product.import') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card card-body">
                         <h4 class="card-title mb-3 pb-3 border-bottom">Lens Updates</h4>
-                        @error('excelFile')
+                        @error('product_update_file')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
                         <div class="mb-3">
-                        <label for="excelFile" class="form-label">
+                        <label for="product_update_file" class="form-label">
                             Upload an excel File
                         </label>
-                        <input class="form-control" type="file" id="excelFile" name="excelFile">
+                        <input class="form-control" type="file" id="product_update_file" name="product_update_file">
 
                         <div class="flex w-full justify-between">
                             <a href="{{ route('manager.product.export')}}" type="submit" class="btn btn-outline-primary rounded-pill px-4 mt-5">

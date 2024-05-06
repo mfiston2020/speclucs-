@@ -118,6 +118,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::post('/saveProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'save'])->name('product.save');
     Route::get('/createProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'create'])->name('product.create');
     Route::get('/importProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'importProduct'])->name('product.import');
+    Route::post('/import/update/Product', [\App\Http\Controllers\Manager\ProductsController::class, 'importProductUpdate'])->name('update.product.import');
     Route::post('/saveImportProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'saveImport'])->name('product.import.save');
     Route::post('/importOtherProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'importOtherProducts'])->name('product.import.other.product');
 

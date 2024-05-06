@@ -6,6 +6,7 @@ use App\Exports\Manager\ProductsExport;
 use App\Exports\ProductExport;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Imports\Manager\UpdateProductsImport;
 use App\Imports\Product\ImportOtherProduct;
 use App\Imports\ProductImport;
 use App\Models\Power;
@@ -224,8 +225,23 @@ class ProductsController extends Controller
     }
 
     function exportProducts(){
-        // dd('sdjfld');
-        // return view('productExport');
         return Excel::download(new ProductsExport,''.getUserCompanyInfo()->company_name.'-Products.xlsx');
+    }
+
+    function importProductUpdate(Request $request){
+        $this->validate($request,[
+            'product_update_file'=>'required|mimes:xlsx,xls'
+        ]);
+        try {
+            Excel::import(new UpdateProductsImport(), $request->product_update_file);
+
+            if (session()->has('missingData')) {
+                return redirect()->back()->with('warningMsg', session('missingData'));
+            } else {
+                return redirect()->route('manager.product')->with('successMsg', 'Importing successful');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errorMsg', 'Oops! something Went Wrong!');
+        }
     }
 }
