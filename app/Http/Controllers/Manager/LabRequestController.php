@@ -587,16 +587,14 @@ class LabRequestController extends Controller
         if ($request->requestId == null) {
             return redirect()->back()->with('warningMsg', 'Select at least one Order!');
         } else {
+            // dd($request->requestId);
             foreach ($request->requestId as $key => $invoiceId) {
-                $invoice   =   $invoices->where('id',$invoiceId)->first();
+                $invoice   =   Invoice::where('id',$invoiceId)->with('unavailableproducts','soldproduct')->first();
+                
                 $unavailableProductsCount   =   count($invoice->unavailableproducts);
-
-                // dd($unavailableProductsCount);
-
 
                 if ($unavailableProductsCount==2) {
                     $lenT   =   $lensType->where('id',$invoice->unavailableproducts[0]->type_id)->pluck('name')->first();
-                    // dd($lenT);
 
                     // checking for the lens type to know how to compare them
                     if (initials($lenT)=='SV') {
@@ -720,8 +718,6 @@ class LabRequestController extends Controller
 
                 // if only one unavailable product
                 if ($unavailableProductsCount==1) {
-
-                    // dd($unavailableProductsCount);
                     foreach ($invoice->unavailableproducts as $key => $unProduct) {
 
                         $newProduct =   $productRepo->saveUnavailableToStock($unProduct->toArray());

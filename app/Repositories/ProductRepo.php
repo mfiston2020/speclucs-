@@ -112,7 +112,6 @@ class ProductRepo implements ProductInterface
     // function to show the product stock efficiency
     function productStockEfficiency(string $product_id,int $usag,int $stoc,int $cat,int $days=null){
 
-        $tobeReturned       =   [];
         $usage              =   0;
         $status             =   0;
         $quantityEfficiency =   0;
@@ -138,7 +137,6 @@ class ProductRepo implements ProductInterface
             $quantityEfficiency =   $stock-$usage;
             $inventoryEfficiency    =   0;
         }
-
 
         // crititcal
         if ($inventoryEfficiency<=40 && $quantityEfficiency<0) {

@@ -12,7 +12,7 @@ class PurchaseOrder extends Component
 {
     public $categories,$category,$order_date,$delivery_date,$period_days=0,$period_months=3;
 
-    public $showTable=false,$products=[],$totalDays,$productRepo,$leadTime,$totalCost=0;
+    public $showTable=false,$products=[],$totalDays,$productRepo,$leadTime,$totalCost=0,$omitZero=false;
 
     protected $rules=[
         'category'      =>  'required',
@@ -45,14 +45,20 @@ class PurchaseOrder extends Component
         $this->products     =   Product::where('company_id',auth()->user()->company_id)
                                         ->with(['soldproducts'=>function ($query) use ($today){
                                             $query->whereBetween('created_at',[date('Y-m-d',strtotime($today . '-'.$this->totalDays.'day')),date('Y-m-d',strtotime($today))]);
-                                        },'category:id,name','power:sphere,cylinder,axis,add,eye'])
+                                        },'category:id,name','power:id,product_id,sphere,cylinder,axis,add,eye'])
                                         ->select('id','product_name','description','stock','cost','category_id')
                                         ->where('category_id',$this->category)
                                         ->get();
 
         // $this->dispatch('total-cost');
+
+        // dd($this->products[0]);
         $this->showTable=true;
         $this->dispatchBrowserEvent('total-cost');
+    }
+
+    function changeOmition(){
+        $this->omitZero =   !$this->omitZero;
     }
 
     function goBack(){

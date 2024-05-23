@@ -67,9 +67,9 @@ class StockAnalysisChart extends Component
 
                 array_push($this->productstatus,$fromPo['status']);
 
-                if ($fromPo['status']=='0') {
-                   dd($fromPo);
-                }
+                // if ($fromPo['status']=='0') {
+                //    dd($fromPo);
+                // }
             }
 
             // frame
@@ -96,6 +96,8 @@ class StockAnalysisChart extends Component
             }
 
         }
+
+            // dd($fromPo);
         $this->dispatchBrowserEvent('refreshChart');
     }
 
