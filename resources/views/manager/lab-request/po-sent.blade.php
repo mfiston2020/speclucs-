@@ -45,8 +45,8 @@
 
         <div class="tab-content">
             {{-- requested --}}
-            <div class="tab-pane active" id="requested" role="tabpanel">
-                <div class="tab-pane  p-20" id="profile2" role="tabpanel">
+            {{-- <div class="tab-pane active" id="requested" role="tabpanel"> --}}
+                {{-- <div class="tab-pane  p-20" id="profile2" role="tabpanel"> --}}
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
@@ -85,7 +85,6 @@
                                     <div class="tab-content br-n pn">
                                         {{-- completed and in stock --}}
                                         <div id="complete-orders" class="tab-pane active">
-
                                             @if (count($requests_supplier)>0)
                                                 <div class="row">
                                                     <div class="col-12">
@@ -486,7 +485,7 @@
                                         </div>
 
                                         @if (is_null(getUserCompanyInfo()->is_vision_center) && getUserCompanyInfo()->can_supply=='1')
-                                            <div id="out-complete-orders" class="tab-pane active">
+                                            <div id="out-complete-orders" class="tab-pane">
 
                                             @if (count($requests_supplier_count)>0)
                                                 <div class="row">
@@ -947,8 +946,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                {{-- </div> --}}
+            {{-- </div> --}}
 
         </div>
 
