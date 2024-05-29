@@ -95,7 +95,7 @@
                                                             @foreach ($invoicess as $key => $request)
 
                                                                 <tr>
-                                                                    <td>-</td>
+                                                                    <td>{{$key+1}}</td>
                                                                     <td>
                                                                         <a href="#!" data-toggle="modal"
                                                                             data-target="#request-{{ $key }}-detail">

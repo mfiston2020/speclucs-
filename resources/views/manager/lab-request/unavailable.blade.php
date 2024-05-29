@@ -32,7 +32,7 @@
                             <span class="hidden-xs-down">
                                 N/A Products
                                 <span class="badge badge-danger badge-pill">
-                                    {{ $requests->total() }}
+                                    {{ number_format($requests->total() + $requests_out->total()) }}
                                 </span>
                             </span>
                         </h4>

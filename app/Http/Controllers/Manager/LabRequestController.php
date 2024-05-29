@@ -84,9 +84,18 @@ class LabRequestController extends Controller
         if ($type=='priced') {
 
             $requests_priced      =   $this->ordersRepo->internalOrder(['Confirmed','priced']);
-            $requests_priced_out  =   $this->ordersRepo->externalOrder(['Confirmed','priced']);
+            // $requests_priced_out  =   $this->ordersRepo->externalOrder(['Confirmed','priced']);
+            $requests_priced_out    =   Invoice::whereIn('status',['Confirmed','priced'])
+                                            ->where('supplier_id',userInfo()->company_id)
+                                            ->without('soldproduct')
+                                            ->with('unavailableProducts',function($query){
+                                                $query->with('product',function($q){
+                                                    $q->with(['power','category']);
+                                                });
+                                            })->orderBy('created_at','desc')
+                                            ->get();
 
-            // dd($requests_priced);
+            // dd($requests_priced_out);
 
             return view('manager.lab-request.priced',compact('requests_priced','requests_priced_out'));
         }
