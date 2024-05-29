@@ -79,7 +79,7 @@
                 <!-- ============================================================== -->
                 <!-- Comment -->
                 <!-- ============================================================== -->
-                @if ($count_notification > 0)
+                {{-- @if ($count_notification > 0)
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle waves-effect waves-dark" href="#"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i
@@ -127,7 +127,7 @@
                             </ul>
                         </div>
                     </li>
-                @endif
+                @endif --}}
                 <!-- ============================================================== -->
                 <!-- End Comment -->
                 <!-- ============================================================== -->

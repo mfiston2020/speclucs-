@@ -84,8 +84,10 @@ class LabRequestController extends Controller
         if ($type=='priced') {
 
             $requests_priced      =   $this->ordersRepo->internalOrder(['Confirmed','priced']);
-            // $requests_priced_out  =   $this->ordersRepo->externalOrder(['Confirmed','priced']);
-            $requests_priced_out    =   Invoice::whereIn('status',['Confirmed','priced'])
+            if (getuserCompanyInfo()->is_vision_center=='1') {
+                $requests_priced_out  =   $this->ordersRepo->externalOrder(['Confirmed','priced']);
+            }else{
+                $requests_priced_out    =   Invoice::whereIn('status',['Confirmed','priced'])
                                             ->where('supplier_id',userInfo()->company_id)
                                             ->without('soldproduct')
                                             ->with('unavailableProducts',function($query){
@@ -93,7 +95,8 @@ class LabRequestController extends Controller
                                                     $q->with(['power','category']);
                                                 });
                                             })->orderBy('created_at','desc')
-                                            ->get();
+                                            ->paginate(50);
+            }
 
             // dd($requests_priced_out);
 

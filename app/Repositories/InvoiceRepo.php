@@ -77,7 +77,7 @@ class InvoiceRepo implements InvoiceInterface
             } else {
                 return Invoice::where('supplier_id', userInfo()->company_id)
                                             ->whereIn('status',$status)
-                                            ->without('soldproduct')
+                                            ->with('soldproduct')
                                             ->with('unavailableProducts',function($query){
                                                 $query->with('product',function($q){
                                                     $q->with(['power','category']);

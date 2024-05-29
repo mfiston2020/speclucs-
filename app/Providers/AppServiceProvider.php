@@ -35,8 +35,8 @@ class AppServiceProvider extends ServiceProvider
         }
 
         view()->composer('manager.includes.layouts.header', function ($view) {
-            $count_notification     =   count(\App\Models\SupplierNotify::where('supplier_id', Auth::user()->company_id)->where('status', '0')->get());
-            $notifications           =   \App\Models\SupplierNotify::where('supplier_id', Auth::user()->company_id)->where('status', '0')->orderBy('created_at', 'desc')->get();
+            // $count_notification     =   count(\App\Models\SupplierNotify::where('supplier_id', Auth::user()->company_id)->where('status', '0')->get());
+            // $notifications           =   \App\Models\SupplierNotify::where('supplier_id', Auth::user()->company_id)->where('status', '0')->orderBy('created_at', 'desc')->get();
 
             $ordersCount            =   Invoice::where('company_id',userInfo()->company_id)->select('status')->get();
             $ordersCountOutside     =   Invoice::where('supplier_id',userInfo()->company_id)->where('status','<>','canceled')->select('status')->get();
@@ -56,8 +56,9 @@ class AppServiceProvider extends ServiceProvider
 
             // $pendingProducts    =   UnavailableProduct::where('company_id',userInfo()->company_id)->where('status','pending')->count();
 
-            $view->with('count_notification', $count_notification)
-                ->with('notifications', $notifications)
+            $view
+            // ->with('count_notification', $count_notification)
+            //     ->with('notifications', $notifications)
                 ->with('from_out',$ordersCountOutside->count())
                 ->with('orderCount',$ordersCount->count())
                 ->with('booking',$ordersCount->where('status','booked')->count() + $ordersCountOutside->where('status','booked')->count())
