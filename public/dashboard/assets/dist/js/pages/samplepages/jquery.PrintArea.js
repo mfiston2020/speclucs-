@@ -31,16 +31,17 @@
     var modes = { iframe : "iframe", popup : "popup" };
     var standards = { strict : "strict", loose : "loose", html5 : "html5" };
     var defaults = { mode       : modes.iframe,
-                     standard   : standards.html5,
+                    //  standard   : standards.html5,
                      popHt      : 500,
                      popWd      : 400,
                      popX       : 200,
                      popY       : 200,
                      popTitle   : '',
-                     popClose   : false,
+                     popClose   : true,
                      extraCss   : '',
                      extraHead  : '',
-                     retainAttr : ["id","class","style"] };
+        retainAttr: ["id", "class", "style"]
+    };
 
     var settings = {};//global settings
 

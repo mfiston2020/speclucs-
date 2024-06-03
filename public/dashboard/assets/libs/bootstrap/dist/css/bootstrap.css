@@ -6757,9 +6757,9 @@ button.bg-dark:focus {
   .d-print-none {
     display: none !important;
   }
-  .d-print-inline {
+  /* .d-print-inline {
     display: inline !important;
-  }
+  } */
   .d-print-inline-block {
     display: inline-block !important;
   }

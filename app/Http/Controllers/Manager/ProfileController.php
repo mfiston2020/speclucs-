@@ -138,7 +138,7 @@ class ProfileController extends Controller
         }
         catch (\Throwable $th)
         {
-            return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! ');
+            return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong! '.$th);
         }
     }
 
