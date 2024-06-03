@@ -225,35 +225,32 @@
                                                                             </tr>
                                                                             <tbody>
                                                                                 {{-- looping through available products --}}
-                                                                                @if (!$request->soldproduct)
+                                                                                @if (!is_null($request->soldproduct))
                                                                                     @foreach ($request->soldproduct as $productsold)
-                                                                                        @php
-                                                                                            $invoice_product = $products->where('id', $productsold->product_id)->first();
-                                                                                        @endphp
 
-                                                                                        @if ($invoice_product->category_id == 1)
+                                                                                        @if ($productsold->product->category_id == 1)
                                                                                             <tr>
                                                                                                 <td>
                                                                                                     {{ $productsold->eye == null ? '' : Oneinitials($productsold->eye) }}
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    {{ $invoice_product->description }}
+                                                                                                    {{ $productsold->product->description }}
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    @if (initials($invoice_product->product_name) == 'SV')
-                                                                                                        <span>{{ $invoice_product->power->sphere }}
+                                                                                                    @if (initials($productsold->product->product_name) == 'SV')
+                                                                                                        <span>{{ $productsold->product->power->sphere }}
                                                                                                             /
-                                                                                                            {{ $invoice_product->power->cylinder }}</span>
+                                                                                                            {{ $productsold->product->power->cylinder }}</span>
                                                                                                     @else
-                                                                                                        <span>{{ $invoice_product->power->sphere }}
+                                                                                                        <span>{{ $productsold->product->power->sphere }}
                                                                                                             /
-                                                                                                            {{ $invoice_product->power->cylinder }}
-                                                                                                            *{{ $invoice_product->power->axis }}
-                                                                                                            {{ $invoice_product->power->add }}</span>
+                                                                                                            {{ $productsold->product->power->cylinder }}
+                                                                                                            *{{ $productsold->product->power->axis }}
+                                                                                                            {{ $productsold->product->power->add }}</span>
                                                                                                     @endif
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
+                                                                                                    {{ $productsold->product->location == null ? '-' : $productsold->product->location }}
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <span

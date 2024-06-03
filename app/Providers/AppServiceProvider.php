@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
             $ordersCount            =   Invoice::where('company_id',userInfo()->company_id)->select('status')->get();
             $ordersCountOutside     =   Invoice::where('supplier_id',userInfo()->company_id)->where('status','<>','canceled')->select('status')->get();
 
-            $requested  =   Invoice::where('company_id', userInfo()->company_id)->where('status','requested')->count() + Invoice::where('supplier_id', userInfo()->company_id)->where('status','requested')->whereDoesntHave('unavailableProducts')->count();
+            $requested  =   Invoice::where('company_id', userInfo()->company_id)->whereDoesntHave('unavailableProducts')->where('status','requested')->count() + Invoice::where('supplier_id', userInfo()->company_id)->where('status','requested')->whereDoesntHave('unavailableProducts')->count();
 
             // dd(Invoice::where('supplier_id', userInfo()->company_id)
             //                                 ->whereIn('status',['Confirm','priced'])

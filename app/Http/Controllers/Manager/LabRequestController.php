@@ -63,11 +63,56 @@ class LabRequestController extends Controller
 
     function indexWithTye($type){
         $isOutOfStock   =   null;
+        $invoicess_out  =   [];
+        $invoicess      =   [];
 
         if ($type=='requested') {
 
-            $invoicess      =   $this->ordersRepo->internalOrder(['requested']);
-            $invoicess_out  =   $this->ordersRepo->externalOrder(['requested']);
+            if (getuserCompanyInfo()->is_vision_center!='1') {
+                $invoicess_out  =   Invoice::where('status','requested')
+                            ->where('supplier_id',userInfo()->company_id)
+                            ->with('soldproduct',function($query){
+                                $query->with('product',function($q){
+                                    $q->with(['power','category']);
+                                });
+                            })->whereDoesntHave('unavailableProducts')
+                            ->orderBy('created_at','desc')
+                            ->paginate(50);
+                            
+                // fetching external orders
+                $invoicess  =    Invoice::where('status','requested')
+                                        ->where('company_id',userInfo()->company_id)
+                                        ->with('soldproduct',function($query){
+                                            $query->with('product',function($q){
+                                                $q->with(['power','category']);
+                                            });
+                                        })->whereDoesntHave('unavailableProducts')
+                                        ->orderBy('created_at','desc')
+                                        ->paginate(50);
+            }else{
+                $invoicess_out  =   Invoice::where('status','requested')
+                            ->where('company_id',userInfo()->company_id)
+                            ->whereNotNull('supplier_id')
+                            ->with('soldproduct',function($query){
+                                $query->with('product',function($q){
+                                    $q->with(['power','category']);
+                                });
+                            })->whereDoesntHave('unavailableProducts')
+                            ->orderBy('created_at','desc')
+                            ->paginate(50);
+                            
+                // fetching external orders
+                $invoicess  =    Invoice::where('status','requested')
+                                        ->where('company_id',userInfo()->company_id)
+                                        ->whereNull('supplier_id')
+                                        ->with('soldproduct',function($query){
+                                            $query->with('product',function($q){
+                                                $q->with(['power','category']);
+                                            });
+                                        })->whereDoesntHave('unavailableProducts')
+                                        ->orderBy('created_at','desc')
+                                        ->paginate(50);
+            }
 
 
             return view('manager.lab-request.requested',compact('invoicess','invoicess_out'));
@@ -89,7 +134,7 @@ class LabRequestController extends Controller
             }else{
                 $requests_priced_out    =   Invoice::whereIn('status',['Confirmed','priced'])
                                             ->where('supplier_id',userInfo()->company_id)
-                                            ->without('soldproduct')
+                                            ->with('soldproduct')
                                             ->with('unavailableProducts',function($query){
                                                 $query->with('product',function($q){
                                                     $q->with(['power','category']);
@@ -98,12 +143,11 @@ class LabRequestController extends Controller
                                             ->paginate(50);
             }
 
-            // dd($requests_priced_out);
-
             return view('manager.lab-request.priced',compact('requests_priced','requests_priced_out'));
         }
 
         if ($type=='po-sent') {
+
 
             $requests_supplier          =   $this->ordersRepo->internalOrder(['sent to supplier']);
             $requests_supplier_count    =   $this->ordersRepo->externalOrder(['sent to supplier']);
@@ -117,28 +161,48 @@ class LabRequestController extends Controller
         if (getuserCompanyInfo()->is_vision_center=='1') {
             $requests          =   Invoice::where('company_id', userInfo()->company_id)
                                         ->where('status','requested')
+                                        ->with('soldproduct',function($query){
+                                                $query->with('product',function($q){
+                                                    $q->with(['power','category']);
+                                                });
+                                            })
                                         ->whereNull('supplier_id')
                                         ->orderBy('id','desc')
-                                        ->has('unavailableProducts')->paginate(50);
+                                        ->whereHas('unavailableProducts')->paginate(50);
         }else{
             $requests          =   Invoice::where('company_id', userInfo()->company_id)
                                         ->where('status','requested')
                                         ->whereNull('supplier_id')
+                                        ->with('soldproduct',function($query){
+                                                $query->with('product',function($q){
+                                                    $q->with(['power','category']);
+                                                });
+                                            })
                                         ->orderBy('id','desc')
-                                        ->has('unavailableProducts')->paginate(50);
+                                        ->whereHas('unavailableProducts')->paginate(50);
         }
 
         if (getuserCompanyInfo()->is_vision_center=='1') {
             $requests_out          =   Invoice::whereNotNull('supplier_id')
                                         ->where('status','requested')
+                                        ->with('soldproduct',function($query){
+                                                $query->with('product',function($q){
+                                                    $q->with(['power','category']);
+                                                });
+                                            })
                                         ->where('company_id',userInfo()->company_id)
                                         ->orderBy('id','desc')
-                                        ->has('unavailableProducts')->paginate(50);
+                                        ->whereHas('unavailableProducts')->paginate(50);
         } else {
             $requests_out          =   Invoice::where('supplier_id', userInfo()->company_id)
                                         ->where('status','requested')
+                                        ->with('soldproduct',function($query){
+                                                $query->with('product',function($q){
+                                                    $q->with(['power','category']);
+                                                });
+                                            })
                                         ->orderBy('id','desc')
-                                        ->has('unavailableProducts')->paginate(50);
+                                        ->whereHas('unavailableProducts')->paginate(50);
         }
 
         // $requests          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);

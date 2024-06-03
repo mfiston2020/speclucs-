@@ -29,7 +29,8 @@
                         <div class="row">
                             <h4 class="card-title">All Requested Products
                                 <span class="badge badge-danger badge-pill ml-2">
-                                    {{ number_format(count($invoicess)+count($invoicess_out))}}
+
+                                        {{ number_format($invoicess->total()+$invoicess_out->total())}}
                                 </span>
                             </h4>
                         </div>
@@ -55,7 +56,7 @@
                                                 aria-expanded="false">
                                                 Internal Order(s)
                                                 <span class="badge badge-danger badge-pill ml-2">
-                                                    {{count($invoicess)}}
+                                                    {{($invoicess->total())}}
                                                 </span>
                                             </a>
                                         </li>
@@ -65,7 +66,7 @@
                                                 aria-expanded="false">
                                                 External Order(s)
                                                 <span class="badge badge-danger badge-pill ml-2">
-                                                    {{ count($invoicess_out) }}
+                                                    {{ ($invoicess_out->total()) }}
                                                 </span>
                                             </a>
                                         </li>
@@ -183,7 +184,7 @@
                                                                                     data-dismiss="modal"
                                                                                     aria-hidden="true">×</button>
 
-                                                                                <div class="pull-left mb-4 d-print-block">
+                                                                                <div class="pull-left mb-4 d-none d-print-block">
                                                                                     <address>
 
                                                                                         <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt=""
@@ -521,25 +522,6 @@
                                                                             <div class="modal-content">
                                                                                 <div class="modal-header">
                                                                                     <div>
-                                                                                        
-                                                                                        <div class="pull-left mb-4 d-none d-print-block">
-                                                                                            <address>
-
-                                                                                                <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt=""
-                                                                                                    height="100px">
-                                                                                                {{-- @if (Auth::user()->company_id != 3) --}}
-                                                                                                <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
-                                                                                                {{-- @endif --}}
-                                                                                                <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
-                                                                                                    {{ getuserCompanyInfo()->company_tin_number }}
-                                                                                                    {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
-                                                                                                    <br /><strong class="text-black-50">Phone Number:</strong>
-                                                                                                    {{ getuserCompanyInfo()->company_phone }}
-                                                                                                    <br /><strong class="text-black-50">Email:</strong>
-                                                                                                    {{ getuserCompanyInfo()->company_email }}
-                                                                                                </p>
-                                                                                            </address>
-                                                                                        </div>
 
                                                                                         <h4 class="modal-title text-info">
                                                                                             @if ($request->client_id != null)
@@ -571,6 +553,25 @@
                                                                                     <button type="button" class="close d-print-none"
                                                                                         data-dismiss="modal"
                                                                                         aria-hidden="true">×</button>
+                                                                                        
+                                                                                    <div class="pull-left mb-4 d-none d-print-block">
+                                                                                        <address>
+
+                                                                                            <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt=""
+                                                                                                height="100px">
+                                                                                            {{-- @if (Auth::user()->company_id != 3) --}}
+                                                                                            <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
+                                                                                            {{-- @endif --}}
+                                                                                            <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
+                                                                                                {{ getuserCompanyInfo()->company_tin_number }}
+                                                                                                {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
+                                                                                                <br /><strong class="text-black-50">Phone Number:</strong>
+                                                                                                {{ getuserCompanyInfo()->company_phone }}
+                                                                                                <br /><strong class="text-black-50">Email:</strong>
+                                                                                                {{ getuserCompanyInfo()->company_email }}
+                                                                                            </p>
+                                                                                        </address>
+                                                                                    </div>
                                                                                 </div>
                                                                                 <div class="modal-body" id="printable">
                                                                                     {{-- @if ($product->hasLens()) --}}
