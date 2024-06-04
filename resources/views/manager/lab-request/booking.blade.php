@@ -228,42 +228,65 @@
                                                             </td>
                                                             <td>
                                                                 @if ($right_len)
-                                                                @if ($availability_right)
-                                                                <span>
-                                                                    {{ format_values($right_len->power->sphere) }}
-                                                                    /
-                                                                    {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($right_len->axis) }}
-                                                                    {{ format_values($right_len->addition) }}
-                                                                </span>
-                                                                @else
-                                                                <span>
-                                                                    {{ format_values($right_len->power->sphere) }}
-                                                                    /
-                                                                    {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($right_len->axis) }}
-                                                                    {{ format_values($right_len->power->add) }}
-                                                                </span>
-                                                                @endif
+                                                                    
+                                                                    @if ($availability_right)
+                                                                        
+                                                                        <span>
+                                                                            {{ format_values($right_len->power->sphere) }}
+                                                                            /
+                                                                            {{ format_values($right_len->power->cylinder) }}
+                                                                            @if ( $request->soldproduct[0]->eye=='right')
+                                                                                <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
+                                                                            @endif
+                                                                            @if ( $request->soldproduct[1]->eye=='right')
+                                                                                <span class="text-primary">*{{ ($request->soldproduct[1]->axis) }}</span>
+                                                                            @endif
+                                                                            {{ format_values($right_len->addition) }}
+                                                                        </span>
+                                                                    @else
+                                                                        <span>
+                                                                            {{ format_values($right_len->power->sphere) }}
+                                                                            /
+                                                                            {{ format_values($right_len->power->cylinder) }}
+                                                                            @if ( $request->soldproduct[0]->eye=='right')
+                                                                                <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
+                                                                            @endif
+                                                                            @if ( $request->soldproduct[1]->eye=='right')
+                                                                                <span class="text-primary">*{{ ($request->soldproduct[1]->axis) }}</span>
+                                                                            @endif
+                                                                            {{-- *{{ ($right_len->power->axis) }} []->axis--}}
+                                                                            {{ format_values($right_len->power->add) }}
+                                                                        </span>
+                                                                    @endif
                                                                 @else
                                                                 <span>-</span>
                                                                 @endif
                                                             </td>
                                                             <td>
                                                                 @if ($left_len)
-                                                                @if ($availability_left)
-                                                                {{ format_values($left_len->sphere) }}
-                                                                /
-                                                                {{ format_values($left_len->cylinder) }}
-                                                                *{{ format_values($left_len->axis) }}
-                                                                {{ format_values($left_len->addition) }}
-                                                                @else
-                                                                {{ format_values($left_len->power->sphere) }}
-                                                                /
-                                                                {{ format_values($left_len->power->cylinder) }}
-                                                                *{{ format_values($left_len->axis) }}
-                                                                {{ format_values($left_len->power->add) }}
-                                                                @endif
+                                                                    @if ($availability_left)
+                                                                        {{ format_values($left_len->sphere) }}
+                                                                        /
+                                                                        {{ format_values($left_len->cylinder) }}
+                                                                        @if ( $request->soldproduct[0]->eye=='left')
+                                                                            <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
+                                                                        @endif
+                                                                        @if ( $request->soldproduct[1]->eye=='left')
+                                                                            <span class="text-primary">*{{ ($request->soldproduct[1]->axis) }}</span>
+                                                                        @endif
+                                                                        {{ format_values($left_len->addition) }}
+                                                                    @else
+                                                                        {{ format_values($left_len->power->sphere) }}
+                                                                        /
+                                                                        {{ format_values($left_len->power->cylinder) }}
+                                                                        @if ( $request->soldproduct[0]->eye=='left')
+                                                                            <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
+                                                                        @endif
+                                                                        @if ( $request->soldproduct[1]->eye=='left')
+                                                                            <span class="text-primary">*{{ ($request->soldproduct[1]->axis) }}</span>
+                                                                        @endif
+                                                                        {{ format_values($left_len->power->add) }}
+                                                                    @endif
                                                                 @else
                                                                 <span class="text-center">-</span>
                                                                 @endif
@@ -362,14 +385,14 @@
                                                                                                 {{ $invoice_product->power->sphere }}
                                                                                                 /
                                                                                                 {{ $invoice_product->power->cylinder }}
-                                                                                                *{{ $invoice_product->axis }}
+                                                                                                *{{ $invoice_product->power->axis }}
                                                                                                 {{ $invoice_product->power->add }}
                                                                                             </span>
                                                                                         @else
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $invoice_product->axis }}
+                                                                                            *{{ $invoice_product->power->axis }}
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         @endif
                                                                                     </div>
@@ -687,7 +710,7 @@
                                                                     {{ format_values($right_len->power->sphere) }}
                                                                     /
                                                                     {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($right_len->axis) }}
+                                                                    *{{ format_values($right_len->power->axis) }}
                                                                     {{ format_values($right_len->addition) }}
                                                                 </span>
                                                                 @else
@@ -695,7 +718,7 @@
                                                                     {{ format_values($right_len->power->sphere) }}
                                                                     /
                                                                     {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($right_len->axis) }}
+                                                                    *{{ format_values($right_len->power->axis) }}
                                                                     {{ format_values($right_len->power->add) }}
                                                                 </span>
                                                                 @endif
@@ -715,7 +738,7 @@
                                                                 {{ format_values($left_len->power->sphere) }}
                                                                 /
                                                                 {{ format_values($left_len->power->cylinder) }}
-                                                                *{{ format_values($left_len->axis) }}
+                                                                *{{ format_values($left_len->power->axis) }}
                                                                 {{ format_values($left_len->power->add) }}
                                                                 @endif
                                                                 @else
@@ -812,7 +835,7 @@
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $invoice_product->axis }}
+                                                                                            *{{ $invoice_product->power->axis }}
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         {{-- <span>{{ $invoice_product->power->sphere }}
                                                                                             /
@@ -821,7 +844,7 @@
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $invoice_product->axis }}
+                                                                                            *{{ $invoice_product->power->axis }}
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         @endif
                                                                                     </div>

@@ -238,7 +238,7 @@
                                                                                                             {{ $product->product->power->sphere }}
                                                                                                             /
                                                                                                             {{ $product->product->power->cylinder }}
-                                                                                                            *{{ $product->axis }}
+                                                                                                            <span class="text-primary">*{{ $product->axis }}</span>
                                                                                                             {{ $product->product->power->add }}
                                                                                                         </span>
                                                                                                             
@@ -246,7 +246,7 @@
                                                                                                         <span>{{ $product->product->power->sphere }}
                                                                                                             /
                                                                                                             {{ $product->product->power->cylinder }}
-                                                                                                            *{{ $product->axis }}
+                                                                                                            <span class="text-primary">*{{ $product->axis }}</span>
                                                                                                             {{ $product->product->power->add }}</span>
                                                                                                     @endif
                                                                                                 </div>
@@ -604,14 +604,14 @@
                                                                                                                     {{ $product->product->power->sphere }}
                                                                                                                 /
                                                                                                                 {{ $product->product->power->cylinder }}
-                                                                                                                *{{ $product->axis }}
+                                                                                                                <span class="text-primary">*{{ $product->axis }}</span>
                                                                                                                 {{ $product->product->power->add }}
                                                                                                                 </span>
                                                                                                         @else
                                                                                                             <span>{{ $product->product->power->sphere }}
                                                                                                                 /
                                                                                                                 {{ $product->product->power->cylinder }}
-                                                                                                                *{{ $product->axis }}
+                                                                                                                <span class="text-primary">*{{ $product->axis }}</span>
                                                                                                                 {{ $product->product->power->add }}</span>
                                                                                                         @endif
                                                                                                     </div>

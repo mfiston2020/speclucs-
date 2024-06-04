@@ -196,7 +196,7 @@
                                                                                         {{ format_values($right_len->power->sphere) }}
                                                                                         /
                                                                                         {{ format_values($right_len->power->cylinder) }}
-                                                                                        *{{ format_values($right_len->power->axis) }}
+                                                                                        *{{ format_values($right_len->axis) }}
                                                                                         {{ $right_len->power->add }}
                                                                                     </span>
                                                                                 @endif

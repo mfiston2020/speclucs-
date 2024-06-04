@@ -29,7 +29,7 @@ class LabRequestController extends Controller
 
     function index()
     {
-        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('soldproduct')->paginate(50);
+        $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('soldproduct')->get();
 
         $isOutOfStock       =   null;
         $lens_type          =   \App\Models\LensType::all();
@@ -79,7 +79,7 @@ class LabRequestController extends Controller
                                 });
                             })->whereDoesntHave('unavailableProducts')
                             ->orderBy('created_at','desc')
-                            ->paginate(50);
+                            ->get();
                             
                 // fetching external orders
                 $invoicess  =    Invoice::where('status','requested')
@@ -90,7 +90,7 @@ class LabRequestController extends Controller
                                             });
                                         })->whereDoesntHave('unavailableProducts')
                                         ->orderBy('created_at','desc')
-                                        ->paginate(50);
+                                        ->get();
             }else{
                 $invoicess_out  =   Invoice::where('status','requested')
                             ->where('company_id',$companyId)
@@ -101,7 +101,7 @@ class LabRequestController extends Controller
                                 });
                             })->whereDoesntHave('unavailableProducts')
                             ->orderBy('created_at','desc')
-                            ->paginate(50);
+                            ->get();
                             
                 // fetching external orders
                 $invoicess  =    Invoice::where('status','requested')
@@ -113,7 +113,7 @@ class LabRequestController extends Controller
                                             });
                                         })->whereDoesntHave('unavailableProducts')
                                         ->orderBy('created_at','desc')
-                                        ->paginate(50);
+                                        ->get();
             }
 
 
@@ -142,7 +142,7 @@ class LabRequestController extends Controller
                                                     $q->with(['power','category']);
                                                 });
                                             })->orderBy('created_at','desc')
-                                            ->paginate(50);
+                                            ->get();
             }
 
             return view('manager.lab-request.priced',compact('requests_priced','requests_priced_out'));
@@ -170,7 +170,7 @@ class LabRequestController extends Controller
                                             })
                                         ->whereNull('supplier_id')
                                         ->orderBy('id','desc')
-                                        ->whereHas('unavailableProducts')->paginate(50);
+                                        ->whereHas('unavailableProducts')->get();
         }else{
             $requests          =   Invoice::where('company_id', userInfo()->company_id)
                                         ->where('status','requested')
@@ -181,7 +181,7 @@ class LabRequestController extends Controller
                                                 });
                                             })
                                         ->orderBy('id','desc')
-                                        ->whereHas('unavailableProducts')->paginate(50);
+                                        ->whereHas('unavailableProducts')->get();
         }
 
         if (getuserCompanyInfo()->is_vision_center=='1') {
@@ -194,7 +194,7 @@ class LabRequestController extends Controller
                                             })
                                         ->where('company_id',userInfo()->company_id)
                                         ->orderBy('id','desc')
-                                        ->whereHas('unavailableProducts')->paginate(50);
+                                        ->whereHas('unavailableProducts')->get();
         } else {
             $requests_out          =   Invoice::where('supplier_id', userInfo()->company_id)
                                         ->where('status','requested')
@@ -204,12 +204,12 @@ class LabRequestController extends Controller
                                                 });
                                             })
                                         ->orderBy('id','desc')
-                                        ->whereHas('unavailableProducts')->paginate(50);
+                                        ->whereHas('unavailableProducts')->get();
         }
 
-        // $requests          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);
+        // $requests          =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->get();
 
-        // $requests_out          =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->paginate(50);
+        // $requests_out          =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'requested')->orderBy('id', 'desc')->has('unavailableproducts')->get();
 
 
         // $products   =   Product::where('company_id', userInfo()->company_id)->get();
@@ -278,13 +278,13 @@ class LabRequestController extends Controller
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             } else {
                 $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
                 $query->with('product',function($q){
                     $q->with(['power','category']);
                 });
-            })->paginate(100);
+            })->get();
             }
 
 
@@ -294,13 +294,13 @@ class LabRequestController extends Controller
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             }else{
                 $requests_out   =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'sent to lab')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             }
 
             return view('manager.lab-request.received.new', compact('requests','requests_out'));
@@ -313,13 +313,13 @@ class LabRequestController extends Controller
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             } else {
                 $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
                 $query->with('product',function($q){
                     $q->with(['power','category']);
                 });
-            })->paginate(100);
+            })->get();
             }
 
 
@@ -329,22 +329,22 @@ class LabRequestController extends Controller
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             }else{
                 $requests_out   =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             }
-            // $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
+            // $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'in production')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->get();
 
             return view('manager.lab-request.received.in-production', compact('requests','requests_out'));
         }
 
         if (decrypt($type)=='completed') {
             // completed
-            // $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
+            // $requests   =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->get();
 
 
             if (getuserCompanyInfo()->is_vision_center=='1') {
@@ -352,13 +352,13 @@ class LabRequestController extends Controller
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             } else {
                 $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
                 $query->with('product',function($q){
                     $q->with(['power','category']);
                 });
-            })->paginate(100);
+            })->get();
             }
 
 
@@ -368,13 +368,13 @@ class LabRequestController extends Controller
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             }else{
                 $requests_out   =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'completed')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             }
 
             return view('manager.lab-request.received.completed', compact('requests','requests_out'));
@@ -382,7 +382,7 @@ class LabRequestController extends Controller
 
         if (decrypt($type)=='delivered') {
             // delivered
-            // $requests  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->paginate(100);
+            // $requests  =   Invoice::where('company_id', userInfo()->company_id)->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts','client','soldproduct')->get();
 
             // sent to lab
             if (getuserCompanyInfo()->is_vision_center=='1') {
@@ -390,13 +390,13 @@ class LabRequestController extends Controller
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             } else {
                 $requests   =   Invoice::where('company_id', userInfo()->company_id)->whereNull('supplier_id')->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
                 $query->with('product',function($q){
                     $q->with(['power','category']);
                 });
-            })->paginate(100);
+            })->get();
             }
 
 
@@ -406,13 +406,13 @@ class LabRequestController extends Controller
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             }else{
                 $requests_out   =   Invoice::where('supplier_id', userInfo()->company_id)->where('status', 'delivered')->orderBy('created_at', 'desc')->with('unavailableproducts')->with('soldproduct',function($query){
                     $query->with('product',function($q){
                         $q->with(['power','category']);
                     });
-                })->paginate(100);
+                })->get();
             }
 
             return view('manager.lab-request.received.delivered', compact('requests','requests_out'));
