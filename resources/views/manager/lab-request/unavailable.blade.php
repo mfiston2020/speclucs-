@@ -159,7 +159,7 @@
                                                             id="request-{{ $key }}-detail" tabindex="-1"
                                                             role="dialog" aria-labelledby="myLargeModalLabel"
                                                             aria-hidden="true" style="display: none;">
-                                                            <div class="modal-dialog modal-xl modal-dialog-centered">
+                                                            <div class="modal-dialog modal-xl d-print-inline">
                                                                 <div class="modal-content"
                                                                     id="request-{{ $key }}-contents">
                                                                     <div class="modal-header">
@@ -405,83 +405,85 @@
                                                                                 @endif
                                                                             @endforeach
                                                                         {{-- @endif --}}
-                                                                        @if (is_null($request->supplier_id))
-                                                                            <hr>
-                                                                            <h4 class="text-info">Operations</h4>
-                                                                            <hr>
-                                                                            <form method="post" id="priceSettingForm"
-                                                                                onsubmit="return submitPricing();"
-                                                                                action="{{ route('manager.sent.request.to.addprice') }}">
-                                                                                @csrf
-                                                                                @foreach ($request->unavailableproducts as $unavail)
-                                                                                    <h5>{{ Oneinitials($unavail->eye) }}
-                                                                                    </h5>
-                                                                                    <input type="hidden" name="invoiceID"
-                                                                                        value="{{ $request->id }}" />
-                                                                                    <input type="hidden" name="prodId[]"
-                                                                                        value="{{ $unavail->id }}" />
-                                                                                    <div class="row">
-                                                                                        <div class="col-sm-12 col-md-3">
-                                                                                            <div class="form-group">
-                                                                                                <label for="inputlname"
-                                                                                                    class="control-label col-form-label">Cost</label>
-                                                                                                <input type="text"
-                                                                                                    class="form-control"
-                                                                                                    name="cost[]"
-                                                                                                    id="inputlname"
-                                                                                                    value="{{$unavail->cost}}"
-                                                                                                    placeholder="cost"
-                                                                                                    required>
+                                                                        <div class="d-print-none">
+                                                                            @if (is_null($request->supplier_id))
+                                                                                <hr>
+                                                                                <h4 class="text-info">Operations</h4>
+                                                                                <hr>
+                                                                                <form method="post" id="priceSettingForm"
+                                                                                    onsubmit="return submitPricing();"
+                                                                                    action="{{ route('manager.sent.request.to.addprice') }}">
+                                                                                    @csrf
+                                                                                    @foreach ($request->unavailableproducts as $unavail)
+                                                                                        <h5>{{ Oneinitials($unavail->eye) }}
+                                                                                        </h5>
+                                                                                        <input type="hidden" name="invoiceID"
+                                                                                            value="{{ $request->id }}" />
+                                                                                        <input type="hidden" name="prodId[]"
+                                                                                            value="{{ $unavail->id }}" />
+                                                                                        <div class="row">
+                                                                                            <div class="col-sm-12 col-md-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="inputlname"
+                                                                                                        class="control-label col-form-label">Cost</label>
+                                                                                                    <input type="text"
+                                                                                                        class="form-control"
+                                                                                                        name="cost[]"
+                                                                                                        id="inputlname"
+                                                                                                        value="{{$unavail->cost}}"
+                                                                                                        placeholder="cost"
+                                                                                                        required>
+                                                                                                </div>
                                                                                             </div>
-                                                                                        </div>
-                                                                                        <div class="col-sm-12 col-md-3">
-                                                                                            <div class="form-group">
-                                                                                                <label for="inputname"
-                                                                                                    class="control-label col-form-label">
-                                                                                                    Price</label>
-                                                                                                <input type="text"
-                                                                                                    class="form-control"
-                                                                                                    id="inputname"
-                                                                                                    name="price[]"
-                                                                                                    value="{{$unavail->price}}"
-                                                                                                    placeholder="price"
-                                                                                                    required>
+                                                                                            <div class="col-sm-12 col-md-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="inputname"
+                                                                                                        class="control-label col-form-label">
+                                                                                                        Price</label>
+                                                                                                    <input type="text"
+                                                                                                        class="form-control"
+                                                                                                        id="inputname"
+                                                                                                        name="price[]"
+                                                                                                        value="{{$unavail->price}}"
+                                                                                                        placeholder="price"
+                                                                                                        required>
+                                                                                                </div>
                                                                                             </div>
-                                                                                        </div>
-                                                                                        <div class="col-sm-12 col-md-3">
-                                                                                            <div class="form-group">
-                                                                                                <label for="inputlname"
-                                                                                                    class="control-label col-form-label">Location</label>
-                                                                                                <input type="text"
-                                                                                                    class="form-control"
-                                                                                                    id="inputlname"
-                                                                                                    name="location[]"
-                                                                                                    placeholder="Location">
+                                                                                            <div class="col-sm-12 col-md-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="inputlname"
+                                                                                                        class="control-label col-form-label">Location</label>
+                                                                                                    <input type="text"
+                                                                                                        class="form-control"
+                                                                                                        id="inputlname"
+                                                                                                        name="location[]"
+                                                                                                        placeholder="Location">
+                                                                                                </div>
                                                                                             </div>
-                                                                                        </div>
-                                                                                        <div class="col-sm-12 col-md-3">
-                                                                                            <div class="form-group">
-                                                                                                <label for="inputlname"
-                                                                                                    class="control-label col-form-label">Supplier</label>
-                                                                                                <select class="form-control"
-                                                                                                    id="inputlname"
-                                                                                                    name="supplier[]">
-                                                                                                    <option value="">
-                                                                                                        select
-                                                                                                        supplier
-                                                                                                    </option>
-                                                                                                    @foreach ($suppliers as $supplier)
-                                                                                                        <option
-                                                                                                            value="{{ $supplier->id }}">
-                                                                                                            {{ $supplier->name }}
+                                                                                            <div class="col-sm-12 col-md-3">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="inputlname"
+                                                                                                        class="control-label col-form-label">Supplier</label>
+                                                                                                    <select class="form-control"
+                                                                                                        id="inputlname"
+                                                                                                        name="supplier[]">
+                                                                                                        <option value="">
+                                                                                                            select
+                                                                                                            supplier
                                                                                                         </option>
-                                                                                                    @endforeach
-                                                                                                </select>
+                                                                                                        @foreach ($suppliers as $supplier)
+                                                                                                            <option
+                                                                                                                value="{{ $supplier->id }}">
+                                                                                                                {{ $supplier->name }}
+                                                                                                            </option>
+                                                                                                        @endforeach
+                                                                                                    </select>
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </div>
-                                                                                @endforeach
-                                                                        @endif
+                                                                                    @endforeach
+                                                                            @endif
+                                                                        </div>
                                                                     </div>
                                                                     <div
                                                                         class="modal-footer d-flex justify-content-between d-print-none">
@@ -492,7 +494,7 @@
                                                                         </button>
                                                                         @if (is_null($request->supplier_id))
                                                                             <button type="button"
-                                                                                onclick="printModal({{ $key }})"
+                                                                                onclick="printModal('request-{{ $key }}-detail')"
                                                                                 class="btn btn-success waves-effect text-left"
                                                                                 id="print">Print</button>
                                                                             <button
