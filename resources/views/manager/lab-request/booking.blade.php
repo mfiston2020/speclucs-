@@ -355,9 +355,16 @@
                                                                                     </div>
                                                                                     <div class="col-2">
                                                                                         @if (initials($invoice_product->product_name) == 'SV')
-                                                                                        <span>{{ $invoice_product->power->sphere }}
+                                                                                        {{-- <span>{{ $invoice_product->power->sphere }}
                                                                                             /
-                                                                                            {{ $invoice_product->power->cylinder }}</span>
+                                                                                            {{ $invoice_product->power->cylinder }}</span> --}}
+                                                                                            <span>
+                                                                                                {{ $invoice_product->power->sphere }}
+                                                                                                /
+                                                                                                {{ $invoice_product->power->cylinder }}
+                                                                                                *{{ $invoice_product->power->axis }}
+                                                                                                {{ $invoice_product->power->add }}
+                                                                                            </span>
                                                                                         @else
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
@@ -804,7 +811,12 @@
                                                                                         @if (initials($invoice_product->product_name) == 'SV')
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
-                                                                                            {{ $invoice_product->power->cylinder }}</span>
+                                                                                            {{ $invoice_product->power->cylinder }}
+                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                            {{ $invoice_product->power->add }}</span>
+                                                                                        {{-- <span>{{ $invoice_product->power->sphere }}
+                                                                                            /
+                                                                                            {{ $invoice_product->power->cylinder }}</span> --}}
                                                                                         @else
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /

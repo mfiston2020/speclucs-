@@ -238,9 +238,14 @@
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     @if (initials($productsold->product->product_name) == 'SV')
+                                                                                                        {{-- <span>{{ $productsold->product->power->sphere }}
+                                                                                                            /
+                                                                                                            {{ $productsold->product->power->cylinder }}</span> --}}
                                                                                                         <span>{{ $productsold->product->power->sphere }}
                                                                                                             /
-                                                                                                            {{ $productsold->product->power->cylinder }}</span>
+                                                                                                            {{ $productsold->product->power->cylinder }}
+                                                                                                            *{{ $productsold->product->power->axis }}
+                                                                                                            {{ $productsold->product->power->add }}</span>
                                                                                                     @else
                                                                                                         <span>{{ $productsold->product->power->sphere }}
                                                                                                             /
@@ -492,13 +497,9 @@
                                                                             data-dismiss="modal">
                                                                             Close
                                                                         </button>
+                                                                        <button type="button" onclick="printModal('request-{{ $key }}-detail')" class="btn btn-success waves-effect text-left" id="print">Print</button>
                                                                         @if (is_null($request->supplier_id))
-                                                                            <button type="button"
-                                                                                onclick="printModal('request-{{ $key }}-detail')"
-                                                                                class="btn btn-success waves-effect text-left"
-                                                                                id="print">Print</button>
-                                                                            <button
-                                                                                class="btn btn-info waves-effect text-left">
+                                                                            <button class="btn btn-info waves-effect text-left">
                                                                                 Set Price
                                                                             </button>
                                                                         @endif
@@ -701,9 +702,14 @@
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     @if (initials($invoice_product->product_name) == 'SV')
+                                                                                                        {{-- <span>{{ $invoice_product->power->sphere }}
+                                                                                                            /
+                                                                                                            {{ $invoice_product->power->cylinder }}</span> --}}
                                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                                             /
-                                                                                                            {{ $invoice_product->power->cylinder }}</span>
+                                                                                                            {{ $invoice_product->power->cylinder }}
+                                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                                            {{ $invoice_product->power->add }}</span>
                                                                                                     @else
                                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                                             /
@@ -957,11 +963,9 @@
                                                                             data-dismiss="modal">
                                                                             Close
                                                                         </button>
+                                                                        <button type="button" onclick="printModal('external-{{ $key }}-detail')" class="btn btn-success waves-effect text-left" id="print">Print</button>
                                                                         @if (is_null($request->supplier_id) || $request->supplier_id==userInfo()->company_id)
-                                                                            <button type="button"
-                                                                                onclick="printModal('external-{{ $key }}-detail')"
-                                                                                class="btn btn-success waves-effect text-left"
-                                                                                id="print">Print</button>
+                                                                            
                                                                             <button
                                                                                 class="btn btn-info waves-effect text-left">
                                                                                 Set Price

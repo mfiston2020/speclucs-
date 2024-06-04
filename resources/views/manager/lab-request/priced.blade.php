@@ -3,15 +3,15 @@
 @section('title', 'Dashboard - Product')
 
 @push('css')
-<link href="{{ asset('dashboard/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-<style>
-    @media print {
-        .modal-footer {
-            display: none;
+    <link href="{{ asset('dashboard/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+    <style>
+        @media print {
+            .modal-footer {
+                display: none;
+            }
         }
-    }
 
-</style>
+    </style>
 @endpush
 
 {{-- ==== Breadcumb ======== --}}
@@ -250,7 +250,7 @@
                                                                         @php
                                                                             $isOutOfStock='no';
                                                                         @endphp
-                                                                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                                                                        <div class="modal-dialog modal-xl d-print-inline">
                                                                             <div class="modal-content">
                                                                                 <div class="modal-header">
                                                                                     <div>
@@ -271,7 +271,24 @@
                                                                                             Request #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                                         </h4>
                                                                                     </div>
-                                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                    <button type="button" class="close d-print-none" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                    <div class="pull-left mb-4 d-none d-print-block">
+                                                                                        <address>
+
+                                                                                            <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt="" height="100px">
+                                                                                            {{-- @if (Auth::user()->company_id != 3) --}}
+                                                                                            <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
+                                                                                            {{-- @endif --}}
+                                                                                            <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
+                                                                                                {{ getuserCompanyInfo()->company_tin_number }}
+                                                                                                {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
+                                                                                                <br /><strong class="text-black-50">Phone Number:</strong>
+                                                                                                {{ getuserCompanyInfo()->company_phone }}
+                                                                                                <br /><strong class="text-black-50">Email:</strong>
+                                                                                                {{ getuserCompanyInfo()->company_email }}
+                                                                                            </p>
+                                                                                        </address>
+                                                                                    </div>
                                                                                 </div>
                                                                                 <div class="modal-body" id="printable">
                                                                                     <h4 class="text-info">Lens</h4>
@@ -297,9 +314,14 @@
                                                                                                 </div>
                                                                                                 <div class="col-2">
                                                                                                     @if (initials($invoice_product->product_name) == 'SV')
+                                                                                                        {{-- <span>{{ $invoice_product->power->sphere }}
+                                                                                                            /
+                                                                                                            {{ $invoice_product->power->cylinder }}</span> --}}
                                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                                             /
-                                                                                                            {{ $invoice_product->power->cylinder }}</span>
+                                                                                                            {{ $invoice_product->power->cylinder }}
+                                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                                            {{ $invoice_product->power->add }}</span>
                                                                                                     @else
                                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                                             /
@@ -509,12 +531,14 @@
                                                                                         @endforeach
                                                                                     @endif
                                                                                 </div>
-                                                                                <div class="modal-footer d-flex justify-content-between">
+                                                                                <div class="modal-footer d-print-none d-flex justify-content-between">
                                                                                     <button type="button"
                                                                                         class="btn btn-danger waves-effect text-left"
                                                                                         data-dismiss="modal">
                                                                                         Close
                                                                                     </button>
+
+                                                                                    <button type="button" onclick="printModal('proddd-{{ $key }}-detail')" class="btn btn-success waves-effect text-left" id="print">Print</button>
                                                                                     {{-- <button type="button"
                                                                                         class="btn btn-success waves-effect text-left"
                                                                                         id="print">Print</button> --}}
@@ -713,7 +737,7 @@
                                                                         @php
                                                                             $isOutOfStock='no';
                                                                         @endphp
-                                                                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                                                                        <div class="modal-dialog modal-xl d-print-inline">
                                                                             <div class="modal-content">
                                                                                 <div class="modal-header">
                                                                                     <div>
@@ -734,7 +758,24 @@
                                                                                             Request #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                                         </h4>
                                                                                     </div>
-                                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                    <button type="button" class="close d-none" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                    <div class="pull-left mb-4 d-none d-print-block">
+                                                                                        <address>
+
+                                                                                            <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt="" height="100px">
+                                                                                            {{-- @if (Auth::user()->company_id != 3) --}}
+                                                                                            <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
+                                                                                            {{-- @endif --}}
+                                                                                            <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
+                                                                                                {{ getuserCompanyInfo()->company_tin_number }}
+                                                                                                {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
+                                                                                                <br /><strong class="text-black-50">Phone Number:</strong>
+                                                                                                {{ getuserCompanyInfo()->company_phone }}
+                                                                                                <br /><strong class="text-black-50">Email:</strong>
+                                                                                                {{ getuserCompanyInfo()->company_email }}
+                                                                                            </p>
+                                                                                        </address>
+                                                                                    </div>
                                                                                 </div>
                                                                                 <div class="modal-body" id="printable">
                                                                                     <h4 class="text-info">Lens</h4>
@@ -760,9 +801,14 @@
                                                                                                 </div>
                                                                                                 <div class="col-2">
                                                                                                     @if (initials($invoice_product->product_name) == 'SV')
+                                                                                                        {{-- <span>{{ $invoice_product->power->sphere }}
+                                                                                                            /
+                                                                                                            {{ $invoice_product->power->cylinder }}</span> --}}
                                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                                             /
-                                                                                                            {{ $invoice_product->power->cylinder }}</span>
+                                                                                                            {{ $invoice_product->power->cylinder }}
+                                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                                            {{ $invoice_product->power->add }}</span>
                                                                                                     @else
                                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                                             /
@@ -972,15 +1018,13 @@
                                                                                         @endforeach
                                                                                     @endif
                                                                                 </div>
-                                                                                <div class="modal-footer d-flex justify-content-between">
+                                                                                <div class="modal-footer d-print-none d-flex justify-content-between">
                                                                                     <button type="button"
                                                                                         class="btn btn-danger waves-effect text-left"
                                                                                         data-dismiss="modal">
                                                                                         Close
                                                                                     </button>
-                                                                                    {{-- <button type="button"
-                                                                                        class="btn btn-success waves-effect text-left"
-                                                                                        id="print">Print</button> --}}
+                                                                                    <button type="button" onclick="printModal('prod-{{ $key }}-detail')" class="btn btn-success waves-effect text-left" id="print">Print</button>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- /.modal-content -->
@@ -1064,16 +1108,16 @@
         });
     }
 
-    function printModal(key) {
-        var mode = 'iframe'; //popup
-        var close = mode == "popup";
-        var options = {
-            mode: mode,
-            popClose: close
+        function printModal(name) {
+            var mode = 'iframe'; //popup
+            var close = mode == "popup";
+            var options = {
+                mode: mode,
+                popClose: close
+            };
+            $('.modal-footer').hide();
+            $("#"+name).printArea(options);
         };
-        $('.modal-footer').hide();
-        $("#request-" + key + "-contents").printArea(options);
-    };
 
 </script>
 @endpush
