@@ -65,12 +65,14 @@ class LabRequestController extends Controller
         $isOutOfStock   =   null;
         $invoicess_out  =   [];
         $invoicess      =   [];
+        $companyId      =   userInfo()->company_id;
+        $companyInfo    =   getuserCompanyInfo();
 
         if ($type=='requested') {
 
-            if (getuserCompanyInfo()->is_vision_center!='1') {
+            if ($companyInfo->is_vision_center!='1') {
                 $invoicess_out  =   Invoice::where('status','requested')
-                            ->where('supplier_id',userInfo()->company_id)
+                            ->where('supplier_id',$companyId)
                             ->with('soldproduct',function($query){
                                 $query->with('product',function($q){
                                     $q->with(['power','category']);
@@ -81,7 +83,7 @@ class LabRequestController extends Controller
                             
                 // fetching external orders
                 $invoicess  =    Invoice::where('status','requested')
-                                        ->where('company_id',userInfo()->company_id)
+                                        ->where('company_id',$companyId)
                                         ->with('soldproduct',function($query){
                                             $query->with('product',function($q){
                                                 $q->with(['power','category']);
@@ -91,7 +93,7 @@ class LabRequestController extends Controller
                                         ->paginate(50);
             }else{
                 $invoicess_out  =   Invoice::where('status','requested')
-                            ->where('company_id',userInfo()->company_id)
+                            ->where('company_id',$companyId)
                             ->whereNotNull('supplier_id')
                             ->with('soldproduct',function($query){
                                 $query->with('product',function($q){
@@ -103,7 +105,7 @@ class LabRequestController extends Controller
                             
                 // fetching external orders
                 $invoicess  =    Invoice::where('status','requested')
-                                        ->where('company_id',userInfo()->company_id)
+                                        ->where('company_id',$companyId)
                                         ->whereNull('supplier_id')
                                         ->with('soldproduct',function($query){
                                             $query->with('product',function($q){
@@ -115,7 +117,7 @@ class LabRequestController extends Controller
             }
 
 
-            return view('manager.lab-request.requested',compact('invoicess','invoicess_out'));
+            return view('manager.lab-request.requested',compact('invoicess','invoicess_out','companyId','companyInfo'));
         }
 
         if ($type=='booking') {
@@ -129,7 +131,7 @@ class LabRequestController extends Controller
         if ($type=='priced') {
 
             $requests_priced      =   $this->ordersRepo->internalOrder(['Confirmed','priced']);
-            if (getuserCompanyInfo()->is_vision_center=='1') {
+            if ($companyInfo->is_vision_center=='1') {
                 $requests_priced_out  =   $this->ordersRepo->externalOrder(['Confirmed','priced']);
             }else{
                 $requests_priced_out    =   Invoice::whereIn('status',['Confirmed','priced'])

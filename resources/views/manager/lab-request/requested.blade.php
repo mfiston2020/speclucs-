@@ -187,18 +187,18 @@
                                                                                 <div class="pull-left mb-4 d-none d-print-block">
                                                                                     <address>
 
-                                                                                        <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt=""
+                                                                                        <img src="{{ asset('documents/logos/' . $companyInfo->logo) }}" alt=""
                                                                                             height="100px">
                                                                                         {{-- @if (Auth::user()->company_id != 3) --}}
-                                                                                        <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
+                                                                                        <h3> &nbsp;<b class="text-danger">{{ $companyInfo->company_name }}</b></h3>
                                                                                         {{-- @endif --}}
                                                                                         <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
-                                                                                            {{ getuserCompanyInfo()->company_tin_number }}
-                                                                                            {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
+                                                                                            {{ $companyInfo->company_tin_number }}
+                                                                                            {{-- <br /><span></span> {{$companyInfo->company_street}} --}}
                                                                                             <br /><strong class="text-black-50">Phone Number:</strong>
-                                                                                            {{ getuserCompanyInfo()->company_phone }}
+                                                                                            {{ $companyInfo->company_phone }}
                                                                                             <br /><strong class="text-black-50">Email:</strong>
-                                                                                            {{ getuserCompanyInfo()->company_email }}
+                                                                                            {{ $companyInfo->company_email }}
                                                                                         </p>
                                                                                     </address>
                                                                                 </div>
@@ -435,7 +435,7 @@
 
 
 
-                                        {{-- @if (is_null(getUserCompanyInfo()->is_vision_center) && getUserCompanyInfo()->can_supply=='1') --}}
+                                        {{-- @if (is_null($companyInfo->is_vision_center) && $companyInfo->can_supply=='1') --}}
                                             {{-- completed and in stock --}}
                                             <div id="external_requested" class="tab-pane">
                                                 @if (count($invoicess_out)>0)
@@ -557,18 +557,18 @@
                                                                                     <div class="pull-left mb-4 d-none d-print-block">
                                                                                         <address>
 
-                                                                                            <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt=""
+                                                                                            <img src="{{ asset('documents/logos/' . $companyInfo->logo) }}" alt=""
                                                                                                 height="100px">
                                                                                             {{-- @if (Auth::user()->company_id != 3) --}}
-                                                                                            <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
+                                                                                            <h3> &nbsp;<b class="text-danger">{{ $companyInfo->company_name }}</b></h3>
                                                                                             {{-- @endif --}}
                                                                                             <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
-                                                                                                {{ getuserCompanyInfo()->company_tin_number }}
-                                                                                                {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
+                                                                                                {{ $companyInfo->company_tin_number }}
+                                                                                                {{-- <br /><span></span> {{$companyInfo->company_street}} --}}
                                                                                                 <br /><strong class="text-black-50">Phone Number:</strong>
-                                                                                                {{ getuserCompanyInfo()->company_phone }}
+                                                                                                {{ $companyInfo->company_phone }}
                                                                                                 <br /><strong class="text-black-50">Email:</strong>
-                                                                                                {{ getuserCompanyInfo()->company_email }}
+                                                                                                {{ $companyInfo->company_email }}
                                                                                             </p>
                                                                                         </address>
                                                                                     </div>
@@ -763,7 +763,7 @@
                                                                                         @endif
                                                                                     {{-- @endif --}}
                                                                                 </div>
-                                                                                @if (!is_null($request->supplier_id) && $request->supplier_id==getUserCompanyInfo()->id)
+                                                                                @if (!is_null($request->supplier_id) && $request->supplier_id==$companyInfo->id)
                                                                                     <div class="modal-footer d-flex justify-content-between d-print-none">
 
                                                                                         @if ($isOutOfStock=='yes' && $accisOutOfStock=='yes' && $frameisOutOfStock=='yes')
