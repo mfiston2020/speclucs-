@@ -234,14 +234,11 @@
                                                                                                 <div class="col-2">
                                                                                                     <!-- {{$product->product}} -->
                                                                                                     @if (initials($product->product->product_name) == 'SV')
-                                                                                                        <!-- <span>{{ $product->product->power->sphere }}
-                                                                                                            /
-                                                                                                            {{ $product->product->power->cylinder }}</span> -->
                                                                                                         <span>
                                                                                                             {{ $product->product->power->sphere }}
                                                                                                             /
                                                                                                             {{ $product->product->power->cylinder }}
-                                                                                                            *{{ $product->product->power->axis }}
+                                                                                                            *{{ $product->axis }}
                                                                                                             {{ $product->product->power->add }}
                                                                                                         </span>
                                                                                                             
@@ -249,7 +246,7 @@
                                                                                                         <span>{{ $product->product->power->sphere }}
                                                                                                             /
                                                                                                             {{ $product->product->power->cylinder }}
-                                                                                                            *{{ $product->product->power->axis }}
+                                                                                                            *{{ $product->axis }}
                                                                                                             {{ $product->product->power->add }}</span>
                                                                                                     @endif
                                                                                                 </div>
@@ -603,21 +600,18 @@
                                                                                                     </div>
                                                                                                     <div class="col-2">
                                                                                                         @if (initials($product->product->product_name) == 'SV')
-                                                                                                            <!-- <span>{{ $product->product->power->sphere }}
-                                                                                                                /
-                                                                                                                {{ $product->product->power->cylinder }}</span> -->
                                                                                                                 <span>
                                                                                                                     {{ $product->product->power->sphere }}
                                                                                                                 /
                                                                                                                 {{ $product->product->power->cylinder }}
-                                                                                                                *{{ $product->product->power->axis }}
+                                                                                                                *{{ $product->axis }}
                                                                                                                 {{ $product->product->power->add }}
                                                                                                                 </span>
                                                                                                         @else
                                                                                                             <span>{{ $product->product->power->sphere }}
                                                                                                                 /
                                                                                                                 {{ $product->product->power->cylinder }}
-                                                                                                                *{{ $product->product->power->axis }}
+                                                                                                                *{{ $product->axis }}
                                                                                                                 {{ $product->product->power->add }}</span>
                                                                                                         @endif
                                                                                                     </div>

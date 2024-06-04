@@ -233,7 +233,7 @@
                                                                     {{ format_values($right_len->power->sphere) }}
                                                                     /
                                                                     {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($right_len->power->axis) }}
+                                                                    *{{ format_values($right_len->axis) }}
                                                                     {{ format_values($right_len->addition) }}
                                                                 </span>
                                                                 @else
@@ -241,7 +241,7 @@
                                                                     {{ format_values($right_len->power->sphere) }}
                                                                     /
                                                                     {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($right_len->power->axis) }}
+                                                                    *{{ format_values($right_len->axis) }}
                                                                     {{ format_values($right_len->power->add) }}
                                                                 </span>
                                                                 @endif
@@ -261,7 +261,7 @@
                                                                 {{ format_values($left_len->power->sphere) }}
                                                                 /
                                                                 {{ format_values($left_len->power->cylinder) }}
-                                                                *{{ format_values($left_len->power->axis) }}
+                                                                *{{ format_values($left_len->axis) }}
                                                                 {{ format_values($left_len->power->add) }}
                                                                 @endif
                                                                 @else
@@ -362,14 +362,14 @@
                                                                                                 {{ $invoice_product->power->sphere }}
                                                                                                 /
                                                                                                 {{ $invoice_product->power->cylinder }}
-                                                                                                *{{ $invoice_product->power->axis }}
+                                                                                                *{{ $invoice_product->axis }}
                                                                                                 {{ $invoice_product->power->add }}
                                                                                             </span>
                                                                                         @else
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                            *{{ $invoice_product->axis }}
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         @endif
                                                                                     </div>
@@ -687,7 +687,7 @@
                                                                     {{ format_values($right_len->power->sphere) }}
                                                                     /
                                                                     {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($right_len->power->axis) }}
+                                                                    *{{ format_values($right_len->axis) }}
                                                                     {{ format_values($right_len->addition) }}
                                                                 </span>
                                                                 @else
@@ -695,7 +695,7 @@
                                                                     {{ format_values($right_len->power->sphere) }}
                                                                     /
                                                                     {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($right_len->power->axis) }}
+                                                                    *{{ format_values($right_len->axis) }}
                                                                     {{ format_values($right_len->power->add) }}
                                                                 </span>
                                                                 @endif
@@ -715,7 +715,7 @@
                                                                 {{ format_values($left_len->power->sphere) }}
                                                                 /
                                                                 {{ format_values($left_len->power->cylinder) }}
-                                                                *{{ format_values($left_len->power->axis) }}
+                                                                *{{ format_values($left_len->axis) }}
                                                                 {{ format_values($left_len->power->add) }}
                                                                 @endif
                                                                 @else
@@ -812,7 +812,7 @@
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                            *{{ $invoice_product->axis }}
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         {{-- <span>{{ $invoice_product->power->sphere }}
                                                                                             /
@@ -821,7 +821,7 @@
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                            *{{ $invoice_product->axis }}
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         @endif
                                                                                     </div>

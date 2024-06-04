@@ -244,13 +244,13 @@
                                                                                                         <span>{{ $productsold->product->power->sphere }}
                                                                                                             /
                                                                                                             {{ $productsold->product->power->cylinder }}
-                                                                                                            *{{ $productsold->product->power->axis }}
+                                                                                                            *{{ $productsold->axis }}
                                                                                                             {{ $productsold->product->power->add }}</span>
                                                                                                     @else
                                                                                                         <span>{{ $productsold->product->power->sphere }}
                                                                                                             /
                                                                                                             {{ $productsold->product->power->cylinder }}
-                                                                                                            *{{ $productsold->product->power->axis }}
+                                                                                                            *{{ $productsold->axis }}
                                                                                                             {{ $productsold->product->power->add }}</span>
                                                                                                     @endif
                                                                                                 </td>
@@ -708,13 +708,13 @@
                                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                                             /
                                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                                            *{{ $invoice_product->axis }}
                                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                                     @else
                                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                                             /
                                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                                            *{{ $invoice_product->axis }}
                                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                                     @endif
                                                                                                 </td>
