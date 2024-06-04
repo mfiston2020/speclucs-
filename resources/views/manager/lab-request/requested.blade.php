@@ -30,7 +30,7 @@
                             <h4 class="card-title">All Requested Products
                                 <span class="badge badge-danger badge-pill ml-2">
 
-                                        {{ number_format($invoicess->total()+$invoicess_out->total())}}
+                                        {{ number_format( count($invoicess) + count($invoicess_out))}}
                                 </span>
                             </h4>
                         </div>
@@ -56,7 +56,7 @@
                                                 aria-expanded="false">
                                                 Internal Order(s)
                                                 <span class="badge badge-danger badge-pill ml-2">
-                                                    {{($invoicess->total())}}
+                                                    {{count($invoicess)}}
                                                 </span>
                                             </a>
                                         </li>
@@ -66,7 +66,7 @@
                                                 aria-expanded="false">
                                                 External Order(s)
                                                 <span class="badge badge-danger badge-pill ml-2">
-                                                    {{ ($invoicess_out->total()) }}
+                                                    {{ count($invoicess_out) }}
                                                 </span>
                                             </a>
                                         </li>

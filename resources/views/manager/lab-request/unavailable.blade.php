@@ -32,7 +32,7 @@
                             <span class="hidden-xs-down">
                                 N/A Products
                                 <span class="badge badge-danger badge-pill">
-                                    {{ number_format($requests->total() + $requests_out->total()) }}
+                                    {{ number_format(count($requests) + count($requests_out)) }}
                                 </span>
                             </span>
                         </h4>
@@ -55,14 +55,14 @@
                         <a href="#incomplete-orders" class="nav-link active" data-toggle="tab"
                             aria-expanded="false">
                             Internal N/A
-                            <span class="badge badge-danger badge-pill">{{number_format($requests->total())}}</span>
+                            <span class="badge badge-danger badge-pill">{{number_format(count($requests))}}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#external-booking-orders" class="nav-link" data-toggle="tab"
                             aria-expanded="false">
                             External N/A
-                            <span class="badge badge-danger badge-pill">{{number_format($requests_out->total())}}</span>
+                            <span class="badge badge-danger badge-pill">{{number_format(count($requests_out))}}</span>
                         </a>
                     </li>
                 </ul>
@@ -148,7 +148,7 @@
                                                             @endforeach
                                                         </tbody>
 
-                                                        {{$requests->links()}}
+                                                        {{-- {{$requests->links()}} --}}
                                                     </table>
 
                                                     {{-- looping to add modals on the page separately from the table --}}
@@ -608,7 +608,7 @@
                                                             @endforeach
                                                         </tbody>
 
-                                                        {{$requests_out->links()}}
+                                                        {{-- {{$requests_out->links()}} --}}
                                                     </table>
 
                                                     {{-- looping to add modals on the page separately from the table --}}
