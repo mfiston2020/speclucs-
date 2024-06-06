@@ -102,7 +102,7 @@
                                         $sum += $user_perfomance_report->where('user_id',$user->id)->where('status','Confirmed')->count();
                                         $sum += $user_perfomance_report->where('user_id',$user->id)->where('status','sent to supplier')->count();
                                         $sum += $user_perfomance_report->where('user_id',$user->id)->where('status','sent to lab')->count();
-                                        $sum += $user_perfomance_report->where('user_id',$user->id)->where('status','in Process')->count();
+                                        $sum += $user_perfomance_report->where('user_id',$user->id)->where('status','in production')->count();
                                         $sum += $user_perfomance_report->where('user_id',$user->id)->where('status','completed')->count();
                                         $sum += $user_perfomance_report->where('user_id',$user->id)->where('status','delivered')->count();
                                         $sum += $user_perfomance_report->where('user_id',$user->id)->where('status','received')->count();
@@ -117,7 +117,7 @@
                                     <td>{{$user_perfomance_report->where('user_id',$user->id)->where('status','Confirmed')->count() }}</td>
                                     <td>{{$user_perfomance_report->where('user_id',$user->id)->where('status','sent to supplier')->count() }}</td>
                                     <td>{{$user_perfomance_report->where('user_id',$user->id)->where('status','sent to lab')->count() }}</td>
-                                    <td>{{$user_perfomance_report->where('user_id',$user->id)->where('status','in Process')->count() }}</td>
+                                    <td>{{$user_perfomance_report->where('user_id',$user->id)->where('status','in production')->count() }}</td>
                                     <td>{{$user_perfomance_report->where('user_id',$user->id)->where('status','completed')->count() }}</td>
                                     <td>{{$user_perfomance_report->where('user_id',$user->id)->where('status','delivered')->count() }}</td>
                                     <td>{{$user_perfomance_report->where('user_id',$user->id)->where('status','received')->count() }}</td>
