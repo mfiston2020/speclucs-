@@ -15,7 +15,7 @@
     <!-- Custom CSS -->
     <link href="{{ asset('dashboard/assets/dist/css/style.min.css')}}" rel="stylesheet">
     @stack('css')
-    @livewireStyles
+    {{-- @livewireStyles --}}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPHB4250YR"></script>
     <script>
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    @livewireScripts
+    {{-- @livewireScripts --}}
     <!-- All Jquery -->
     <script src="{{ asset('dashboard/assets/libs/jquery/dist/jquery.min.js')}}"></script>
     <!-- Bootstrap tether Core JavaScript -->
