@@ -12,7 +12,7 @@
                     <div class="card-body">
 
                         <div class="form-group mb-4">
-                            <select class="form-control" wire:model="customerType">
+                            <select class="form-control" wire:model.live="customerType">
                                 <option>
                                     *** Select Type ***
                                 </option>
@@ -27,7 +27,7 @@
 
                         @if ($customerType == 'existing')
                             <div class="form-group">
-                                <select class="form-control" wire:model="myCustomers">
+                                <select class="form-control" wire:model.live="myCustomers">
 
                                     <option>*** Select Customer ***</option>
 
@@ -54,7 +54,7 @@
                         <div class="card-body">
 
                             <div class="form-group mb-4">
-                                <select class="form-control" wire:model="productType">
+                                <select class="form-control" wire:model.live="productType">
                                     <option>
                                         *** Select Product ***
                                     </option>
@@ -92,7 +92,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Firstname</label>
-                                            <input type="text" wire:model.lazy="firstname" class="form-control"
+                                            <input type="text" wire:model.blur="firstname" class="form-control"
                                                 required="">
                                         </div>
                                     </div>
@@ -100,7 +100,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Lastname</label>
-                                            <input type="text" wire:model.lazy="lastname" class="form-control"
+                                            <input type="text" wire:model.blur="lastname" class="form-control"
                                                 required="">
                                         </div>
                                     </div>
@@ -109,7 +109,7 @@
                                             <label>Gender</label>
                                             <select
                                                 class="form-control @error('gender') is-invalid @enderror custom-select"
-                                                wire:model.lazy='gender'>
+                                                wire:model.blur='gender'>
                                                 <option>--Select your Gender--</option>
                                                 <option value="male">Male</option>
                                                 <option value="female">Female</option>
@@ -124,14 +124,14 @@
                                         <div class="form-group">
                                             <label>Date Of Birth</label>
                                             <input type="date" max="{{ date('Y-m-d') }}"
-                                                wire:model.lazy="date_of_birth" class="form-control" required="">
+                                                wire:model.blur="date_of_birth" class="form-control" required="">
                                         </div>
                                     </div>
                                     <!--/span-->
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Tin Number</label>
-                                            <input type="text" wire:model.lazy="tin_number" class="form-control"
+                                            <input type="text" wire:model.blur="tin_number" class="form-control"
                                                 required="">
                                         </div>
                                     </div>
@@ -139,7 +139,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Phone Number</label>
-                                            <input type="text" wire:model.lazy="phone" class="form-control"
+                                            <input type="text" wire:model.blur="phone" class="form-control"
                                                 required="">
                                         </div>
                                     </div>
@@ -184,20 +184,20 @@
 
                     @if ($productType == 'lens')
 
-                        <form wire:submit.prevent="saveSoldProduct" id="saveProduct1">
+                        <form wire:submit="saveSoldProduct" id="saveProduct1">
                             <div class="col-md-12 col-sm-12 mt-2">
                                 <div class="card">
                                     <div class="card-header">
                                         Lens Characteristics
                                     </div>
                                     <div class="card-body">
-                                        <input type="hidden" wire:model='invoice_id'>
+                                        <input type="hidden" wire:model.live='invoice_id'>
 
                                         <div class="row">
                                             <!--/span-->
                                             <div class="col-md-3 col-sm-12">
                                                 <div class="form-group">
-                                                    <select class="form-control" wire:model.lazy="type">
+                                                    <select class="form-control" wire:model.blur="type">
                                                         <option value="">
                                                             *** Select Type ***
                                                         </option>
@@ -211,7 +211,7 @@
                                             <!--/span-->
                                             <div class="col-md-3 col-sm-12">
                                                 <div class="form-group">
-                                                    <select class="form-control" wire:model.lazy="coating">
+                                                    <select class="form-control" wire:model.blur="coating">
                                                         <option>
                                                             *** Select Coating ***
                                                         </option>
@@ -225,7 +225,7 @@
                                             <!--/span-->
                                             <div class="col-md-3 col-sm-12">
                                                 <div class="form-group">
-                                                    <select class="form-control" wire:model.lazy='index'>
+                                                    <select class="form-control" wire:model.blur='index'>
                                                         <option>
                                                             *** Select Index ***
                                                         </option>
@@ -239,7 +239,7 @@
                                             <!--/span-->
                                             <div class="col-md-3 col-sm-12">
                                                 <div class="form-group">
-                                                    <select class="form-control" wire:model.lazy="chromatic">
+                                                    <select class="form-control" wire:model.blur="chromatic">
                                                         <option>
                                                             *** Select Chromatic Aspect ***
                                                         </option>
@@ -264,7 +264,7 @@
                                             <div class="d-flex justify-content-between">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
-                                                        id="rightEye" wire:model="rightEye"
+                                                        id="rightEye" wire:model.live="rightEye"
                                                         {{ $leftEye == true ? 'disabled' : '' }}>
                                                     <label class="custom-control-label" for="rightEye">Right</label>
                                                 </div>
@@ -273,29 +273,29 @@
                                             <div class="row">
                                                 <div class="form-group col-3">
                                                     <input type="text" class="form-control" id="right_s"
-                                                        placeholder="Sph" wire:model="r_sphere" value="">
+                                                        placeholder="Sph" wire:model.live="r_sphere" value="">
                                                 </div>
                                                 <div class="form-group col-3">
                                                     <input type="text" class="form-control" id="right_c"
-                                                        placeholder="Cyl" wire:model="r_cylinder" value="">
+                                                        placeholder="Cyl" wire:model.live="r_cylinder" value="">
                                                 </div>
                                                 <div class="form-group col-3">
                                                     <input type="text" class="form-control" id="right_x"
-                                                        placeholder="Axis" wire:model="r_axis" value="">
+                                                        placeholder="Axis" wire:model.live="r_axis" value="">
                                                 </div>
                                                 <div class="form-group col-3">
                                                     <input type="text" class="form-control" id="right_a"
-                                                        placeholder="Add" wire:model="r_addition" value="">
+                                                        placeholder="Add" wire:model.live="r_addition" value="">
                                                 </div>
                                                 <hr>
                                                 <div class="form-group col-6">
                                                     <input type="text" class="form-control" id="r_segment_height"
-                                                        placeholder="Seg Height" wire:model="r_segment_height"
+                                                        placeholder="Seg Height" wire:model.live="r_segment_height"
                                                         value="">
                                                 </div>
                                                 <div class="form-group col-6">
                                                     <input type="text" class="form-control" id="r_mono_pd"
-                                                        placeholder="Mono PD" wire:model="r_mono_pd" value="">
+                                                        placeholder="Mono PD" wire:model.live="r_mono_pd" value="">
                                                 </div>
 
                                             </div>
@@ -307,7 +307,7 @@
                                             <div class="d-flex justify-content-between">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
-                                                        id="leftEye" wire:model="leftEye"
+                                                        id="leftEye" wire:model.live="leftEye"
                                                         {{ $rightEye == true ? 'disabled' : '' }}>
                                                     <label class="custom-control-label" for="leftEye">Left</label>
                                                 </div>
@@ -316,29 +316,29 @@
                                             <div class="row">
                                                 <div class="form-group col-3">
                                                     <input type="text" class="form-control" id="left_s"
-                                                        placeholder="Sph" wire:model="l_sphere" value="">
+                                                        placeholder="Sph" wire:model.live="l_sphere" value="">
                                                 </div>
                                                 <div class="form-group col-3">
                                                     <input type="text" class="form-control" id="left_c"
-                                                        placeholder="Cyl" wire:model="l_cylinder" value="">
+                                                        placeholder="Cyl" wire:model.live="l_cylinder" value="">
                                                 </div>
                                                 <div class="form-group col-3">
                                                     <input type="text" class="form-control" id="left_x"
-                                                        placeholder="Axis" wire:model="l_axis" value="">
+                                                        placeholder="Axis" wire:model.live="l_axis" value="">
                                                 </div>
                                                 <div class="form-group col-3">
                                                     <input type="text" class="form-control" id="left_a"
-                                                        placeholder="Add" wire:model="l_addition" value="">
+                                                        placeholder="Add" wire:model.live="l_addition" value="">
                                                 </div>
                                                 <hr>
                                                 <div class="form-group col-6">
                                                     <input type="text" class="form-control" id="l_segment_height"
-                                                        placeholder="Seg Height" wire:model="l_segment_height"
+                                                        placeholder="Seg Height" wire:model.live="l_segment_height"
                                                         value="">
                                                 </div>
                                                 <div class="form-group col-6">
                                                     <input type="text" class="form-control" id="l_mono_pd"
-                                                        placeholder="Mono PD" wire:model="l_mono_pd" value="">
+                                                        placeholder="Mono PD" wire:model.live="l_mono_pd" value="">
                                                 </div>
 
                                             </div>
@@ -375,20 +375,20 @@
 
                                             <div class="form-group row">
                                                 @if ($lensProduct)
-                                                    <input type="hidden" wire:model="productID">
+                                                    <input type="hidden" wire:model.live="productID">
                                                     <div class="col-sm-12 col-md-2">
                                                         <label for="stock"
                                                             class="text-right control-label col-form-label">
                                                             Unit Price
                                                         </label>
-                                                        <input type="text" wire:model="product_unit_price"
+                                                        <input type="text" wire:model.live="product_unit_price"
                                                             class="form-control" readonly required>
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-2">
                                                         <label for="stock"
                                                             class="text-right control-label col-form-label">Stock</label>
-                                                        <input type="text" wire:model="product_stock"
+                                                        <input type="text" wire:model.live="product_stock"
                                                             class="form-control" readonly required>
                                                     </div>
                                                 @endif
@@ -400,7 +400,7 @@
                                                     </label>
                                                     <input type="number"
                                                         class="form-control @error('proquantity')  is-invalid @enderror"
-                                                        placeholder="0" wire:model.debounce.500ms="proquantity"
+                                                        placeholder="0" wire:model.live.debounce.500ms="proquantity"
                                                         min="1" max="{{ $product_stock }}">
                                                     <span class="text-info" wire:loading wire:target=proquantity>
                                                         Calculating...
@@ -415,7 +415,7 @@
                                                     <input type="text"
                                                         class="form-control @error('prodiscount')  is-invalid @enderror"
                                                         id="discount" placeholder="0"
-                                                        wire:model.debounce.500ms="prodiscount">
+                                                        wire:model.live.debounce.500ms="prodiscount">
                                                     <span class="text-info" wire:loading wire:target=prodiscount>
                                                         Calculating...
                                                     </span>
@@ -428,7 +428,7 @@
                                                     </label>
                                                     <input type="text" class="form-control" id="total_amount"
                                                         placeholder="0"
-                                                        wire:model.debounce.500ms="product_total_amount" readonly>
+                                                        wire:model.live.debounce.500ms="product_total_amount" readonly>
                                                 </div>
                                             </div>
 
@@ -439,7 +439,7 @@
                                                     <label for="discount"
                                                         class="text-right control-label col-form-label invalid">Insurance</label>
                                                     <select class="form-control form-select" required
-                                                        wire:model=insurance_type>
+                                                        wire:model.live=insurance_type>
                                                         <option value="">** Select Type **</option>
                                                         <option value="private">private</option>
                                                         @if (count($allInsurances) > 0)
@@ -463,7 +463,7 @@
                                                             class="form-control @error('insurance_percentage')  is-invalid @enderror"
                                                             id="insurance_percentage" max="100" min="0"
                                                             placeholder="0"
-                                                            wire:model.debounce.500ms="insurance_percentage">
+                                                            wire:model.live.debounce.500ms="insurance_percentage">
                                                     </div>
 
                                                     <div class="col-sm-3">
@@ -474,7 +474,7 @@
                                                         <input type="text"
                                                             class="form-control @error('insurance_number')  is-invalid @enderror"
                                                             id="insurance_number"
-                                                            wire:model.debounce.500ms="insurance_number">
+                                                            wire:model.live.debounce.500ms="insurance_number">
                                                     </div>
 
                                                     <div class="col-sm-3">
@@ -485,7 +485,7 @@
                                                         <input type="number"
                                                             class="form-control @error('approved_amount')  is-invalid @enderror"
                                                             id="approved_amount" min="0" placeholder="0"
-                                                            wire:model.debounce.500ms="approved_amount">
+                                                            wire:model.live.debounce.500ms="approved_amount">
                                                     </div>
                                             </div>
                                             <button type="button" wire:click="approvedAmount"
@@ -506,7 +506,7 @@
                                         Insurance Payment
                                     </label>
                                     <input type="text" class="form-control" id="total_amount" placeholder="0"
-                                        wire:model.debounce.500ms="insurance_payment" readonly>
+                                        wire:model.live.debounce.500ms="insurance_payment" readonly>
                                 </div>
 
                                 <div class="col-sm-6">
@@ -514,7 +514,7 @@
                                         Client Payment
                                     </label>
                                     <input type="text" class="form-control" id="total_amount" placeholder="0"
-                                        wire:model.debounce.500ms="patient_payment" readonly>
+                                        wire:model.live.debounce.500ms="patient_payment" readonly>
                                 </div>
                             </div>
             </div>
@@ -542,7 +542,7 @@
 
 @if ($productType == 'others')
     <div class="col-md-12 col-sm-12">
-        <form wire:submit.prevent="saveSoldProduct" id="saveProduct2">
+        <form wire:submit="saveSoldProduct" id="saveProduct2">
             <div class="card" id="non-lens">
                 <div class="card-header bg-info">
                     <h4 class="m-b-0 text-white">Product Information</h4>
@@ -556,7 +556,7 @@
                     </label>
                     <div class="col-sm-9">
                         <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
-                            name="product" wire:model="productSelected">
+                            name="product" wire:model.live="productSelected">
                             <option value="">Select</option>
                             @foreach ($nonlensProducts as $nonlensProducts)
                                 <option value="{{ $nonlensProducts->id }}">
@@ -568,14 +568,14 @@
                 </div>
 
                 @if ($productSelected)
-                    <input type="hidden" wire:model="productID">
-                    <input type="hidden" wire:model='invoice_id'>
+                    <input type="hidden" wire:model.live="productID">
+                    <input type="hidden" wire:model.live='invoice_id'>
 
 
                     <div class="form-group row">
                         <label for="stock" class="col-sm-3 text-right control-label col-form-label">Stock</label>
                         <div class="col-sm-9">
-                            <input type="text" wire:model="product_stock" class="form-control" placeholder="0"
+                            <input type="text" wire:model.live="product_stock" class="form-control" placeholder="0"
                                 readonly required>
                         </div>
                     </div>
@@ -585,7 +585,7 @@
                             Price</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" placeholder="0"
-                                wire:model="product_unit_price" readonly required>
+                                wire:model.live="product_unit_price" readonly required>
                         </div>
                     </div>
                 @endif
@@ -596,7 +596,7 @@
                     </label>
                     <div class="col-sm-9">
                         <input type="number" class="form-control @error('proquantity') is-invalid @enderror"
-                            wire:model.debounce.500ms="proquantity" placeholder="quantity" min="1">
+                            wire:model.live.debounce.500ms="proquantity" placeholder="quantity" min="1">
                     </div>
                 </div>
 
@@ -606,7 +606,7 @@
                     </label>
                     <div class="col-sm-9">
                         <input type="number" class="form-control @error('prodiscount') is-invalid @enderror"
-                            wire:model.debounce.500ms="prodiscount" placeholder="discount">
+                            wire:model.live.debounce.500ms="prodiscount" placeholder="discount">
                         <span class="text-warning mt-2" wire:loading wire:target="proquantity">calculating...</span>
                         <span class="text-warning mt-2" wire:loading wire:target="prodiscount">calculating...</span>
                     </div>
@@ -616,7 +616,7 @@
                     <label for="cost" class="col-sm-3 text-right control-label col-form-label invalid">Total
                         Amount</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" wire:model="product_total_amount" placeholder="0"
+                        <input type="text" class="form-control" wire:model.live="product_total_amount" placeholder="0"
                             readonly>
                     </div>
                 </div>
@@ -627,7 +627,7 @@
                     <label for="discount"
                         class="col-sm-4 text-right control-label col-form-label invalid">Insurance</label>
                     <div class="col-sm-8">
-                        <select class="form-control form-select" required wire:model=insurance_type>
+                        <select class="form-control form-select" required wire:model.live=insurance_type>
                             <option value="">** Select Type **</option>
                             <option value="private">private</option>
                             @if (count($allInsurances) > 0)
@@ -650,7 +650,7 @@
                             <input type="number"
                                 class="form-control @error('insurance_percentage')  is-invalid @enderror"
                                 id="insurance_percentage" max="100" min="0" placeholder="0"
-                                wire:model.debounce.500ms="insurance_percentage" required>
+                                wire:model.live.debounce.500ms="insurance_percentage" required>
                         </div>
                     </div>
 
@@ -661,7 +661,7 @@
                         <div class="col-sm-8">
                             <input type="number" class="form-control @error('approved_amount')  is-invalid @enderror"
                                 id="approved_amount" min="0" placeholder="0"
-                                wire:model.debounce.500ms="approved_amount">
+                                wire:model.live.debounce.500ms="approved_amount">
                             <button type="button" wire:click="approvedAmount"
                                 class="btn btn-default waves-effect waves-light mt-4">
                                 Calculate
@@ -677,7 +677,7 @@
                         </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="total_amount" placeholder="0"
-                                wire:model.debounce.500ms="insurance_payment" readonly>
+                                wire:model.live.debounce.500ms="insurance_payment" readonly>
                         </div>
                     </div>
 
@@ -687,7 +687,7 @@
                         </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="total_amount" placeholder="0"
-                                wire:model.debounce.500ms="patient_payment" readonly>
+                                wire:model.live.debounce.500ms="patient_payment" readonly>
                         </div>
                     </div>
                 @endif

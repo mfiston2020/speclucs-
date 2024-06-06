@@ -54,7 +54,7 @@
 
     <div class="card">
         @if (!$showTable)
-            <form wire:submit.prevent='searchInformation'>
+            <form wire:submit='searchInformation'>
                 @csrf
                 <div class="card-body">
 
@@ -64,7 +64,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label> Category </label>
-                                <select class="form-control" wire:model="category" id="">
+                                <select class="form-control" wire:model.live="category" id="">
                                     <option value="">*Select Category*</option>
                                     @foreach ($categories as $category)
                                         <option value="{{$category->id}}">{{$category->name}}</option>
@@ -80,7 +80,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label> Order Date </label>
-                                <input class="form-control" min="{{date('Y-m-d')}}" max="{{date('Y-m-d')}}" wire:model="order_date" type="date" id="example-time-input">
+                                <input class="form-control" min="{{date('Y-m-d')}}" max="{{date('Y-m-d')}}" wire:model.live="order_date" type="date" id="example-time-input">
                                 @error('order_date')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -91,7 +91,7 @@
                         <div class="col-md-4 mb-4">
                             <div class="form-group">
                                 <label> Expected Delivery Date </label>
-                                <input class="form-control" min="{{date('Y-m-d')}}" wire:model="delivery_date" type="date" id="example-time-input">
+                                <input class="form-control" min="{{date('Y-m-d')}}" wire:model.live="delivery_date" type="date" id="example-time-input">
                                 @error('delivery_date')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -107,7 +107,7 @@
                             <div class="form-group">
                                 <label for="example-color-input" class="col-2 col-form-label">Days</label>
                                 <div class="col-10">
-                                    <input type="range" wire:model="period_days" class="form-control" id="days" value="0" min="0" max="30">
+                                    <input type="range" wire:model.live="period_days" class="form-control" id="days" value="0" min="0" max="30">
                                     <span id="daysRangeShow">{{$period_days}}</span> Day(s)
                                 </div>
                                 @error('period_days')
@@ -121,7 +121,7 @@
                             <div class="form-group">
                                 <label for="example-color-input" class="col-2 col-form-label">Months</label>
                                 <div class="col-10">
-                                    <input type="range" wire:model="period_months" class="form-control" id="months" value="0" min="0" max="12">
+                                    <input type="range" wire:model.live="period_months" class="form-control" id="months" value="0" min="0" max="12">
                                     <span id="monthsRangeShow">{{$period_months}}</span> Month(s)
                                 </div>
                                 @error('period_months')

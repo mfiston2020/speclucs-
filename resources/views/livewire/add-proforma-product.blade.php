@@ -1,5 +1,5 @@
 <div>
-    {{-- <form wire:submit.prevent method="post">
+    {{-- <form wire:submit method="post">
         @csrf --}}
         <div class="row"></div>
 
@@ -21,7 +21,7 @@
                                 category</label>
                             <div class="col-sm-9">
                                 <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
-                                    name="category" wire:model='category' required>
+                                    name="category" wire:model.live='category' required>
                                     <option value=""> ** Select category **</option>
                                     <option value="lens" {{(old('category')=='lens')?'selected':''}}>
                                         Lens
@@ -44,7 +44,7 @@
                 <div class="card-header bg-info">
                     <h4 class="m-b-0 text-white">Lens Information</h4>
                 </div>
-                <form class="form-horizontal" wire:submit.prevent>
+                <form class="form-horizontal" wire:submit>
                     @csrf
                     <div class="form-body">
                         <br>
@@ -56,7 +56,7 @@
                                     <div class="form-group">
                                         <label>Lens Type</label>
                                         <select class="form-control custom-select" name="lens_type" id="lens_type"
-                                            wire:model.lazy="lensTpype" required>
+                                            wire:model.blur="lensTpype" required>
                                             <option value="">-- Select --</option>
                                             @foreach ($lens_types as $lens_type)
                                             <option value="{{$lens_type->id}}"
@@ -71,7 +71,7 @@
                                     <div class="form-group">
                                         <label>Index</label>
                                         <select class="form-control custom-select" name="findex" id="index" required
-                                            wire:model.lazyx="lensindex">
+                                            wire:model.blurx="lensindex">
                                             <option value="">-- Select --</option>
                                             @foreach ($index as $index)
                                             <option value="{{$index->id}}" {{(old('index')==$index->id)?'selected':''}}>
@@ -85,7 +85,7 @@
                                     <div class="form-group">
                                         <label>Chromatics Aspects</label>
                                         <select class="form-control custom-select" name="fchromatics" id="chromatics"
-                                            required wire:model="lenschromatics">
+                                            required wire:model.live="lenschromatics">
                                             <option value="">-- Select --</option>
                                             @foreach ($chromatics as $chromatics)
                                             <option value="{{$chromatics->id}}"
@@ -100,7 +100,7 @@
                                     <div class="form-group">
                                         <label>Coating</label>
                                         <select class="form-control custom-select" name="fcoating" id="coating" required
-                                            wire:model="lenscoating">
+                                            wire:model.live="lenscoating">
                                             <option value="">-- Select --</option>
                                             @foreach ($coatings as $coatings)
                                             <option value="{{$coatings->id}}"
@@ -118,7 +118,7 @@
                                     <div class="form-group">
                                         <label>SPHERE</label>
                                         <input type="text" class="form-control" name="fsphere"
-                                            value="{{ old('sphere')}}" id="sphere" required wire:model.lazy="lensphere">
+                                            value="{{ old('sphere')}}" id="sphere" required wire:model.blur="lensphere">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -126,7 +126,7 @@
                                         <label>CYLINDER</label>
                                         <input type="text" class="form-control" name="fcylinder"
                                             value="{{ old('cylinder')}}" id="cylinder" required
-                                            wire:model="lencylinder">
+                                            wire:model.live="lencylinder">
                                     </div>
                                 </div>
                                 @if ($tpype!='SINGLE VISION' && $tpype!=null)
@@ -134,14 +134,14 @@
                                     <div class="form-group" id="axiss">
                                         <label>AXIS</label>
                                         <input type="text" class="form-control" name="faxis" value="{{ old('axis')}}"
-                                            id="axis" required wire:model="lensaxis">
+                                            id="axis" required wire:model.live="lensaxis">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group" id="adds">
                                         <label>ADD</label>
                                         <input type="text" class="form-control" name="fadd" value="{{ old('add')}}"
-                                            id="add" required wire:model="lensadd">
+                                            id="add" required wire:model.live="lensadd">
                                     </div>
                                 </div>
                                 @endif
@@ -155,9 +155,9 @@
                                     <div class="form-group row">
                                         <div class="wrapper">
                                             <input type="radio" name="eye" id="option-1" value="right"
-                                                wire:model="lenseye">
+                                                wire:model.live="lenseye">
                                             <input type="radio" name="eye" id="option-2" value="left"
-                                                wire:model="lenseye">
+                                                wire:model.live="lenseye">
                                             <label for="option-1" class="option option-1">
                                                 <div class="dot"></div>
                                                 <span>Right</span>
@@ -259,7 +259,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
-                                    name="product_id" wire:model="nonLensProduct" required>
+                                    name="product_id" wire:model.live="nonLensProduct" required>
                                     <option value="">Select</option>
                                     @foreach ($non_lens_product as $product)
                                     <option value="{{$product->id}}" {{(old('product')==$product->id)?'selected':''}}>

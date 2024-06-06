@@ -54,7 +54,7 @@ class PurchaseOrder extends Component
 
         // dd($this->products[0]);
         $this->showTable=true;
-        $this->dispatchBrowserEvent('total-cost');
+        $this->dispatch('total-cost');
     }
 
     function changeOmition(){

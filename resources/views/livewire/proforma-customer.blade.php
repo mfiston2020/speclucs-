@@ -18,7 +18,7 @@
                             <div class="col-12 row">
                                 <label for="pname" class="col-sm-3 text-right control-label col-form-label">Patient category</label>
                                 <div class="col-sm-9">
-                                    <select class="select2 form-control custom-select" style="width: 100%; height:36px;" name="category" wire:model='category' required>
+                                    <select class="select2 form-control custom-select" style="width: 100%; height:36px;" name="category" wire:model.live='category' required>
                                         <option value=""> ** Select category **</option>
                                         <option value="new" {{(old('category')=='new')?'selected':''}}>
                                             New Patient
@@ -34,7 +34,7 @@
                                 <div class="col-12 row mt-2">
                                     <label for="pname" class="col-sm-3 text-right control-label col-form-label">Select Patient</label>
                                     <div class="col-sm-9">
-                                        <select class="select2 form-control custom-select" style="width: 100%; height:36px;" name="customer" wire:model='customerId' required>
+                                        <select class="select2 form-control custom-select" style="width: 100%; height:36px;" name="customer" wire:model.live='customerId' required>
                                             <option value=""> ** Select Patient **</option>
                                             @foreach ($customer as $customer)
                                                 <option value="{{$customer->id}}" {{(old('customer')==$customer->id)?'selected':''}}>

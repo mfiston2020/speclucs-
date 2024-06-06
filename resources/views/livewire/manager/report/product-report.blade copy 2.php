@@ -12,7 +12,7 @@
 <div class="col-md-12">
 
     <div class="card">
-        <form wire:submit.prevent='searchInformation'>
+        <form wire:submit='searchInformation'>
             @csrf
             <div class="card-body">
 
@@ -23,7 +23,7 @@
                             <label>Start Date </label>
                             <div class="input-group">
                                 <input type="date" class="form-control" placeholder="mm/dd/yyyy"
-                                    wire:model.lazy='start_date'>
+                                    wire:model.blur='start_date'>
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="icon-calender"></i></span>
                                 </div>
@@ -39,7 +39,7 @@
                             <label>Start Date </label>
                             <div class="input-group">
                                 <input type="date" class="form-control" placeholder="mm/dd/yyyy"
-                                    wire:model.lazy='end_date'>
+                                    wire:model.blur='end_date'>
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="icon-calender"></i></span>
                                 </div>

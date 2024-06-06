@@ -12,7 +12,7 @@
                             </div>
                             <div class="ml-auto d-flex no-block align-items-center">
                                 <div class="dl">
-                                    <select class="custom-select" wire:model="timeframe">
+                                    <select class="custom-select" wire:model.live="timeframe">
                                         <option value="0" selected>Monthly</option>
                                         <option value="1">Daily</option>
                                         <option value="2">Weekly</option>

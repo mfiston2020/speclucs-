@@ -14,7 +14,7 @@
         <div class="form-group">
             <label for="stock">Allow Clients To See My Stock</label><br>
             <label class="switch">
-                <input type="checkbox" id="st" wire:model="showStock" value="{{$user_info->show_stock}}" {{($user_info->show_stock=='1')?'checked':''}}>
+                <input type="checkbox" id="st" wire:model.live="showStock" value="{{$user_info->show_stock}}" {{($user_info->show_stock=='1')?'checked':''}}>
                 <span></span>
             </label>
         </div>
@@ -24,7 +24,7 @@
         <div class="form-group">
             <label for="seller_edit">Allow Seller To Edit Sales</label><br>
             <label class="switch">
-                <input type="checkbox" id="seller_edit" wire:model="selerEdit" value="{{$company->seller_edit}}" checked>
+                <input type="checkbox" id="seller_edit" wire:model.live="selerEdit" value="{{$company->seller_edit}}" checked>
                 <span></span>
             </label>
         </div>
@@ -47,7 +47,7 @@
                 <span>Allow Clients To See My Stock</span>
             </div>
             <div class="switch-toggle">
-                <input type="checkbox" id="wifi" wire:model="showStock" value="{{$user_info->show_stock}}" checked>
+                <input type="checkbox" id="wifi" wire:model.live="showStock" value="{{$user_info->show_stock}}" checked>
                 <label for="wifi"></label>
             </div>
         </div>
@@ -57,7 +57,7 @@
                 <span>Location</span>
             </div>
             <div class="switch-toggle">
-                <input type="checkbox" id="location" wire:model="selerEdit" value="{{$company->seller_edit}}" {{($company->seller_edit=='1')?'checked':''}}>
+                <input type="checkbox" id="location" wire:model.live="selerEdit" value="{{$company->seller_edit}}" {{($company->seller_edit=='1')?'checked':''}}>
                 <label for="location"></label>
             </div>
         </div>

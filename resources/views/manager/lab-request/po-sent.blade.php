@@ -222,7 +222,7 @@
                                                                                                             <address>
 
                                                                                                                 <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt=""
-                                                                                                                    height="100px">
+                                                                                                                    width="300px">
                                                                                                                 {{-- @if (Auth::user()->company_id != 3) --}}
                                                                                                                 <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
                                                                                                                 {{-- @endif --}}
@@ -267,13 +267,13 @@
                                                                                                                             <span>{{ $invoice_product->power->sphere }}
                                                                                                                                 /
                                                                                                                                 {{ $invoice_product->power->cylinder }}
-                                                                                                                                *{{ $invoice_product->axis }}
+                                                                                                                                *{{ $request->axis }}
                                                                                                                                 {{ $invoice_product->power->add }}</span>
                                                                                                                         @else
                                                                                                                             <span>{{ $invoice_product->power->sphere }}
                                                                                                                                 /
                                                                                                                                 {{ $invoice_product->power->cylinder }}
-                                                                                                                                *{{ $invoice_product->axis }}
+                                                                                                                                *{{ $request->axis }}
                                                                                                                                 {{ $invoice_product->power->add }}</span>
                                                                                                                         @endif
                                                                                                                     </div>
@@ -722,13 +722,13 @@
                                                                                                                             <span>{{ $invoice_product->power->sphere }}
                                                                                                                                 /
                                                                                                                                 {{ $invoice_product->power->cylinder }}
-                                                                                                                                *{{ $invoice_product->axis }}
+                                                                                                                                *{{ $request->axis }}
                                                                                                                                 {{ $invoice_product->power->add }}</span>
                                                                                                                         @else
                                                                                                                             <span>{{ $invoice_product->power->sphere }}
                                                                                                                                 /
                                                                                                                                 {{ $invoice_product->power->cylinder }}
-                                                                                                                                *{{ $invoice_product->axis }}
+                                                                                                                                *{{ $request->axis }}
                                                                                                                                 {{ $invoice_product->power->add }}</span>
                                                                                                                         @endif
                                                                                                                     </div>

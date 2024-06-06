@@ -10,7 +10,7 @@
 <div class="col-md-12">
 
     <div class="card">
-        <form wire:submit.prevent='searchInformation'>
+        <form wire:submit='searchInformation'>
             @csrf
             <div class="card-body">
 
@@ -21,7 +21,7 @@
                             <label>Closing Date </label>
                             <div class="input-group">
                                 <input type="date" class="form-control" placeholder="mm/dd/yyyy"
-                                    wire:model.lazy='closing_date'>
+                                    wire:model.blur='closing_date'>
                                 <img src="{{asset('dashboard/assets/images/loading.gif')}}" width="40" wire:loading wire:target='searchInformation'/>
                             </div>
                             @error('closing_date')
@@ -33,7 +33,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label> Category </label>
-                            <select class="form-control" wire:model="category" id="">
+                            <select class="form-control" wire:model.live="category" id="">
                                 <option value="">*Select Category*</option>
                                 @foreach ($categories as $category)
                                     <option value="{{$category->id}}">{{$category->name}}</option>
@@ -49,7 +49,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label> Lens Type </label>
-                                <select class="form-control" wire:model="lens_type" id="">
+                                <select class="form-control" wire:model.live="lens_type" id="">
                                     <option value="">*Select Category*</option>
                                     @foreach ($types as $type)
                                         <option value="{{$type->name}}">{{$type->name}}</option>

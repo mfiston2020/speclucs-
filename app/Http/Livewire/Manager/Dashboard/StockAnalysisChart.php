@@ -98,7 +98,7 @@ class StockAnalysisChart extends Component
         }
 
             // dd($fromPo);
-        $this->dispatchBrowserEvent('refreshChart');
+        $this->dispatch('refreshChart');
     }
 
     function mount(){

@@ -73,6 +73,26 @@
                 </div>
             </a>
 
+
+            {{-- Stock History report --}}
+            <a href="{{ route('manager.user.perfomance.report')}}" class="col-lg-4 col-md-6 text-success">
+                <div class="">
+                    <div class="card border-right border-success">
+                        <div class="card-body">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <span class="text-success display-6"><i class="ti-user"></i></span>
+                                </div>
+                                <div class="ml-auto">
+                                    <h3>User Perfomance Report</h3>
+                                    <small class="text-dark">Get perfomance of users by order placed!</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
             {{-- fifo --}}
             {{-- <a href="{{ route('manager.product.report') }}" class="col-lg-4 col-md-6 text-success">
                 <div class="">

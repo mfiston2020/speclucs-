@@ -1,7 +1,7 @@
 <div class="col-md-12">
 
     <div class="card">
-        <form wire:submit.prevent='searchInformation'>
+        <form wire:submit='searchInformation'>
             @csrf
             <div class="card-body">
 
@@ -10,7 +10,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Start Date </label>
-                            <input type="date" wire:model.lazy='start_date'
+                            <input type="date" wire:model.blur='start_date'
                                 class="@error('start_date') is-invalid @enderror form-control">
                             @error('start_date')
                                 <span class="text-danger">{{ $message }}</span>
@@ -21,7 +21,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>End Date </label>
-                            <input type="date" wire:model.lazy='end_date'
+                            <input type="date" wire:model.blur='end_date'
                                 class="@error('end_date') is-invalid @enderror form-control">
                             @error('end_date')
                                 <span class="text-danger">{{ $message }}</span>
@@ -34,7 +34,7 @@
                         <div class="form-group">
                             <label>Insurance</label>
                             <select class="form-control @error('insurance') is-invalid @enderror custom-select"
-                                wire:model.lazy='insurance'>
+                                wire:model.blur='insurance'>
                                 <option>-- Select your Insurance --</option>
                                 @foreach ($insurances as $insurance)
                                     <option value="{{ $insurance->id }}">{{ $insurance->insurance_name }}</option>
@@ -117,7 +117,7 @@
                         </button>
                         <hr>
                         <div class="table-responsive">
-                            <form wire:submit.prevent="addInvoiceCredit">
+                            <form wire:submit="addInvoiceCredit">
                                 <table id="zero_config" class="table table-striped table-bordered nowrap"
                                     style="width:100%">
                                     <thead>
@@ -144,7 +144,7 @@
                                             <tr>
                                                 <th>
                                                     @if ($invoice->hasbeeninvoiced()==null)
-                                                        <input class="invoicesID" wire:model="invoicesIds.{{$key}}.chekboxId" type="checkbox" value="{{$invoice->id}}"/>
+                                                        <input class="invoicesID" wire:model.live="invoicesIds.{{$key}}.chekboxId" type="checkbox" value="{{$invoice->id}}"/>
                                                     @endif
                                                 </th>
                                                 <th>{{ $key + 1 }}</th>
@@ -158,7 +158,7 @@
                                                 <th>{{ format_money($invoice->soldproduct_sum_insurance_payment) }}
                                                 </th>
                                                 {{-- <th>
-                                                    <input type="text" wire:model="invoiceCredit.{{$key}}.amount" id="">
+                                                    <input type="text" wire:model.live="invoiceCredit.{{$key}}.amount" id="">
                                                 </th> --}}
                                                 <th>
                                                     {{ format_money($invoice->soldproduct_sum_insurance_payment) }}

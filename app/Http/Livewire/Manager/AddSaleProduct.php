@@ -216,8 +216,8 @@ class AddSaleProduct extends Component
             try {
                 $sold->save();
                 $this->resetInput();
-                $this->emitSelf('product-added');
-                $this->dispatchBrowserEvent('hideProductNotFoundModal');
+                $this->dispatch('product-added')->self();
+                $this->dispatch('hideProductNotFoundModal');
             } catch (\Throwable $th) {
                 return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }
@@ -230,8 +230,8 @@ class AddSaleProduct extends Component
                 $product->save();
 
                 $this->resetInput();
-                $this->emitSelf('product-added');
-                $this->dispatchBrowserEvent('hideProductNotFoundModal');
+                $this->dispatch('product-added')->self();
+                $this->dispatch('hideProductNotFoundModal');
             } catch (\Throwable $th) {
                 return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }
@@ -358,8 +358,8 @@ class AddSaleProduct extends Component
 
                         $this->lensProduct    =   \App\Models\Product::find($product_id);
                         if (!$this->lensProduct) {
-                            $this->emitSelf('product-not-found');
-                            $this->dispatchBrowserEvent('openProductNotFoundModal');
+                            $this->dispatch('product-not-found')->self();
+                            $this->dispatch('openProductNotFoundModal');
                             $this->showProductDetails   =   false;
                         } else {
                             $this->productID            =   $this->lensProduct[0]->id;
@@ -368,9 +368,9 @@ class AddSaleProduct extends Component
                             $this->showProductDetails   =   true;
                         }
                     } else {
-                        $this->emitSelf('product-not-found');
+                        $this->dispatch('product-not-found')->self();
                         $this->showProductDetails   =   false;
-                        $this->dispatchBrowserEvent('openProductNotFoundModal');
+                        $this->dispatch('openProductNotFoundModal');
                     }
                 } else {
                     if ($this->rightEye == true) {
@@ -408,8 +408,8 @@ class AddSaleProduct extends Component
 
                         $this->lensProduct    =   \App\Models\Product::find($product_id);
                         if (!$this->lensProduct) {
-                            $this->dispatchBrowserEvent('openProductNotFoundModal');
-                            $this->emitSelf('product-not-found');
+                            $this->dispatch('openProductNotFoundModal');
+                            $this->dispatch('product-not-found')->self();
                             $this->showProductDetails   =   false;
                         } else {
                             $this->productID            =   $this->lensProduct[0]->id;
@@ -418,14 +418,14 @@ class AddSaleProduct extends Component
                             $this->showProductDetails   =   true;
                         }
                     } else {
-                        $this->dispatchBrowserEvent('openProductNotFoundModal');
-                        $this->emitSelf('product-not-found');
+                        $this->dispatch('openProductNotFoundModal');
+                        $this->dispatch('product-not-found')->self();
                         $this->showProductDetails   =   false;
                     }
                 }
             } else {
-                $this->dispatchBrowserEvent('openProductNotFoundModal');
-                $this->emitSelf('product-not-found');
+                $this->dispatch('openProductNotFoundModal');
+                $this->dispatch('product-not-found')->self();
                 $this->showProductDetails   =   false;
             }
         } else {
@@ -518,7 +518,7 @@ class AddSaleProduct extends Component
             try {
                 $sold->save();
                 $this->resetInput();
-                $this->emitSelf('product-added');
+                $this->dispatch('product-added')->self();
             } catch (\Throwable $th) {
                 return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }
@@ -531,7 +531,7 @@ class AddSaleProduct extends Component
                 $product->save();
 
                 $this->resetInput();
-                $this->emitSelf('product-added');
+                $this->dispatch('product-added')->self();
             } catch (\Throwable $th) {
                 return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }

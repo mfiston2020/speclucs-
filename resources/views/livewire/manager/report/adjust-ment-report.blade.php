@@ -14,7 +14,7 @@
 
 
     <div class="card">
-        <form wire:submit.prevent='searchInformation'>
+        <form wire:submit='searchInformation'>
             @csrf
             <div class="card-body">
 
@@ -25,7 +25,7 @@
                             <label>Start Date </label>
                             <div class="input-group">
                                 <input type="date" class="form-control" placeholder="mm/dd/yyyy"
-                                    wire:model.lazy='start_date'>
+                                    wire:model.blur='start_date'>
                             </div>
                             @error('start_date')
                                 <span class="text-danger">{{ $message }}</span>
@@ -38,7 +38,7 @@
                             <label>End Date </label>
                             <div class="input-group">
                                 <input type="date" class="form-control" placeholder="mm/dd/yyyy"
-                                    wire:model.lazy='end_date'>
+                                    wire:model.blur='end_date'>
                             </div>
                             @error('end_date')
                                 <span class="text-danger">{{ $message }}</span>
@@ -49,7 +49,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label> Category </label>
-                            <select class="form-control" wire:model="category" id="">
+                            <select class="form-control" wire:model.live="category" id="">
                                 <option value="">*Select Category*</option>
                                 @foreach ($categories as $category)
                                     <option value="{{$category->id}}">{{$category->name}}</option>
@@ -65,7 +65,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label> Lens Type </label>
-                                <select class="form-control" wire:model="lens_type" id="">
+                                <select class="form-control" wire:model.live="lens_type" id="">
                                     <option value="">*Select Category*</option>
                                     @foreach ($types as $type)
                                         <option value="{{$type->name}}">{{$type->name}}</option>

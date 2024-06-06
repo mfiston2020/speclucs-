@@ -28,7 +28,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <h4 class="card-title">All Requested Products
+                        <h4 class="card-title">
+                            All Requested Products
                         </h4>
                     </div>
                     {{-- ============================== --}}
@@ -128,7 +129,7 @@
                                                                 @endif
                                                             </td>
                                                             {{-- <td>
-                                                                                            {{ $request->supplier }}
+                                                                    {{ $request->supplier }}
                                                             </td> --}}
                                                             <td>
                                                                 {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
@@ -385,14 +386,14 @@
                                                                                                 {{ $invoice_product->power->sphere }}
                                                                                                 /
                                                                                                 {{ $invoice_product->power->cylinder }}
-                                                                                                *{{ $invoice_product->power->axis }}
+                                                                                                *{{ $request->axis }}
                                                                                                 {{ $invoice_product->power->add }}
                                                                                             </span>
                                                                                         @else
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                            *{{ $request->axis }}
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         @endif
                                                                                     </div>
@@ -835,7 +836,7 @@
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                            *{{ $request->axis }}
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         {{-- <span>{{ $invoice_product->power->sphere }}
                                                                                             /
@@ -844,7 +845,7 @@
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $invoice_product->power->axis }}
+                                                                                            *{{ $request->axis }}
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         @endif
                                                                                     </div>

@@ -2,7 +2,7 @@
 <div class="col-md-12">
 
         <div class="card">
-            <form wire:submit.prevent='searchInformation'>
+            <form wire:submit='searchInformation'>
                 @csrf
                 <div class="card-body">
 
@@ -11,7 +11,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Year </label>
-                                <select class="form-control @error('year') is-invalid @enderror custom-select" wire:model.lazy='year'>
+                                <select class="form-control @error('year') is-invalid @enderror custom-select" wire:model.blur='year'>
                                     <option>--Select your Year--</option>
                                     <option>2023</option>
                                     {{-- <option>20</option>
@@ -24,7 +24,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Month</label>
-                                <select class="form-control @error('month') is-invalid @enderror custom-select" wire:model.lazy='month'>
+                                <select class="form-control @error('month') is-invalid @enderror custom-select" wire:model.blur='month'>
                                     <option>--Select your Month--</option>
                                     @foreach ($months as $month)
                                         <option>{{$month}}</option>
@@ -38,7 +38,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Insurance</label>
-                                <select class="form-control @error('insurance') is-invalid @enderror custom-select" wire:model.lazy='insurance'>
+                                <select class="form-control @error('insurance') is-invalid @enderror custom-select" wire:model.blur='insurance'>
                                     <option>-- Select your Insurance --</option>
                                     @foreach ($insurances as $insurance)
                                         <option value="{{ $insurance->id }}">{{ $insurance->insurance_name }}</option>

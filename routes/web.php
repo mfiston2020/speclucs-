@@ -6,6 +6,7 @@ use App\Http\Livewire\Manager\Report\AdjustMentReport;
 use App\Http\Livewire\Manager\Report\ClosingReport;
 use App\Http\Livewire\Manager\Report\ProductReport;
 use App\Http\Livewire\Manager\Report\StockHistory;
+use App\Http\Livewire\Manager\Report\UserPerfomanceReport;
 use App\Http\Livewire\Manager\Sales\ProductRetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -212,7 +213,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::post('/request/sendToSupplier', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendRequestToSupplier'])->name('sent.request.send.to.supplier');
     Route::post('/request/sendTolab', [\App\Http\Controllers\Manager\LabRequestController::class, 'sendRequestTolab'])->name('sent.request.send.to.lab');
 
-    Route::get('/request/labRequest/na',[\App\Http\Controllers\Manager\LabRequestController::class,'naOrders'])->name('order.not.available');
+    Route::get('/request/labRequest/na', [\App\Http\Controllers\Manager\LabRequestController::class, 'naOrders'])->name('order.not.available');
 
 
     // pending orders
@@ -311,6 +312,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     // ====================== Routes about Reporting ==========================
     Route::get('/report/closing', ClosingReport::class)->name('closing.report');
     Route::get('/report/adjusted', AdjustMentReport::class)->name('adjustment.report');
+    Route::get('/report/user-perfomance', UserPerfomanceReport::class)->name('user.perfomance.report');
     Route::get('/report', [\App\Http\Controllers\Manager\ReportingController::class, 'index'])->name('report');
 
     // ====================== Routes about Users management ==========================
@@ -374,7 +376,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::post('/acceptCredits', [\App\Http\Controllers\Manager\OrderCreditsController::class, 'acceptcredit'])->name('accept.credit');
 
     // ====================== Routes about Purchase Orders ==========================
-    Route::get('/purchaseOrder',PurchaseOrder::class)->name('po');
+    Route::get('/purchaseOrder', PurchaseOrder::class)->name('po');
     // Route::get('/purchase order', [\App\Http\Controllers\Manager\PurchaseOrderController::class, 'index'])->name('po');
     // Route::get('/purchase_order', [\App\Http\Controllers\Manager\PurchaseOrderController::class, 'proceed'])->name('proceed');
     // Route::post('/purchase_order_quotation', [\App\Http\Controllers\Manager\PurchaseOrderController::class, 'quotation'])->name('quotation');

@@ -136,7 +136,7 @@ class ProductRetail extends Component
     function showModal($msg)
     {
         $this->informationMessage   =   $msg;
-        $this->dispatchBrowserEvent('showwarningModal');
+        $this->dispatch('showwarningModal');
     }
 
     // checking product availability

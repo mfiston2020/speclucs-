@@ -1,6 +1,6 @@
 <div class="col-md-12 col-sm-12">
 
-    <form wire:submit.prevent="saveOrder">
+    <form wire:submit="saveOrder">
         <div class="col-md-12 col-sm-12 mt-2">
 
             {{-- <div class="col-12"> --}}
@@ -41,7 +41,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Cloud ID</label>
-                                    <input type="text" wire:model.lazy="cloud_id" class="form-control">
+                                    <input type="text" wire:model.blur="cloud_id" class="form-control">
                                 </div>
                             </div>
 
@@ -49,7 +49,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Hospital Name</label>
-                                    <input type="text" wire:model.lazy="hospital_name" class="form-control">
+                                    <input type="text" wire:model.blur="hospital_name" class="form-control">
                                 </div>
                             </div>
 
@@ -57,7 +57,7 @@
                                 <div class="form-group">
                                     <label>Insurance</label>
                                     <select class="form-control @error('insurance_type') is-invalid @enderror custom-select"
-                                        wire:model.lazy='insurance_type' required>
+                                        wire:model.blur='insurance_type' required>
                                         <option value="">** Select Type **</option>
                                         <option value="private" selected>private</option>
                                         @if (count($insuranceList) > 0)
@@ -94,7 +94,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Firstname</label>
-                                <input type="text" wire:model.lazy="firstname" class="form-control" {{$isCloudOrder=='no'?'required':''}}>
+                                <input type="text" wire:model.blur="firstname" class="form-control" {{$isCloudOrder=='no'?'required':''}}>
                             </div>
                         </div>
 
@@ -102,7 +102,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Lastname</label>
-                                <input type="text" wire:model.lazy="lastname" class="form-control" {{$isCloudOrder=='no'?'required':''}}>
+                                <input type="text" wire:model.blur="lastname" class="form-control" {{$isCloudOrder=='no'?'required':''}}>
                             </div>
                         </div>
 
@@ -110,7 +110,7 @@
                             <div class="form-group">
                                 <label>Gender</label>
                                 <select class="form-control @error('gender') is-invalid @enderror custom-select"
-                                    wire:model.lazy='gender'  {{$isCloudOrder=='no'?'required':''}}>
+                                    wire:model.blur='gender'  {{$isCloudOrder=='no'?'required':''}}>
                                     <option value="">--Select your Gender--</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
@@ -125,7 +125,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Date Of Birth</label>
-                                <input type="date" max="{{ date('Y-m-d') }}" wire:model.lazy="date_of_birth"
+                                <input type="date" max="{{ date('Y-m-d') }}" wire:model.blur="date_of_birth"
                                     class="form-control" {{$isCloudOrder=='no'?'required':''}}>
                             </div>
                         </div>
@@ -134,7 +134,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Tin Number</label>
-                                <input type="text" wire:model.lazy="tin_number" class="form-control">
+                                <input type="text" wire:model.blur="tin_number" class="form-control">
                             </div>
                         </div>
 
@@ -142,7 +142,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Phone Number</label>
-                                <input type="text" wire:model.lazy="phone" class="form-control" {{$isCloudOrder=='no'?'required':''}}>
+                                <input type="text" wire:model.blur="phone" class="form-control" {{$isCloudOrder=='no'?'required':''}}>
                             </div>
                         </div>
 
@@ -150,7 +150,7 @@
                             <div class="form-group">
                                 <label>Insurance</label>
                                 <select style="width: 100%; height:2rem;"  class="form-control @error('insurance_type') is-invalid @enderror custom-select"
-                                    wire:model.lazy='insurance_type' required>
+                                    wire:model.blur='insurance_type' required>
                                     <option value="">** Select Type **</option>
                                     <option value="private">private</option>
                                     @if (count($insuranceList) > 0)
@@ -174,7 +174,7 @@
                             </label>
                             <input type="text" class="form-control @error('affiliate')  is-invalid @enderror"
                                 id="affiliate" placeholder="ex: Fiston MUNYAMPETA"
-                                wire:model.debounce.500ms="affiliate">
+                                wire:model.live.debounce.500ms="affiliate">
                             @error('affiliate')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -185,7 +185,7 @@
                                 Ins. Number
                             </label>
                             <input type="text" class="form-control @error('insurance_number')  is-invalid @enderror"
-                                id="insurance_number" placeholder="0" wire:model.debounce.500ms="insurance_number">
+                                id="insurance_number" placeholder="0" wire:model.live.debounce.500ms="insurance_number">
                             @error('insurance_number')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -209,7 +209,7 @@
                             <!--/span-->
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
-                                    <select class="form-control" wire:model.lazy="lens_type">
+                                    <select class="form-control" wire:model.blur="lens_type">
                                         <option value="">
                                             *** Select Type ***
                                         </option>
@@ -223,7 +223,7 @@
                             <!--/span-->
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
-                                    <select class="form-control" wire:model.lazy="lens_coating">
+                                    <select class="form-control" wire:model.blur="lens_coating">
                                         <option value=>
                                             *** Select Coating ***
                                         </option>
@@ -237,7 +237,7 @@
                             <!--/span-->
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
-                                    <select class="form-control" wire:model.lazy='lens_index'>
+                                    <select class="form-control" wire:model.blur='lens_index'>
                                         <option value="">
                                             *** Select Index ***
                                         </option>
@@ -251,7 +251,7 @@
                             <!--/span-->
                             <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
-                                    <select class="form-control" wire:model.lazy="lens_chromatic">
+                                    <select class="form-control" wire:model.blur="lens_chromatic">
                                         <option value="">
                                             *** Select Chromatic Aspect ***
                                         </option>
@@ -272,7 +272,7 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="rightEye"
-                                            wire:model.lazy="rightEye">
+                                            wire:model.blur="rightEye">
                                         <label class="custom-control-label" for="rightEye">Right</label>
                                     </div>
                                 </div>
@@ -280,27 +280,27 @@
                                 <div class="row">
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="right_s" placeholder="Sph"
-                                            wire:model.lazy="r_sphere">
+                                            wire:model.blur="r_sphere">
                                     </div>
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="right_c" placeholder="Cyl"
-                                            wire:model.lazy="r_cylinder">
+                                            wire:model.blur="r_cylinder">
                                     </div>
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="right_x" placeholder="Axis"
-                                            wire:model.lazy="r_axis">
+                                            wire:model.blur="r_axis">
                                     </div>
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="right_a" placeholder="Add"
-                                            wire:model.lazy="r_addition">
+                                            wire:model.blur="r_addition">
                                     </div>
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="r_segment_height"
-                                            placeholder="Seg Height" wire:model.lazy="r_segment_height">
+                                            placeholder="Seg Height" wire:model.blur="r_segment_height">
                                     </div>
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="r_mono_pd"
-                                            placeholder="Mono PD" wire:model.lazy="r_mono_pd">
+                                            placeholder="Mono PD" wire:model.blur="r_mono_pd">
                                     </div>
                                     <hr>
 
@@ -312,7 +312,7 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="leftEye"
-                                            wire:model="leftEye">
+                                            wire:model.live="leftEye">
                                         <label class="custom-control-label" for="leftEye">Left</label>
                                     </div>
                                 </div>
@@ -320,27 +320,27 @@
                                 <div class="row">
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="left_s" placeholder="Sph"
-                                            wire:model.lazy="l_sphere">
+                                            wire:model.blur="l_sphere">
                                     </div>
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="left_c" placeholder="Cyl"
-                                            wire:model.lazy="l_cylinder">
+                                            wire:model.blur="l_cylinder">
                                     </div>
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="left_x" placeholder="Axis"
-                                            wire:model.lazy="l_axis">
+                                            wire:model.blur="l_axis">
                                     </div>
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="left_a" placeholder="Add"
-                                            wire:model.lazy="l_addition">
+                                            wire:model.blur="l_addition">
                                     </div>
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="l_segment_height"
-                                            placeholder="Seg Height" wire:model.lazy="l_segment_height">
+                                            placeholder="Seg Height" wire:model.blur="l_segment_height">
                                     </div>
                                     <div class="form-group col-4">
                                         <input type="text" class="form-control" id="l_mono_pd"
-                                            placeholder="Mono PD" wire:model.lazy="l_mono_pd">
+                                            placeholder="Mono PD" wire:model.blur="l_mono_pd">
                                     </div>
 
                                 </div>
@@ -365,7 +365,7 @@
                             <div class="col-md-3 col-sm-12">
                                 <label>Frames</label>
                                 <div class="form-group">
-                                    <select class="form-control custom-select" style="width: 100%; height:2rem;"  id="frame" wire:model.lazy="frame">
+                                    <select class="form-control custom-select" style="width: 100%; height:2rem;"  id="frame" wire:model.blur="frame">
                                         <option value="">
                                             *** Select Type ***
                                         </option>
@@ -383,25 +383,25 @@
                                 <label>Stock</label>
                                 <input type="text"
                                     class="form-control {{ $frame_stock == 0 && $frame_stock != null ? 'border border-danger' : '' }}"
-                                    id="frame_stock" placeholder="Stock" wire:model.lazy="frame_stock" readonly>
+                                    id="frame_stock" placeholder="Stock" wire:model.blur="frame_stock" readonly>
                             </div>
 
                             <div class="form-group col-1">
                                 <label>U. Price</label>
                                 <input type="text" class="form-control" id="frame_unit_price"
-                                    placeholder="Unit Price" wire:model.lazy="frame_unit_price" readonly>
+                                    placeholder="Unit Price" wire:model.blur="frame_unit_price" readonly>
                             </div>
 
                             <div class="form-group col-1">
                                 <label>Quantity</label>
                                 <input type="number" class="form-control" id="frame_quantity" placeholder="Qty"
-                                    wire:model.lazy="frame_quantity" readonly>
+                                    wire:model.blur="frame_quantity" readonly>
                             </div>
 
                             <div class="form-group col-2">
                                 <label>Price Adj</label>
                                 <input type="number" class="form-control" id="frame_price_adjust"
-                                    placeholder="Price Adj" wire:model="frame_price_adjust">
+                                    placeholder="Price Adj" wire:model.live="frame_price_adjust">
                             </div>
 
                             <div class="form-group col-2">
@@ -413,7 +413,7 @@
                             <div class="form-group col-2">
                                 <label>Location</label>
                                 <input type="text" class="form-control" id="frame_location"
-                                    placeholder="Location" wire:model.lazy="frame_location" readonly>
+                                    placeholder="Location" wire:model.blur="frame_location" readonly>
                             </div>
                         </div>
                         @if (!is_null($frame_stock))
@@ -454,7 +454,7 @@
                                 <div class="col-md-3 col-sm-12">
                                     <label>Products</label>
                                     <div class="form-group">
-                                        <select class="form-control custom-select" id="accessory" style="width: 100%; height:2rem;" wire:model.lazy="accessory">
+                                        <select class="form-control custom-select" id="accessory" style="width: 100%; height:2rem;" wire:model.blur="accessory">
                                             <option value="">
                                                 *** Select Product ***
                                             </option>
@@ -471,26 +471,26 @@
                                     <label>Stock</label>
                                     <input type="text"
                                         class="form-control {{ $accessory_stock <= 0 && $accessory_stock != null ? 'border border-danger' : '' }}"
-                                        id="accessory_stock" placeholder="Stock" wire:model.lazy="accessory_stock"
+                                        id="accessory_stock" placeholder="Stock" wire:model.blur="accessory_stock"
                                         readonly>
                                 </div>
 
                                 <div class="form-group col-1">
                                     <label>U. Price</label>
                                     <input type="text" class="form-control border-red-500" id="accessory_unit_price"
-                                        placeholder="Unit Price" wire:model.lazy="accessory_unit_price" readonly>
+                                        placeholder="Unit Price" wire:model.blur="accessory_unit_price" readonly>
                                 </div>
 
                                 <div class="form-group col-1">
                                     <label>Quantity</label>
                                     <input type="number" class="form-control" id="accessory_quantity" placeholder="Qty"
-                                        wire:model="accessory_quantity" max="{{$accessory_quantity}}" min="1">
+                                        wire:model.live="accessory_quantity" max="{{$accessory_quantity}}" min="1">
                                 </div>
 
                                 <div class="form-group col-2">
                                     <label>Price Adj</label>
                                     <input type="number" class="form-control" id="accessory_price_adjust"
-                                        placeholder="Price Adj" wire:model="accessory_price_adjust">
+                                        placeholder="Price Adj" wire:model.live="accessory_price_adjust">
                                 </div>
 
                                 <div class="form-group col-2">
@@ -502,7 +502,7 @@
                                 <div class="form-group col-2">
                                     <label>Location</label>
                                     <input type="text" class="form-control" id="accessory_location"
-                                        placeholder="Location" wire:model.lazy="accessory_location" readonly>
+                                        placeholder="Location" wire:model.blur="accessory_location" readonly>
                                 </div>
                             </div>
                             {{-- <div class="col-12 row">
@@ -510,7 +510,7 @@
                                 <div class="col-md-2 col-sm-12">
                                     <label>Products</label>
                                     <div class="form-group">
-                                        <select class="form-control custom-select" id="accessory" style="width: 100%; height:2rem;" wire:model.lazy="accessory">
+                                        <select class="form-control custom-select" id="accessory" style="width: 100%; height:2rem;" wire:model.blur="accessory">
                                             <option value="">
                                                 *** Select Product ***
                                             </option>
@@ -527,26 +527,26 @@
                                     <label>Stock</label>
                                     <input type="text"
                                         class="form-control {{ $accessory_stock <= 0 && $accessory_stock != null ? 'border border-danger' : '' }}"
-                                        id="accessory_stock" placeholder="Stock" wire:model.lazy="accessory_stock"
+                                        id="accessory_stock" placeholder="Stock" wire:model.blur="accessory_stock"
                                         readonly>
                                 </div>
 
                                 <div class="form-group col-1">
                                     <label>U. Price</label>
                                     <input type="text" class="form-control border-red-500" id="accessory_unit_price"
-                                        placeholder="Unit Price" wire:model.lazy="accessory_unit_price" readonly>
+                                        placeholder="Unit Price" wire:model.blur="accessory_unit_price" readonly>
                                 </div>
 
                                 <div class="form-group col-1">
                                     <label>Quantity</label>
                                     <input type="number" class="form-control" id="accessory_quantity" placeholder="Qty"
-                                        wire:model="accessory_quantity" max="{{$accessory_quantity}}" min="1">
+                                        wire:model.live="accessory_quantity" max="{{$accessory_quantity}}" min="1">
                                 </div>
 
                                 <div class="form-group col-2">
                                     <label>Price Adj</label>
                                     <input type="number" class="form-control" id="accessory_price_adjust"
-                                        placeholder="Price Adj" wire:model="accessory_price_adjust">
+                                        placeholder="Price Adj" wire:model.live="accessory_price_adjust">
                                 </div>
 
                                 <div class="form-group col-2">
@@ -558,7 +558,7 @@
                                 <div class="form-group col-2">
                                     <label>Location</label>
                                     <input type="text" class="form-control" id="accessory_location"
-                                        placeholder="Location" wire:model.lazy="accessory_location" readonly>
+                                        placeholder="Location" wire:model.blur="accessory_location" readonly>
                                 </div>
                             </div> --}}
                         </div>
@@ -656,33 +656,33 @@
                                         <div class="form-group col-2">
                                             <label>Total Amount</label>
                                             <input type="text" class="form-control" id="total_lens_amount"
-                                                placeholder="Total Amount" wire:model="total_lens_amount" readonly>
+                                                placeholder="Total Amount" wire:model.live="total_lens_amount" readonly>
                                         </div>
 
                                         <div class="form-group col-2">
                                             <label>Insurance Percentage</label>
                                             <input type="number" min="0" max="100" class="form-control"
                                                 id="insurance_percentage" placeholder="Ins. %"
-                                                wire:model="insurance_percentage_lens">
+                                                wire:model.live="insurance_percentage_lens">
                                         </div>
 
                                         <div class="form-group col-2">
                                             <label>Ins Apprv</label>
                                             <input type="text" class="form-control" id="lens_approved_amount"
-                                                placeholder="approved amt" wire:model="insurance_approved_lens">
+                                                placeholder="approved amt" wire:model.live="insurance_approved_lens">
                                         </div>
 
                                         <div class="form-group col-2">
                                             <label>Ins Payment</label>
                                             <input type="text" class="form-control" id="insurance_payment_lens"
-                                                placeholder="Ins. payment" wire:model="insurance_payment_lens"
+                                                placeholder="Ins. payment" wire:model.live="insurance_payment_lens"
                                                 readonly>
                                         </div>
 
                                         <div class="form-group col-2">
                                             <label>Pt Payment</label>
                                             <input type="text" class="form-control" id="patient_payment_lens"
-                                                placeholder="Pt. Payment" wire:model="patient_payment_lens" readonly>
+                                                placeholder="Pt. Payment" wire:model.live="patient_payment_lens" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -710,26 +710,26 @@
                                         <label>Insurance Percentage</label>
                                         <input type="text" min="0" max="100" class="form-control"
                                             id="insurance_percentage_frame" placeholder="Ins. %"
-                                            wire:model="insurance_percentage_frame">
+                                            wire:model.live="insurance_percentage_frame">
                                     </div>
 
                                     <div class="form-group col-2">
                                         <label>Ins Apprv</label>
                                         <input type="text" class="form-control" id="insurance_approved_frame"
-                                            placeholder="approved Amt" wire:model="insurance_approved_frame">
+                                            placeholder="approved Amt" wire:model.live="insurance_approved_frame">
                                     </div>
 
                                     <div class="form-group col-2">
                                         <label>Ins Payment</label>
                                         <input type="text" class="form-control" id="insurance_payment_frame"
-                                            placeholder="Ins. payment" wire:model.lazy="insurance_payment_frame"
+                                            placeholder="Ins. payment" wire:model.blur="insurance_payment_frame"
                                             readonly>
                                     </div>
 
                                     <div class="form-group col-2">
                                         <label>Pt Payment</label>
                                         <input type="text" class="form-control" id="patient_payment_frame"
-                                            placeholder="Pt. Payment" wire:model="patient_payment_frame" readonly>
+                                            placeholder="Pt. Payment" wire:model.live="patient_payment_frame" readonly>
                                     </div>
                                 </div>
                             </div>
