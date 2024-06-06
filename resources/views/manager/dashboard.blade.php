@@ -14,9 +14,6 @@
 @section('content')
 
 
-
-{{-- <span hidden>{{$company=\App\Models\CompanyInformation::find(Auth::user()->company_id)}}</span> --}}
-
     <div class="container-fluid">
 
 
@@ -266,10 +263,7 @@
             </div>
         @endif
     </div>
-{{-- @else --}}
-    {{-- @if (userInfo()->permissions!='manager')
-        <div class="container-fluid" style="background: url('{{asset('documents/logos/'.getUserCompanyInfo()->logo)}}') no-repeat center; background-attachment: fixed;"></div>
-    @endif --}}
+    
 @endsection
 
 @push('scripts')
