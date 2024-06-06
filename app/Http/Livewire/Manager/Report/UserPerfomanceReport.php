@@ -23,6 +23,9 @@ class UserPerfomanceReport extends Component
     function searchInformation()
     {
         $this->searchFoundSomething =   null;
+        $this->user_perfomance_report   =   [];
+
+
         $validated  =   $this->validate();
 
         $users  =   [];
