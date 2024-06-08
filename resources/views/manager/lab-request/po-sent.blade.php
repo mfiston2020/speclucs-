@@ -669,7 +669,7 @@
                                                                                             @php
                                                                                                 $isOutOfStock='no';
                                                                                             @endphp
-                                                                                            <div class="modal-dialog modal-xl modal-dialog-centered">
+                                                                                            <div class="modal-dialog modal-xl d-print-inline">
                                                                                                 <div class="modal-content">
                                                                                                     <div class="modal-header">
                                                                                                         <div>
@@ -690,7 +690,26 @@
                                                                                                                 Request #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                                                             </h4>
                                                                                                         </div>
-                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                                        <button type="button" class="close d-print-none" data-dismiss="modal" aria-hidden="true">×</button>
+
+                                                                                                        <div class="pull-left mb-4 d-none d-print-block">
+                                                                                                            <address>
+
+                                                                                                                <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt=""
+                                                                                                                    width="300px">
+                                                                                                                {{-- @if (Auth::user()->company_id != 3) --}}
+                                                                                                                <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
+                                                                                                                {{-- @endif --}}
+                                                                                                                <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
+                                                                                                                    {{ getuserCompanyInfo()->company_tin_number }}
+                                                                                                                    {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
+                                                                                                                    <br /><strong class="text-black-50">Phone Number:</strong>
+                                                                                                                    {{ getuserCompanyInfo()->company_phone }}
+                                                                                                                    <br /><strong class="text-black-50">Email:</strong>
+                                                                                                                    {{ getuserCompanyInfo()->company_email }}
+                                                                                                                </p>
+                                                                                                            </address>
+                                                                                                        </div>
                                                                                                     </div>
                                                                                                     <div class="modal-body" id="printable">
                                                                                                         <h4 class="text-info">Lens</h4>
@@ -932,16 +951,12 @@
                                                                                                             @endforeach
                                                                                                         @endif
                                                                                                     </div>
-                                                                                                    <div
-                                                                                                        class="modal-footer d-flex justify-content-between">
-                                                                                                                <button type="button"
-                                                                                                                    class="btn btn-danger waves-effect text-left"
-                                                                                                                    data-dismiss="modal">
-                                                                                                                    Close
-                                                                                                                </button>
-                                                                                                                <button type="button"
-                                                                                                                    class="btn btn-success waves-effect text-left"
-                                                                                                                    id="print">Print</button>
+                                                                                                    <div class="modal-footer d-flex justify-content-between d-print-none">
+                                                                                                        <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">
+                                                                                                            Close
+                                                                                                        </button>
+                                                                                                        <button type="button" class="btn btn-success waves-effect text-left"
+                                                                                                            id="print" onclick="printModal('extproddd-{{ $key }}-detail')">Print</button>
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <!-- /.modal-content -->
