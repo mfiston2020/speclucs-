@@ -96,8 +96,7 @@ class InvoiceRepo implements InvoiceInterface
                                                         $q->with(['power','category']);
                                                     });
                                                 })
-                                                ->orderBy('created_at','desc')
-                                                ->whereDoesntHave('unavailableProducts')->get();
+                                                ->orderBy('created_at','desc')->get();
                 } else {
                     return Invoice::where('supplier_id', userInfo()->company_id)
                                                 ->whereIn('status',$status)
@@ -106,8 +105,7 @@ class InvoiceRepo implements InvoiceInterface
                                                         $q->with(['power','category']);
                                                     });
                                                 })
-                                                ->orderBy('created_at','desc')
-                                                ->whereDoesntHave('unavailableProducts')->get();
+                                                ->orderBy('created_at','desc')->get();
                 }
             }
         }

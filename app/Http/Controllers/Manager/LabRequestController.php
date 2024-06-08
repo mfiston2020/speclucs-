@@ -68,6 +68,11 @@ class LabRequestController extends Controller
         $companyId      =   userInfo()->company_id;
         $companyInfo    =   getuserCompanyInfo();
 
+        $lens_type          =   \App\Models\LensType::all();
+        $index              =   \App\Models\PhotoIndex::all();
+        $coatings           =   \App\Models\PhotoCoating::all();
+        $chromatics         =   \App\Models\PhotoChromatics::all();
+
         if ($type=='requested') {
 
             if ($companyInfo->is_vision_center!='1') {
@@ -154,7 +159,7 @@ class LabRequestController extends Controller
             $requests_supplier          =   $this->ordersRepo->internalOrder(['sent to supplier']);
             $requests_supplier_count    =   $this->ordersRepo->externalOrder(['sent to supplier']);
 
-            return view('manager.lab-request.po-sent',compact('requests_supplier','requests_supplier_count'));
+            return view('manager.lab-request.po-sent',compact('requests_supplier','requests_supplier_count','lens_type', 'index', 'chromatics', 'coatings',));
         }
     }
 

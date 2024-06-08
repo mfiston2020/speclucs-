@@ -547,7 +547,7 @@
                                                                                             </td>
                                                                                             <td>
                                                                                                 <a href="#!" data-toggle="modal"
-                                                                                                data-target="#proddd-{{ $key }}-detail">
+                                                                                                data-target="#extproddd-{{ $key }}-detail">
                                                                                                     Request
                                                                                                     #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                                                 </a>
@@ -665,7 +665,7 @@
 
                                                                                         {{-- modal --}}
 
-                                                                                        <div class="modal fade bs-example-modal-lg" id="proddd-{{ $key }}-detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                                                                                        <div class="modal fade bs-example-modal-lg" id="extproddd-{{ $key }}-detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
                                                                                             @php
                                                                                                 $isOutOfStock='no';
                                                                                             @endphp
