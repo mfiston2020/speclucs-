@@ -225,7 +225,7 @@
                                                                                         <span>{{ format_values($unavail->sphere) }}
                                                                                             /
                                                                                             {{ format_values($unavail->cylinder) }}
-                                                                                            *{{ $unavail->axis }}
+                                                                                            <span class='text-primary'>*{{ $unavail->axis??0 }}</span>
                                                                                             {{ $unavail->addition }}</span>
                                                                                     </div>
                                                                                     <div class="col-2 row">
@@ -280,23 +280,11 @@
                                                                                             </span>
                                                                                         </div>
                                                                                         <div class="col-2">
-                                                                                            @if (initials($invoice_product->product_name) == 'SV')
-                                                                                                {{-- <span>{{ $invoice_product->power->sphere }}
-                                                                                                    /
-                                                                                                    {{ $invoice_product->power->cylinder }}</span> --}}
                                                                                                 <span>{{ $invoice_product->power->sphere }}
                                                                                                     /
                                                                                                     {{ $invoice_product->power->cylinder }}
-                                                                                                    *{{ $invoice_product->axis }}
-                                                                                                    {{ $invoice_product->power->add }}
-                                                                                                </span>
-                                                                                            @else
-                                                                                                <span>{{ $invoice_product->power->sphere }}
-                                                                                                    /
-                                                                                                    {{ $invoice_product->power->cylinder }}
-                                                                                                    *{{ $invoice_product->axis }}
+                                                                                                    <span class='text-primary'>*{{ $product->axis??0 }}</span>
                                                                                                     {{ $invoice_product->power->add }}</span>
-                                                                                            @endif
                                                                                         </div>
                                                                                         <div class="col-2 row">
                                                                                             <span>
@@ -432,12 +420,9 @@
                                                                             <hr>
                                                                             <div class="row d-flex justify-content-end">
                                                                                 <div class="form-group col-3">
-                                                                                    <label for="delivery_date">Delivery
-                                                                                        Date</label>
-                                                                                    <input type="date"
-                                                                                        name="delivery_date"
-                                                                                        id="delivery_date" required
-                                                                                        class="form-control"
+                                                                                    <label for="delivery_date">
+                                                                                    Delivery Date</label>
+                                                                                    <input type="date" name="delivery_date" id="delivery_date" required class="form-control"
                                                                                         min="{{ date('Y-m-d') }}">
                                                                                 </div>
                                                                             </div>
@@ -840,7 +825,7 @@
                                                                                 <span>{{ format_values($unavail->sphere) }}
                                                                                     /
                                                                                     {{ format_values($unavail->cylinder) }}
-                                                                                    *{{ $unavail->axis }}
+                                                                                    <span class='text-primary'>*{{ $unavail->axis??0 }}</span>
                                                                                     {{ $unavail->addition }}</span>
                                                                             </div>
                                                                             <div class="col-2 row">
@@ -897,21 +882,11 @@
                                                                                     </div>
                                                                                     <div class="col-2">
                                                                                         @if (initials($invoice_product->product_name) == 'SV')
-                                                                                            {{-- <span>{{ $invoice_product->power->sphere }}
-                                                                                                /
-                                                                                                {{ $invoice_product->power->cylinder }}</span> --}}
                                                                                             <span>{{ $invoice_product->power->sphere }}
                                                                                                 /
                                                                                                 {{ $invoice_product->power->cylinder }}
-                                                                                                *{{ $invoice_product->axis }}
+                                                                                                <span class='text-primary'>*{{ $product->axis??0 }}</span>
                                                                                                 {{ $invoice_product->power->add }}</span>
-                                                                                        @else
-                                                                                            <span>{{ $invoice_product->power->sphere }}
-                                                                                                /
-                                                                                                {{ $invoice_product->power->cylinder }}
-                                                                                                *{{ $invoice_product->axis }}
-                                                                                                {{ $invoice_product->power->add }}</span>
-                                                                                        @endif
                                                                                     </div>
                                                                                     <div class="col-2 row">
                                                                                         <span>

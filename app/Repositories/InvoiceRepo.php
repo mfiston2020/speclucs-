@@ -17,9 +17,9 @@ class InvoiceRepo implements InvoiceInterface
                                             ->whereNull('supplier_id')
                                             ->without('soldproduct')
                                             ->with('unavailableProducts',function($query){
-                                                $query->with('uindex','coating','uchromatic','type','product',function($q){
+                                                $query->with(['uindex','coating','uchromatic','type','product'=>function($q){
                                                     $q->with(['power','category']);
-                                                });
+                                                }]);
                                             })
                                             ->orderBy('created_at','desc')
                                             ->get();
@@ -29,9 +29,9 @@ class InvoiceRepo implements InvoiceInterface
                                             ->whereNull('supplier_id')
                                             ->without('soldproduct')
                                             ->with('unavailableProducts',function($query){
-                                                $query->with('uindex','coating','uchromatic','type','product',function($q){
+                                                $query->with(['uindex','coating','uchromatic','type','product'=>function($q){
                                                     $q->with(['power','category']);
-                                                });
+                                                }]);
                                             })
                                             ->orderBy('created_at','desc')
                                             ->get();
@@ -42,16 +42,15 @@ class InvoiceRepo implements InvoiceInterface
                                             ->whereIn('status',$status)
                                             ->whereNull('supplier_id')
                                             ->with('unavailableProducts',function($query){
-                                                $query->with('uindex','coating','uchromatic','type','product',function($q){
+                                                $query->with(['uindex','coating','uchromatic','type','product'=>function($q){
                                                     $q->with(['power','category']);
-                                                });
+                                                }]);
                                             })
                                             ->with('soldproduct',function($query){
                                                 $query->with('product',function($q){
                                                     $q->with(['power','category']);
                                                 });
-                                            })->orderBy('created_at','desc')
-                                            ->whereDoesntHave('unavailableProducts')->get();
+                                            })->orderBy('created_at','desc')->get();
             }else{
                 return Invoice::where('company_id', userInfo()->company_id)
                                             ->whereIn('status',$status)
@@ -77,9 +76,9 @@ class InvoiceRepo implements InvoiceInterface
                                             ->where('company_id',userInfo()->company_id)
                                             ->without('soldproduct')
                                             ->with('unavailableProducts',function($query){
-                                                $query->with('uindex','coating','uchromatic','type','product',function($q){
+                                                $query->with(['uindex','coating','uchromatic','type','product'=>function($q){
                                                     $q->with(['power','category']);
-                                                });
+                                                }]);
                                             })
                                             ->orderBy('created_at','desc')
                                             ->get();
@@ -88,9 +87,9 @@ class InvoiceRepo implements InvoiceInterface
                                             ->whereIn('status',$status)
                                             ->with('soldproduct')
                                             ->with('unavailableProducts',function($query){
-                                                $query->with('uindex','coating','uchromatic','type','product',function($q){
+                                                $query->with(['uindex','coating','uchromatic','type','product'=>function($q){
                                                     $q->with(['power','category']);
-                                                });
+                                                }]);
                                             })
                                             ->orderBy('created_at','desc')
                                             ->get();

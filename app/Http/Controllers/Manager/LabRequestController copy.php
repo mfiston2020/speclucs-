@@ -30,7 +30,7 @@ class LabRequestController extends Controller
         $invoicess          =   Invoice::where('company_id', userInfo()->company_id)->orderBy('id', 'desc')->with('soldproduct')->paginate(50);
 
         $isOutOfStock       =   null;
-        $lens_type          =   \App\Models\LensType::all();
+        $lens_type          =   LensType::all();
         $index              =   \App\Models\PhotoIndex::all();
         $coatings           =   \App\Models\PhotoCoating::all();
         $chromatics         =   \App\Models\PhotoChromatics::all();
@@ -64,7 +64,7 @@ class LabRequestController extends Controller
 
         // dd($invoices[0]->supplier);
 
-        $lens_type          =   \App\Models\LensType::all();
+        $lens_type          =   LensType::all();
         $index              =   \App\Models\PhotoIndex::all();
         $coatings           =   \App\Models\PhotoCoating::all();
         $chromatics         =   \App\Models\PhotoChromatics::all();
@@ -114,7 +114,7 @@ class LabRequestController extends Controller
 
 
         $isOutOfStock       =   null;
-        $lens_type          =   \App\Models\LensType::all();
+        $lens_type          =   LensType::all();
         $index              =   \App\Models\PhotoIndex::all();
         $coatings           =   \App\Models\PhotoCoating::all();
         $chromatics         =   \App\Models\PhotoChromatics::all();

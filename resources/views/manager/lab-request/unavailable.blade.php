@@ -237,22 +237,11 @@
                                                                                                     {{ $productsold->product->description }}
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    @if (initials($productsold->product->product_name) == 'SV')
-                                                                                                        {{-- <span>{{ $productsold->product->power->sphere }}
-                                                                                                            /
-                                                                                                            {{ $productsold->product->power->cylinder }}</span> --}}
-                                                                                                        <span>{{ $productsold->product->power->sphere }}
-                                                                                                            /
-                                                                                                            {{ $productsold->product->power->cylinder }}
-                                                                                                            *{{ $productsold->axis }}
-                                                                                                            {{ $productsold->product->power->add }}</span>
-                                                                                                    @else
-                                                                                                        <span>{{ $productsold->product->power->sphere }}
-                                                                                                            /
-                                                                                                            {{ $productsold->product->power->cylinder }}
-                                                                                                            *{{ $productsold->axis }}
-                                                                                                            {{ $productsold->product->power->add }}</span>
-                                                                                                    @endif
+                                                                                                    <span>{{ $productsold->product->power->sphere }}
+                                                                                                        /
+                                                                                                        {{ $productsold->product->power->cylinder }}
+                                                                                                        <span class='text-primary'>*{{ $productsold->axis??0 }}</span>
+                                                                                                        {{ $productsold->product->power->add }}</span>
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     {{ $productsold->product->location == null ? '-' : $productsold->product->location }}
@@ -305,7 +294,7 @@
                                                                                                 {{ format_values($productsold->sphere) }}
                                                                                                 /
                                                                                                 {{ format_values($productsold->cylinder) }}
-                                                                                                *{{ format_values($productsold->axis??0) }}
+                                                                                                <span class='text-primary'>*{{ $productsold->axis??0 }}</span>
                                                                                                 {{ format_values($productsold->addition??0) }}
                                                                                             </td>
                                                                                             <td>
@@ -701,22 +690,11 @@
                                                                                                     {{ $invoice_product->description }}
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                    @if (initials($invoice_product->product_name) == 'SV')
-                                                                                                        {{-- <span>{{ $invoice_product->power->sphere }}
-                                                                                                            /
-                                                                                                            {{ $invoice_product->power->cylinder }}</span> --}}
-                                                                                                        <span>{{ $invoice_product->power->sphere }}
-                                                                                                            /
-                                                                                                            {{ $invoice_product->power->cylinder }}
-                                                                                                            *{{ $invoice_product->axis }}
-                                                                                                            {{ $invoice_product->power->add }}</span>
-                                                                                                    @else
-                                                                                                        <span>{{ $invoice_product->power->sphere }}
-                                                                                                            /
-                                                                                                            {{ $invoice_product->power->cylinder }}
-                                                                                                            *{{ $invoice_product->axis }}
-                                                                                                            {{ $invoice_product->power->add }}</span>
-                                                                                                    @endif
+                                                                                                    <span>{{ $invoice_product->power->sphere }}
+                                                                                                        /
+                                                                                                        {{ $invoice_product->power->cylinder }}
+                                                                                                        <span class='text-primary'>*{{ $productsold->axis??0 }}</span>
+                                                                                                        {{ $invoice_product->power->add }}</span>
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
@@ -771,7 +749,7 @@
                                                                                                 {{ format_values($productsold->sphere) }}
                                                                                                 /
                                                                                                 {{ format_values($productsold->cylinder) }}
-                                                                                                *{{ format_values($productsold->axis??0) }}
+                                                                                                <span class='text-primary'>*{{ $productsold->axis??0 }}</span>
                                                                                                 {{ format_values($productsold->addition??0) }}
                                                                                             </td>
                                                                                             <td>

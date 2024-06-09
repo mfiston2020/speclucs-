@@ -386,14 +386,14 @@
                                                                                                 {{ $invoice_product->power->sphere }}
                                                                                                 /
                                                                                                 {{ $invoice_product->power->cylinder }}
-                                                                                                *{{ $request->axis }}
+                                                                                                <span class='text-primary'>*{{ $product->axis??0 }}</span>
                                                                                                 {{ $invoice_product->power->add }}
                                                                                             </span>
                                                                                         @else
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $request->axis }}
+                                                                                            <span class='text-primary'>*{{ $product->axis??0 }}</span>
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         @endif
                                                                                     </div>
@@ -579,8 +579,7 @@
                                                             </td>
                                                             <td>
                                                                 <a href="#!" data-toggle="modal" data-target="#out-proddd-{{ $key }}-detail">
-                                                                    Request
-                                                                    #{{ sprintf('SPCL-%04d', $request->id) }}
+                                                                    Request #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                 </a>
                                                             </td>
                                                             <td>
@@ -711,7 +710,7 @@
                                                                     {{ format_values($right_len->power->sphere) }}
                                                                     /
                                                                     {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($request->axis) }}
+                                                                    <span class='text-primary'>*{{ $request->axis??0 }}</span>
                                                                     {{ format_values($right_len->addition) }}
                                                                 </span>
                                                                 @else
@@ -719,7 +718,7 @@
                                                                     {{ format_values($right_len->power->sphere) }}
                                                                     /
                                                                     {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($request->axis) }}
+                                                                    <span class='text-primary'>*{{ $request->axis??0 }}</span>
                                                                     {{ format_values($right_len->power->add) }}
                                                                 </span>
                                                                 @endif
@@ -733,13 +732,13 @@
                                                                 {{ format_values($left_len->sphere) }}
                                                                 /
                                                                 {{ format_values($left_len->cylinder) }}
-                                                                *{{ format_values($left_len->axis) }}
+                                                                <span class='text-primary'>*{{ $request->axis??0 }}</span>
                                                                 {{ format_values($left_len->addition) }}
                                                                 @else
                                                                 {{ format_values($left_len->power->sphere) }}
                                                                 /
                                                                 {{ format_values($left_len->power->cylinder) }}
-                                                                *{{ format_values($request->axis) }}
+                                                                <span class='text-primary'>*{{ $request->axis??0 }}</span>
                                                                 {{ format_values($left_len->power->add) }}
                                                                 @endif
                                                                 @else
@@ -775,15 +774,14 @@
                                                                             <div>
                                                                                 <h4 class="modal-title text-info">
                                                                                     @if ($request->client_id != null)
-                                                                                    {{$request->client->name}}
+                                                                                        {{$request->client->name}}
                                                                                     @else
-                                                                                    @if ($request->hospital_name!=null)
-                                                                                    [{{$request->cloud_id}}] {{$request->hospital_name}}
-                                                                                    @else
-                                                                                    {{$request->client_name}}
+                                                                                        @if ($request->hospital_name!=null)
+                                                                                            [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                                                        @else
+                                                                                            {{$request->client_name}}
+                                                                                        @endif
                                                                                     @endif
-                                                                                    @endif
-                                                                                    {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                                 </h4>
                                                                                 <br>
 
@@ -797,12 +795,11 @@
                                                                                 <address>
 
                                                                                     <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt="" height="100px">
-                                                                                    {{-- @if (Auth::user()->company_id != 3) --}}
-                                                                                    <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
-                                                                                    {{-- @endif --}}
-                                                                                    <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
+                                                                                    <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b>
+                                                                                    </h3>
+                                                                                    <p class="text-muted m-l-5">
+                                                                                    <strong class="text-black-50">TIN Number:</strong>
                                                                                         {{ getuserCompanyInfo()->company_tin_number }}
-                                                                                        {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
                                                                                         <br /><strong class="text-black-50">Phone Number:</strong>
                                                                                         {{ getuserCompanyInfo()->company_phone }}
                                                                                         <br /><strong class="text-black-50">Email:</strong>
@@ -836,7 +833,7 @@
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $request->axis }}
+                                                                                            <span class='text-primary'>*{{ $product->axis??0 }}</span>
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         {{-- <span>{{ $invoice_product->power->sphere }}
                                                                                             /
@@ -845,7 +842,7 @@
                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                             /
                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                            *{{ $request->axis }}
+                                                                                            <span class='text-primary'>*{{ $request->axis??0 }}</span>
                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                         @endif
                                                                                     </div>
