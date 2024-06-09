@@ -17,30 +17,35 @@ class InvoiceRepo implements InvoiceInterface
                                             ->whereNull('supplier_id')
                                             ->without('soldproduct')
                                             ->with('unavailableProducts',function($query){
-                                                $query->with('product',function($q){
+                                                $query->with('uindex','coating','uchromatic','type','product',function($q){
                                                     $q->with(['power','category']);
                                                 });
                                             })
                                             ->orderBy('created_at','desc')
-                                            ->paginate(50);
+                                            ->get();
             }else{
                 return Invoice::where('company_id', userInfo()->company_id)
                                             ->whereIn('status',$status)
                                             ->whereNull('supplier_id')
                                             ->without('soldproduct')
                                             ->with('unavailableProducts',function($query){
-                                                $query->with('product',function($q){
+                                                $query->with('uindex','coating','uchromatic','type','product',function($q){
                                                     $q->with(['power','category']);
                                                 });
                                             })
                                             ->orderBy('created_at','desc')
-                                            ->paginate(50);
+                                            ->get();
             }
         }else{
             if (getuserCompanyInfo()->is_vision_center=='1') {
                 return Invoice::where('company_id', userInfo()->company_id)
                                             ->whereIn('status',$status)
                                             ->whereNull('supplier_id')
+                                            ->with('unavailableProducts',function($query){
+                                                $query->with('uindex','coating','uchromatic','type','product',function($q){
+                                                    $q->with(['power','category']);
+                                                });
+                                            })
                                             ->with('soldproduct',function($query){
                                                 $query->with('product',function($q){
                                                     $q->with(['power','category']);
@@ -50,12 +55,16 @@ class InvoiceRepo implements InvoiceInterface
             }else{
                 return Invoice::where('company_id', userInfo()->company_id)
                                             ->whereIn('status',$status)
+                                            ->with('unavailableProducts',function($query){
+                                                $query->with(['uindex','coating','uchromatic','type','product'=>function($q){
+                                                    $q->with(['power','category']);
+                                                }]);
+                                            })
                                             ->with('soldproduct',function($query){
                                                 $query->with('product',function($q){
                                                     $q->with(['power','category']);
                                                 });
-                                            })->orderBy('created_at','desc')
-                                            ->get();
+                                            })->orderBy('created_at','desc')->get();
             }
         }
     }
@@ -68,23 +77,23 @@ class InvoiceRepo implements InvoiceInterface
                                             ->where('company_id',userInfo()->company_id)
                                             ->without('soldproduct')
                                             ->with('unavailableProducts',function($query){
-                                                $query->with('product',function($q){
+                                                $query->with('uindex','coating','uchromatic','type','product',function($q){
                                                     $q->with(['power','category']);
                                                 });
                                             })
                                             ->orderBy('created_at','desc')
-                                            ->paginate(50);
+                                            ->get();
             } else {
                 return Invoice::where('supplier_id', userInfo()->company_id)
                                             ->whereIn('status',$status)
                                             ->with('soldproduct')
                                             ->with('unavailableProducts',function($query){
-                                                $query->with('product',function($q){
+                                                $query->with('uindex','coating','uchromatic','type','product',function($q){
                                                     $q->with(['power','category']);
                                                 });
                                             })
                                             ->orderBy('created_at','desc')
-                                            ->paginate(50);
+                                            ->get();
             }
         }else{
             if (getuserCompanyInfo()->is_vision_center=='1') {

@@ -29,7 +29,7 @@
                                 <a href="#internal-orders" class="nav-link active" data-toggle="tab" aria-expanded="false">
                                     Internal Orders
                                     <span class="badge badge-danger badge-pill">
-                                        {{ $requests->total() }}
+                                        {{ number_format($requests->total()) }}
                                     </span>
                                 </a>
                             </li>
@@ -38,7 +38,7 @@
                                 <a href="#external-orders" class="nav-link" data-toggle="tab" aria-expanded="false">
                                     External Orders
                                     <span class="badge badge-danger badge-pill">
-                                        {{ $requests_out->total() }}
+                                        {{ number_format($requests_out->total()) }}
                                     </span>
                                 </a>
                             </li>
@@ -250,7 +250,7 @@
                                                                                                 <span>{{ $invoice_product->power->sphere }}
                                                                                                     /
                                                                                                     {{ $invoice_product->power->cylinder }}
-                                                                                                    *{{ $invoice_product->power->axis }}
+                                                                                                    *{{ $invoice_product->axis }}
                                                                                                     {{ $invoice_product->power->add }}</span>
                                                                                             @endif
                                                                                         </div>
@@ -641,7 +641,7 @@
                                                                                                 <span>{{ $invoice_product->power->sphere }}
                                                                                                     /
                                                                                                     {{ $invoice_product->power->cylinder }}
-                                                                                                    *{{ $invoice_product->power->axis }}
+                                                                                                    *{{ $invoice_product->axis }}
                                                                                                     {{ $invoice_product->power->add }}</span>
                                                                                             @endif
                                                                                         </div>

@@ -102,7 +102,6 @@ function getuserCompanyInfo()
 function compareArrayValues($lastValue, $currentValue)
 {
     if ($currentValue == $lastValue) {
-        dd(true);
     } else {
         return false;
     }

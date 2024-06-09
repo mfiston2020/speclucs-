@@ -255,7 +255,7 @@
                                                                             @if ( $request->soldproduct[1]->eye=='right')
                                                                                 <span class="text-primary">*{{ ($request->soldproduct[1]->axis) }}</span>
                                                                             @endif
-                                                                            {{-- *{{ ($right_len->power->axis) }} []->axis--}}
+                                                                            {{-- *{{ ($right_len->axis) }} []->axis--}}
                                                                             {{ format_values($right_len->power->add) }}
                                                                         </span>
                                                                     @endif
@@ -711,7 +711,7 @@
                                                                     {{ format_values($right_len->power->sphere) }}
                                                                     /
                                                                     {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($right_len->power->axis) }}
+                                                                    *{{ format_values($request->axis) }}
                                                                     {{ format_values($right_len->addition) }}
                                                                 </span>
                                                                 @else
@@ -719,7 +719,7 @@
                                                                     {{ format_values($right_len->power->sphere) }}
                                                                     /
                                                                     {{ format_values($right_len->power->cylinder) }}
-                                                                    *{{ format_values($right_len->power->axis) }}
+                                                                    *{{ format_values($request->axis) }}
                                                                     {{ format_values($right_len->power->add) }}
                                                                 </span>
                                                                 @endif
@@ -739,7 +739,7 @@
                                                                 {{ format_values($left_len->power->sphere) }}
                                                                 /
                                                                 {{ format_values($left_len->power->cylinder) }}
-                                                                *{{ format_values($left_len->power->axis) }}
+                                                                *{{ format_values($request->axis) }}
                                                                 {{ format_values($left_len->power->add) }}
                                                                 @endif
                                                                 @else

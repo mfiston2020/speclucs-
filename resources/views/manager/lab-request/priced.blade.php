@@ -216,7 +216,7 @@
                                                                                     {{ format_values($left_len->power->sphere) }}
                                                                                     /
                                                                                     {{ format_values($left_len->power->cylinder) }}
-                                                                                    *{{ format_values($left_len->power->axis) }}
+                                                                                    *{{ format_values($request->axis) }}
                                                                                     {{ $left_len->power->add }}
                                                                                 @endif
                                                                             @else
@@ -680,7 +680,7 @@
                                                                                         {{ format_values($right_len->power->sphere) }}
                                                                                         /
                                                                                         {{ format_values($right_len->power->cylinder) }}
-                                                                                        *{{ format_values($right_len->power->axis) }}
+                                                                                        *{{ format_values($request->axis) }}
                                                                                         {{ $right_len->power->add }}
                                                                                     </span>
                                                                                 @endif
@@ -700,7 +700,7 @@
                                                                                     {{ format_values($left_len->power->sphere) }}
                                                                                     /
                                                                                     {{ format_values($left_len->power->cylinder) }}
-                                                                                    *{{ format_values($left_len->power->axis) }}
+                                                                                    *{{ format_values($request->axis) }}
                                                                                     {{ $left_len->power->add }}
                                                                                 @endif
                                                                             @else
@@ -877,13 +877,15 @@
                                                                                                     @if (initials($product->type->name) == 'SV')
                                                                                                         <span>{{ format_values($product->sphere) }}
                                                                                                             /
-                                                                                                            {{ format_values($product->cylinder) }}</span>
+                                                                                                            {{ format_values($product->cylinder) }}
+                                                                                                        </span>
                                                                                                     @else
                                                                                                         <span>{{ format_values($product->sphere) }}
                                                                                                             /
                                                                                                             {{ format_values($product->cylinder) }}
                                                                                                             *{{ $product->axis }}
-                                                                                                            {{ $product->addition }}</span>
+                                                                                                            {{ $product->addition }}
+                                                                                                        </span>
                                                                                                     @endif
                                                                                                 </div>
                                                                                                 <div class="col-2 row">

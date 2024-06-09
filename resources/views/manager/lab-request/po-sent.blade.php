@@ -31,7 +31,7 @@
                             <h4 class="card-title">
                                 Requests
                                 <span class="badge badge-danger badge-pill ml-2">
-                                    {{ number_format(count($requests_supplier)) }}</h4>
+                                    {{ number_format(count($requests_supplier)+count($requests_supplier)) }}</h4>
                                 </span>
                         </div>
                         {{-- ============================== --}}
@@ -45,8 +45,6 @@
 
         <div class="tab-content">
             {{-- requested --}}
-            {{-- <div class="tab-pane active" id="requested" role="tabpanel"> --}}
-                {{-- <div class="tab-pane  p-20" id="profile2" role="tabpanel"> --}}
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
@@ -71,15 +69,6 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        {{-- <li class=" nav-item">
-                                            <a href="#incomplete-orders" class="nav-link " data-toggle="tab"
-                                                aria-expanded="false">
-                                                Provided to Lab
-                                                <span class="badge badge-danger badge-pill ml-2">
-                                                    {{count($requests_lab)}}
-                                                </span>
-                                            </a>
-                                        </li> --}}
                                     </ul>
                                     <hr>
                                     <div class="tab-content br-n pn">
@@ -143,7 +132,6 @@
                                                                                                         {{$request->client_name}}
                                                                                                     @endif
                                                                                                 @endif
-                                                                                                {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                                             </td>
                                                                                             <td>
                                                                                                 {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
@@ -159,38 +147,6 @@
                                                                                                 </span>
                                                                                             </td>
                                                                                         </tr>
-                                                                                        @php
-                                                                                            $availability_right = true;
-                                                                                            $availability_left = true;
-                                                                                            $description = null;
-                                                                                            $right_len = $request->unavailableproducts->where('eye', 'right')->first();
-
-                                                                                            // dd($right_len);
-
-                                                                                            if (!$right_len) {
-                                                                                                $right_len = $request->soldproduct->where('eye', 'right')->first();
-                                                                                                if ($right_len==null) {
-                                                                                                    continue;
-                                                                                                }
-                                                                                                // dd('hello');
-                                                                                                $right_len = $right_len->product;
-                                                                                                $availability_right = false;
-                                                                                            }
-
-                                                                                            // left eye checking
-                                                                                            $left_len = $request->unavailableproducts->where('eye', 'left')->first();
-
-                                                                                            if (!$left_len) {
-                                                                                                $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                                                                                if ($left_len==null) {
-                                                                                                    continue;
-                                                                                                }
-                                                                                                $left_len = $left_len->product;
-                                                                                                $availability_left = false;
-                                                                                            }
-                                                                                        @endphp
-
-                                                                                        {{-- modal --}}
 
                                                                                         <div class="modal fade bs-example-modal-lg" id="proddd-{{ $key }}-detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
                                                                                             @php
@@ -223,15 +179,14 @@
 
                                                                                                                 <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt=""
                                                                                                                     width="300px">
-                                                                                                                {{-- @if (Auth::user()->company_id != 3) --}}
-                                                                                                                <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
-                                                                                                                {{-- @endif --}}
-                                                                                                                <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
+                                                                                                                <p class="text-muted m-l-5">
+                                                                                                                    <strong class="text-black-50">TIN Number:</strong>
                                                                                                                     {{ getuserCompanyInfo()->company_tin_number }}
-                                                                                                                    {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
-                                                                                                                    <br /><strong class="text-black-50">Phone Number:</strong>
+                                                                                                                    <br />
+                                                                                                                    <strong class="text-black-50">Phone Number:</strong>
                                                                                                                     {{ getuserCompanyInfo()->company_phone }}
-                                                                                                                    <br /><strong class="text-black-50">Email:</strong>
+                                                                                                                    <br />
+                                                                                                                    <strong class="text-black-50">Email:</strong>
                                                                                                                     {{ getuserCompanyInfo()->company_email }}
                                                                                                                 </p>
                                                                                                             </address>
@@ -245,9 +200,7 @@
                                                                                                                 $invoice_product = $product->product;
                                                                                                             @endphp
 
-                                                                                                            {{-- for lens --}}
                                                                                                             @if ($invoice_product->category_id == 1)
-
                                                                                                                 <div class="row mb-2">
                                                                                                                     <div class="col-1">
                                                                                                                         <h4 class="text-capitalize">
@@ -260,22 +213,12 @@
                                                                                                                         </span>
                                                                                                                     </div>
                                                                                                                     <div class="col-2">
-                                                                                                                        @if (initials($invoice_product->product_name) == 'SV')
-                                                                                                                            {{-- <span>{{ $invoice_product->power->sphere }}
-                                                                                                                                /
-                                                                                                                                {{ $invoice_product->power->cylinder }}</span> --}}
-                                                                                                                            <span>{{ $invoice_product->power->sphere }}
-                                                                                                                                /
-                                                                                                                                {{ $invoice_product->power->cylinder }}
-                                                                                                                                *{{ $request->axis }}
-                                                                                                                                {{ $invoice_product->power->add }}</span>
-                                                                                                                        @else
-                                                                                                                            <span>{{ $invoice_product->power->sphere }}
-                                                                                                                                /
-                                                                                                                                {{ $invoice_product->power->cylinder }}
-                                                                                                                                *{{ $request->axis }}
-                                                                                                                                {{ $invoice_product->power->add }}</span>
-                                                                                                                        @endif
+                                                                                                                        <span>{{ $invoice_product->power->sphere }}
+                                                                                                                            /
+                                                                                                                            {{ $invoice_product->power->cylinder }}
+                                                                                                                        <span class="text-primary"> *{{ $product->axis ?? 0}} </span>
+                                                                                                                            {{ $invoice_product->power->add }}
+                                                                                                                        </span>
                                                                                                                     </div>
                                                                                                                     <div class="col-2 row">
                                                                                                                         <span>
@@ -334,17 +277,12 @@
                                                                                                                     </span>
                                                                                                                 </div>
                                                                                                                 <div class="col-2">
-                                                                                                                    @if (initials($product->type->name) == 'SV')
-                                                                                                                        <span>{{ format_values($product->sphere) }}
-                                                                                                                            /
-                                                                                                                            {{ format_values($product->cylinder) }}</span>
-                                                                                                                    @else
                                                                                                                         <span>{{ format_values($product->sphere) }}
                                                                                                                             /
                                                                                                                             {{ format_values($product->cylinder) }}
-                                                                                                                            *{{ format_values($product->axis) }}
-                                                                                                                            {{ $product->addition }}</span>
-                                                                                                                    @endif
+                                                                                                                            <span class="text-primary">*{{ $product->axis }}</span>
+                                                                                                                            {{ $product->addition }}
+                                                                                                                        </span>
                                                                                                                 </div>
                                                                                                                 <div class="col-2 row">
                                                                                                                     <span>
@@ -562,7 +500,6 @@
                                                                                                         {{$request->client_name}}
                                                                                                     @endif
                                                                                                 @endif
-                                                                                                {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                                             </td>
                                                                                             <td>
                                                                                                 {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
@@ -578,90 +515,6 @@
                                                                                                 </span>
                                                                                             </td>
                                                                                         </tr>
-                                                                                        @php
-                                                                                            $availability_right = true;
-                                                                                            $availability_left = true;
-                                                                                            $description = null;
-                                                                                            $right_len = $request->unavailableproducts->where('eye', 'right')->first();
-
-                                                                                            // dd($right_len);
-
-                                                                                            if (!$right_len) {
-                                                                                                $right_len = $request->soldproduct->where('eye', 'right')->first();
-                                                                                                if ($right_len==null) {
-                                                                                                    continue;
-                                                                                                }
-                                                                                                // dd('hello');
-                                                                                                $right_len = $right_len->product;
-                                                                                                $availability_right = false;
-                                                                                            }
-
-                                                                                            if ($availability_right == true) {
-                                                                                                $type = $lens_type
-                                                                                                    ->where('id', $right_len->type_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $indx = $index
-                                                                                                    ->where('id', $right_len->index_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $ct = $coatings
-                                                                                                    ->where('id', $right_len->coating_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $chrm = $chromatics
-                                                                                                    ->where('id', $right_len->chromatic_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-                                                                                            } else {
-                                                                                                if ($right_len) {
-                                                                                                    $description = $right_len->description;
-                                                                                                }
-                                                                                            }
-
-                                                                                            // left eye checking
-                                                                                            $left_len = $request->unavailableproducts->where('eye', 'left')->first();
-
-                                                                                            if (!$left_len) {
-                                                                                                $left_len = $request->soldproduct->where('eye', 'left')->first();
-                                                                                                if ($left_len==null) {
-                                                                                                    continue;
-                                                                                                }
-                                                                                                $left_len = $left_len->product;
-                                                                                                $availability_left = false;
-                                                                                            }
-
-                                                                                            if ($availability_left == true) {
-                                                                                                $type = $lens_type
-                                                                                                    ->where('id', $left_len->type_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $indx = $index
-                                                                                                    ->where('id', $left_len->index_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $ct = $coatings
-                                                                                                    ->where('id', $left_len->coating_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-
-                                                                                                $chrm = $chromatics
-                                                                                                    ->where('id', $left_len->chromatic_id)
-                                                                                                    ->pluck('name')
-                                                                                                    ->first();
-                                                                                            } else {
-                                                                                                if ($left_len) {
-                                                                                                    $description = $left_len->description;
-                                                                                                }
-                                                                                            }
-                                                                                        @endphp
-
-
 
                                                                                         {{-- modal --}}
 
@@ -697,12 +550,8 @@
 
                                                                                                                 <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt=""
                                                                                                                     width="300px">
-                                                                                                                {{-- @if (Auth::user()->company_id != 3) --}}
-                                                                                                                <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
-                                                                                                                {{-- @endif --}}
                                                                                                                 <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
                                                                                                                     {{ getuserCompanyInfo()->company_tin_number }}
-                                                                                                                    {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
                                                                                                                     <br /><strong class="text-black-50">Phone Number:</strong>
                                                                                                                     {{ getuserCompanyInfo()->company_phone }}
                                                                                                                     <br /><strong class="text-black-50">Email:</strong>
@@ -734,22 +583,11 @@
                                                                                                                         </span>
                                                                                                                     </div>
                                                                                                                     <div class="col-2">
-                                                                                                                        @if (initials($invoice_product->product_name) == 'SV')
-                                                                                                                            {{-- <span>{{ $invoice_product->power->sphere }}
-                                                                                                                                /
-                                                                                                                                {{ $invoice_product->power->cylinder }}</span> --}}
-                                                                                                                            <span>{{ $invoice_product->power->sphere }}
-                                                                                                                                /
-                                                                                                                                {{ $invoice_product->power->cylinder }}
-                                                                                                                                *{{ $request->axis }}
-                                                                                                                                {{ $invoice_product->power->add }}</span>
-                                                                                                                        @else
-                                                                                                                            <span>{{ $invoice_product->power->sphere }}
-                                                                                                                                /
-                                                                                                                                {{ $invoice_product->power->cylinder }}
-                                                                                                                                *{{ $request->axis }}
-                                                                                                                                {{ $invoice_product->power->add }}</span>
-                                                                                                                        @endif
+                                                                                                                        <span>{{ $invoice_product->power->sphere }}
+                                                                                                                            /
+                                                                                                                            {{ $invoice_product->power->cylinder }}
+                                                                                                                            <span class="text-primary"> *{{ $product->axis}} </span>
+                                                                                                                            {{ $invoice_product->power->add }}</span>
                                                                                                                     </div>
                                                                                                                     <div class="col-2 row">
                                                                                                                         <span>
@@ -790,13 +628,6 @@
                                                                                                         @foreach ($request->unavailableproducts as $product)
                                                                                                             @php
                                                                                                                 $invoice_product = $product;
-
-                                                                                                                if ($availability_left == true) {
-                                                                                                                    $type = $lens_type->where('id', $left_len->type_id)->pluck('name')->first();
-                                                                                                                    $indx = $index->where('id', $left_len->index_id)->pluck('name')->first();
-                                                                                                                    $ct = $coatings->where('id', $left_len->coating_id)->pluck('name')->first();
-                                                                                                                    $chrm = $chromatics->where('id', $left_len->chromatic_id)->pluck('name')->first();
-                                                                                                                }
                                                                                                             @endphp
 
                                                                                                             {{-- for lens --}}
@@ -809,21 +640,20 @@
                                                                                                                 </div>
                                                                                                                 <div class="col-3">
                                                                                                                     <span>
-                                                                                                                        {{ initials($type)=='BT'?'Bifocal Round Top':initials($type) }} {{ $chrm }} {{ $ct }} {{ $indx }}
+                                                                                                                        {{ initials($invoice_product->type->name)=='BT'?'Bifocal Round Top':
+                                                                                                                        initials($invoice_product->type->name) }} 
+                                                                                                                        {{ $invoice_product->uchromatic->name }} 
+                                                                                                                        {{ $invoice_product->coating->name }} 
+                                                                                                                        {{ $invoice_product->uindex->name }} 
                                                                                                                     </span>
                                                                                                                 </div>
                                                                                                                 <div class="col-2">
-                                                                                                                    @if (initials($type) == 'SV')
-                                                                                                                        <span>{{ format_values($invoice_product->sphere) }}
-                                                                                                                            /
-                                                                                                                            {{ format_values($invoice_product->cylinder) }}</span>
-                                                                                                                    @else
-                                                                                                                        <span>{{ format_values($invoice_product->sphere) }}
-                                                                                                                            /
-                                                                                                                            {{ format_values($invoice_product->cylinder) }}
-                                                                                                                            *{{ format_values($invoice_product->axis) }}
-                                                                                                                            {{ $invoice_product->addition }}</span>
-                                                                                                                    @endif
+                                                                                                                    <span>{{ format_values($invoice_product->sphere) }}
+                                                                                                                        /
+                                                                                                                        {{ format_values($invoice_product->cylinder) }}
+                                                                                                                        *{{ format_values($invoice_product->axis ?? 0) }}
+                                                                                                                        {{ $invoice_product->addition }}
+                                                                                                                    </span>
                                                                                                                 </div>
                                                                                                                 <div class="col-2 row">
                                                                                                                     <span>
@@ -977,7 +807,7 @@
                                                     </div>
                                                 </div>
                                             @endif
-                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                             </div>

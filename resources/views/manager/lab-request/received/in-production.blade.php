@@ -1,3 +1,4 @@
+
 @extends('manager.includes.app')
 
 @section('title', 'Dashboard - Product')
@@ -274,7 +275,7 @@
                                                                                                 <span>{{ $invoice_product->power->sphere }}
                                                                                                     /
                                                                                                     {{ $invoice_product->power->cylinder }}
-                                                                                                    *{{ $invoice_product->power->axis }}
+                                                                                                    *{{ $invoice_product->axis }}
                                                                                                     {{ $invoice_product->power->add }}</span>
                                                                                             @endif
                                                                                         </div>
@@ -664,7 +665,7 @@
                                                                                                 <span>{{ $invoice_product->power->sphere }}
                                                                                                     /
                                                                                                     {{ $invoice_product->power->cylinder }}
-                                                                                                    *{{ $invoice_product->power->axis }}
+                                                                                                    *{{ $invoice_product->axis }}
                                                                                                     {{ $invoice_product->power->add }}</span>
                                                                                             @endif
                                                                                         </div>
