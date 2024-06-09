@@ -181,7 +181,9 @@
                                                                                         {{ format_values($right_len->sphere) }}
                                                                                         /
                                                                                         {{ format_values($right_len->cylinder) }}
-                                                                                        @if ($request->soldproduct)
+                                                                                        @if (count($request->soldproduct))
+
+                                                                                        
                                                                                             @if ( $request->soldproduct[0]->eye=='right')
                                                                                                 <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
                                                                                             @endif
@@ -196,7 +198,7 @@
                                                                                         {{ format_values($right_len->power->sphere) }}
                                                                                         /
                                                                                         {{ format_values($right_len->power->cylinder) }}
-                                                                                        @if ($request->soldproduct)
+                                                                                        @if (count($request->soldproduct))
                                                                                             @if ( $request->soldproduct[0]->eye=='right')
                                                                                                 <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
                                                                                             @endif
@@ -217,7 +219,7 @@
                                                                                     {{ format_values($left_len->sphere) }}
                                                                                     /
                                                                                     {{ format_values($left_len->cylinder) }}
-                                                                                    @if ($request->soldproduct)
+                                                                                    @if (count($request->soldproduct))
                                                                                         @if ( $request->soldproduct[0]->eye=='left')
                                                                                             <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
                                                                                         @endif
@@ -230,7 +232,7 @@
                                                                                     {{ format_values($left_len->power->sphere) }}
                                                                                     /
                                                                                     {{ format_values($left_len->power->cylinder) }}
-                                                                                    @if ($request->soldproduct)
+                                                                                    @if (count($request->soldproduct))
                                                                                         @if ( $request->soldproduct[0]->eye=='left')
                                                                                             <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
                                                                                         @endif
@@ -677,7 +679,7 @@
                                                                                         {{ format_values($right_len->sphere) }}
                                                                                         /
                                                                                         {{ format_values($right_len->cylinder) }}
-                                                                                        @if ($request->soldproduct)
+                                                                                        @if (count($request->soldproduct))
                                                                                             @if ( $request->soldproduct[0]->eye=='right')
                                                                                                 <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
                                                                                             @endif
@@ -692,7 +694,7 @@
                                                                                         {{ format_values($right_len->power->sphere) }}
                                                                                         /
                                                                                         {{ format_values($right_len->power->cylinder) }}
-                                                                                        @if ($request->soldproduct)
+                                                                                        @if (count($request->soldproduct))
                                                                                             @if ( $request->soldproduct[0]->eye=='right')
                                                                                                 <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
                                                                                             @endif
@@ -713,7 +715,7 @@
                                                                                     {{ format_values($left_len->sphere) }}
                                                                                     /
                                                                                     {{ format_values($left_len->cylinder) }}
-                                                                                    @if ($request->soldproduct)
+                                                                                    @if (count($request->soldproduct))
                                                                                         @if ( $request->soldproduct[0]->eye=='left')
                                                                                             <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
                                                                                         @endif
@@ -726,7 +728,7 @@
                                                                                     {{ format_values($left_len->power->sphere) }}
                                                                                     /
                                                                                     {{ format_values($left_len->power->cylinder) }}
-                                                                                    @if ($request->soldproduct)
+                                                                                    @if (count($request->soldproduct))
                                                                                         @if ( $request->soldproduct[0]->eye=='left')
                                                                                             <span class="text-primary">*{{ ($request->soldproduct[0]->axis) }}</span>
                                                                                         @endif
