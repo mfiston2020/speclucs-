@@ -754,8 +754,7 @@
                                                                             #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                         </h4>
                                                                     </div>
-                                                                    <button type="button" class="close"
-                                                                        data-dismiss="modal" aria-hidden="true">×</button>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <h4 class="text-info">Lens</h4>

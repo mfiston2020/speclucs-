@@ -278,15 +278,17 @@
                                                                                         <address>
 
                                                                                             <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt="" height="100px">
-                                                                                            {{-- @if (Auth::user()->company_id != 3) --}}
-                                                                                            <h3> &nbsp;<b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b></h3>
-                                                                                            {{-- @endif --}}
-                                                                                            <p class="text-muted m-l-5"><strong class="text-black-50">TIN Number:</strong>
+                                                                                            <h3> &nbsp;
+                                                                                                <b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b>
+                                                                                            </h3>
+                                                                                            <p class="text-muted m-l-5">
+                                                                                            <strong class="text-black-50">TIN Number:</strong>
                                                                                                 {{ getuserCompanyInfo()->company_tin_number }}
-                                                                                                {{-- <br /><span></span> {{getuserCompanyInfo()->company_street}} --}}
-                                                                                                <br /><strong class="text-black-50">Phone Number:</strong>
+                                                                                                <br />
+                                                                                                <strong class="text-black-50">Phone Number:</strong>
                                                                                                 {{ getuserCompanyInfo()->company_phone }}
-                                                                                                <br /><strong class="text-black-50">Email:</strong>
+                                                                                                <br />
+                                                                                                <strong class="text-black-50">Email:</strong>
                                                                                                 {{ getuserCompanyInfo()->company_email }}
                                                                                             </p>
                                                                                         </address>
