@@ -188,7 +188,7 @@
                                                                                 <div class="pull-left mb-4 d-none d-print-block">
                                                                                     <address>
 
-                                                                                        <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt="" height="100px">
+                                                                                        <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt="" width="100px">
                                                                                         <h3> &nbsp;
                                                                                             <b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b>
                                                                                         </h3>
@@ -546,7 +546,7 @@
                                                                                     <div class="pull-left mb-4 d-none d-print-block">
                                                                                         <address>
 
-                                                                                            <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt="" height="100px">
+                                                                                            <img src="{{ asset('documents/logos/' . getuserCompanyInfo()->logo) }}" alt="" width="100px">
                                                                                             <h3> &nbsp;
                                                                                                 <b class="text-danger">{{ getuserCompanyInfo()->company_name }}</b>
                                                                                             </h3>
