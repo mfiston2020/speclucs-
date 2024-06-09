@@ -146,7 +146,7 @@
                                                                             $left_len_befor_product    =   null;
 
                                                                             $right_len = $request->unavailableproducts->where('eye', 'right')->first();
-                                                                            $$right_len_befor_product    =   $right_len;
+                                                                            $right_len_befor_product    =   $right_len;
 
                                                                             if (!$right_len) {
                                                                                 $right_len = $request->soldproduct->where('eye', 'right')->first();
