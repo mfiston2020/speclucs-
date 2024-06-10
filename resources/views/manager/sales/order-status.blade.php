@@ -58,9 +58,8 @@
                                 </button>
 
                                 <div class="table-responsive">
-                                    {{$other_orders->links()}}
-                                    <table id="zero_config" class="table table-striped table-bordered nowrap"
-                                    style="width:100%">
+                                    <div class="float-right">{{$other_orders->links()}}</div>
+                                    <table id="zero_config" class="table table-striped table-bordered nowrap" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -124,8 +123,8 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <div class="float-right">{{$other_orders->links()}}</div>
                                 </div>
-                                <div class="float-right">{{ $other_orders->links() }}</div>
                             </div>
                         </div>
                     </div>
@@ -207,8 +206,8 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <div class="float-right">{{$other_orders_out->links()}}</div>
                                 </div>
-                                <div class="float-right">{{$other_orders_out->links()}}</div>
                             </div>
                         </div>
                     </div>
