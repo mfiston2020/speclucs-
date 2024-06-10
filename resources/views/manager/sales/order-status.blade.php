@@ -25,7 +25,7 @@
                                         aria-expanded="false">
                                         Internal Orders
                                         <span class="badge badge-danger badge-pill">{{ number_format($other_orders->total()) }}</span>
-                                        
+
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -141,7 +141,7 @@
                                 </button>
 
                                 <div class="table-responsive">
-                                    {{$other_orders->links()}}
+                                    {{$other_orders_out->links()}}
                                     <table id="zero_config_external" class="table table-striped table-bordered nowrap" style="width:100%">
                                         <thead>
                                             <tr>
@@ -208,7 +208,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="float-right">{{$other_orders->links()}}</div>
+                                <div class="float-right">{{$other_orders_out->links()}}</div>
                             </div>
                         </div>
                     </div>
