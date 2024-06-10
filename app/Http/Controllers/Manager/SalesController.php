@@ -108,7 +108,7 @@ class SalesController extends Controller
     {
         $id =   Crypt::decrypt($id);
 
-        $invoice    =   \App\Models\Invoice::find($id);
+        $invoice    =   Invoice::find($id);
         $products   =   SoldProduct::where('invoice_id', $id)->orderBy('eye','desc')->get();
 
         $na_products        =   UnavailableProduct::where('invoice_id', $id)->whereIn('status', ['pending', 'approved'])->orderBy('eye','desc')->get();

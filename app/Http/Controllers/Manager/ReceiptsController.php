@@ -221,11 +221,9 @@ class ReceiptsController extends Controller
     public function invoiceDetail($id)
     {
         $id         =   Crypt::decrypt($id);
-        $invoice    =   Invoice::where(['id' => $id])->where('company_id', Auth::user()->company_id)->with('soldproduct')->withsum('soldproduct', 'patient_payment')->withsum('unavailableProducts', 'price')->with('unavailableProducts')->first();
+        $invoice    =   Invoice::where(['id' => $id])->with('soldproduct')->withsum('soldproduct', 'patient_payment')->withsum('unavailableProducts', 'price')->with('unavailableProducts')->first();
 
         $companyInfo    =   getuserCompanyInfo();
-
-        // $products    =   Product::where('company_id', $companyInfo->id)->first();
 
         return view('manager.receipt.detail', compact('invoice', 'companyInfo'));
     }

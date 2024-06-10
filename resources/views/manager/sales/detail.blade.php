@@ -76,14 +76,10 @@
                                                 <h6>{{ lensDescription($product->product->product_name) }}</h6>
                                                 <small class="text-muted">
                                                     @if ($product->product->power)
-                                                        @if (initials($product->product->product_name) == 'SV')
-                                                            <span> {{ $product->product->power->sphere }} / {{ $product->product->power->cylinder }}</span>
-                                                        @else
-                                                            <span>
-                                                                {{ $product->product->power->sphere }} / {{ $product->product->power->cylinder }}
-                                                                *{{ $product->product->power->axis }} {{ $product->product->power->add }}{{ $product->product->power->addition }}
-                                                            </span>
-                                                        @endif
+                                                        <span>
+                                                            {{ $product->product->power->sphere }} / {{ $product->product->power->cylinder }}
+                                                            <span class="text-primary">*{{ $product->axis??0 }}</span> {{ $product->product->power->add }}{{ $product->product->power->addition }}
+                                                        </span>
                                                     @endif
                                                 </small>
                                             </td>
@@ -91,16 +87,7 @@
                                             <td>{{ format_money($product->unit_price) }}</td>
                                             <td>{{ format_money($product->discount ) }}</td>
                                             <td>{{ format_money($product->unit_price * $product->quantity) }}</td>
-                                            {{-- @if ($invoice->status == 'completed')
-                                            @else
-                                                <td>
-                                                    <a href="{{ route('manager.sales.edit.product', Crypt::encrypt($product->id)) }}"
-                                                        style="color: rgb(0, 38, 255)">Edit</a>
-                                                    <a href="#" class="pl-2" data-toggle="modal"
-                                                        data-target="#myModal-{{ $key }}"
-                                                        style="color: red">Delete</a>
-                                                </td>
-                                            @endif --}}
+                                            
                                         </tr>
 
                                         <div id="myModal-{{ $key }}" class="modal fade" tabindex="-1"
