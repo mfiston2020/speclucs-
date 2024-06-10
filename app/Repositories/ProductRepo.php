@@ -4,15 +4,17 @@ namespace App\Repositories;
 
 use App\Interface\ProductInterface;
 use App\Models\CompanyInformation;
-use App\Models\LensPricing;
+use App\Models\Invoice;
 use App\Models\LensType;
 use App\Models\Order;
+use App\Models\PhotoChromatics;
+use App\Models\PhotoCoating;
+use App\Models\PhotoIndex;
 use App\Models\Power;
 use App\Models\Product;
 use App\Models\SoldProduct;
 use App\Models\UnavailableProduct;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class ProductRepo implements ProductInterface
@@ -21,14 +23,6 @@ class ProductRepo implements ProductInterface
     public String $message  =   '';
     public bool $showProductDetails  =   false;
     public $products,$productList;
-
-
-    public function __construct()
-    {
-        // $this->products = Product::where('company_id',auth()->user()->company_id)->with('soldproducts')->get();
-
-        // $this->productList    =   Product::where('company_id',auth()->user()->company_id)->withOnly('soldproducts:id,quantity')->select('id','stock')->get();
-    }
 
     function searchProduct(array $productDescription)
     {
@@ -47,7 +41,7 @@ class ProductRepo implements ProductInterface
                         && $productDescription['cylinder'] != null
                     ) {
 
-                        $product_id     =   \App\Models\Power::where('type_id', $productDescription['type'])
+                        $product_id     =   Power::where('type_id', $productDescription['type'])
                             ->where('index_id', $productDescription['index'])
                             ->where('chromatics_id', $productDescription['chromatic'])
                             ->where('coating_id', $productDescription['coating'])
@@ -58,7 +52,7 @@ class ProductRepo implements ProductInterface
                             // ->where('company_id', userInfo()->company_id)
                             ->select('product_id')->first();
 
-                        $productResult   =   \App\Models\Product::find($product_id);
+                        $productResult   =   Product::find($product_id);
                         if (!$productResult) {
                             return 'product-not-found';
                         } else {
@@ -75,7 +69,7 @@ class ProductRepo implements ProductInterface
                         $productDescription['sphere']!=null && $productDescription['cylinder']!=null &&
                         $productDescription['axis']!=null && $productDescription['addition']!=null && $productDescription['eye']!=null
                     ) {
-                        $product_id     =   \App\Models\Power::where('type_id', $productDescription['type'])
+                        $product_id     =   Power::where('type_id', $productDescription['type'])
                             ->where('index_id', $productDescription['index'])
                             ->where('chromatics_id', $productDescription['chromatic'])
                             ->where('coating_id', $productDescription['coating'])
@@ -90,7 +84,7 @@ class ProductRepo implements ProductInterface
                             ->where('company_id', $productDescription['supplier'])
                             ->select('product_id')->first();
 
-                        $productResult    =   \App\Models\Product::find($product_id);
+                        $productResult    =   Product::find($product_id);
                         // dd($productResult);
                         if (!$productResult) {
                             return 'product-not-found';
@@ -105,7 +99,7 @@ class ProductRepo implements ProductInterface
                 return 'product-not-found';
             }
         } else {
-            return   \App\Models\Product::find($productDescription['product_id']);
+            return   Product::find($productDescription['product_id']);
         }
     }
 
@@ -185,7 +179,6 @@ class ProductRepo implements ProductInterface
             'minStock'  =>  $usage,
             'QtyTKeep'  =>  $usage*3,
             'status'    =>  $status,
-            'status'    =>  $status,
             'QtyEfficiency'     =>  $stock-$usage,
             'efficiency_ratio'  =>  round($inventoryEfficiency,2).'%',
         ];
@@ -232,12 +225,12 @@ class ProductRepo implements ProductInterface
     {
         if ($category == '1' && $category != null) {
             // ============================================
-            $product    =   new \App\Models\Product();
+            $product    =   new Product();
 
-            $lens_type  =   \App\Models\LensType::find($request['type_id']);
-            $index      =   \App\Models\PhotoIndex::find($request['index_id']);
-            $chromatic  =   \App\Models\PhotoChromatics::find($request['chromatic_id']);
-            $coating    =   \App\Models\PhotoCoating::find($request['coating_id']);
+            $lens_type  =   LensType::find($request['type_id']);
+            $index      =   PhotoIndex::find($request['index_id']);
+            $chromatic  =   PhotoChromatics::find($request['chromatic_id']);
+            $coating    =   PhotoCoating::find($request['coating_id']);
 
 
             if ($isOrder) {
@@ -288,7 +281,7 @@ class ProductRepo implements ProductInterface
                     try {
                         $product->save();
 
-                        $power                    =   new \App\Models\Power();
+                        $power                    =   new Power();
                         $power->product_id        =   $product->id;
                         $power->type_id           =   $lens_type->id;
                         $power->index_id          =   $index->id;
@@ -318,7 +311,7 @@ class ProductRepo implements ProductInterface
 
                     $product->save();
 
-                    $power                    =   new \App\Models\Power();
+                    $power                    =   new Power();
                     $power->product_id        =   $product->id;
                     $power->type_id           =   $lens_type->id;
                     $power->index_id          =   $index->id;
@@ -340,13 +333,13 @@ class ProductRepo implements ProductInterface
     // make lab order function
     function makeLabOrder(array $request, string $product_id)
     {
-        $lens_type  =   \App\Models\LensType::find($request['type_id']);
-        $index      =   \App\Models\PhotoIndex::find($request['index_id']);
-        $chromatic  =   \App\Models\PhotoChromatics::find($request['chromatic_id']);
-        $coating    =   \App\Models\PhotoCoating::find($request['coating_id']);
+        $lens_type  =   LensType::find($request['type_id']);
+        $index      =   PhotoIndex::find($request['index_id']);
+        $chromatic  =   PhotoChromatics::find($request['chromatic_id']);
+        $coating    =   PhotoCoating::find($request['coating_id']);
 
 
-        $order  =   new \App\Models\Order();
+        $order  =   new Order();
 
         $order->company_id      =   userInfo()->company_id;
         // $order->supplier_id     =   $request['supplier'];
@@ -381,11 +374,11 @@ class ProductRepo implements ProductInterface
         $order->addition_l  =   $request['addition_l'];
 
         try {
-            $power          =   \App\Models\Power::where(['product_id' => $product_id])->select('*')->first();
-            // $company        =   \App\Models\CompanyInformation::find($company_id);
-            // $this_company   =   \App\Models\CompanyInformation::find(userInfo()->company_id);
+            $power          =   Power::where(['product_id' => $product_id])->select('*')->first();
+            // $company        =   CompanyInformation::find($company_id);
+            // $this_company   =   CompanyInformation::find(userInfo()->company_id);
 
-            $product           =   \App\Models\Product::find($product_id);
+            $product           =   Product::find($product_id);
 
             if (initials($product->product_name) == 'SV') {
                 $lenPower   =   $product->description . " " . $power->sphere . " / " . $power->cylinder;
@@ -396,7 +389,7 @@ class ProductRepo implements ProductInterface
             // Notification::route('mail', $company->company_email)->notify(new OrderPlaced($this_company->company_name,$lenPower));
             $order->save();
 
-            // $notification   =   new \App\Models\SupplierNotify();
+            // $notification   =   new SupplierNotify();
             // $notification->company_id   =   userInfo()->company_id;
             // // $notification->supplier_id  =   $company_id;
             // $notification->order_id     =   $order->id;
@@ -416,7 +409,7 @@ class ProductRepo implements ProductInterface
         $reference  =   count(DB::table('invoices')->select('reference_number')->where('company_id', userInfo()->company_id)->get());
         $pending    =   count(DB::table('invoices')->select('*')->where('status', '=', 'pending')->where('company_id', userInfo()->company_id)->where('user_id', '=', userInfo()->id)->get());
 
-        $invoice    =   new \App\Models\Invoice();
+        $invoice    =   new Invoice();
 
         $invoice->reference_number  =   $reference + 1;
         $invoice->client_name       =   $product['firstname'] . ' ' . $product['lastname'];
@@ -427,7 +420,7 @@ class ProductRepo implements ProductInterface
         $invoice->company_id        =   userInfo()->company_id;
         $invoice->save();
 
-        $sold   =   new \App\Models\SoldProduct();
+        $sold   =   new SoldProduct();
 
         $sold->invoice_id   =   $invoice->id;
         $sold->product_id   =   $product['product_id'];
@@ -476,12 +469,12 @@ class ProductRepo implements ProductInterface
     // save unavailable products to stock
     function saveUnavailableToStock(array $request)
     {
-        $product    =   new \App\Models\Product();
+        $product    =   new Product();
 
-        $lens_type  =   \App\Models\LensType::find($request['type_id']);
-        $index      =   \App\Models\PhotoIndex::find($request['index_id']);
-        $chromatic  =   \App\Models\PhotoChromatics::find($request['chromatic_id']);
-        $coating    =   \App\Models\PhotoCoating::find($request['coating_id']);
+        $lens_type  =   LensType::find($request['type_id']);
+        $index      =   PhotoIndex::find($request['index_id']);
+        $chromatic  =   PhotoChromatics::find($request['chromatic_id']);
+        $coating    =   PhotoCoating::find($request['coating_id']);
 
         $description=   initials($lens_type['name']) . " " . $index['name'] . " " . $chromatic['name'] . " " . $coating['name'];
 
@@ -506,7 +499,7 @@ class ProductRepo implements ProductInterface
 
         $product->save();
 
-        $power                    =   new \App\Models\Power();
+        $power                    =   new Power();
         $power->product_id        =   $product->id;
         $power->type_id           =   $lens_type->id;
         $power->index_id          =   $index->id;

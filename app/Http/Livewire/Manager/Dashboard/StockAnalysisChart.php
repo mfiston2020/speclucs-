@@ -52,7 +52,7 @@ class StockAnalysisChart extends Component
 
         foreach ($this->products as $key=> $product) {
 
-            $fromPo =   $productRepo->productStockEfficiency($product->id,$product->soldproducts->sum('quantity'),$product->stock,$product->category_id,null,$companyId);
+            $fromPo =   $productRepo->productStockEfficiency($product->id,$product->soldproducts->sum('quantity'),$product->stock,$product->category_id,90);
 
             // lens
             if ($fromPo['category']=='1') {

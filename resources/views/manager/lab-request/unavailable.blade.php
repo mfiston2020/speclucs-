@@ -154,8 +154,7 @@
                                                 @foreach ($requests as $key => $request)
                                                     {{-- modal --}}
 
-                                                    <div class="modal fade bs-example-modal-lg"
-                                                        id="request-{{ $key }}-detail" tabindex="-1"
+                                                    <div class="modal fade bs-example-modal-lg" id="request-{{ $key }}-detail" tabindex="-1"
                                                         role="dialog" aria-labelledby="myLargeModalLabel"
                                                         aria-hidden="true" style="display: none;">
                                                         <div class="modal-dialog modal-xl d-print-inline">

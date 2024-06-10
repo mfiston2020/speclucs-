@@ -23,12 +23,21 @@
 
         {{ $slot }}
 
-        {{-- @livewire('manager.add-sale-product', ['invoice_id' => $invoice_id]) --}}
-
     </div>
 @endsection
 
 @push('scripts')
     <script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
+    <script>
+
+        function exportAll(type) {
+
+            $('#scroll_ver').tableExport({
+                filename: 'table_%DD%-%MM%-%YY%-month(%MM%)',
+                format: type
+            });
+        }
+    </script>
 @endpush

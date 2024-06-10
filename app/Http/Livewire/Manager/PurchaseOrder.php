@@ -65,6 +65,11 @@ class PurchaseOrder extends Component
         $this->showTable    =   false;
     }
 
+    function export()
+    {
+        $this->dispatch('total-cost');
+    }
+
     function mount(){
         $this->categories   =   Category::get();
     }
