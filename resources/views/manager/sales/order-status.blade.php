@@ -58,7 +58,7 @@
                                 </button>
 
                                 <div class="table-responsive">
-                                    <div class="float-left">{{$other_orders->links()}}</div>
+                                    {{$other_orders->links()}}
                                     <table id="zero_config" class="table table-striped table-bordered nowrap" style="width:100%">
                                         <thead>
                                             <tr>
@@ -140,7 +140,7 @@
                                 </button>
 
                                 <div class="table-responsive">
-                                    <div class="float-left">{{$other_orders_out->links()}}</div>
+                                    {{$other_orders_out->links()}}
                                     <table id="zero_config_external" class="table table-striped table-bordered nowrap" style="width:100%">
                                         <thead>
                                             <tr>
