@@ -74,7 +74,18 @@ function productPricingSection() {
 
                                 </div>
                             </div>
-                            <div class="col-md-2 flex">
+
+                            <div class="col-md-4 mt-3">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Wholesale Price</span>
+                                    </div>
+                                    <input type="text" name="wholesale_price[]" class="form-control" required>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 d-flex">
                                 <button class="btn btn-danger mt-3" type="button" onclick="remove_product_fields('` + room + `');">
                                         <i class="fa fa-minus"></i>
                                 </button>

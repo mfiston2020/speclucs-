@@ -15,7 +15,11 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Column -->
+
+        @include('manager.includes.layouts.message')
+
         <div class="col-lg-12 col-xlg-12 col-md-12">
+
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item ">
                     <a class="nav-link active" data-toggle="tab" href="#lens-pricing" role="tab">
@@ -70,6 +74,7 @@
                     </a>
                 </li>
             </ul>
+
             <!-- Tab panes -->
             <div class="tab-content tabcontent-border">
 
@@ -118,14 +123,14 @@
                                                     <tr>
                                                         <td>{{$key+1}}</td>
                                                         <td>{{lensDescription(initials($pricing->lenstype->name)).' '.$pricing->index->name.' '.$pricing->chromatics->name.' '.$pricing->coating->name}}</td>
-                                                        <td>{{$pricing->sphere_from}}</td>
-                                                        <td>{{$pricing->sphere_to}}</td>
-                                                        <td>{{$pricing->cylinder_from}}</td>
-                                                        <td>{{$pricing->cylinder_to}}</td>
-                                                        <td>{{$pricing->addition_from}}</td>
-                                                        <td>{{$pricing->addition_to}}</td>
-                                                        <td>{{format_money($pricing->cost)}}</td>
-                                                        <td>{{format_money($pricing->price)}}</td>
+                                                        <td>{{ $pricing->sphere_from }}</td>
+                                                        <td>{{ $pricing->sphere_to }}</td>
+                                                        <td>{{ $pricing->cylinder_from }}</td>
+                                                        <td>{{ $pricing->cylinder_to }}</td>
+                                                        <td>{{ $pricing->addition_from }}</td>
+                                                        <td>{{ $pricing->addition_to }}</td>
+                                                        <td>{{ format_money($pricing->cost)}}</td>
+                                                        <td>{{ format_money($pricing->price)}}</td>
                                                         <td>
                                                             <form action="{{route('manager.clinic.pricing.remove',Crypt::encrypt($pricing->id))}}" method="post" onsubmit="return confirm('Are You sure ?')">
                                                                 @csrf
@@ -145,7 +150,6 @@
                         <div class="tab-pane  p-20" id="profile" role="tabpanel">
 
                             <div class="col-md-12" id="lens">
-                                @include('manager.includes.layouts.message')
                                 <form action={{route('manager.clinic.settings.lens.pricing.save')}} method="post">
                                     @csrf
                                     <div class="card">
@@ -229,7 +233,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12" id="eyes">
                                                         <div class="form-group row">
-                                                            <div class="col-12 mt-3">
+                                                            <div class="col-12 mt-3 d-flex justify-content-end">
                                                                 <div class="form-group">
                                                                     <button class="btn btn-success" type="button"
                                                                         onclick="productPricingSection();"><i class="fa fa-plus"></i>

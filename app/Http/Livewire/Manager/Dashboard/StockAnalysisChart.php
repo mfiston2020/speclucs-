@@ -48,11 +48,9 @@ class StockAnalysisChart extends Component
 
         $productRepo  =   new ProductRepo();
 
-        // $fromPo =   $productRepo->productStockEfficiency($this->products[100]->id,$this->products[100]->soldproducts->sum('quantity'),$this->products[100]->stock,$this->products[100]->category_id);
-
         foreach ($this->products as $key=> $product) {
 
-            $fromPo =   $productRepo->productStockEfficiency($product->id,$product->soldproducts->sum('quantity'),$product->stock,$product->category_id,90);
+            $fromPo =   $productRepo->productStockEfficiency($product->id,$product->soldproducts->sum('quantity'),$product->stock,$product->category_id);
 
             // lens
             if ($fromPo['category']=='1') {
@@ -66,10 +64,6 @@ class StockAnalysisChart extends Component
                 ];
 
                 array_push($this->productstatus,$fromPo['status']);
-
-                // if ($fromPo['status']=='0') {
-                //    dd($fromPo);
-                // }
             }
 
             // frame

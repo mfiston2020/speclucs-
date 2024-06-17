@@ -187,14 +187,13 @@ class ProductRetail extends Component
         } else {
             // L
             $this->leftPriceRange = LensPricing::where('type_id',$this->lens_type)
-                                                ->where('index_id',$this->lens_index)
-                                                ->where('chromatic_id',$this->lens_chromatic)
-                                                ->where('coating_id',$this->lens_coating)
-                                                ->where('sphere_from','>=',format_values($left_sphere))
-                                                ->where('sphere_to','<=',format_values($left_sphere))
-                                                ->where('cylinder_from','>=',format_values($this->l_cylinder))
-                                                ->where('cylinder_to','<=',format_values($this->l_cylinder))
-                                                ->select('price','cost')->first();
+                                                    ->where('index_id',$this->lens_index)
+                                                    ->where('chromatic_id',$this->lens_chromatic)
+                                                    ->where('coating_id',$this->lens_coating)
+                                                    ->whereRaw('? BETWEEN sphere_from AND sphere_to', [(float) format_values($left_sphere)])
+                                                    ->whereRaw('? BETWEEN cylinder_from AND cylinder_to', [(float) format_values($this->l_cylinder)])
+                                                    ->select('price','cost','wholesale_price')
+                                                    ->first();
         }
         if (is_null($this->leftPriceRange)) {
             $this->autoL =   false;
@@ -229,11 +228,10 @@ class ProductRetail extends Component
                                                     ->where('index_id',$this->lens_index)
                                                     ->where('chromatic_id',$this->lens_chromatic)
                                                     ->where('coating_id',$this->lens_coating)
-                                                    ->where('sphere_from','>=',format_values($right_sphere))
-                                                    ->where('sphere_to','<=',format_values($right_sphere))
-                                                    ->where('cylinder_from','>=',format_values($this->r_cylinder))
-                                                    ->where('cylinder_to','<=',format_values($this->r_cylinder))
-                                                    ->select('price','cost')->first();
+                                                    ->whereRaw('? BETWEEN sphere_from AND sphere_to', [(float) format_values($right_sphere)])
+                                                    ->whereRaw('? BETWEEN cylinder_from AND cylinder_to', [(float) format_values($this->r_cylinder)])
+                                                    ->select('price','cost','wholesale_price')
+                                                    ->first();
         }
 
         if (is_null($this->rightPriceRange)) {

@@ -205,6 +205,7 @@ class ClinicSettingController extends Controller
 
     // lens pricing
     function lensPricingSave(Request $request){
+
         $this->validate($request,[
             'lens_type' =>  'required',
             'index'     =>  'required',
@@ -217,27 +218,30 @@ class ClinicSettingController extends Controller
         }
         else{
 
-            $lensPricing    =   new LensPricing();
+            try {
+                foreach ($request->sphere_from as $key => $value) {
 
-            foreach ($request->sphere_from as $key => $value) {
-                $lensPricing->company_id   =  userInfo()->company_id;
-                $lensPricing->type_id      =  $request->lens_type;
-                $lensPricing->coating_id   =  $request->coating;
-                $lensPricing->index_id     =  $request->index;
-                $lensPricing->chromatic_id =  $request->chromatics;
-                $lensPricing->sphere_from  =  $request->sphere_from[$key];
-                $lensPricing->sphere_to    =  $request->sphere_to[$key];
-                $lensPricing->cylinder_from=  $request->cylinder_from[$key];
-                $lensPricing->cylinder_to  =  $request->cylinder_to[$key];
-                $lensPricing->addition_from=  $request->addition_from[$key];
-                $lensPricing->addition_to  =  $request->addition_to[$key];
-                $lensPricing->cost         =  $request->cost[$key];
-                $lensPricing->price        =  $request->price[$key];
-                try {
+                    $lensPricing               =   new LensPricing();
+                    $lensPricing->company_id   =  userInfo()->company_id;
+                    $lensPricing->type_id      =  $request->lens_type;
+                    $lensPricing->coating_id   =  $request->coating;
+                    $lensPricing->index_id     =  $request->index;
+                    $lensPricing->chromatic_id =  $request->chromatics;
+                    $lensPricing->sphere_from  =  (float)format_values($request->sphere_from[$key]);
+                    $lensPricing->sphere_to    =  (float)format_values($request->sphere_to[$key]);
+                    $lensPricing->cylinder_from=  (float)format_values($request->cylinder_from[$key]);
+                    $lensPricing->cylinder_to  =  (float)format_values($request->cylinder_to[$key]);
+                    $lensPricing->addition_from=  (float)format_values($request->addition_from[$key]);
+                    $lensPricing->addition_to  =  (float)format_values($request->addition_to[$key]);
+                    $lensPricing->cost         =  $request->cost[$key];
+                    $lensPricing->price        =  $request->price[$key];
+                    $lensPricing->wholesale_price        =  $request->wholesale_price[$key];
+
                     $lensPricing->save();
-                } catch (\Throwable $th) {
-                    dd($th);
+
                 }
+            } catch (\Throwable $th) {
+                dd($th);
             }
             return redirect()->back()->with('successMsg','Pricing saved!');
         }
