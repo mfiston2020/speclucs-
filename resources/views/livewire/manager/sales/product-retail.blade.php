@@ -627,8 +627,12 @@
                     </div>
                     <div class="card-body">
 
+                                @if ($informationMessage)
+                                    <div class="alert alert-danger font-bold"><i class="fa fa-exclamation-triangle"></i> {{$informationMessage}}</div>
+                                @endif
                         <div class="row">
                             <div class="col-12 row">
+
                                 <!--/span-->
                                 <div class="col-md-3 col-sm-12">
                                     <label>Products</label>
@@ -929,6 +933,7 @@
                                 @endif
                                 <button class="btn btn-sm btn-info" type="button" wire:click=calculateInsurance>
                                     Calculate
+                                    <img src="{{ asset('dashboard/assets/images/loading2.gif') }}" wire:loading wire:target="calculateInsurance" height="20" alt="">
                                 </button>
                             </div>
 
@@ -967,13 +972,13 @@
     <script src="{{ asset('dashboard/assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
     <script src="{{ asset('dashboard/assets/libs/select2/dist/js/select2.min.js')}}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/forms/select2/select2.init.js')}}"></script>
-
-
-    <script src="//unpkg.com/alpinejs" defer></script>
     <script>
-        window.addEventListener('showwarningModal', event => {
-            $("#warningModal").modal('show');
-        })
+        $wire.on('showwarningModal', () => {
+            $('#warningModal').modal('show');
+        });
+        // window.addEventListener('showwarningModal', event => {
+        //     $("#warningModal").modal('show');
+        // })
 
         $('#frame').on('change', function() {
             frameAdjustment();

@@ -37,7 +37,7 @@ class ProductRetail extends Component
     // control variables
     public $lensType, $lensIndex, $lensCoating, $lensChromaticAspect, $frameList, $accessoriesList, $insuranceList;
 
-    public $rightEye = false, $leftEye = false, $showPaymentSection = false, $leftLen = false, $rightLen = false, $leftLenFound = true, $rightLenFound = false, $searchProduct = false, $showsubmit = false, $isCloudOrder = 'no',$leftPriceRange,$rightPriceRange;
+    public $rightEye = false, $leftEye = false, $showPaymentSection = false, $leftLen = false, $rightLen = false, $leftLenFound = true, $rightLenFound = false, $searchProduct = false, $showsubmit = false, $isCloudOrder = 'no',$leftPriceRange=null,$rightPriceRange=null;
 
     // ============== lens selection variables ========
     public $lens_type, $lens_index, $lens_coating, $lens_chromatic;
@@ -72,8 +72,7 @@ class ProductRetail extends Component
     ];
 
     // showing cloud form and hidding it
-    function hideCloud($value)
-    {
+    function hideCloud($value){
         $this->isCloudOrder =   $value;
     }
 
@@ -105,8 +104,7 @@ class ProductRetail extends Component
     }
 
     // searching for frame
-    function updatedframe($val)
-    {
+    function updatedframe($val){
         $data   =   [
             'productType' => 'frame',
             'product_id' => $val
@@ -139,8 +137,7 @@ class ProductRetail extends Component
     }
 
     // searching accessories
-    function updatedaccessory($value)
-    {
+    function updatedaccessory($value){
         $data   =   [
             'productType' => 'frame',
             'product_id' => $value
@@ -169,6 +166,7 @@ class ProductRetail extends Component
     // if product not found give price if it's in the pricing range
     function autoPricingLeft(){
 
+        $this->leftPriceRange   =   null;
         $left_sphere = $this->l_sphere==0?$this->l_sphere:($this->r_sign=='minus' ? -1*abs($this->l_sphere):abs($this->l_sphere));
 
         if (initials($this->lensType->where('id',$this->lens_type)->pluck('name')->first())!='SV') {
@@ -205,7 +203,7 @@ class ProductRetail extends Component
 
     // if product not found give price if it's in the pricing range
     function autoPricingRight(){
-
+        $this->rightPriceRange  =   null;
         $right_sphere = $this->r_sphere==0?$this->r_sphere:($this->r_sign=='minus' ? -1*abs($this->r_sphere):abs($this->r_sphere));
 
         if (initials($this->lensType->where('id',$this->lens_type)->pluck('name')->first())!='SV') {
@@ -228,8 +226,10 @@ class ProductRetail extends Component
                                                     ->where('index_id',$this->lens_index)
                                                     ->where('chromatic_id',$this->lens_chromatic)
                                                     ->where('coating_id',$this->lens_coating)
-                                                    ->whereRaw('? BETWEEN sphere_from AND sphere_to', [(float) format_values($right_sphere)])
-                                                    ->whereRaw('? BETWEEN cylinder_from AND cylinder_to', [(float) format_values($this->r_cylinder)])
+                                                    ->where('sphere_from', '>=', format_values($right_sphere))
+                                                    ->where('sphere_to', '<=', format_values($right_sphere))
+                                                    ->where('cylinder_from', '>=', format_values($this->r_cylinder))
+                                                    ->where('cylinder_to', '<=', format_values($this->r_cylinder))
                                                     ->select('price','cost','wholesale_price')
                                                     ->first();
         }
@@ -242,16 +242,13 @@ class ProductRetail extends Component
         return $this->rightPriceRange ?? 0;
     }
 
-    function showModal($msg)
-    {
+    function showModal($msg){
         $this->informationMessage   =   $msg;
         $this->dispatch('showwarningModal');
     }
 
     // checking product availability
-    function checkAvailability()
-    {
-
+    function checkAvailability(){
         $left_sphere = $this->l_sphere==0?$this->l_sphere:($this->l_sign=='minus' ? -1*abs($this->l_sphere):abs($this->l_sphere));
         $right_sphere = $this->r_sphere==0?$this->r_sphere:($this->r_sign=='minus' ? -1*abs($this->r_sphere):abs($this->r_sphere));
 
@@ -344,7 +341,7 @@ class ProductRetail extends Component
             }
             // if left len is the only product
             else if ($left_len_Results != 'product-not-found' && $right_len_Results == 'product-not-found') {
-                $rightPrice =   $this->autoPricingRight()?$this->autoPricingRight()->price:0;
+                $rightPrice =   $this->autoPricingRight();
                 $this->total_lens_amount =    $left_len_Results[0]->price + $rightPrice;
 
                 $invoiceStock =   Invoice::where('status','requested')->whereRelation('soldproduct','product_id',$left_len_Results[0]->id)->withSum('soldproduct','quantity')->get();
@@ -353,7 +350,8 @@ class ProductRetail extends Component
             }
             // if right len is the only product
             else if ($left_len_Results == 'product-not-found' && $right_len_Results != 'product-not-found') {
-                $leftPrice  =   $this->autoPricingLeft()?$this->autoPricingLeft()->price:0;
+                $leftPrice  =   0;
+                // $leftPrice  =   $this->autoPricingLeft()?$this->autoPricingLeft()->price:0;
                 $this->total_lens_amount =    $right_len_Results[0]->price + $leftPrice;
 
                 // checking for booked stock on lens
@@ -363,12 +361,13 @@ class ProductRetail extends Component
 
             // if both lens are not found
             else {
-                $leftPrice  =   $this->autoPricingLeft()?$this->autoPricingLeft()->price:0;
-                $rightPrice =   $this->autoPricingRight()?$this->autoPricingRight()->price:0;
+                $leftPrice  =   0;
+                // $leftPrice  =   $this->autoPricingLeft()?$this->autoPricingLeft()->price:0;
+                // $rightPrice =   $this->autoPricingRight()->price;
+                $rightPrice =   0;
 
                 $this->total_lens_amount    =   $leftPrice + $rightPrice;
             }
-
         }
         if ($this->frame) {
             $this->frame_total_amount   =   ($this->frame_unit_price + $this->frame_price_adjust) * $this->frame_quantity;
@@ -376,13 +375,11 @@ class ProductRetail extends Component
         if ($this->accessory) {
             $this->accessory_total_amount   =   ($this->accessory_unit_price + $this->accessory_price_adjust) * $this->accessory_quantity;
         }
-
         $this->showPaymentSection   =   true;
     }
 
     // insurance percentages calculations
-    function calculateInsurance()
-    {
+    function calculateInsurance(){
         $this->checkAvailability();
         if ($this->insurance_type == 'private') {
             $this->insurance_payment_lens    =   0;
@@ -437,8 +434,7 @@ class ProductRetail extends Component
     }
 
     // function to handle form submit
-    function saveOrder()
-    {
+    function saveOrder(){
         $this->validate();
 
 
@@ -560,9 +556,7 @@ class ProductRetail extends Component
     }
 
     // function to save product in the database
-    function save($type, $availability, $invoiceId, $eye = '')
-    {
-
+    function save($type, $availability, $invoiceId, $eye = ''){
         $left_sphere = $this->l_sphere==0?$this->l_sphere:($this->l_sign=='minus' ? -1*abs($this->l_sphere):abs($this->l_sphere));
         $right_sphere = $this->r_sphere==0?$this->r_sphere:($this->r_sign=='minus' ? -1*abs($this->r_sphere):abs($this->r_sphere));
 
@@ -698,8 +692,7 @@ class ProductRetail extends Component
     }
 
     // mount
-    function mount()
-    {
+    function mount(){
         $this->lensType             =   LensType::all();
         $this->lensIndex            =   PhotoIndex::all();
         $this->lensCoating          =   PhotoCoating::all();
@@ -715,8 +708,7 @@ class ProductRetail extends Component
         $this->accessoriesList  =   Product::where('company_id', userInfo()->company_id)->whereNotIn('category_id', ['1', '2'])->get();
     }
 
-    public function render()
-    {
+    public function render(){
         return view('livewire.manager.sales.product-retail')->layout('livewire.livewire-slot');
     }
 }
