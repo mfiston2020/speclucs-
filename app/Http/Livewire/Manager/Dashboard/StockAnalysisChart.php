@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\LensType;
 use App\Models\Product;
 use App\Repositories\ProductRepo;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class StockAnalysisChart extends Component
@@ -96,7 +97,12 @@ class StockAnalysisChart extends Component
     }
 
     function mount(){
-        $this->products =   Product::where('company_id',auth()->user()->company_id)->with('soldproducts:id,quantity')->select('id','stock','category_id')->get();
+        if(Cache::has('productListing')){
+            $this->products =   Cache::get('productListing');
+        }else{
+            $this->products =   Product::where('company_id', auth()->user()->company_id)->with('soldproducts:id,quantity')->select('id', 'stock', 'category_id')->get();
+            Cache::put('productListing',$this->products);
+        }
 
         $this->lensData=[
             'lens_critical' =>  0,

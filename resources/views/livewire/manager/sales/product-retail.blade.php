@@ -57,7 +57,7 @@
                                 <div class="form-group">
                                     <label>Hospital Name</label>
                                     <select class="form-control @error('hospital_name') is-invalid @enderror custom-select"
-                                        wire:model.blur='hospital_name' required>
+                                        wire:model='hospital_name' required>
                                         <option value="">** Select Hospital **</option>
                                         @foreach ($visionCenters as $visionCenter)
                                             <option value="{{ $visionCenter->hospital_name }}">{{ $visionCenter->hospital_name }}
