@@ -96,7 +96,7 @@
             </div>
         @endif
 
-        <livewire:manager.dashboard.stock-analysis-chart lazy="on-load" />
+        {{-- <livewire:manager.dashboard.stock-analysis-chart lazy="on-load" /> --}}
 
         @if (userInfo()->permissions=='manager')
             <!-- ============================================================== -->

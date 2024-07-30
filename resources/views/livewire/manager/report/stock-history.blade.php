@@ -96,11 +96,11 @@
 
         <div class="card">
             <div class="card-body">
-                <a onclick="exportAll('xls');" href="#" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                <a onclick="exportAll('xlsx');" href="#" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
                     <i class="fa fa-download"></i> Export To Excel
                 </a>
                 <div class="table-responsive mt-3">
-                    <table id="file_export" class="table table-striped table-bordered">
+                    <table id="zero_config" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -156,6 +156,7 @@
 
                                     </td>
                                 </tr>
+
                             @endforeach
                         </tbody>
                         <tfoot>
@@ -198,10 +199,10 @@
     <script>
         function exportAll(type) {
 
-                $('#file_export').tableExport({
-                    filename: 'stock_history_%DD%-%MM%-%YY%-month(%MM%)',
-                    format: type
-                });
-            }
+            $('#zero_config').tableExport({
+                filename: 'stock_history_%DD%-%MM%-%YY%-month(%MM%)',
+                format: type
+            });
+        }
     </script>
 @endpush
