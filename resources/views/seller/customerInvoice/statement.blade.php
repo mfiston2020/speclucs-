@@ -163,7 +163,7 @@
             <div class="card">
                 <div class="card-body">
                         <div class="form-group m-b-0 text-center">
-                            {{-- <button onclick="exportAll('xls')" class="btn btn-success waves-effect waves-light text-white">
+                            {{-- <button onclick="exportAll('xlsx')" class="btn btn-success waves-effect waves-light text-white">
                                 <i class="fa fa-download"></i> Export To Excel</button> --}}
                             <button id="print" class="btn btn-info waves-effect waves-light"><i class="fa fa-print"></i> Print</button>
                             {{-- <button id="pay-button" class="btn btn-secondary waves-effect waves-light text-white">

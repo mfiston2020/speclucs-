@@ -65,7 +65,7 @@
                             {{number_format(count($user_perfomance_report))}}
                         </span>
                     </h4>
-                    <a onclick="exportAll('xls');" href="#" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                    <a onclick="ExportToExcel('xlsx')" href="#" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
                         <i class="fa fa-download"></i> Export To Excel
                     </a>
                 </div>
@@ -169,22 +169,3 @@
         </div>
     @endif
 </div>
-
-@push('css')
-    <link href="{{ asset('dashboard/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-@endpush
-
-@push('scripts')
-    <script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
-    <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
-    <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
-    <script>
-        function exportAll(type) {
-
-                $('#zero_config').tableExport({
-                    filename: 'stock_history_%DD%-%MM%-%YY%-month(%MM%)',
-                    format: type
-                });
-            }
-    </script>
-@endpush

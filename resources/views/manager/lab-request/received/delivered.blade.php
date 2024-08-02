@@ -54,7 +54,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <a href="#" onclick="exportAll('xls')" class="btn btn-success btn-rounded"><i class="mdi mdi-file-excel"></i> Export To Excel</a>
+                                <a href="#" onclick="exportAll('xlsx')" class="btn btn-success btn-rounded"><i class="mdi mdi-file-excel"></i> Export To Excel</a>
                                 <hr>
                                 <div class="tab-content br-n pn">
 

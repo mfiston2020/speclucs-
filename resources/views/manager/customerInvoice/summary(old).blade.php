@@ -91,7 +91,7 @@
                         </div>
                         <hr>
                         <div class="form-group m-b-0 text-center">
-                            <button onclick="exportAll('xls')" class="btn btn-success waves-effect waves-light text-white">
+                            <button onclick="exportAll('xlsx')" class="btn btn-success waves-effect waves-light text-white">
                                 <i class="fa fa-download"></i> Export To Excel</button>
                             <a href="#" class="btn btn-primary waves-effect waves-light text-white">
                                 <i class="fa fa-print"></i> Print</a>

@@ -4,10 +4,7 @@
 
 @push('css')
     <link href="{{ asset('dashboard/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-    <link href="{{asset('css/editable.min.css')}}"
-        rel="stylesheet" />
-
-    <link rel="stylesheet" href="{{asset('css/datatable.min')}}">
+    <link href="{{asset('dashboard/assets/extra-libs/DataTables/datatables.min.css')}}" rel="stylesheet" />
 
     <style>
         .glyphicon-ok:before {
@@ -52,7 +49,7 @@
                                         style="align-items: right;">
                                         <i class="fa fa-plus"></i> New Product
                                     </a>
-                                    <a onclick="exportAll('xls');" href="#"
+                                    <a onclick="ExportToExcel('xlsx')" href="#"
                                         class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success"
                                         style="align-items: right;">
                                         <i class="fa fa-download"></i> Export To Excel
@@ -201,18 +198,20 @@
     <script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
 
-    <script src="{{asset('dashboard/assets/dist/js/editable.min.js')}}">
-    </script>
-    <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <script src="{{asset('dashboard/assets/dist/js/editable.min.js')}}"></script>
 
     <script>
-        function exportAll(type) {
-
-            $('#zero_config').tableExport({
-                filename: 'table_%DD%-%MM%-%YY%-month(%MM%)',
-                format: type
-            });
+        function ExportToExcel(type, fn, dl) {
+            console.log();
+            var elt = document.getElementById('zero_config');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
         }
+
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'

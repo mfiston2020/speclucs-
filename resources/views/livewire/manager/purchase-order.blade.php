@@ -147,7 +147,7 @@
                     <h4 class="card-title">Purchase Order
                     </h4>
                     <div class="d-flex">
-                        <button onclick="exportAll('xls');" class="btn btn-sm btn-success mr-3 rounded">Excel </button>
+                        <button onclick="exportAll('xlsx');" class="btn btn-sm btn-success mr-3 rounded">Excel </button>
                         <button wire:click="goBack" class="btn btn-sm btn-outline-danger rounded">
                             <span wire:loading.remove wire:target="goBack">go Back</span>
                             <span wire:loading wire:target="goBack">going Back....</span>

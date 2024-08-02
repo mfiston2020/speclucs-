@@ -9,7 +9,7 @@
                     style="align-items: right;">
                     <i class="fa fa-plus"></i> New Product
                 </a>
-                <a onclick="exportAll('xls');" href="#"
+                <a onclick="exportAll('xlsx');" href="#"
                     class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success"
                     style="align-items: right;">
                     <i class="fa fa-download"></i> Export To Excel

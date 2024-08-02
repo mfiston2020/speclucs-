@@ -17,7 +17,7 @@
     @stack('css')
     {{-- @livewireStyles --}}
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPHB4250YR"></script>
+    {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPHB4250YR"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -27,7 +27,7 @@
         gtag('js', new Date());
 
         gtag('config', 'G-MPHB4250YR');
-    </script>
+    </script> --}}
 </head>
 
 <body>

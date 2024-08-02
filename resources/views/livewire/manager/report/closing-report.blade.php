@@ -84,8 +84,8 @@
             @endphp
 
             <div class="card-body">
-                <a onclick="exportAll('xls');" href="#" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
-                    <i class="fa fa-download"></i> Export To Excel
+                <a onclick="ExportToExcel('xlsx')" href="#" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                    <i class="fa fa-download"></i> Export To Excel  
                 </a>
 
                 {{-- @if ()
@@ -93,7 +93,7 @@
                 @endif --}}
 
                 <div class="table-responsive mt-3">
-                    <table id="file_export" class="table table-striped table-bordered">
+                    <table id="zero_config" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -205,16 +205,3 @@
         </div>
     @endif
 </div>
-
-@push('scripts')
-    <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
-    <script>
-        function exportAll(type) {
-
-                $('#file_export').tableExport({
-                    filename: 'closing_stock_%DD%-%MM%-%YY%-month(%MM%)',
-                    format: type
-                });
-            }
-    </script>
-@endpush

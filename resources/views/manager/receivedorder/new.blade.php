@@ -40,7 +40,7 @@
                             <h4 class="card-title">All Orders</h4>
                         @if (!$orders)
                             <hr>
-                            <a href="#" onclick="exportAll('xls')" class="btn btn-success btn-rounded"><i class="mdi mdi-file-excel"></i> Export To Excel</a>
+                            <a href="#" onclick="exportAll('xlsx')" class="btn btn-success btn-rounded"><i class="mdi mdi-file-excel"></i> Export To Excel</a>
                         @endif
                         </div>
                         <hr>

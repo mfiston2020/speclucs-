@@ -268,7 +268,7 @@ div[tabindex="0"][aria-labelledby][role="region"]:nth-child(7) {
                           <div class="table-responsive colheaders" role="region" aria-labelledby="HeadersRow" tabindex="0">
                             <div>
                               
-                        <a onclick="exportAll('xls');" href="#" type="button"
+                        <a onclick="exportAll('xlsx');" href="#" type="button"
                         class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success"
                         style="align-items: right;">
                         <i class="fa fa-download"></i> Export To Excel</a>

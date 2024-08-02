@@ -22,7 +22,7 @@
                         <div class="d-flex align-items-center">
                             <h4 class="card-title">Products: <strong>{{count($products_array)}}</strong></h4>
                             <hr>
-                            <a onclick="exportAll('xls');" href="#" type="button"
+                            <a onclick="exportAll('xlsx');" href="#" type="button"
                                 class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success"
                                 style="align-items: right;">
                                 <i class="fa fa-download"></i> Export To Excel</a>

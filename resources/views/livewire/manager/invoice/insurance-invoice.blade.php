@@ -112,7 +112,7 @@
 
                         {{-- <h4 class="card-title">{{ numberToWord(90007895) }}</h4> --}}
                         {{-- <hr> --}}
-                        <button onclick="exportAll('xls');" class="ml-2 btn btn-sm waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                        <button onclick="exportAll('xlsx');" class="ml-2 btn btn-sm waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
                             <i class="fa fa-download"></i> Download
                         </button>
                         <hr>

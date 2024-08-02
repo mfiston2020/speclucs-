@@ -54,7 +54,7 @@
                             style="align-items: right;">
                             <i class="fa fa-box"></i> Lens Stock</a>
 
-                        <a onclick="exportAll('xls');" href="#" type="button"
+                        <a onclick="exportAll('xlsx');" href="#" type="button"
                             class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success"
                             style="align-items: right;">
                             <i class="fa fa-download"></i> Export To Excel</a>

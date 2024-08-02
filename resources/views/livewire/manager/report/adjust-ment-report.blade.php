@@ -99,12 +99,12 @@
                 $stockTracker   =   \App\Models\TrackStockRecord::whereDate('created_at','>=',date('Y-m-d',strtotime($start_date)))->whereDate('created_at','<=',date('Y-m-d',strtotime($end_date)))->where('company_id',userInfo()->company_id)->where('type','rm')->get();
             @endphp
             <div class="card-body">
-                <a onclick="exportAll('xls');" href="#" class="mb-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                <a onclick="ExportToExcel('xlsx');" href="#" class="mb-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
                     <i class="fa fa-download"></i>
                     Export To Excel
                 </a>
                 <div class="table-responsive">
-                    <table id="file_export" class="table table-striped table-bordered">
+                    <table id="zero_config" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>#</th>

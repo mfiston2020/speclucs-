@@ -38,7 +38,7 @@
                             <h4 class="card-title">All Requests</h4>
                             @if ($pendingOrders)
                                 <hr>
-                                <a href="#" onclick="exportAll('xls')" class="btn btn-success btn-rounded"><i
+                                <a href="#" onclick="exportAll('xlsx')" class="btn btn-success btn-rounded"><i
                                         class="mdi mdi-file-excel"></i> Export To Excel</a>
                             @endif
                         </div>
