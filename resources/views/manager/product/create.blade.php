@@ -84,7 +84,7 @@
                             <div class="form-group row">
                                 <label for="stock" class="col-sm-3 text-right control-label col-form-label">Stock</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="stock" placeholder="Stock Here"
+                                    <input type="number" class="form-control" id="stock" placeholder="Stock Here"
                                         name="stock" value="{{ old('stock') }}">
                                 </div>
                             </div>
@@ -93,7 +93,7 @@
                                 <label for="fstock" class="col-sm-3 text-right control-label col-form-label">Defective
                                     Stock</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="fstock" placeholder="Folty Stock Here"
+                                    <input type="number" class="form-control" id="fstock" placeholder="Folty Stock Here"
                                         name="defective_stock" value="{{ old('defective_stock') }}">
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                                 <label for="cost"
                                     class="col-sm-3 text-right control-label col-form-label invalid">Cost</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="cost" placeholder="cost Here"
+                                    <input type="number" class="form-control" id="cost" placeholder="cost Here"
                                         name="cost" value="{{ old('cost') }}">
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                                 <label for="price"
                                     class="col-sm-3 text-right control-label col-form-label invalid">Price</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="price" placeholder="Price Here"
+                                    <input type="number" class="form-control" id="price" placeholder="Price Here"
                                         name="price" value="{{ old('price') }}">
                                 </div>
                             </div>
