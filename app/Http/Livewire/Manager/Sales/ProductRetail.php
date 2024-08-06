@@ -725,31 +725,31 @@ class ProductRetail extends Component
         $this->isCloudOrder         =   userInfo()->permissions == 'lab' ? 'yes' : 'no';
         $this->insuranceList        =   Insurance::get();
 
-        if (Cache::has('visionCenters' . auth()->user()->company_id)) {
-            $this->visionCenters        =   Cache::get('visionCenters' . auth()->user()->company_id);
-        } else {
+        // if (Cache::has('visionCenters' . auth()->user()->company_id)) {
+        //     $this->visionCenters        =   Cache::get('visionCenters' . auth()->user()->company_id);
+        // } else {
             $this->visionCenters        =   Hospital::where('company_id', userInfo()->company_id)->get();
-            Cache::put('visionCenters' . auth()->user()->company_id, $this->visionCenter);
-        }
+        //     Cache::put('visionCenters' . auth()->user()->company_id, $this->visionCenter);
+        // }
 
         // caching the product information about frames
-        if (Cache::has('product-frameList')) {
-            $this->frameList    =   Cache::get('product-frameList');
-        } else {
+        // if (Cache::has('product-frameList')) {
+        //     $this->frameList    =   Cache::get('product-frameList');
+        // } else {
             // $this->frameList;
             $this->frameList  =   Product::where('company_id', userInfo()->company_id)->where('category_id', '2')->orderBy('product_name', 'ASC')->get();
-            Cache::put('product-frameList', $this->frameList, 720);
-        }
+        //     Cache::put('product-frameList', $this->frameList, 720);
+        // }
 
         // caching the product information about accessories
-        if (Cache::has('product-accessoriesList')) {
-            $this->accessoriesList    =   Cache::get('product-accessoriesList');
-        } else {
+        // if (Cache::has('product-accessoriesList')) {
+        //     $this->accessoriesList    =   Cache::get('product-accessoriesList');
+        // } else {
             // $this->frameList;
             $this->accessoriesList  =   Product::where('company_id', userInfo()->company_id)->whereNotIn('category_id', ['1', '2'])->get();
             // $this->frameList  =   Product::where('company_id', userInfo()->company_id)->where('category_id', '2')->orderBy('product_name', 'ASC')->get();
-            Cache::put('product-accessoriesList', $this->accessoriesList, 720);
-        }
+        //     Cache::put('product-accessoriesList', $this->accessoriesList, 720);
+        // }
 
 
         // non lens products
