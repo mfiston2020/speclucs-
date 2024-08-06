@@ -837,9 +837,6 @@
 
     <script>
 
-
-
-
         function ExportToExcelPoSent(type, fn, dl) {
             var elt = document.getElementById('po_sent_table');
             var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
