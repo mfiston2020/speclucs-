@@ -159,7 +159,7 @@
                             </div>
                         </div>
 
-                        <a onclick="exportAll('xlsx');" href="#" type="button" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                        <a onclick="ExportToExcel('xlsx')" href="#" type="button" class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
                             <i class="fa fa-download"></i> Export To Excel
                         </a>
                         <hr>
@@ -353,14 +353,15 @@
 
 @push('scripts')
 
-<script src="{{ asset('dashboard/assets/dist/js/export.js')}}"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 <script>
-  function exportAll(type) {
-
-$('#zero_config').tableExport({
-    filename: 'table_%DD%-%MM%-%YY%-month(%MM%)',
-    format: type
-});
-}
+        function ExportToExcel(type, fn, dl) {
+            console.log();
+            var elt = document.getElementById('zero_config');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('Speclucs [Lens Stock].' + (type || 'xlsx')));
+        }
 </script>
 @endpush
