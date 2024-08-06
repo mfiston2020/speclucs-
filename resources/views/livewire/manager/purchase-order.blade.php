@@ -147,7 +147,7 @@
                     <h4 class="card-title">Purchase Order
                     </h4>
                     <div class="d-flex">
-                        <button onclick="exportAll('xlsx');" class="btn btn-sm btn-success mr-3 rounded">Excel </button>
+                        <button onclick="ExportToExcel('xlsx');" class="btn btn-sm btn-success mr-3 rounded">Excel </button>
                         <button wire:click="goBack" class="btn btn-sm btn-outline-danger rounded">
                             <span wire:loading.remove wire:target="goBack">go Back</span>
                             <span wire:loading wire:target="goBack">going Back....</span>
@@ -155,7 +155,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table id="scroll_ver" class="table table-striped table-bordered display" style="width:100%">
+                    <table id="zero_config" class="table table-striped table-bordered display" style="width:100%">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -219,7 +219,17 @@
 @endpush
 
 @push('scripts')
+
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script>
+        function ExportToExcel(type, fn, dl) {
+            console.log();
+            var elt = document.getElementById('zero_config');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
+        }
 
         document.addEventListener('livewire:total-cost', function () {
             alert('sdjflkajsdlf');

@@ -86,12 +86,12 @@
                                                             </div>
                                                         @else
                                                             <div class="table-responsive mt-4">
-                                                                <button onclick="exportOutOfStock('xls','PO Sent');"
+                                                                <button onclick="ExportToExcelPoSent('xlsx');"
                                                                     class="btn btn-success float-right mb-3">
                                                                     <i class="fa fa-cloud-download-alt"></i>
                                                                     Excel
                                                                 </button>
-                                                                <table id="priced-table" class="table table-striped table-bordered nowrap"
+                                                                <table id="po_sent_table" class="table table-striped table-bordered nowrap"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
@@ -457,12 +457,12 @@
                                                             </div>
                                                         @else
                                                             <div class="table-responsive mt-4">
-                                                                <button onclick="exportOutOfStock('xls','PO Sent');"
+                                                                <button onclick="ExportToExcelPoSentExternal('xlsx');"
                                                                     class="btn btn-success float-right mb-3">
                                                                     <i class="fa fa-cloud-download-alt"></i>
                                                                     Excel
                                                                 </button>
-                                                                <table id="priced-table" class="table table-striped table-bordered nowrap"
+                                                                <table id="po_sent_external" class="table table-striped table-bordered nowrap"
                                                                     style="width:100%">
                                                                     <thead>
                                                                         <tr>
@@ -833,9 +833,31 @@
     <script src="{{ asset('dashboard/assets/extra-libs/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
     <script src="{{ asset('dashboard/assets/dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
-    <script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 
     <script>
+
+
+
+
+        function ExportToExcelPoSent(type, fn, dl) {
+            var elt = document.getElementById('po_sent_table');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('Speclucs-Po-Sent-internal.' + (type || 'xlsx')));
+        }
+
+
+        function ExportToExcelPoSentExternal(type, fn, dl) {
+            var elt = document.getElementById('po_sent_external');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('Speclucs-Po-Sent-external.' + (type || 'xlsx')));
+        }
+
+
         function checkUncheckrequestId(checkBox) {
 
             get = document.getElementsByName('requestId[]');
@@ -844,22 +866,6 @@
 
             get[i].checked = checkBox.checked;}
 
-        }
-
-        function exportAll(type, tableName) {
-
-            $('#priced-table').tableExport({
-                filename: tableName + '_%DD%-%mm%-%YY%',
-                format: type
-            });
-        }
-
-        function exportOutOfStock(type, tableName) {
-
-            $('#priced-table').tableExport({
-                filename: tableName + '_%DD%-%mm%-%YY%',
-                format: type
-            });
         }
 
         function printModal(name) {

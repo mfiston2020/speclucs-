@@ -74,12 +74,12 @@
 
                                         <div id="internal_requested" class="tab-pane active">
                                             @if (count($requests_priced)>0)
-                                                <button onclick="exportAll('xls','Priced Lens');" class="btn btn-success float-right mb-3">
+                                                <button onclick="ExportToExcelPriced('xlsx');" class="btn btn-success float-right mb-3">
                                                     <i class="fa fa-cloud-download-alt"></i>
                                                     Excel
                                                 </button>
                                                 <div class="table-responsive mt-4">
-                                                    <table id="priced-table" class="table table-striped table-bordered nowrap" style="width:100%">
+                                                    <table id="priced_table" class="table table-striped table-bordered nowrap" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th> <input type="checkbox" onclick="checkUncheckrequestId(this)"> </th>
@@ -548,12 +548,12 @@
 
                                         <div id="external_requested" class="tab-pane">
                                             @if (count($requests_priced_out)>0)
-                                                <button onclick="exportAllExternal('xls','External Priced Lens');" class="btn btn-success float-right mb-3">
+                                                <button onclick="ExportToExcelPricedExternal('xlsx');" class="btn btn-success float-right mb-3">
                                                     <i class="fa fa-cloud-download-alt"></i>
                                                     Excel
                                                 </button>
                                                 <div class="table-responsive mt-4">
-                                                    <table id="external-priced-table" class="table table-striped table-bordered nowrap" style="width:100%">
+                                                    <table id="external_priced_table" class="table table-striped table-bordered nowrap" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th> <input type="checkbox" onclick="checkUncheckrequestId(this)"> </th>
@@ -1044,9 +1044,29 @@
 
 @push('scripts')
 <script src="{{ asset('dashboard/assets/dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
-<script src="{{ asset('dashboard/assets/dist/js/export.js') }}"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 
 <script>
+
+
+    function ExportToExcelPriced(type, fn, dl) {
+        var elt = document.getElementById('priced_table');
+        var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+        return dl ?
+            XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+            XLSX.writeFile(wb, fn || ('Speclucs-Priced-internal.' + (type || 'xlsx')));
+    }
+
+
+    function ExportToExcelPricedExternal(type, fn, dl) {
+        var elt = document.getElementById('external_priced_table');
+        var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+        return dl ?
+            XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+            XLSX.writeFile(wb, fn || ('Speclucs-Priced-external.' + (type || 'xlsx')));
+    }
+
+
     function checkUncheckpriced(checkBox) {
 
         get = document.getElementsByName('requestId[]');
@@ -1069,21 +1089,21 @@
 
     }
 
-    function exportAllExternal(type, tableName) {
+    // function exportAllExternal(type, tableName) {
 
-        $('#external-priced-table').tableExport({
-            filename: tableName + '_%DD%-%mm%-%YY%',
-            format: type
-        });
-    }
+    //     $('#external-priced-table').tableExport({
+    //         filename: tableName + '_%DD%-%mm%-%YY%',
+    //         format: type
+    //     });
+    // }
 
-    function exportAll(type, tableName) {
+    // function exportAll(type, tableName) {
 
-        $('#priced-table').tableExport({
-            filename: tableName + '_%DD%-%mm%-%YY%',
-            format: type
-        });
-    }
+    //     $('#priced-table').tableExport({
+    //         filename: tableName + '_%DD%-%mm%-%YY%',
+    //         format: type
+    //     });
+    // }
 
     function exportOutOfStock(type, tableName) {
 
