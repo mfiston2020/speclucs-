@@ -188,26 +188,28 @@ class ProductRetail extends Component
             ->where('index_id', $this->lens_index)
             ->where('chromatic_id', $this->lens_chromatic)
             ->where('coating_id', $this->lens_coating)
-            ->whereRaw('? BETWEEN sphere_from AND sphere_to', [(float) format_values($left_sphere)])
-            ->whereRaw('? BETWEEN cylinder_from AND cylinder_to', [(float) format_values($this->l_cylinder)])
-            ->whereRaw('? BETWEEN addition_from AND addition_to', [(float) format_values($this->l_addition)])
+                ->whereRaw("{$left_sphere} BETWEEN sphere_from AND sphere_to")
+                ->whereRaw("{$this->l_cylinder} BETWEEN cylinder_to AND cylinder_from")
+                ->whereRaw("{$this->l_cylinder} BETWEEN addition_from AND addition_to")
                 // ->where('sphere_from', '>=', format_values($left_sphere))
                 // ->where('sphere_to', '<=', format_values($left_sphere))
                 // ->where('cylinder_from', '>=', format_values($this->l_cylinder))
                 // ->where('cylinder_to', '<=', format_values($this->l_cylinder))
                 // ->where('addition_from', '>=', format_values($this->l_addition))
                 // ->where('addition_to', '<=', format_values($this->l_addition))
-                ->select('price', 'cost')->first();
+                ->select('id', 'price', 'cost', 'wholesale_price')->first();
         } else {
             // L
             $this->leftPriceRange = LensPricing::where('type_id', $this->lens_type)
             ->where('index_id', $this->lens_index)
             ->where('chromatic_id', $this->lens_chromatic)
             ->where('coating_id', $this->lens_coating)
-            ->where('sphere_from', '>=', format_values($left_sphere))
-            ->where('sphere_to', '<=', format_values($left_sphere))
-            ->where('cylinder_from', '>=', format_values($this->l_cylinder))
-            ->where('cylinder_to', '<=', format_values($this->l_cylinder))
+                ->whereRaw("{$left_sphere} BETWEEN sphere_from AND sphere_to")
+                ->whereRaw("{$this->l_cylinder} BETWEEN cylinder_to AND cylinder_from")
+            // ->where('sphere_from', '>=', format_values($left_sphere))
+            // ->where('sphere_to', '<=', format_values($left_sphere))
+            // ->where('cylinder_from', '>=', format_values($this->l_cylinder))
+            // ->where('cylinder_to', '<=', format_values($this->l_cylinder))
             ->select('id', 'price', 'cost', 'wholesale_price')
             ->first();
         }
@@ -225,38 +227,39 @@ class ProductRetail extends Component
 
         $this->rightPriceRange   =   null;
         $right_sphere = $this->r_sphere == 0 ? $this->r_sphere : ($this->r_sign == 'minus' ? -1 * abs($this->r_sphere) : abs($this->r_sphere));
+        
+
+        // dd($right_cylinder);
 
         if (initials($this->lensType->where('id', $this->lens_type)->pluck('name')->first()) != 'SV') {
             // L
             $this->rightPriceRange = LensPricing::where('type_id', $this->lens_type)
-            ->where('index_id', $this->lens_index)
-            ->where('chromatic_id', $this->lens_chromatic)
-            ->where('coating_id', $this->lens_coating)
-            ->where('sphere_from', '>=', format_values($right_sphere))
-            ->where('sphere_to', '<=', format_values($right_sphere))
-            ->where('cylinder_from', '>=', format_values($this->r_cylinder))
-            ->where('cylinder_to', '<=', format_values($this->r_cylinder))
-            ->where('addition_from', '>=', format_values($this->r_addition))
-            ->where('addition_to', '<=', format_values($this->r_addition))
-            ->select('price', 'cost')->first();
+                                                    ->where('index_id', $this->lens_index)
+                                                    ->where('chromatic_id', $this->lens_chromatic)
+                                                    ->where('coating_id', $this->lens_coating)
+                                                    ->whereRaw("{$right_sphere} BETWEEN sphere_from AND sphere_to")
+                                                    ->whereRaw("{$this->r_cylinder} BETWEEN cylinder_to AND cylinder_from")
+                                                    ->whereRaw("{format_values($this->r_addition)} BETWEEN sphere_from AND sphere_to")
+                                                    // ->where('addition_from', '>=', )
+                                                    // ->where('addition_to', '<=', format_values($this->r_addition))
+                                                    ->select('id', 'price', 'cost', 'wholesale_price')->first();
         } else {
             // L
             $this->rightPriceRange = LensPricing::where('type_id', $this->lens_type)
-            ->where('index_id', $this->lens_index)
-            ->where('chromatic_id', $this->lens_chromatic)
-            ->where('coating_id', $this->lens_coating)
-            ->where('sphere_from', '>=', format_values($right_sphere))
-            ->where('sphere_to', '<=', format_values($right_sphere))
-            ->where('cylinder_from', '>=', format_values($this->r_cylinder))
-            ->where('cylinder_to', '<=', format_values($this->r_cylinder))
-            ->select('id', 'price', 'cost', 'wholesale_price')
-            ->first();
+                                                    ->where('index_id', $this->lens_index)
+                                                    ->where('chromatic_id', $this->lens_chromatic)
+                                                    ->where('coating_id', $this->lens_coating)
+                                                    ->whereRaw("{$right_sphere} BETWEEN sphere_from AND sphere_to")
+                                                    ->whereRaw("{$this->r_cylinder} BETWEEN cylinder_to AND cylinder_from")
+                                                    ->select('id', 'price', 'cost', 'wholesale_price')
+                                                    ->first();
         }
         if (is_null($this->rightPriceRange)) {
             $this->autoR =   false;
         } else {
             $this->autoR =   true;
         }
+        // dd($this->rightPriceRange);
         return $this->rightPriceRange ?? 0;
     }
 
@@ -362,7 +365,7 @@ class ProductRetail extends Component
             // if left len is the only product
             else if ($left_len_Results != 'product-not-found' && $right_len_Results == 'product-not-found') {
                 $rightPrice =   $this->autoPricingRight();
-                $this->total_lens_amount =    $left_len_Results[0]->price + $rightPrice;
+                $this->total_lens_amount =    $left_len_Results[0]->price + $rightPrice->price;
 
                 $invoiceStock =   Invoice::where('status', 'requested')->whereRelation('soldproduct', 'product_id', $left_len_Results[0]->id)->withSum('soldproduct', 'quantity')->get();
 
@@ -372,7 +375,7 @@ class ProductRetail extends Component
             else if ($left_len_Results == 'product-not-found' && $right_len_Results != 'product-not-found') {
                 $leftPrice  =   0;
                 // $leftPrice  =   $this->autoPricingLeft()?$this->autoPricingLeft()->price:0;
-                $this->total_lens_amount =    $right_len_Results[0]->price + $leftPrice;
+                $this->total_lens_amount =    $right_len_Results[0]->price + $leftPrice->price;
 
                 // checking for booked stock on lens
                 $invoiceStock =   Invoice::where('status', 'requested')->whereRelation('soldproduct', 'product_id', $right_len_Results[0]->id)->withSum('soldproduct', 'quantity')->get();
