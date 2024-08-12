@@ -22,7 +22,7 @@ class ProductRepo implements ProductInterface
 
     public String $message  =   '';
     public bool $showProductDetails  =   false;
-    public $products,$productList;
+    public $products, $productList;
 
     function searchProduct(array $productDescription)
     {
@@ -64,10 +64,10 @@ class ProductRepo implements ProductInterface
                 } else {
 
                     if (
-                        $productDescription['type']!=null && $productDescription['index']!=null &&
-                        $productDescription['chromatic']!=null && $productDescription['coating']!=null &&
-                        $productDescription['sphere']!=null && $productDescription['cylinder']!=null &&
-                        $productDescription['axis']!=null && $productDescription['addition']!=null && $productDescription['eye']!=null
+                        $productDescription['type'] != null && $productDescription['index'] != null &&
+                        $productDescription['chromatic'] != null && $productDescription['coating'] != null &&
+                        $productDescription['sphere'] != null && $productDescription['cylinder'] != null &&
+                        $productDescription['axis'] != null && $productDescription['addition'] != null && $productDescription['eye'] != null
                     ) {
                         $product_id     =   Power::where('type_id', $productDescription['type'])
                             ->where('index_id', $productDescription['index'])
@@ -77,9 +77,8 @@ class ProductRepo implements ProductInterface
                             ->where('cylinder', format_values($productDescription['cylinder']))
                             ->where('axis', format_values($productDescription['axis']))
                             ->where('add', format_values($productDescription['addition']))
-                            ->where('eye', $productDescription['type']=='3'?
-                                                                            ($productDescription['eye']=='right'?'Right':'Left'):
-                                                                            ($productDescription['eye']=='right'?'R':'L'))
+                            ->where('eye', $productDescription['type'] == '3' ?
+                                ($productDescription['eye'] == 'right' ? 'Right' : 'Left') : ($productDescription['eye'] == 'right' ? 'R' : 'L'))
                             // ->where('company_id', userInfo()->company_id)
                             ->where('company_id', $productDescription['supplier'])
                             ->select('product_id')->first();
@@ -104,67 +103,68 @@ class ProductRepo implements ProductInterface
     }
 
     // function to show the product stock efficiency
-    function productStockEfficiency(string $product_id,int $usag,int $stoc,int $cat,int $days=null){
+    function productStockEfficiency(string $product_id, int $usag, int $stoc, int $cat, int $days = null)
+    {
 
         $usage              =   0;
         $status             =   0;
         $quantityEfficiency =   0;
-        $inventoryEfficiency=   0;
+        $inventoryEfficiency =   0;
         $usage              =   $usag;
         $stock              =   $stoc;
         $category_id        =   $cat;
 
 
-        if (($usage*3) > $stock && $usage>0) {
-            $quantityEfficiency =   $stock-$usage;
-            $inventoryEfficiency    =   ($stock/($usage*3))*100;
+        if (($usage * 3) > $stock && $usage > 0) {
+            $quantityEfficiency =   $stock - $usage;
+            $inventoryEfficiency    =   ($stock / ($usage * 3)) * 100;
         }
-        if (($usage*3) < $stock && $stock>0) {
-            $quantityEfficiency =   $stock-$usage;
-            $inventoryEfficiency    =   (($usage*3)/$stock)*100;
+        if (($usage * 3) < $stock && $stock > 0) {
+            $quantityEfficiency =   $stock - $usage;
+            $inventoryEfficiency    =   (($usage * 3) / $stock) * 100;
         }
-        if (($usage*3)>0 && $stock && $stock==0) {
-            $quantityEfficiency =   $stock-$usage;
+        if (($usage * 3) > 0 && $stock && $stock == 0) {
+            $quantityEfficiency =   $stock - $usage;
             $inventoryEfficiency    =   0;
         }
-        if (($usage*3)==0 && $stock && $stock==0) {
-            $quantityEfficiency =   $stock-$usage;
+        if (($usage * 3) == 0 && $stock && $stock == 0) {
+            $quantityEfficiency =   $stock - $usage;
             $inventoryEfficiency    =   0;
         }
 
         // crititcal
-        if ($inventoryEfficiency<=40 && $quantityEfficiency<0) {
+        if ($inventoryEfficiency <= 40 && $quantityEfficiency < 0) {
             $status =   'critical';
         }
 
         // High
-        if ($inventoryEfficiency>40 && $inventoryEfficiency<=70 && $quantityEfficiency<0) {
+        if ($inventoryEfficiency > 40 && $inventoryEfficiency <= 70 && $quantityEfficiency < 0) {
             $status =   'high';
         }
 
         // Medium
-        if ($inventoryEfficiency>70 && $inventoryEfficiency<=100 && $quantityEfficiency<0) {
+        if ($inventoryEfficiency > 70 && $inventoryEfficiency <= 100 && $quantityEfficiency < 0) {
             $status =   'medium';
         }
         // =============================================================
 
         // Medium
-        if ($inventoryEfficiency>70 && $inventoryEfficiency<=100 && $quantityEfficiency>=0) {
+        if ($inventoryEfficiency > 70 && $inventoryEfficiency <= 100 && $quantityEfficiency >= 0) {
             $status =   'medium';
         }
 
         // Low
-        if ($inventoryEfficiency>40 && $inventoryEfficiency<=70 && $quantityEfficiency>=0) {
+        if ($inventoryEfficiency > 40 && $inventoryEfficiency <= 70 && $quantityEfficiency >= 0) {
             $status =   'low';
         }
 
         // Over
-        if ($inventoryEfficiency<=40 && $quantityEfficiency>=0) {
+        if ($inventoryEfficiency <= 40 && $quantityEfficiency >= 0) {
             $status =   'over';
         }
 
         // Discountinue
-        if ($usage==0 && $stock==0) {
+        if ($usage == 0 && $stock == 0) {
             $status =   'Discontinued';
         }
 
@@ -177,10 +177,10 @@ class ProductRepo implements ProductInterface
             'stock'     =>  $stock,
             'usage'     =>  $usage,
             'minStock'  =>  $usage,
-            'QtyTKeep'  =>  $usage*3,
+            'QtyTKeep'  =>  $usage * 3,
             'status'    =>  $status,
-            'QtyEfficiency'     =>  $stock-$usage,
-            'efficiency_ratio'  =>  round($inventoryEfficiency,2).'%',
+            'QtyEfficiency'     =>  $stock - $usage,
+            'efficiency_ratio'  =>  round($inventoryEfficiency, 2) . '%',
         ];
 
         // dd($po);
@@ -190,7 +190,8 @@ class ProductRepo implements ProductInterface
 
 
     // search for unavailable products
-    function searchUnavailableProduct(array $productDescription){
+    function searchUnavailableProduct(array $productDescription)
+    {
         // dd($productDescription)
         // if (initials(LensType::find($productDescription['type'])->pluck('name')->first())!='SV') {
         //     dd('here');
@@ -476,7 +477,7 @@ class ProductRepo implements ProductInterface
         $chromatic  =   PhotoChromatics::find($request['chromatic_id']);
         $coating    =   PhotoCoating::find($request['coating_id']);
 
-        $description=   initials($lens_type['name']) . " " . $index['name'] . " " . $chromatic['name'] . " " . $coating['name'];
+        $description =   initials($lens_type['name']) . " " . $index['name'] . " " . $chromatic['name'] . " " . $coating['name'];
 
         $eye        =   $request['eye'];
         $add        =   $request['addition'];
@@ -495,6 +496,7 @@ class ProductRepo implements ProductInterface
         $product->stock             =   $request['quantity'];
         $product->location          =   $request['location'];
         $product->company_id        =   userInfo()->company_id;
+        $product->wholesale_price   =   $request['wholesale_price'];
         $product->supplier_id       =   $request['supplier_id'];
 
         $product->save();

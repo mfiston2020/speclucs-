@@ -235,7 +235,7 @@ class ClinicSettingController extends Controller
                     $lensPricing->addition_to  =  (float)format_values($request->addition_to[$key]);
                     $lensPricing->cost         =  $request->cost[$key];
                     $lensPricing->price        =  $request->price[$key];
-                    $lensPricing->wholesale_price        =  $request->wholesale_price[$key];
+                    $lensPricing->wholesale_price        =  $request->wholesale_price[$key]?? null;
 
                     $lensPricing->save();
 

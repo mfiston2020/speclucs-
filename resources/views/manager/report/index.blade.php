@@ -14,6 +14,25 @@
         <div class="row">
 
 
+            {{-- fifo --}}
+            <a href="{{ route('manager.product.report') }}" class="col-lg-4 col-md-6 text-success">
+                <div class="">
+                    <div class="card border-right border-success">
+                        <div class="card-body">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <span class="text-success display-6"><i class="ti-archive"></i></span>
+                                </div>
+                                <div class="ml-auto">
+                                    <h3>FIFO Report</h3>
+                                    <small class="text-dark">Get reporting from stock</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
             {{-- closing report --}}
             <a href="{{ route('manager.closing.report') }}" class="col-lg-4 col-md-6 text-warning">
                 <div class="">
@@ -41,7 +60,7 @@
                         <div class="card-body">
                             <div class="d-flex no-block align-items-center">
                                 <div>
-                                    <span class="text-secondary display-6"><i class="ti-layout-slider-alt"></i></span>
+                                    <span class="text-secondary display-6"><i class="ti-write"></i></span>
                                 </div>
                                 <div class="ml-auto">
                                     <h3>Stock Adjustment</h3>
@@ -61,7 +80,7 @@
                         <div class="card-body">
                             <div class="d-flex no-block align-items-center">
                                 <div>
-                                    <span class="text-primary display-6"><i class="ti-layout-slider-alt"></i></span>
+                                    <span class="text-primary display-6"><i class="ti-files"></i></span>
                                 </div>
                                 <div class="ml-auto">
                                     <h3>Stock History</h3>
@@ -92,25 +111,6 @@
                     </div>
                 </div>
             </a>
-
-            {{-- fifo --}}
-            {{-- <a href="{{ route('manager.product.report') }}" class="col-lg-4 col-md-6 text-success">
-                <div class="">
-                    <div class="card border-right border-success">
-                        <div class="card-body">
-                            <div class="d-flex no-block align-items-center">
-                                <div>
-                                    <span class="text-success display-6"><i class="ti-layout-slider-alt"></i></span>
-                                </div>
-                                <div class="ml-auto">
-                                    <h3>FIFO Report</h3>
-                                    <small class="text-dark">Get reporting from stock</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a> --}}
 
             {{-- Insurance report --}}
             {{-- <a href="{{ route('manager.insurance.proforma') }}" class="col-lg-4 col-md-6 text-primary">

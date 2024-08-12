@@ -632,6 +632,7 @@ class ProductRetail extends Component
                 // pricing when a product was found in a range
                 'price'     => $eye == 'right' ? ($this->autoR ? $this->autoPricingRight()->price : 0) : ($this->autoL ? $this->autoPricingLeft()->price : 0),
                 'cost'      => $eye == 'right' ? ($this->autoR ? $this->autoPricingRight()->cost : 0) : ($this->autoL ? $this->autoPricingLeft()->cost : 0),
+                'wholesale_price' => $eye == 'right' ? ($this->autoR ? $this->autoPricingRight()->wholesale_price : 0) : ($this->autoL ? $this->autoPricingLeft()->wholesale_price : 0),
 
                 'mono_pd'   => $this->r_mono_pd,
                 'segment_h' => $this->r_segment_height
