@@ -37,6 +37,7 @@ class ProductReport extends Component
 
     function updatedCategory()
     {
+        $this->result   =   false;
         if ($this->category == '1') {
             $this->types    =   LensType::get();
             $this->showType =   true;
@@ -82,7 +83,7 @@ class ProductReport extends Component
 
             $productTracker =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereHas('product', function ($query) {
                 $query->where('category_id', $this->category)->select('id', 'product_name', 'description', 'cost');
-            })->wherebetween('created_at', [$this->start_date, $this->end_date])->where('type', 'rm')->orderBy('product_id', 'desc')->select('id', 'product_id', 'current_stock', 'incoming', 'status', 'type', 'created_at', 'reason', 'change')->get();
+            })->wherebetween('created_at', [$this->start_date, $this->end_date])->where('type', 'rm')->orderBy('product_id', 'asc')->select('id', 'product_id', 'current_stock', 'incoming', 'status', 'type', 'created_at', 'reason', 'change')->take(30)->get();
 
             foreach ($productTracker as $key => $prodFound) {
                 $instock    =   0;
@@ -90,8 +91,6 @@ class ProductReport extends Component
 
                 $prodFound->status == 'in' ? $instock     =   $prodFound->incoming : $instock   =   0;
                 $prodFound->status == 'out' ? $outStock   =   $prodFound->incoming : $outStock   =   0;
-
-                // $closingStock   =   $prodFound->where('id', $prodFound->id)->pluck('current_stock')->first() + $instock - $outStock;
 
                 $this->productListing[$key] = [
                     'closingStock'  => $prodFound->change,
@@ -104,8 +103,6 @@ class ProductReport extends Component
                     'reason'        => $prodFound->where('id', $prodFound->id)->pluck('reason')->first(),
                 ];
             }
-
-            // dd($this->total_opening_quantity);
 
             if (count($this->productListing) <= 0) {
                 $this->searchFoundSomething = 'no';
