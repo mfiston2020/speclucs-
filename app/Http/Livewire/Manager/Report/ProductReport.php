@@ -46,6 +46,10 @@ class ProductReport extends Component
         }
     }
 
+    function updatedlens_type(){
+        $this->hideResult();
+    }
+
     function updatedstart_date()
     {
         $this->hideResult();
@@ -80,10 +84,32 @@ class ProductReport extends Component
                 // Clone the original carbon date to avoid changing the original instance
                 $this->dateList[] = $carbonDate->copy()->addDay($sDate)->format('Y-m-d');
             }
+            $productTracker =   null;
 
-            $productTracker =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereHas('product', function ($query) {
-                $query->where('category_id', $this->category)->select('id', 'product_name', 'description', 'cost');
-            })->wherebetween('created_at', [$this->start_date, $this->end_date])->where('type', 'rm')->orderBy('product_id', 'asc')->select('id', 'product_id', 'current_stock', 'incoming', 'status', 'type', 'created_at', 'reason', 'change')->get();
+            if ($this->category == Category::where('name', 'Lens')->pluck('id')->first()) {
+
+                // fetch lens products based on their type
+                $productTracker =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereHas('product', function ($query) {
+                    $query->whereHas('power', function ($query) {
+                        $query->where('type_id', $this->lens_type)
+                            ->select('id', 'product_id', 'sphere', 'cylinder', 'axis', 'add', 'eye');
+                    })
+                    ->where('category_id', $this->category)
+                    ->select('id', 'category_id','product_name', 'description', 'cost');
+                })
+                    ->wherebetween('created_at', [$this->start_date, $this->end_date])
+                    ->where('type', 'rm')
+                    ->orderBy('product_id', 'asc')
+                    ->select('id', 'product_id', 'current_stock', 'incoming', 'status', 'type', 'created_at', 'reason', 'change')
+                    ->get();
+
+                // dd($productTracker);
+            } else {
+                $productTracker =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereHas('product', function ($query) {
+                    $query->where('category_id', $this->category)->select('id', 'product_name', 'description', 'cost');
+                })->wherebetween('created_at', [$this->start_date, $this->end_date])->where('type', 'rm')->orderBy('product_id', 'asc')->select('id', 'product_id', 'current_stock', 'incoming', 'status', 'type', 'created_at', 'reason', 'change')->get();
+            }
+
 
             foreach ($productTracker as $key => $prodFound) {
                 $instock    =   0;
@@ -94,7 +120,6 @@ class ProductReport extends Component
 
                 $this->productListing[$key] = [
                     'closingStock'  => $prodFound->change,
-                    'count'         => $this->countProduct,
                     'product'       => $prodFound->product,
                     'inStock'       => number_format($instock),
                     'outStock'      => number_format($outStock),

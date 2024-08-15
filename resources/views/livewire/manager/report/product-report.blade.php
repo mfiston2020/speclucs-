@@ -72,7 +72,7 @@
                                 <select class="form-control" wire:model.live="lens_type" id="">
                                     <option value="">*Select Category*</option>
                                     @foreach ($types as $type)
-                                        <option value="{{$type->name}}">{{$type->name}}</option>
+                                        <option value="{{$type->id}}">{{$type->name}}</option>
                                     @endforeach
                                 </select>
                                 @error('lens_type')
@@ -130,10 +130,15 @@
 
                 <div class="tab-content">
                     <div class="tab-pane active mt-4" id="raw-material" role="tabpanel">
+
+                        <a onclick="ExportToExcel('xlsx')" href="#" class=" mt-2 mb-2 ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                            <i class="fa fa-download"></i> Export To Excel
+                        </a>
+
                         <div class="table-responsive">
                             {{-- <table width="100%" border="1"> --}}
                             <table class="table table-striped table-bordered nowrap fixTableHead"
-                                style="width:100%" data-sticky-header>
+                                style="width:100%" data-sticky-header id="zero_config">
                                 <thead class="font-bold">
                                     @php
                                         $stockInTottal =    0;
@@ -186,12 +191,32 @@
                                                     <span class="badge badge-danger badge-pill ml-2">{{$product['reason']}}</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $product['product']?->product_name.'-'.$product['product']?->description }}</td>
+                                            <td>
+                                                {{ $product['product']?->product_name.'-'.$product['product']?->description }}
+
+                                                @if ($product['product']->category_id=='1')
+                                                    |
+
+                                                    @if (initials($product['product']->product_name) == 'SV')
+                                                        <span>
+                                                            {{ $product['product']->power->sphere }} /
+                                                            {{ $product['product']->power->cylinder }}
+                                                        </span>
+                                                    @else
+                                                        <span>
+                                                            {{ $product['product']->power->sphere }} /
+                                                            {{ $product['product']->power->cylinder }}
+                                                            *{{ $product['product']->power->axis }}
+                                                            {{ $product['product']->power->add }}
+                                                        </span>
+                                                    @endif
+                                                @endif
+                                            </td>
                                             <td> - </td>
                                             <td>{{ $product['product']?->location }}</td>
 
                                             {{-- Opening Stock --}}
-                                            <td>{{ $product['current_stock'] }}</td>
+                                            <td style="background: rgb(255, 234, 194);">{{ $product['current_stock'] }}</td>
                                             <td>{{ format_money($product['product']->cost) }}</td>
                                             <td>{{ format_money($product['current_stock']*$product['product']->cost) }}</td>
 
@@ -206,7 +231,7 @@
                                             <td>{{ format_money($product['outStock']*$product['product']->cost) }}</td>
 
                                             {{-- Closing Out --}}
-                                            <td>{{ $product['closingStock'] }}</td>
+                                            <td style="background: rgb(219, 255, 194);">{{ $product['closingStock'] }}</td>
                                             <td>{{ format_money($product['product']->cost) }}</td>
                                             <td>{{ format_money($product['closingStock']*$product['product']->cost) }}</td>
                                             @php
