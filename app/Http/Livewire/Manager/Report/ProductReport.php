@@ -15,7 +15,7 @@ class ProductReport extends Component
     public $productListing = [];
     public $productListingVariation = [];
     public $dateList = [];
-    public $productArrayList = array();
+    public $productArrayList = array(), $countProduct   =   1;
     public $products, $stockRecords;
     public $daysCount   =   0;
 
@@ -67,143 +67,55 @@ class ProductReport extends Component
         if ($this->start_date > $this->end_date) {
             dd('operation not allowed!');
         } else {
-            $datecount  =   0;
-            $carbonDate =   Carbon::create($this->start_date);
-            $dateDiff   =   $carbonDate->diffInDays($this->end_date);
-            $this->daysCount    =   $dateDiff;
+            // Create Carbon date instance once
+            $carbonDate = Carbon::create($this->start_date);
 
-            $dates = [];
+            // Calculate date difference and populate dates array
+            $dateDiff = $carbonDate->diffInDays($this->end_date);
+            $this->daysCount = $dateDiff;
+            $this->dateList = [];
+
             for ($sDate = 1; $sDate <= $dateDiff; $sDate++) {
-                $carbonDate =   Carbon::create($this->start_date);
-                array_push($this->dateList, $carbonDate->addDay($sDate)->format('Y-m-d'));
+                // Clone the original carbon date to avoid changing the original instance
+                $this->dateList[] = $carbonDate->copy()->addDay($sDate)->format('Y-m-d');
             }
 
-            $this->products =   Product::where('company_id', userInfo()->company_id)->where('category_id', $this->category)->select('id', 'product_name', 'description', 'cost', 'location')->with('power:id,product_id,sphere,cylinder,axis,add,eye')->get();
+            $productTracker =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereHas('product', function ($query) {
+                $query->where('category_id', $this->category)->select('id', 'product_name', 'description', 'cost');
+            })->wherebetween('created_at', [$this->start_date, $this->end_date])->where('type', 'rm')->orderBy('product_id', 'desc')->select('id', 'product_id', 'current_stock', 'incoming', 'status', 'type', 'created_at', 'reason', 'change')->take(500)->get();
 
-            try {
-                foreach ($this->products as $key => $product) {
-                    foreach ($this->dateList as $key => $date) {
-                        $incoming       =   TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->select('id', 'incoming', 'current_stock')->first();
+            foreach ($productTracker as $key => $prodFound) {
+                $instock    =   0;
+                $outStock   =   0;
 
-                        if (!is_null($incoming)) {
-                            $closingStock   =   TrackStockRecord::where('product_id', $product->id)->where('type', 'rm')->pluck('change')->first();
+                $prodFound->status == 'in' ? $instock     =   $prodFound->incoming : $instock   =   0;
+                $prodFound->status == 'out' ? $outStock   =   $prodFound->incoming : $outStock   =   0;
 
-                            $instock    =   $incoming->where('product_id', $product->id)->where('operation', 'in')->sum('incoming');
-                            $outstock   =   $incoming->where('product_id', $product->id)->where('operation', 'out')->sum('incoming');
+                // $closingStock   =   $prodFound->where('id', $prodFound->id)->pluck('current_stock')->first() + $instock - $outStock;
 
-                            $this->productListing[$date] = [
-                                'date'          => $date,
-                                'product'       => $product,
-                                'incoming'      => $incoming,
-                                'closingStock'  => $closingStock,
-                                'openingStock'  => $incoming->current_stock,
-
-                                'in_stock'      => $instock,
-                                'out_stock'     => $outstock,
-
-                                'closing_stock' => $incoming->current_stock + $instock - $outstock,
-                            ];
-                        }
-                    }
-                }
-            } catch (\Throwable $th) {
-                dd($th);
+                $this->productListing[$key] = [
+                    'closingStock'  => $prodFound->change,
+                    'count'         => $this->countProduct,
+                    'product'       => $prodFound->product,
+                    'inStock'       => number_format($instock),
+                    'outStock'      => number_format($outStock),
+                    'current_stock' => $prodFound->current_stock,
+                    'date'          => date('Y-m-d', strtotime($prodFound->created_at)),
+                    'reason'        => $prodFound->where('id', $prodFound->id)->pluck('reason')->first(),
+                ];
             }
+
+            // dd($this->total_opening_quantity);
 
             if (count($this->productListing) <= 0) {
                 $this->searchFoundSomething = 'no';
                 $this->result   =   false;
             } else {
-                $this->searchFoundSomething = 'yes';
                 $this->result   =   true;
+                $this->searchFoundSomething = 'yes';
             }
-            // $this->result   =   true;
-            // dd($this->productListing);
         }
     }
-
-    // function searchInformation()
-    // {
-    //     $this->resetData();
-    //     $this->validate();
-
-    //     if ($this->start_date > $this->end_date) {
-    //         dd('operation not allowed!');
-    //     } else {
-    //         $datecount  =   0;
-    //         $carbonDate =   Carbon::create($this->start_date);
-    //         $dateDiff   =   $carbonDate->diffInDays($this->end_date);
-    //         $this->daysCount    =   $dateDiff;
-    //         // dd($dateDiff);
-    //         $dates = [];
-    //         for ($sDate = 1; $sDate <= $dateDiff; $sDate++) {
-    //             $carbonDate =   Carbon::create($this->start_date);
-    //             array_push($this->dateList, $carbonDate->addDay($sDate)->format('Y-m-d'));
-    //         }
-
-    //         $this->products =   Product::where('company_id', userInfo()->company_id)->where('category_id', $this->category)->select('id', 'product_name', 'cost', 'location')->with('power:id,product_id,sphere,cylinder,axis,add,eye')->get();
-
-    //         $productTracker =   TrackStockRecord::where('company_id', userInfo()->company_id)->get();
-    //         foreach ($productTracker as $key => $id) {
-    //             array_push($this->productArrayList, $id->id);
-    //         }
-
-    //         (int)$count_p = $dateDiff;
-    //         foreach ($this->products as $key => $product) {
-
-    //             $incomingSum = 0;
-
-    //             if ($count_p == 0) {
-    //                 $count_p = $dateDiff;
-    //             }
-
-    //             foreach ($this->dateList as $count => $date) {
-
-    //                 $incoming       =   TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->sum('incoming');
-    //                 $closingStock   =   TrackStockRecord::where('product_id', $product->id)->where('type', 'rm')->pluck('change')->first();
-
-    //                 // finding the opening stock
-    //                 $incomingSum += (int)$incoming;
-
-    //                 // closing stock calculations
-    //                 $closingStock = date('Y-m-d', strtotime($date)) == date('Y-m-d', strtotime($this->end_date))
-    //                     ? ($closingStock == null
-    //                         ? 0 : $closingStock) : 0;
-
-    //                 if (!array_search($product->id, $this->productArrayList, true)) {
-    //                     $closingStock = date('Y-m-d', strtotime($date)) == date('Y-m-d', strtotime($this->end_date))
-    //                         ? ($product->stock == null
-    //                             ? 0 : $product->stock) : 0;
-    //                 }
-
-    //                 $this->productListing[$date . '-' . $product->id] = [
-    //                     'product' => $product,
-    //                     'current_stock' => TrackStockRecord::where('product_id', $product->id)->whereDate('created_at', $date)->where('type', 'rm')->first(),
-    //                     'incoming' => number_format($incoming),
-    //                     'hide' => $this->daysCount == $count_p ? false : true,
-    //                     'closingStock' => $closingStock,
-    //                     'openingStock' => $incomingSum,
-    //                 ];
-    //                 $count_p--;
-
-    //                 dd($this->productListing);
-    //             }
-
-    //             $this->productListingVariation[$product->id] = $incomingSum;
-    //         }
-
-    //         dd($this->productListing);
-
-    //         if (count($this->productListing) <= 0) {
-    //             $this->searchFoundSomething = 'no';
-    //         } else {
-    //             $this->searchFoundSomething = 'yes';
-    //         }
-    //     }
-    //     // dd($this->productListingVariation);
-
-    //     $this->result   =   true;
-    // }
 
     function resetData()
     {

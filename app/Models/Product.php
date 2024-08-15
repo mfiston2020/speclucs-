@@ -58,4 +58,8 @@ class Product extends Model
     function costOfGoodSold($year){
         return $this->soldProducts->where('product_id',$this->id)->where('created_at',$year)->sum('quantity');
     }
+
+    function fifo($date){
+        return $this->soldProducts->where('product_id', $this->id)->where('created_at', $date)->where('type', 'rm')->sum('incoming');
+    }
 }

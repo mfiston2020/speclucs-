@@ -132,13 +132,18 @@
                     <div class="tab-pane active mt-4" id="raw-material" role="tabpanel">
                         <div class="table-responsive">
                             {{-- <table width="100%" border="1"> --}}
-                            <table id="" class="table table-striped table-bordered nowrap fixTableHead"
+                            <table class="table table-striped table-bordered nowrap fixTableHead"
                                 style="width:100%" data-sticky-header>
-                                <thead>
+                                <thead class="font-bold">
+                                    @php
+                                        $stockInTottal =    0;
+                                        $stockOutTottal =    0;
+                                        $closingTotal =    0;
+                                    @endphp
                                     <tr>
-                                        <th rowspan="2">SN</th>
+                                        <th rowspan="2"><center>SN</center></th>
                                         <th rowspan="2">Date</th>
-                                        <th colspan="4"><center>Particulars</center></th>
+                                       <th colspan="4"><center>Particulars</center></th>
                                         <th colspan="3"><center>Opening Stock</center></th>
                                         <th colspan="3"><center>Stock In</center></th>
                                         <th colspan="3"><center>Stock Out</center></th>
@@ -173,37 +178,78 @@
                                 <tbody>
                                     @foreach ($productListing as $key=> $product)
                                         <tr>
-                                            <td>-</td>
-                                            {{-- <td>{{ sprintf('%04d',$key+1) }}</td> --}}
+                                            <td>{{ sprintf('%04d',$key+1) }}</td>
                                             <td>{{ $product['date'] }}</td>
-                                            <td>{{ $product['product']?->id }}</td>
+                                            <td>
+                                                {{ $product['product']?->id }}
+                                                @if ($product['reason']=='adjust')
+                                                    <span class="badge badge-danger badge-pill ml-2">{{$product['reason']}}</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $product['product']?->product_name.'-'.$product['product']?->description }}</td>
-                                            <td>{{ $product['product']?->id }} </td>
+                                            <td> - </td>
                                             <td>{{ $product['product']?->location }}</td>
 
                                             {{-- Opening Stock --}}
-                                            <td>{{ $product['openingStock'] }}</td>
+                                            <td>{{ $product['current_stock'] }}</td>
                                             <td>{{ format_money($product['product']->cost) }}</td>
-                                            <td>{{ format_money($product['openingStock']*$product['product']->cost) }}</td>
+                                            <td>{{ format_money($product['current_stock']*$product['product']->cost) }}</td>
 
                                             {{-- Stock In --}}
-                                            <td>{{ $product['in_stock'] }}</td>
+                                            <td>{{ $product['inStock'] }}</td>
                                             <td>{{ format_money($product['product']->cost) }}</td>
-                                            <td>{{ format_money($product['in_stock']*$product['product']->cost) }}</td>
+                                            <td>{{ format_money($product['inStock']*$product['product']->cost) }}</td>
 
                                             {{-- Stock Out --}}
-                                            <td>{{ $product['out_stock'] }}</td>
+                                            <td>{{ $product['outStock'] }}</td>
                                             <td>{{ format_money($product['product']->cost) }}</td>
-                                            <td>{{ format_money($product['out_stock']*$product['product']->cost) }}</td>
+                                            <td>{{ format_money($product['outStock']*$product['product']->cost) }}</td>
 
                                             {{-- Closing Out --}}
-                                            <td>{{ $product['closing_stock'] }}</td>
+                                            <td>{{ $product['closingStock'] }}</td>
                                             <td>{{ format_money($product['product']->cost) }}</td>
-                                            <td>{{ format_money($product['closing_stock']*$product['product']->cost) }}</td>
-
+                                            <td>{{ format_money($product['closingStock']*$product['product']->cost) }}</td>
+                                            @php
+                                                $stockInTottal +=   $product['inStock'];
+                                                $stockOutTottal +=   $product['outStock'];
+                                            @endphp
                                         </tr>
                                     @endforeach
                                 </tbody>
+
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="18"></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="6"><b>Total</b> </th>
+                                        {{--  --}}
+                                        <th>0</th>
+                                        <th>-</th>
+                                        <th>
+                                            {{-- {{ format_money($openingStockTotalCost) }} --}}
+                                            0
+                                        </th>
+                                        {{--  --}}
+                                        <th><b class="text-primary">{{ $stockInTottal }}</b></th>
+                                        <th>U Cost</th>
+                                        <th>
+                                            {{-- {{ format_money($inStockTotalCost) }} --}}
+                                            0
+                                        </th>
+                                        {{--  --}}
+                                        <th><b class="text-primary">{{ $stockOutTottal }}</b></th>
+                                        <th>U Cost</th>
+                                        <th>
+                                            {{-- {{ format_money($outStockTotalCost) }} --}}
+                                            0
+                                        </th>
+                                        {{--  --}}
+                                        <th>Qty</th>
+                                        <th>U Cost</th>
+                                        <th>T. Cost</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -225,8 +271,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="alert alert-warning alert-rounded ">
-                    Nothing Found from: <strong>{{ $start_date }}</strong> up to
-                    <strong>{{ $end_date }}</strong>
+                    Nothing Found from: <strong>{{ $start_date }}</strong> up to <strong>{{ $end_date }}</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span
                             aria-hidden="true">×</span>
                     </button>
