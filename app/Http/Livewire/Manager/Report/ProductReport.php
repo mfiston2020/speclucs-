@@ -82,7 +82,7 @@ class ProductReport extends Component
 
             $productTracker =   TrackStockRecord::where('company_id', userInfo()->company_id)->whereHas('product', function ($query) {
                 $query->where('category_id', $this->category)->select('id', 'product_name', 'description', 'cost');
-            })->wherebetween('created_at', [$this->start_date, $this->end_date])->where('type', 'rm')->orderBy('product_id', 'desc')->select('id', 'product_id', 'current_stock', 'incoming', 'status', 'type', 'created_at', 'reason', 'change')->take(500)->get();
+            })->wherebetween('created_at', [$this->start_date, $this->end_date])->where('type', 'rm')->orderBy('product_id', 'desc')->select('id', 'product_id', 'current_stock', 'incoming', 'status', 'type', 'created_at', 'reason', 'change')->get();
 
             foreach ($productTracker as $key => $prodFound) {
                 $instock    =   0;
