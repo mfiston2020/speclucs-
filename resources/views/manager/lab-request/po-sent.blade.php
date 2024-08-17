@@ -63,7 +63,7 @@
                                 <li class="nav-item">
                                     <a href="#out-complete-orders" class="nav-link" data-toggle="tab"
                                         aria-expanded="false">
-                                        External Po Sent
+                                        External Po Sent {{ is_null(getUserCompanyInfo()->is_vision_center) }}
                                         <span class="badge badge-danger badge-pill ml-2">
                                             {{count($requests_supplier_count)}}
                                         </span>
@@ -442,7 +442,7 @@
 
                                 </div>
 
-                                @if (is_null(getUserCompanyInfo()->is_vision_center) && getUserCompanyInfo()->can_supply=='1')
+                                {{-- @if (is_null(getUserCompanyInfo()->is_vision_center) && getUserCompanyInfo()->can_supply=='1') --}}
                                     <div id="out-complete-orders" class="tab-pane">
 
                                     @if (count($requests_supplier_count)>0)
@@ -816,7 +816,7 @@
                                             </div>
                                         </div>
                                     @endif
-                                @endif
+                                {{-- @endif --}}
                             </div>
                         </div>
                     </div>
