@@ -366,7 +366,7 @@
 
                                     @if ( $lens_type!='2' )
                                         <div class="form-group col-3">
-                                            <select class="form-control" wire:model.blur="r_addition">
+                                            <select class="form-control @error('r_addition') is-invalid @enderror" wire:model.blur="r_addition">
                                                 <option value="">
                                                     * ADD *
                                                 </option>
@@ -374,6 +374,9 @@
                                                     <option value="{{ $i }}">{{ number_format($i,2,'.') }}</option>
                                                 @endfor
                                             </select>
+                                            @error('r_addition')
+                                                <span class="text-danger">{{$message}}</span>
+                                            @enderror
                                         </div>
                                     @endif
 
@@ -474,7 +477,7 @@
 
                                     @if ($lens_type!='2')
                                         <div class="form-group col-3">
-                                            <select class="form-control" wire:model.blur="l_addition">
+                                            <select class="form-control @error('l_addition') is-invalid @enderror" wire:model.blur="l_addition">
                                                 <option value="">
                                                     * ADD *
                                                 </option>
@@ -483,6 +486,9 @@
                                                     <option value="{{ $i }}">{{ number_format($i,2,'.') }}</option>
                                                 @endfor
                                             </select>
+                                            @error('l_addition')
+                                                <span class="text-danger">{{$message}}</span>
+                                            @enderror
                                         </div>
                                     @endif
 
