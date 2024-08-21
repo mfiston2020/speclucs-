@@ -14,7 +14,7 @@ class ProductReport extends Component
     public $start_date, $end_date, $searchFoundSomething = 'yes';
     public $productListing = [];
     public $productListingVariation = [];
-    public $dateList = [];
+    public $dateList = [], $productCounting = [];
     public $productArrayList = array(), $countProduct   =   1;
     public $products, $stockRecords;
     public $daysCount   =   0;
@@ -46,7 +46,8 @@ class ProductReport extends Component
         }
     }
 
-    function updatedlens_type(){
+    function updatedlens_type()
+    {
         $this->hideResult();
     }
 
@@ -94,8 +95,8 @@ class ProductReport extends Component
                         $query->where('type_id', $this->lens_type)
                             ->select('id', 'product_id', 'sphere', 'cylinder', 'axis', 'add', 'eye');
                     })
-                    ->where('category_id', $this->category)
-                    ->select('id', 'category_id','product_name', 'description', 'cost');
+                        ->where('category_id', $this->category)
+                        ->select('id', 'category_id', 'product_name', 'description', 'cost');
                 })
                     ->wherebetween('created_at', [$this->start_date, $this->end_date])
                     ->where('type', 'rm')
@@ -114,20 +115,37 @@ class ProductReport extends Component
             foreach ($productTracker as $key => $prodFound) {
                 $instock    =   0;
                 $outStock   =   0;
+                $countProduct   =   1;
 
                 $prodFound->status == 'in' ? $instock     =   $prodFound->incoming : $instock   =   0;
-                $prodFound->status == 'out' ? $outStock   =   $prodFound->incoming : $outStock   =   0;
+                $prodFound->status == 'out' ? $outStock   =   $prodFound->incoming : $outStock  =   0;
 
                 $this->productListing[$key] = [
+                    '_closingStock' => $prodFound->change,
                     'closingStock'  => $prodFound->change,
                     'product'       => $prodFound->product,
+                    'product_id'    => $prodFound->product->id,
                     'inStock'       => number_format($instock),
                     'outStock'      => number_format($outStock),
                     'current_stock' => $prodFound->current_stock,
                     'date'          => date('Y-m-d', strtotime($prodFound->created_at)),
                     'reason'        => $prodFound->where('id', $prodFound->id)->pluck('reason')->first(),
+                    'count'         => $countProduct,
                 ];
+
+                $this->productCounting[$prodFound->product->id] =   1;
+
+                if ($key > 0) {
+                    if ($this->productListing[$key]['product_id'] == $this->productListing[$key - 1]['product_id']) {
+                        $this->productListing[$key]['count'] = $this->productListing[$key - 1]['count'] + 1;
+                        $this->productCounting[$prodFound->product->id] = $this->productListing[$key]['count'];
+                    } else {
+                        $countProduct   = 1;
+                    }
+                }
             }
+
+            // dd($this->productCounting);
 
             if (count($this->productListing) <= 0) {
                 $this->searchFoundSomething = 'no';

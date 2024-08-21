@@ -141,9 +141,19 @@
                                 style="width:100%" data-sticky-header id="zero_config">
                                 <thead class="font-bold">
                                     @php
-                                        $stockInTottal =    0;
+                                        $stockInTottal  =    0;
+                                        $stockInAmt     =    0;
+
                                         $stockOutTottal =    0;
-                                        $closingTotal =    0;
+                                        $stockOutAmt    =    0;
+
+                                        $closingTotal   =    0;
+
+                                        $openingTotal   =    0;
+                                        $openingQtyAmt  =    0;
+
+                                        $closingTotal   =    0;
+                                        $closingQtyAmt  =    0;
                                     @endphp
                                     <tr>
                                         <th rowspan="2"><center>SN</center></th>
@@ -216,7 +226,7 @@
                                             <td>{{ $product['product']?->location }}</td>
 
                                             {{-- Opening Stock --}}
-                                            <td style="background: rgb(255, 234, 194);">{{ $product['current_stock'] }}</td>
+                                            <td style="{{$product['count']==1?'background: rgb(255, 234, 194);':''}}">{{ $product['current_stock'] }}</td>
                                             <td>{{ format_money($product['product']->cost) }}</td>
                                             <td>{{ format_money($product['current_stock']*$product['product']->cost) }}</td>
 
@@ -231,12 +241,31 @@
                                             <td>{{ format_money($product['outStock']*$product['product']->cost) }}</td>
 
                                             {{-- Closing Out --}}
-                                            <td style="background: rgb(219, 255, 194);">{{ $product['closingStock'] }}</td>
+                                            @if ($productCounting[$product['product']->id]==$product['count'])
+                                                <td style="background: rgb(219, 255, 194);">{{ $product['closingStock'] }}</td>
+                                            @else
+                                                <td>{{ $product['closingStock'] }}</td>
+                                            @endif
+                                            
                                             <td>{{ format_money($product['product']->cost) }}</td>
                                             <td>{{ format_money($product['closingStock']*$product['product']->cost) }}</td>
                                             @php
-                                                $stockInTottal +=   $product['inStock'];
+                                                $stockInTottal  +=   $product['inStock'];
+                                                $stockInAmt     +=   $product['inStock']*$product['product']->cost;
+
                                                 $stockOutTottal +=   $product['outStock'];
+                                                $stockOutAmt    +=   $product['outStock']*$product['product']->cost;
+
+                                                if ($product['count']==1) {
+                                                    $openingTotal   +=   $product['current_stock'];
+                                                    $openingQtyAmt  +=   $product['current_stock']*$product['product']->cost;
+                                                }
+
+                                                if ($productCounting[$product['product']->id]==$product['count']){
+                                                    $closingTotal   +=   $product['closingStock'];
+                                                    $closingQtyAmt  +=   $product['closingStock']*$product['product']->cost;
+                                                }
+
                                             @endphp
                                         </tr>
                                     @endforeach
@@ -249,30 +278,31 @@
                                     <tr>
                                         <th colspan="6"><b>Total</b> </th>
                                         {{--  --}}
-                                        <th>0</th>
-                                        <th>-</th>
+                                        <th><b class="text-primary">{{ number_format($openingTotal) }}</b></th>
+                                        <th>Total Opening Cost</th>
                                         <th>
-                                            {{-- {{ format_money($openingStockTotalCost) }} --}}
-                                            0
+                                            <b class="text-primary">{{ format_money($openingQtyAmt) }}</b>
                                         </th>
                                         {{--  --}}
-                                        <th><b class="text-primary">{{ $stockInTottal }}</b></th>
-                                        <th>U Cost</th>
+                                        <th><b class="text-primary">{{ number_format($stockInTottal) }}</b></th>
+                                        <th>U Stock In Cost</th>
                                         <th>
-                                            {{-- {{ format_money($inStockTotalCost) }} --}}
-                                            0
+                                            <b class="text-primary">{{ format_money($stockInAmt) }}</b>
                                         </th>
                                         {{--  --}}
-                                        <th><b class="text-primary">{{ $stockOutTottal }}</b></th>
-                                        <th>U Cost</th>
+                                        <th><b class="text-primary">{{ number_format($stockOutTottal) }}</b></th>
+                                        <th>U Stock Out Cost</th>
                                         <th>
-                                            {{-- {{ format_money($outStockTotalCost) }} --}}
-                                            0
+                                            <b class="text-primary">{{ format_money($stockOutAmt) }}</b>
                                         </th>
                                         {{--  --}}
-                                        <th>Qty</th>
+                                        <th>
+                                            <b class="text-primary">{{ number_format($closingTotal) }}</b>
+                                        </th>
                                         <th>U Cost</th>
-                                        <th>T. Cost</th>
+                                        <th>
+                                            <b class="text-primary">{{ format_money($closingQtyAmt) }}</b>
+                                        </th>
                                     </tr>
                                 </tfoot>
                             </table>
