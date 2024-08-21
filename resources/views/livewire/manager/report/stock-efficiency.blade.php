@@ -104,9 +104,9 @@
                                 <th>#</th>
                                 <th>Product Number</th>
                                 <th>Product Name</th>
-                                <th>Current</th>
+                                {{-- <th>Current</th>
                                 <th>Usage</th>
-                                <th>Qty to keep</th>
+                                <th>Qty to keep</th> --}}
                                 <th>Efficiency Ration</th>
                                 <th>Status</th>
                             </tr>
@@ -119,9 +119,9 @@
                                     <td>{{$key+1 }}</td>
                                     <td>{{$product['product']->id }}</td>
                                     <td>{{$product['product']->product_name }}</td>
-                                    <td>{{$product['product']->stock }}</td>
+                                    {{-- <td>{{$product['product']->stock }}</td>
                                     <td>{{$product['usage'] }}</td>
-                                    <td>{{$product['Qty_to_keep'] }}</td>
+                                    <td>{{$product['Qty_to_keep'] }}</td> --}}
                                     
                                     {{-- =============================== --}}
                                     @if (is_numeric($product['efficiency']))
