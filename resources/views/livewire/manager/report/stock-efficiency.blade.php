@@ -127,76 +127,80 @@
                                     @if (is_numeric($product['efficiency']))
 
                                         @if ($product['efficiency']>=0 && $product['efficiency']<=24 && $product['greater'])
-                                            <td style="background-color: #C01800;color:white">{{round($product['efficiency'],2) }} %</td>
+                                            <td>{{round($product['efficiency'],2) }} %</td>
                                         @endif
 
                                         @if ($product['efficiency']>=25 && $product['efficiency']<=49 && $product['greater'])
-                                            <td style="background-color: #FB2301;color:white">{{round($product['efficiency'],2) }} %</td>
+                                            <td>{{round($product['efficiency'],2) }} %</td>
                                         @endif
 
                                         @if ($product['efficiency']>=50 && $product['efficiency']<=74 && $product['greater'])
-                                            <td style="background-color: #FBC001; color:rgb(0, 0, 0)">{{round($product['efficiency'],2) }} %</td>
+                                            <td>{{round($product['efficiency'],2) }} %</td>
                                         @endif
 
                                         @if ($product['efficiency']>=75 && $product['efficiency']<=100 && $product['greater'])
-                                            <td style="background-color: #92D050;color:rgb(0, 0, 0)">{{round($product['efficiency'],2) }} %</td>
+                                            <td>{{round($product['efficiency'],2) }} %</td>
                                         @endif
 
                                         @if ($product['efficiency']>=0 && $product['efficiency']<=24 && $product['less'])
-                                            <td style="background-color: #2570C0;color:white">{{round($product['efficiency'],2) }} %</td>
+                                            <td>{{round($product['efficiency'],2) }} %</td>
                                         @endif
 
                                         @if ($product['efficiency']>=25 && $product['efficiency']<=49 && $product['less'])
-                                            <td style="background-color: #31B0F0;color:rgb(0, 0, 0)">{{round($product['efficiency'],2) }} %</td>
+                                            <td>{{round($product['efficiency'],2) }} %</td>
                                         @endif
 
                                         @if ($product['efficiency']>=50 && $product['efficiency']<=74 && $product['less'])
-                                            <td style="background-color: #0AB050; color:rgb(0, 0, 0)">{{round($product['efficiency'],2) }} %</td>
+                                            <td>{{round($product['efficiency'],2) }} %</td>
                                         @endif
 
                                         @if ($product['efficiency']>=75 && $product['efficiency']<=100 && $product['less'])
-                                            <td style="background-color: #92D050;color:rgb(0, 0, 0)">{{round($product['efficiency'],2) }} %</td>
+                                            <td>{{round($product['efficiency'],2) }} %</td>
                                         @endif
                                     @else
-                                        <td>{{$product['efficiency'] }}</td>
+                                        @if ($product['usage']==0)
+                                            <td>0</td>
+                                        @endif
                                     @endif
                                     
                                     {{-- =============================== --}}
                                     @if (is_numeric($product['efficiency']))
 
                                         @if ($product['efficiency']>=0 && $product['efficiency']<=24 && $product['greater'])
-                                            <td>HIGHLY CRITICAL</td>
+                                            <td style="background-color: #C01800;color:white">HIGHLY CRITICAL</td>
                                         @endif
 
                                         @if ($product['efficiency']>=25 && $product['efficiency']<=49 && $product['greater'])
-                                            <td>CRITICAL</td>
+                                            <td style="background-color: #FB2301;color:white">CRITICAL</td>
                                         @endif
 
                                         @if ($product['efficiency']>=50 && $product['efficiency']<=74 && $product['greater'])
-                                            <td>HIGH</td>
+                                            <td style="background-color: #FBC001; color:rgb(0, 0, 0)">HIGH</td>
                                         @endif
 
                                         @if ($product['efficiency']>=75 && $product['efficiency']<=100 && $product['greater'])
-                                            <td>MEDIUM</td>
+                                            <td style="background-color: #92D050;color:rgb(0, 0, 0)">MEDIUM</td>
                                         @endif
 
                                         @if ($product['efficiency']>=0 && $product['efficiency']<=24 && $product['less'])
-                                            <td>HIGHLY OVER</td>
+                                            <td style="background-color: #2570C0;color:white">HIGHLY OVER</td>
                                         @endif
 
                                         @if ($product['efficiency']>=25 && $product['efficiency']<=49 && $product['less'])
-                                            <td>OVER</td>
+                                            <td style="background-color: #31B0F0;color:rgb(0, 0, 0)">OVER</td>
                                         @endif
 
                                         @if ($product['efficiency']>=50 && $product['efficiency']<=74 && $product['less'])
-                                            <td>LOW</td>
+                                            <td style="background-color: #0AB050; color:rgb(0, 0, 0)">LOW</td>
                                         @endif
 
                                         @if ($product['efficiency']>=75 && $product['efficiency']<=100 && $product['less'])
-                                            <td>MEDIUM</td>
+                                            <td style="background-color: #92D050;color:rgb(0, 0, 0)">MEDIUM</td>
                                         @endif
                                     @else
-                                        <td>{{$product['efficiency'] }}</td>
+                                        @if ($product['usage']==0)
+                                            <td style="background-color: #2570C0;color:white">HIGHLY OVER</td>
+                                        @endif
                                     @endif
                                 </tr>
                             @endforeach
