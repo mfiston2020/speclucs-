@@ -43,7 +43,7 @@ class Product extends Model
     }
 
     function soldProducts(){
-        return $this->hasMany(SoldProduct::class);
+        return $this->hasMany(SoldProduct::class, 'product_id');
     }
 
     function supplier()

@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title', 'Manager\'s Manager')
+@section('title', getuserType() . ' - ' . ' Reports')
 
 @push('css')
 @endpush
@@ -105,6 +105,26 @@
                                 <div class="ml-auto">
                                     <h3>User Perfomance Report</h3>
                                     <small class="text-dark">Get perfomance of users by order placed!</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+
+            {{-- Stock Efficiency report --}}
+            <a href="{{ route('manager.stock.efficiency.report')}}" class="col-lg-4 col-md-6 text-warning">
+                <div class="">
+                    <div class="card border-right border-warning">
+                        <div class="card-body">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <span class="text-warning display-6"><i class="ti-stats-up"></i></span>
+                                </div>
+                                <div class="ml-auto">
+                                    <h3>Stock Efficiency Report</h3>
+                                    <small class="text-dark">Get the efficiency report of products in stock!</small>
                                 </div>
                             </div>
                         </div>

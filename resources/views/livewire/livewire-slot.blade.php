@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title', 'Dashboard - Sales')
+@section('title', getuserType() . ' - ' . ' Reports')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('dashboard/assets/extra-libs/prism/prism.css') }}">
@@ -14,7 +14,7 @@
 @endpush
 
 {{-- ==== Breadcumb ======== --}}
-@section('current', 'Order')
+{{-- {{-- @section('current', 'Order') --}}
 @section('page_name', 'New Order')
 {{-- === End of breadcumb == --}}
 

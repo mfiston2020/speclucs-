@@ -5,6 +5,7 @@ use App\Http\Livewire\Manager\PurchaseOrder;
 use App\Http\Livewire\Manager\Report\AdjustMentReport;
 use App\Http\Livewire\Manager\Report\ClosingReport;
 use App\Http\Livewire\Manager\Report\ProductReport;
+use App\Http\Livewire\Manager\Report\StockEfficiency;
 use App\Http\Livewire\Manager\Report\StockHistory;
 use App\Http\Livewire\Manager\Report\UserPerfomanceReport;
 use App\Http\Livewire\Manager\Sales\ProductRetail;
@@ -431,6 +432,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     // stock reporting
     Route::get('/product-report', ProductReport::class)->name('product.report');
     Route::get('/product-history-report', StockHistory::class)->name('product.stock.report');
+    Route::get('/stock-efficiency-report', StockEfficiency::class)->name('stock.efficiency.report');
 });
 
 // ===========================================================================
