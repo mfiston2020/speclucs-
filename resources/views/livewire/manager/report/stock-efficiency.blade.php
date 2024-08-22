@@ -91,9 +91,37 @@
         <div class="card">
             <div class="card-body">
                 
-                <a onclick="ExportToExcel('xlsx')" href="#" class=" mt-2 mb-2 ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
-                    <i class="fa fa-download"></i> Export To Excel
-                </a>
+                <div class="d-flex align-items-center justify-content-between">
+                    <a onclick="ExportToExcel('xlsx')" href="#" class=" mt-2 mb-2 ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
+                        <i class="fa fa-download"></i> Export To Excel
+                    </a>
+                    <div class="d-flex align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div style="background-color: #C01800; height:1rem; width:1rem;"></div>
+                            <span class=" ml-2">HIGHLY CRITICAL </span>
+                        </div>
+                        <div class="d-flex align-items-center ml-3">
+                            <div style="background-color: #FB2301; height:1rem; width:1rem;"></div>
+                            <span class=" ml-2">CRITICAL </span>
+                        </div>
+                        <div class="d-flex align-items-center ml-3">
+                            <div style="background-color: #FBC001; height:1rem; width:1rem;"></div>
+                            <span class=" ml-2">HIGH </span>
+                        </div>
+                        <div class="d-flex align-items-center ml-3">
+                            <div style="background-color: #92D050; height:1rem; width:1rem;"></div>
+                            <span class=" ml-2">MEDIUM </span>
+                        </div>
+                        <div class="d-flex align-items-center ml-3">
+                            <div style="background-color: #31B0F0; height:1rem; width:1rem;"></div>
+                            <span class=" ml-2">OVER </span>
+                        </div>
+                        <div class="d-flex align-items-center ml-3">
+                            <div style="background-color: #2570C0; height:1rem; width:1rem;"></div>
+                            <span class=" ml-2">HIGHLY OVER </span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="table-responsive">
                     {{-- <table width="100%" border="1"> --}}
@@ -104,9 +132,6 @@
                                 <th>#</th>
                                 <th>Product Number</th>
                                 <th>Product Name</th>
-                                {{-- <th>Current</th>
-                                <th>Usage</th>
-                                <th>Qty to keep</th> --}}
                                 <th>Efficiency Ration</th>
                                 <th>Status</th>
                             </tr>
@@ -117,11 +142,28 @@
                             @foreach ($productEfficiency as $key=> $product)
                                 <tr>
                                     <td>{{$key+1 }}</td>
-                                    <td>{{$product['product']->id }}</td>
-                                    <td>{{$product['product']->product_name }}</td>
-                                    {{-- <td>{{$product['product']->stock }}</td>
-                                    <td>{{$product['usage'] }}</td>
-                                    <td>{{$product['Qty_to_keep'] }}</td> --}}
+                                    <td>
+                                        {{$product['product']->id }}
+                                    </td>
+                                    <td>
+                                        {{$product['product']->product_name }}
+                                        @if ($product['product']->category_id=='1')
+                                            |
+                                            @if (initials($product['product']->product_name) == 'SV')
+                                                <span>
+                                                    {{ $product['product']?->power?->sphere }} /
+                                                    {{ $product['product']?->power?->cylinder }}
+                                                </span>
+                                            @else
+                                                <span>
+                                                    {{ $product['product']?->power?->sphere }} /
+                                                    {{ $product['product']?->power?->cylinder }}
+                                                    *{{ $product['product']?->power?->axis }}
+                                                    {{ $product['product']?->power?->add }}
+                                                </span>
+                                            @endif
+                                        @endif
+                                    </td>
                                     
                                     {{-- =============================== --}}
                                     @if (is_numeric($product['efficiency']))
@@ -159,7 +201,7 @@
                                         @endif
                                     @else
                                         @if ($product['usage']==0)
-                                            <td>0</td>
+                                            <td>0%</td>
                                         @endif
                                     @endif
                                     
