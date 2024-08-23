@@ -146,7 +146,7 @@
                                         {{$product['product']->id }}
                                     </td>
                                     <td>
-                                        {{$product['product']->product_name }}
+                                        {{ $product['product']?->product_name.'-'.$product['product']?->description }}
                                         @if ($product['product']->category_id=='1')
                                             |
                                             @if (initials($product['product']->product_name) == 'SV')
