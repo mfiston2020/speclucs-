@@ -566,6 +566,7 @@
                                                                 <th>Left Eye</th>
                                                                 <th>Request Date</th>
                                                                 <th>Request Age</th>
+                                                                <th>Source</th>
                                                                 {{-- <th>Cost</th> --}}
                                                                 <th>Payment</th>
                                                                 <th></th>
@@ -708,6 +709,9 @@
                                                                         </td>
                                                                         <td>
                                                                             {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
+                                                                        </td>
+                                                                        <td class="text-start">
+                                                                            {{ $request->company?->company_name }}
                                                                         </td>
                                                                         <td class="text-start">
                                                                             <span @class([ 'text-info'=> $request->status == 'priced','text-success' =>

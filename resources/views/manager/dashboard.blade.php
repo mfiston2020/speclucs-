@@ -123,9 +123,9 @@
                                 <div class="col-lg-4">
 
                                     @if ($earning>0)
-                                    <h1 class="m-b-0 m-t-30">{{format_money($earning)}}</h1>
+                                        <h1 class="m-b-0 m-t-30">{{format_money($earning)}}</h1>
                                     @else
-                                    <h1 class="m-b-0 m-t-30" style="color: red">{{format_money($earning)}}</h1>
+                                        <h1 class="m-b-0 m-t-30" style="color: red">{{format_money($earning)}}</h1>
                                     @endif
                                     <h6 class="font-light text-muted">{{__('manager/dashboard.annual_gros_profit')}}</h6>
                                     <h3 class="m-t-30 m-b-0">{{format_money($totalValue)}}</h3>

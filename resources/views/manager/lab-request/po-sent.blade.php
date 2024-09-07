@@ -63,7 +63,7 @@
                                 <li class="nav-item">
                                     <a href="#out-complete-orders" class="nav-link" data-toggle="tab"
                                         aria-expanded="false">
-                                        External Po Sent {{ is_null(getUserCompanyInfo()->is_vision_center) }}
+                                        External Po Sent 
                                         <span class="badge badge-danger badge-pill ml-2">
                                             {{count($requests_supplier_count)}}
                                         </span>
@@ -471,6 +471,7 @@
                                                                             <th>Patient Name</th>
                                                                             <th>Order Date</th>
                                                                             <th>Order Age</th>
+                                                                            <th>Source</th>
                                                                             <th>Status</th>
                                                                         </tr>
                                                                     </thead>
@@ -508,6 +509,9 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
+                                                                                </td>
+                                                                                <td class="text-start">
+                                                                                    {{ $request->company?->company_name }}
                                                                                 </td>
                                                                                 <td class="text-start">
                                                                                     <span @class([

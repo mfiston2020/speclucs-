@@ -568,6 +568,7 @@
                                                                 <th>Description</th>
                                                                 <th>Right Eye</th>
                                                                 <th>Left Eye</th>
+                                                                <th>Source</th>
                                                                 <th>Status</th>
                                                                 <th>-</th>
                                                             </tr>
@@ -615,6 +616,9 @@
                                                                 </td>
                                                                 <td>
                                                                     {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
+                                                                </td>
+                                                                <td class="text-start">
+                                                                    {{ $request->company?->company_name }}
                                                                 </td>
 
                                                                 </td>
