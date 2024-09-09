@@ -67,7 +67,7 @@
                                                 <span class="ti-calendar"></span>
                                             </span>
                                         </div>
-                                        <input type='text' class="form-control pickadate" placeholder="From" name="from"
+                                        <input type='date' class="form-control" placeholder="From" name="from"
                                             value="{{old('from')}}" />
                                     </div>
                                 </div>
@@ -80,7 +80,7 @@
                                                 <span class="ti-calendar"></span>
                                             </span>
                                         </div>
-                                        <input type='text' class="form-control pickadate" placeholder="To" name="to"
+                                        <input type='date' class="form-control" placeholder="To" name="to"
                                             value="{{old('to')}}" />
                                     </div>
                                 </div>
@@ -141,7 +141,7 @@
                                                 <span class="ti-calendar"></span>
                                             </span>
                                         </div>
-                                        <input type='text' class="form-control pickadate" placeholder="From" name="from"
+                                        <input type='date' class="form-control" placeholder="From" name="from"
                                             value="{{old('from')}}" />
                                     </div>
                                 </div>
@@ -154,7 +154,7 @@
                                                 <span class="ti-calendar"></span>
                                             </span>
                                         </div>
-                                        <input type='text' class="form-control pickadate" placeholder="To" name="to"
+                                        <input type='date' class="form-control" placeholder="To" name="to"
                                             value="{{old('to')}}" />
                                     </div>
                                 </div>
@@ -239,7 +239,7 @@
                                                 <span class="ti-calendar"></span>
                                             </span>
                                         </div>
-                                        <input type='text' class="form-control pickadate" placeholder="From" name="from"
+                                        <input type='date' class="form-control" placeholder="From" name="from"
                                             value="{{old('from')}}" />
                                     </div>
                                 </div>
@@ -252,7 +252,7 @@
                                                 <span class="ti-calendar"></span>
                                             </span>
                                         </div>
-                                        <input type='text' class="form-control pickadate" placeholder="To" name="to"
+                                        <input type='date' class="form-control" placeholder="To" name="to"
                                             value="{{old('to')}}" />
                                     </div>
                                 </div>
@@ -277,9 +277,4 @@
 <script src="{{ asset('dashboard/assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
 <script src="{{ asset('dashboard/assets/libs/select2/dist/js/select2.min.js')}}"></script>
 <script src="{{ asset('dashboard/assets/dist/js/pages/forms/select2/select2.init.js')}}"></script>
-
-{{-- ========================================================================================== --}}
-<script src="{{ asset('dashboard/assets/libs/pickadate/lib/compressed/picker.js')}}"></script>
-<script src="{{ asset('dashboard/assets/libs/pickadate/lib/compressed/picker.date.js')}}"></script>
-<script src="{{ asset('dashboard/assets/dist/js/pages/forms/datetimepicker/datetimepicker.init.js')}}"></script>
 @endpush
