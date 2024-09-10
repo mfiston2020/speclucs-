@@ -57,8 +57,8 @@ class SuppliersController extends Controller
         $this->validate($request, [
             'suppliers_name' => 'required',
             'suppliers_description' => 'required',
-            'suppliers_email' => 'required |unique:suppliers,email',
-            'suppliers_phone' => 'required |unique:suppliers,phone',
+            'suppliers_email' => 'required',
+            'suppliers_phone' => 'required',
         ]);
 
         $supplier   =   Supplier::find($request->supplier_id);
