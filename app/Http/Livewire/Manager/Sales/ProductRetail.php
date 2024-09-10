@@ -725,7 +725,7 @@ class ProductRetail extends Component
         $this->suppliers            =   SupplyRequest::where('request_from', getuserCompanyInfo()->id)->where('status', 'approved')->get();
 
         $this->isCloudOrder         =   userInfo()->permissions == 'lab' ? 'yes' : 'no';
-        $this->insuranceList        =   Insurance::get();
+        $this->insuranceList        =   Insurance::where('company_id', userInfo()->company_id)->get();
 
         $this->visionCenters        =   Hospital::where('company_id', userInfo()->company_id)->get();
         $this->frameList  =   Product::where('company_id', userInfo()->company_id)->where('category_id', '2')->orderBy('product_name', 'ASC')->get();
