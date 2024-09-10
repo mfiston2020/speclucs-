@@ -26,16 +26,16 @@ class SuppliersController extends Controller
         $this->validate($request, [
             'suppliers_name' => 'required',
             'suppliers_description' => 'required',
-            'suppliers_email' => 'required |unique:suppliers,email',
-            'suppliers_phone' => 'required |unique:suppliers,phone',
+            'suppliers_email' => 'required',
+            'suppliers_phone' => 'required',
         ]);
 
         $supplier   =   new \App\Models\Supplier();
 
-        $supplier->name =   $request->suppliers_name;
-        $supplier->description =   $request->suppliers_description;
-        $supplier->email =   $request->suppliers_email;
-        $supplier->phone =   $request->suppliers_phone;
+        $supplier->name         =   $request->suppliers_name;
+        $supplier->description  =   $request->suppliers_description;
+        $supplier->email        =   $request->suppliers_email;
+        $supplier->phone        =   $request->suppliers_phone;
         $supplier->company_id   =   Auth::user()->company_id;
 
         try {
