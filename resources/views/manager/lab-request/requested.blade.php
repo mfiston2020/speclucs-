@@ -438,7 +438,11 @@
                                                                     <th>Patient Name</th>
                                                                     <th>Request Date</th>
                                                                     <th>Request Age</th>
-                                                                    <th>Source</th>
+                                                                    @if (getUserCompanyInfo()->is_vision_center=='1')
+                                                                        <th>Supplier</th>
+                                                                    @else
+                                                                        <th>Source</th>
+                                                                    @endif
                                                                     <th>Status</th>
                                                                     <th></th>
                                                                 </tr>
@@ -476,7 +480,11 @@
                                                                         </td>
 
                                                                         <td class="text-start">
-                                                                            {{ $request->company?->company_name }}
+                                                                            @if (getUserCompanyInfo()->is_vision_center=='1')
+                                                                                {{ $request->supplier?->company_name }}
+                                                                            @else
+                                                                                {{ $request->company?->company_name }}
+                                                                            @endif
                                                                         </td>
 
                                                                         <td class="text-start">

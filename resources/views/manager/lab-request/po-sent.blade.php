@@ -471,8 +471,11 @@
                                                                             <th>Patient Name</th>
                                                                             <th>Order Date</th>
                                                                             <th>Order Age</th>
-                                                                            <th>Source</th>
-                                                                            <th>Status</th>
+                                                                            @if (getUserCompanyInfo()->is_vision_center=='1')
+                                                                                <th>Supplier</th>
+                                                                            @else
+                                                                                <th>Source</th>
+                                                                            @endif
                                                                         </tr>
                                                                     </thead>
 
@@ -511,7 +514,11 @@
                                                                                     {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
                                                                                 </td>
                                                                                 <td class="text-start">
-                                                                                    {{ $request->company?->company_name }}
+                                                                                    @if (getUserCompanyInfo()->is_vision_center=='1')
+                                                                                        {{ $request->supplier?->company_name }}
+                                                                                    @else
+                                                                                        {{ $request->company?->company_name }}
+                                                                                    @endif
                                                                                 </td>
                                                                                 <td class="text-start">
                                                                                     <span @class([

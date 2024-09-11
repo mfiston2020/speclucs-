@@ -562,7 +562,6 @@
                                                                 <th>Request # </th>
                                                                 <th>Cloud ID</th>
                                                                 <th>Patient Name</th>
-                                                                <th>Source</th>
                                                                 <th>Request Date</th>
                                                                 <th>Request Age</th>
                                                                 <th>Description</th>
@@ -591,7 +590,7 @@
                                                                     -
                                                                     @else
                                                                     @if ($request->hospital_name!=null)
-                                                                    {{$request->cloud_id}}
+                                                                        {{$request->cloud_id}}
                                                                     @else
                                                                     -
                                                                     @endif
@@ -609,16 +608,17 @@
                                                                     @endif
                                                                 </td>
                                                                 <td>
-                                                                    {{ $request->supplier?->company_name }}
-                                                                </td>
-                                                                <td>
                                                                     {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
                                                                 </td>
                                                                 <td>
                                                                     {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
                                                                 </td>
                                                                 <td class="text-start">
-                                                                    {{ $request->company?->company_name }}
+                                                                    @if (getUserCompanyInfo()->is_vision_center=='1')
+                                                                        {{ $request->supplier?->company_name }}
+                                                                    @else
+                                                                        {{ $request->company?->company_name }}
+                                                                    @endif
                                                                 </td>
 
                                                                 </td>
