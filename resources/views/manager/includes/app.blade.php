@@ -44,7 +44,19 @@
 
         <div class="page-wrapper">
             <!-- Bread crumb and right sidebar toggle -->
+
+            @php
+                $date   =   date('d-m',strtotime(getuserCompanyInfo()->created_at)).'-'.date('Y');
+                $dt     =   \Carbon\Carbon::createMidnightDate($date);
+            @endphp
+
             <div class="page-breadcrumb">
+            @if ($dt->diffInDays(date('Y-m-d'))>=25)
+                <div class="alert alert-secondary alert-rounded col-lg-12 col-md-12 col-sm-12">
+                    <b><i class="fa fa-exclamation-triangle"></i> Warning! </b>Your Payment is due <strong class="text-primary">{{$dt->diffInDays(date('Y-m-d'))}} days</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span></button>
+                </div>
+            @endif
                 <div class="row">
                     <div class="col-5 align-self-center">
                         <h4 class="page-title text-capitalize">@yield('page_name')</h4>

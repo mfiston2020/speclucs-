@@ -40,6 +40,7 @@ class CompaniesController extends Controller
         $company->company_email     =   $request->company_email;
         $company->company_street    =   $request->company_street;
         $company->company_tin_number=   $request->tin_number;
+        $company->subscription_type =   'gold';
 
         try {
             $company->save();
