@@ -122,7 +122,7 @@
                                                     @else
                                                         <span>{{ format_values($product->sphere) }} /
                                                             {{ format_values($product->cylinder) }}
-                                                            *{{ format_values($product->axis) }}
+                                                            *{{ ($product->axis) }}
                                                             {{ $product->addition }}</span>
                                                     @endif
                                                 </td>
