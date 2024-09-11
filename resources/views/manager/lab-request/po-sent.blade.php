@@ -476,6 +476,7 @@
                                                                             @else
                                                                                 <th>Source</th>
                                                                             @endif
+                                                                            <th>Status</th>
                                                                         </tr>
                                                                     </thead>
 
