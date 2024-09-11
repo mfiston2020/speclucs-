@@ -613,13 +613,6 @@
                                                                 <td>
                                                                     {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans() }}
                                                                 </td>
-                                                                <td class="text-start">
-                                                                    @if (getUserCompanyInfo()->is_vision_center=='1')
-                                                                        {{ $request->supplier?->company_name }}
-                                                                    @else
-                                                                        {{ $request->company?->company_name }}
-                                                                    @endif
-                                                                </td>
 
                                                                 </td>
                                                                 @php
@@ -750,6 +743,14 @@
                                                                     @endif
                                                                     @else
                                                                     <span class="text-center">-</span>
+                                                                    @endif
+                                                                </td>
+
+                                                                <td class="text-start">
+                                                                    @if (getUserCompanyInfo()->is_vision_center=='1')
+                                                                        {{ $request->supplier?->company_name }}
+                                                                    @else
+                                                                        {{ $request->company?->company_name }}
                                                                     @endif
                                                                 </td>
 
