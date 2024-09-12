@@ -52,54 +52,55 @@ class ProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
                     if ($type && $indx && $chr && $ctng) {
                         // checkin the availability of the product
-                    $product_exists =   Power::where('type_id', $type->id)
-                        ->where('index_id', $indx->id)
-                        ->where('chromatics_id', $chr->id)
-                        ->where('coating_id', $ctng->id)
-                        ->where('sphere', format_values($data['sphere'] ?? 0))
-                        ->where('cylinder', format_values($data['cylinder'] ?? 0))
-                        ->where('axis', format_values($data['axis'] ?? 0))
-                        ->where('add', format_values($data['add'] ?? 0))
-                        ->where('eye', initials($data['lens_type']) == 'SV' ? 'any' : $data['eye'])
-                        ->exists();
+                        $product_exists =   Power::where('type_id', $type->id)
+                            ->where('index_id', $indx->id)
+                            ->where('chromatics_id', $chr->id)
+                            ->where('coating_id', $ctng->id)
+                            ->where('sphere', format_values($data['sphere'] ?? 0))
+                            ->where('cylinder', format_values($data['cylinder'] ?? 0))
+                            ->where('axis', format_values($data['axis'] ?? 0))
+                            ->where('add', format_values($data['add'] ?? 0))
+                            ->where('eye', initials($data['lens_type']) == 'SV' ? 'any' : $data['eye'])
+                            ->where('company_id', Auth::user()->company_id)
+                            ->exists();
 
-                    // =====================================================================
+                        // =====================================================================
 
-                    if (!$product_exists) {
-                        $product    =   Product::create([
-                            'category_id'   =>  '1',
-                            'location'   =>  $data['location'],
-                            'product_name'  =>  $data['lens_type'],
-                            'description'   =>  initials(strtoupper($data['lens_type'])) . " "
-                                . strtoupper($un_filtered_data['index']) . " "
-                                . ucfirst($data['chromatics_aspects']) . " "
-                                . strtoupper($data['coating']),
+                        if (!$product_exists) {
+                            $product    =   Product::create([
+                                'category_id'   =>  '1',
+                                'location'   =>  $data['location'],
+                                'product_name'  =>  $data['lens_type'],
+                                'description'   =>  initials(strtoupper($data['lens_type'])) . " "
+                                    . strtoupper($un_filtered_data['index']) . " "
+                                    . ucfirst($data['chromatics_aspects']) . " "
+                                    . strtoupper($data['coating']),
 
-                            'stock'         =>  $un_filtered_data['quantity_on_hand'],
-                            'price'         =>  $data['retail_price'],
-                            'cost'          =>  $data['supplier_cost'],
-                            'fitting_cost'  =>  '0',
-                            'company_id'    =>  Auth::user()->company_id,
-                            'deffective_stock' =>  '0',
-                        ]);
+                                'stock'         =>  $un_filtered_data['quantity_on_hand'],
+                                'price'         =>  $data['retail_price'],
+                                'cost'          =>  $data['supplier_cost'],
+                                'fitting_cost'  =>  '0',
+                                'company_id'    =>  Auth::user()->company_id,
+                                'deffective_stock' =>  '0',
+                            ]);
 
-                        Power::create([
-                            'product_id'    =>  $product->id,
-                            'type_id'       =>  $type->id,
-                            'index_id'      =>  $indx->id,
-                            'chromatics_id' =>  $chr->id,
-                            'coating_id'    =>  $ctng->id,
-                            'sphere'        =>  format_values($data['sphere'] ?? 0),
-                            'cylinder'      =>  format_values($data['cylinder'] ?? 0),
-                            'axis'          =>  format_values($data['axis'] ?? 0),
-                            'add'           =>  format_values($data['add'] ?? 0),
-                            'eye'           =>  strtoupper($data['lens_type']) == 'SINGLE VISION' ?   'any'   :   $data['eye'],
-                            'company_id'    =>  Auth::user()->company_id,
-                        ]);
-                        $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
-                    } else {
-                        $count++;
-                    }
+                            Power::create([
+                                'product_id'    =>  $product->id,
+                                'type_id'       =>  $type->id,
+                                'index_id'      =>  $indx->id,
+                                'chromatics_id' =>  $chr->id,
+                                'coating_id'    =>  $ctng->id,
+                                'sphere'        =>  format_values($data['sphere'] ?? 0),
+                                'cylinder'      =>  format_values($data['cylinder'] ?? 0),
+                                'axis'          =>  format_values($data['axis'] ?? 0),
+                                'add'           =>  format_values($data['add'] ?? 0),
+                                'eye'           =>  strtoupper($data['lens_type']) == 'SINGLE VISION' ?   'any'   :   $data['eye'],
+                                'company_id'    =>  Auth::user()->company_id,
+                            ]);
+                            $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
+                        } else {
+                            $count++;
+                        }
                     }
                 }
             } catch (\Throwable $th) {

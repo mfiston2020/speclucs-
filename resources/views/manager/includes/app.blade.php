@@ -51,9 +51,9 @@
             @endphp
 
             <div class="page-breadcrumb">
-            @if ($dt->diffInDays(date('Y-m-d'))>=25)
-                <div class="alert alert-secondary alert-rounded col-lg-12 col-md-12 col-sm-12">
-                    <b><i class="fa fa-exclamation-triangle"></i> Warning! </b>Your Payment is due <strong class="text-primary">{{$dt->diffInDays(date('Y-m-d'))}} days</strong>
+            @if ($dt->diffInDays(date('Y-m-d'))<=30)
+                <div class="alert {{$dt->diffInDays(date('Y-m-d'))<=5?'alert-danger':'alert-secondary'}} alert-rounded col-lg-12 col-md-12 col-sm-12">
+                    <b><i class="fa fa-exclamation-triangle"></i> Warning! </b>Your Payment is due in <strong class="text-primary">{{$dt->diffInDays(date('Y-m-d'))}} days</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span></button>
                 </div>
             @endif
