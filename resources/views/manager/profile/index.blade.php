@@ -361,11 +361,17 @@
                                         <div class="col-md-12">
                                             <select name="currency" id="" class="form-control">
                                                 <option value="">** Select Currency **</option>
+                                                <option value="MWK" {{ $company->currency_id=='MWK'?'selected':'' }}>
+                                                    Malawian kwacha (MWK)
+                                                </option>
                                                 <option value="RWF" {{($company->currency_id=='RWF') || is_null($company->currency_id)?'selected':''}}>
                                                     RWF
                                                 </option>
                                                 <option value="USD" {{$company->currency_id=='USD'?'selected':''}}>
                                                     USD
+                                                </option>
+                                                <option value="ZMW" {{ $company->currency_id=='ZMW'?'selected':'' }}>
+                                                    Zambian Kwacha (ZMW)
                                                 </option>
                                             </select>
                                         </div>
