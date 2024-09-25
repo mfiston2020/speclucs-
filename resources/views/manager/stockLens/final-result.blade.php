@@ -181,10 +181,6 @@
                                                 @for ($j = $add_max; $j >= $add_min; $j=$j-0.25)
                                                     @php
                                                         $product_stock    =   $productStock[format_values($i)][format_values($j)];
-
-                                                        // if(is_array($product_stock)){
-                                                        //     dd($product_stock);
-                                                        // }
                                                     @endphp
                                                     <td>
                                                         @if (is_null($product_stock))

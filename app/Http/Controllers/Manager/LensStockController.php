@@ -63,9 +63,14 @@ class LensStockController extends Controller
         $chrm   =   $request->chromatics;
         $ct     =   $request->coating;
 
-        $productListing   =   Product::where('company_id',$companyId)
-                                        ->where('category_id',Category::where('name','Lens')->pluck('id')->first())
-                                        ->with('power')->select('id','stock')
+        $productListing   =   Product::where('company_id', $companyId)
+                                        ->where('category_id', Category::where('name', 'Lens')->pluck('id')->first())
+                                        ->whereHas('power', function ($query) use ($lt, $ix, $chrm, $ct) {
+                                            $query->where('index_id', $ix)
+                                                ->where('type_id', $lt)
+                                                ->where('chromatics_id', $chrm)
+                                                ->where('coating_id', $ct);
+                                        })->select('id', 'stock')
                                         ->get();
 
         $this->validate($request,[
@@ -170,7 +175,28 @@ class LensStockController extends Controller
                 for ($i = $sphere_max; $i >= $sphere_min; $i=$i-0.25) {
                     for ($j = $cylinder_max; $j >= $cylinder_min; $j=$j-0.25) {
                         try {
-                            $productStock[format_values($i)][format_values($j)];
+                            if ($i == 0.5 && $j == 0.0) {
+                                $productStock[format_values($i)][format_values($j)] =   Product::where('company_id', $companyId)
+                                    ->where('category_id', Category::where('name', 'Lens')->pluck('id')->first())
+                                    ->whereHas('power', function ($query){
+                                        $query
+                                            ->where('sphere', '0.50')
+                                            ->where('cylinder', '0.00');
+                                    })->pluck('stock')
+                                    ->first();
+                            }
+                            if ($i == 0.75 && $j == 0.0) {
+                                $productStock[format_values($i)][format_values($j)] =   Product::where('company_id', $companyId)
+                                    ->where('category_id', Category::where('name', 'Lens')->pluck('id')->first())
+                                    ->whereHas('power', function ($query){
+                                        $query
+                                            ->where('sphere', '0.75')
+                                            ->where('cylinder', '0.00');
+                                    })->pluck('stock')
+                                    ->first();
+                            } else{
+                                $productStock[format_values($i)][format_values($j)];
+                            }
                         } catch (\Throwable $th) {
                             $productStock[format_values($i)][format_values($j)]=null;
                         }
