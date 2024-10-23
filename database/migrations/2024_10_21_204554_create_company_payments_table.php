@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->nullable()->constrained('company_information','id');
             $table->dateTime('payment_date')->nullable();
+            $table->dateTime('until')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
         });

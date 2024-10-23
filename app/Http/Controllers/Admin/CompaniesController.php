@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CompanyInformation;
+use App\Models\CompanyPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 
 class CompaniesController extends Controller
 {
-    public function index(){
+    public function index()
+    {
 
         $companies  =   \App\Models\CompanyInformation::all();
-        return view('admin.company.index',compact('companies'));
+        return view('admin.company.index', compact('companies'));
     }
 
     public function add()
@@ -22,15 +25,15 @@ class CompaniesController extends Controller
 
     public function save(Request $request)
     {
-        $this->validate($request,[
-            'company_name'=>'required',
-            'company_email'=>'required',
-            'company_phone'=>'required  | unique:company_information,company_email',
-            'company_street'=>'required',
-            'tin_number'=>'required',
-            'director_name'=>'required',
-            'director_email'=>'required | unique:users,email',
-            'director_phone'=>'required',
+        $this->validate($request, [
+            'company_name' => 'required',
+            'company_email' => 'required',
+            'company_phone' => 'required  | unique:company_information,company_email',
+            'company_street' => 'required',
+            'tin_number' => 'required',
+            'director_name' => 'required',
+            'director_email' => 'required | unique:users,email',
+            'director_phone' => 'required',
         ]);
 
         $company    =   new \App\Models\CompanyInformation();
@@ -39,7 +42,7 @@ class CompaniesController extends Controller
         $company->company_phone     =   $request->company_phone;
         $company->company_email     =   $request->company_email;
         $company->company_street    =   $request->company_street;
-        $company->company_tin_number=   $request->tin_number;
+        $company->company_tin_number =   $request->tin_number;
         $company->subscription_type =   'gold';
 
         try {
@@ -59,20 +62,19 @@ class CompaniesController extends Controller
 
             try {
                 $user->save();
-                return redirect()->route('admin.companies')->with('successMsg','The Company has been successfully Recoded!');
+                return redirect()->route('admin.companies')->with('successMsg', 'The Company has been successfully Recoded!');
             } catch (\Throwable $th) {
-                return redirect()->back()->with('errorMsg','Something went wrong!' .$th);
+                return redirect()->back()->with('errorMsg', 'Something went wrong!' . $th);
             }
         } catch (\Throwable $th) {
-            return redirect()->back()->with('errorMsg','Something went wrong!'.$th);
+            return redirect()->back()->with('errorMsg', 'Something went wrong!' . $th);
         }
-
     }
 
     public function deactivate($id)
     {
-        $users  =   \App\Models\User::where(['company_id'=>Crypt::decrypt($id)])->select('*')->get();
-        $company=   \App\Models\CompanyInformation::find(Crypt::decrypt($id));
+        $users  =   \App\Models\User::where(['company_id' => Crypt::decrypt($id)])->select('*')->get();
+        $company =   \App\Models\CompanyInformation::find(Crypt::decrypt($id));
 
         foreach ($users as $key => $user) {
             $user->status   =   'disabled';
@@ -81,19 +83,18 @@ class CompaniesController extends Controller
 
         $company->status    =   'disabled';
 
-        try
-        {
+        try {
             $company->save();
-            return redirect()->back()->with('successMsg','The Company has been successfully De Activated!');
+            return redirect()->back()->with('successMsg', 'The Company has been successfully De Activated!');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('errorMsg','Something went wrong!' .$th);
+            return redirect()->back()->with('errorMsg', 'Something went wrong!' . $th);
         }
     }
 
     public function activate($id)
     {
-        $users  =   \App\Models\User::where(['company_id'=>Crypt::decrypt($id)])->select('*')->get();
-        $company=   \App\Models\CompanyInformation::find(Crypt::decrypt($id));
+        $users  =   \App\Models\User::where(['company_id' => Crypt::decrypt($id)])->select('*')->get();
+        $company =   \App\Models\CompanyInformation::find(Crypt::decrypt($id));
 
         foreach ($users as $key => $user) {
             $user->status   =   'active';
@@ -102,12 +103,11 @@ class CompaniesController extends Controller
 
         $company->status    =   'active';
 
-        try
-        {
+        try {
             $company->save();
-            return redirect()->back()->with('successMsg','The Company has been successfully Activated!');
+            return redirect()->back()->with('successMsg', 'The Company has been successfully Activated!');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('errorMsg','Something went wrong!' .$th);
+            return redirect()->back()->with('errorMsg', 'Something went wrong!' . $th);
         }
     }
 
@@ -122,27 +122,21 @@ class CompaniesController extends Controller
         $sms_state              =   $request->sms;
         $sms                    =   (int)$company->sms_quantity + (int)$request->additional_sms;
 
-        if ($clinic_state)
-        {
+        if ($clinic_state) {
             $clinic_state  =   '1';
-        }
-        else{
+        } else {
             $clinic_state  =   '0';
         }
 
-        if ($sms_state)
-        {
+        if ($sms_state) {
             $sms_state  =   '1';
-        }
-        else{
+        } else {
             $sms_state  =   '0';
         }
 
-        if ($vision_center_state)
-        {
+        if ($vision_center_state) {
             $vision_center_state  =   '1';
-        }
-        else{
+        } else {
             $vision_center_state  =   '0';
         }
 
@@ -151,22 +145,41 @@ class CompaniesController extends Controller
         $company->is_vision_center  =   $vision_center_state;
         $company->sms_quantity      =   $sms;
 
-        try
-        {
+        try {
             $company->save();
-            return redirect()->back()->with('successMsg','The Company Settings has been successfully Updated!');
+            return redirect()->back()->with('successMsg', 'The Company Settings has been successfully Updated!');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('errorMsg','Something went wrong!' .$th);
+            return redirect()->back()->with('errorMsg', 'Something went wrong!' . $th);
         }
     }
 
     public function settings($id)
     {
         $company    =   \App\Models\CompanyInformation::FindOrFail(Crypt::decrypt($id));
-        return view('admin.company.settings',compact('company'));
+
+        $lastPayment    =   CompanyPayment::where('company_id', $company->id)->pluck('until')->last();
+
+        $dt     =   \Carbon\Carbon::createMidnightDate($lastPayment);
+
+        $until_date =   $dt->diffInDays(date('Y-m-d'));
+
+        return view('admin.company.settings', compact('company', 'until_date'));
     }
 
-    function payment($id){
-        
+    function payment($id)
+    {
+        $companyInfo    =   CompanyInformation::where('id', Crypt::decrypt($id))->first();
+        $dateCreated    =   date('Y') . '-' . date('m-d', strtotime($companyInfo->created_at));
+
+        $until  =   date('Y-m-d', strtotime($dateCreated . ' + 365 days'));
+        // dd($until);
+        CompanyPayment::create([
+            'company_id'    =>  Crypt::decrypt($id),
+            'payment_date'  =>  date('Y-m-d'),
+            'until'         =>  $until,
+            'status'        =>  'paid',
+        ]);
+
+        return redirect()->back()->with('successMsg', 'This company has paid!');
     }
 }

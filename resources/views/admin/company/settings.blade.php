@@ -195,9 +195,12 @@
                             <div class="d-flex justify-content-between align-center">
                               <h5>Account Settings</h5>
 
-                              <div class="form-group m-b-0 text-left">
-                                  <a onclick="return confirm('Are You sure you want to perform this action?')" href="{{ route('admin.company.subscription.pay',Crypt::encrypt($company->id))}}" class="btn btn-info waves-effect waves-light">Paid Subscription</a>
-                              </div>
+                              @if ($until_date<=30)
+                                  <div class="form-group m-b-0 text-left">
+                                    <a onclick="return confirm('Are You sure you want to perform this action?')" href="{{ route('admin.company.subscription.pay',Crypt::encrypt($company->id))}}" class="btn btn-info waves-effect waves-light">Paid Subscription</a>
+                                </div>
+                              @endif
+                              
                             </div>
                             <hr>
 
