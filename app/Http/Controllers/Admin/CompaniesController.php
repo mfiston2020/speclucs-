@@ -165,4 +165,8 @@ class CompaniesController extends Controller
         $company    =   \App\Models\CompanyInformation::FindOrFail(Crypt::decrypt($id));
         return view('admin.company.settings',compact('company'));
     }
+
+    function payment($id){
+        
+    }
 }

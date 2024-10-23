@@ -85,6 +85,7 @@ Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
 
     // ====================== all routes about Company settings =======================
     Route::get('/companySettings/{id}', [\App\Http\Controllers\Admin\CompaniesController::class, 'settings'])->name('admin.company.Settings');
+    Route::get('/company/subscriptionPayment/{id}', [\App\Http\Controllers\Admin\CompaniesController::class, 'payment'])->name('admin.company.subscription.pay');
     Route::post('/settingsUpdate', [\App\Http\Controllers\Admin\CompaniesController::class, 'allowsms'])->name('admin.company.settings.update');
 
     // ====================== all routes about roles for users =======================

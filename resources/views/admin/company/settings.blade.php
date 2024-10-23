@@ -192,7 +192,13 @@
                         aria-labelledby="pills-timeline-tab">
                         <div class="card-body">
                             {{-- <hr> --}}
-                            <h5>Account Settings</h5>
+                            <div class="d-flex justify-content-between align-center">
+                              <h5>Account Settings</h5>
+
+                              <div class="form-group m-b-0 text-left">
+                                  <a onclick="return confirm('Are You sure you want to perform this action?')" href="{{ route('admin.company.subscription.pay',Crypt::encrypt($company->id))}}" class="btn btn-info waves-effect waves-light">Paid Subscription</a>
+                              </div>
+                            </div>
                             <hr>
 
                             <form class="form-horizontal form-material" action="{{route('admin.company.settings.update')}}"
