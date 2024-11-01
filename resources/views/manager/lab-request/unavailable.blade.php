@@ -172,7 +172,6 @@
                                                                                     {{$request->client_name}}
                                                                                 @endif
                                                                             @endif
-                                                                            {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
                                                                             @if (!is_null($request->supplier_id))
                                                                                 - <span class="text-warning">Supplier:</span> [{{$request->supplier->company_name}}]
                                                                             @endif
@@ -244,7 +243,12 @@
                                                                                                     /
                                                                                                     {{ $invoice_product->power->cylinder }}
                                                                                                     <span class='text-primary'>*{{ $productsold->axis??0 }}</span>
-                                                                                                    {{ $invoice_product->power->add }}</span>
+                                                                                                    @if (initials($invoice_product->type->name)!='SV')
+                                                                                                        {{ $invoice_product->power->add }}
+                                                                                                        {{-- {{ format_values($productsold->addition??0) }} --}}
+                                                                                                    @endif
+                                                                                                    
+                                                                                                </span>
                                                                                             </td>
                                                                                             <td>
                                                                                                 {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
@@ -300,7 +304,9 @@
                                                                                             /
                                                                                             {{ format_values($productsold->cylinder) }}
                                                                                             <span class='text-primary'>*{{ $productsold->axis??0 }}</span>
-                                                                                            {{ format_values($productsold->addition??0) }}
+                                                                                            @if (initials($productsold->type->name)!='SV')
+                                                                                                {{ format_values($productsold->addition??0) }}
+                                                                                            @endif
                                                                                         </td>
                                                                                         <td>
                                                                                             {{ $productsold->location == null ? '-' : $productsold->location }}
@@ -700,7 +706,8 @@
                                                                                                     /
                                                                                                     {{ $invoice_product->power->cylinder }}
                                                                                                     <span class='text-primary'>*{{ $productsold->axis??0 }}</span>
-                                                                                                    {{ $invoice_product->power->add }}</span>
+                                                                                                    {{ $invoice_product->power->add }}
+                                                                                                </span>
                                                                                             </td>
                                                                                             <td>
                                                                                                 {{ $invoice_product->location == null ? '-' : $invoice_product->location }}
@@ -756,7 +763,10 @@
                                                                                             /
                                                                                             {{ format_values($productsold->cylinder) }}
                                                                                             <span class='text-primary'>*{{ $productsold->axis??0 }}</span>
-                                                                                            {{ format_values($productsold->addition??0) }}
+                                                                                            @if (initials($productsold->type->name)!='SV')
+                                                                                                {{ format_values($productsold->addition??0) }}
+                                                                                            @endif
+                                                                                            
                                                                                         </td>
                                                                                         <td>
                                                                                             {{ $productsold->location == null ? '-' : $productsold->location }}

@@ -885,7 +885,8 @@
                                                                                                 /
                                                                                                 {{ $invoice_product->power->cylinder }}
                                                                                                 <span class='text-primary'>*{{ $product->axis??0 }}</span>
-                                                                                                {{ $invoice_product->power->add }}</span>
+                                                                                                {{-- {{ $invoice_product->power->add }} --}}
+                                                                                            </span>
                                                                                     </div>
                                                                                     <div class="col-2 row">
                                                                                         <span>

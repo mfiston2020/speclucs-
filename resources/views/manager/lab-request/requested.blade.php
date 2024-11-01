@@ -239,7 +239,9 @@
                                                                                                             /
                                                                                                             {{ $product->product->power->cylinder }}
                                                                                                             <span class="text-primary">*{{ $product->axis }}</span>
-                                                                                                            {{ $product->product->power->add }}</span>
+                                                                                                            @if (initials($product->product->product_name) != 'SV')
+                                                                                                                {{ $product->product->power->add }}
+                                                                                                            @endif
                                                                                                 </div>
                                                                                                 <div class="col-2 row">
                                                                                                     <span>
@@ -604,7 +606,10 @@
                                                                                                                 /
                                                                                                                 {{ $product->product->power->cylinder }}
                                                                                                                 <span class="text-primary">*{{ $product->axis }}</span>
-                                                                                                                {{ $product->product->power->add }}</span>
+                                                                                                                @if (initials($product->product_name) != 'SV')
+                                                                                                                    {{ $product->product->power->add }}
+                                                                                                                @endif
+                                                                                                            </span>
                                                                                                     </div>
                                                                                                     <div class="col-2 row">
                                                                                                         <span>
