@@ -191,7 +191,10 @@
                                                                                         /
                                                                                         {{ format_values($right_len->cylinder) }}
                                                                                         <span class="text-primary">*{{ ($right_len_befor_product->axis ?? 0) }}</span>
-                                                                                        {{ $right_len->addition }}
+                                                                                        
+                                                                                        @if (!is_null($right_len))
+                                                                                            {{ $right_len->addition }}
+                                                                                        @endif
                                                                                     </span>
                                                                                 @else
                                                                                     <span>
@@ -199,7 +202,10 @@
                                                                                         /
                                                                                         {{ format_values($right_len->power->cylinder) }}
                                                                                         <span class="text-primary">*{{ ($right_len_befor_product->axis ?? 0) }}</span>
-                                                                                        {{ $right_len->power->add }}
+                                                                                        
+                                                                                        @if (initials($right_len->product_name)!='SV')
+                                                                                            {{ $right_len->power->add }}
+                                                                                        @endif
                                                                                     </span>
                                                                                 @endif
                                                                             @else
@@ -213,13 +219,17 @@
                                                                                     /
                                                                                     {{ format_values($left_len->cylinder) }}
                                                                                         <span class="text-primary">*{{ ($left_len_befor_product->axis ?? 0) }}</span>
-                                                                                    {{ $left_len->addition }}
+                                                                                        @if (!is_null($left_len))
+                                                                                            {{ $left_len->addition }}
+                                                                                        @endif
                                                                                 @else
                                                                                     {{ format_values($left_len->power->sphere) }}
                                                                                     /
                                                                                     {{ format_values($left_len->power->cylinder) }}
                                                                                         <span class="text-primary">*{{ ($left_len_befor_product->axis ?? 0) }}</span>
-                                                                                    {{ $left_len->power->add }}
+                                                                                    @if (initials($left_len->product_name)!='SV')
+                                                                                        {{ $left_len->power->add }}
+                                                                                    @endif
                                                                                 @endif
                                                                             @else
                                                                                 <span class="text-center">-</span>
