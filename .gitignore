@@ -11,3 +11,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+public/.DS_Store
+public/.DS_Store
+public/dashboard/assets/.DS_Store
+public/dashboard/assets/libs/.DS_Store

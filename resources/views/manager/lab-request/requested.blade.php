@@ -606,8 +606,10 @@
                                                                                                                 /
                                                                                                                 {{ $product->product->power->cylinder }}
                                                                                                                 <span class="text-primary">*{{ $product->axis }}</span>
-                                                                                                                @if (initials($product->product_name) != 'SV')
-                                                                                                                    {{ $product->product->power->add }}
+                                                                                                                @if ($product?->product_name)
+                                                                                                                    @if (initials($product->product_name) != 'SV')
+                                                                                                                        {{ $product->product->power->add }}
+                                                                                                                    @endif
                                                                                                                 @endif
                                                                                                             </span>
                                                                                                     </div>
