@@ -20,52 +20,52 @@ class DashboardController extends Controller
         $totalQuantity      =   0;
 
 
-        $soldproducts   =   SoldProduct::where('company_id',userInfo()->company_id)->with('product',function($query){
-            $query->select('id','cost','price','stock');
-        })->select('product_id','quantity','total_amount')->whereYear('created_at',date('Y'))->get();
+        $soldproducts   =   SoldProduct::where('company_id', userInfo()->company_id)->with('product', function ($query) {
+            $query->select('id', 'cost', 'price', 'stock');
+        })->select('product_id', 'quantity', 'total_amount')->whereYear('created_at', date('Y'))->get();
 
-        $products   =   Product::where('company_id',userInfo()->company_id)->select('id','description','product_name','cost','price','stock')->get();
-        $invoices   =   \App\Models\Invoice::where('company_id',Auth::user()->company_id)->count();
-        $suppliers  =   \App\Models\Supplier::where('company_id',Auth::user()->company_id)->count();
+        $products   =   Product::where('company_id', userInfo()->company_id)->select('id', 'description', 'product_name', 'cost', 'price', 'stock')->get();
+        $invoices   =   \App\Models\Invoice::where('company_id', Auth::user()->company_id)->count();
+        $suppliers  =   \App\Models\Supplier::where('company_id', Auth::user()->company_id)->count();
 
-        // dd($products);
-
-        foreach ($soldproducts as $key => $sold){
+        foreach ($soldproducts as $key => $sold) {
             $total_product_cost +=  $sold->product->cost * $sold->quantity;
 
-            $income     =   $sold->total_amount-($sold->quantity*($sold->product->cost));
+            $income     =   $sold->total_amount - ($sold->quantity * ($sold->product->cost));
             $earning    =  $earning + $income;
         }
 
         foreach ($products as $key => $product) {
-            $amount     =   $product->cost*$product->stock;
-            $totalValue =   $totalValue+$amount;
+            if (is_numeric($product->cost)) {
+                $amount     =   $product->cost * $product->stock;
+                $totalValue =   $totalValue + $amount;
+            }
         }
 
         $product    =   DB::table('sold_products')->select(DB::raw('sum(quantity) as sold, product_id'))
-                                                    ->where('company_id',Auth::user()->company_id)
-                                                    ->groupBy('product_id')
-                                                    ->limit(5)
-                                                    ->orderBy('sold','DESC')
-                                                    ->get();
+            ->where('company_id', Auth::user()->company_id)
+            ->groupBy('product_id')
+            ->limit(5)
+            ->orderBy('sold', 'DESC')
+            ->get();
 
         $payment_method   =   DB::table('transactions')->select(DB::raw('sum(amount) as expenses, payment_method_id'))
-                                                        ->where('company_id',Auth::user()->company_id)
-                                                        ->groupBy('payment_method_id')
-                                                        ->where('type','=','expense')
-                                                        ->limit(5)
-                                                        ->orderBy('expenses','ASC')
-                                                        ->get();
+            ->where('company_id', Auth::user()->company_id)
+            ->groupBy('payment_method_id')
+            ->where('type', '=', 'expense')
+            ->limit(5)
+            ->orderBy('expenses', 'ASC')
+            ->get();
 
-        $expenses   =   \App\Models\Transactions::where(['type'=>'expense'])->where('company_id',Auth::user()->company_id)->select('*')->orderBy('amount','DESC')->limit(5);
+        $expenses   =   \App\Models\Transactions::where(['type' => 'expense'])->where('company_id', Auth::user()->company_id)->select('*')->orderBy('amount', 'DESC')->limit(5);
 
-        $expenses_count   =   count(\App\Models\Transactions::where(['type'=>'expense'])->where('company_id',Auth::user()->company_id)->select('*')->get());
+        $expenses_count   =   count(\App\Models\Transactions::where(['type' => 'expense'])->where('company_id', Auth::user()->company_id)->select('*')->get());
 
 
-        $customerInvoices    =   \App\Models\Invoice::where('client_id','<>','')->where('company_id',Auth::user()->company_id)
-                                    ->where('payment','=',NULL)->limit(5)->orderBy('total_amount','DESC')->get();
+        $customerInvoices    =   \App\Models\Invoice::where('client_id', '<>', '')->where('company_id', Auth::user()->company_id)
+            ->where('payment', '=', NULL)->limit(5)->orderBy('total_amount', 'DESC')->get();
 
-        return view('manager.dashboard',compact('product','products','expenses','payment_method','expenses_count','customerInvoices','total_product_cost','invoices','suppliers','earning','totalValue'));
+        return view('manager.dashboard', compact('product', 'products', 'expenses', 'payment_method', 'expenses_count', 'customerInvoices', 'total_product_cost', 'invoices', 'suppliers', 'earning', 'totalValue'));
     }
 
     public function all_invoice()
