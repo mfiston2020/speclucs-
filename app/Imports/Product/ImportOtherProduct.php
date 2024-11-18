@@ -38,6 +38,7 @@ class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
                     $data   =   $un_filtered_data->filter();
 
+                    
                     $cost   = $data['cost'];
                     $on_hand_quantity   = $un_filtered_data['stock'];
                     $price   = $data['price'];

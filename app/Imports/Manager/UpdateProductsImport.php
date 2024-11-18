@@ -20,13 +20,12 @@ class UpdateProductsImport implements ToCollection,WithHeadingRow
                 if ($un_filtered_data->filter()->isNotEmpty()) {
                     $data   =   $un_filtered_data->filter();
 
-                    // dd($$un_filtered_data['stock']);
-
                     if (!is_null($un_filtered_data['stock'])) {
                         Product::where('id',$data['id'])->update([
                             'description'       =>  $un_filtered_data['description'],
                             'product_name'      =>  $un_filtered_data['name'],
                             'cost'              =>  $un_filtered_data['cost'],
+                            'price'             =>  $un_filtered_data['price'],
                             'stock'             =>  $un_filtered_data['stock'],
                             'wholesale_price'   =>  $un_filtered_data['wholesale_price'],
                         ]);
@@ -34,7 +33,6 @@ class UpdateProductsImport implements ToCollection,WithHeadingRow
                 }
             }
         } catch (\Throwable $th) {
-            dd($th);
             session()->flash('missingData','Check for missing values in the excel sheet');
         }
     }
