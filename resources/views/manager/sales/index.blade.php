@@ -24,14 +24,8 @@
                             <a href="{{ route('manager.retail') }}" type="button"
                                 class="btn waves-effect waves-light btn-rounded btn-outline-success mr-3 text-capitalize"
                                 style="align-items: right;">
-                                <i class="fa fa-plus"></i> Retail
+                                <i class="fa fa-plus"></i> {{__('manager/sales.retail')}}
                             </a>
-
-                            {{-- <a href="{{ route('manager.new.order') }}" type="button"
-                                class="btn waves-effect waves-light btn-rounded btn-outline-primary mr-3 text-capitalize"
-                                style="align-items: right;">
-                                <i class="fa fa-plus"></i> Wholesale
-                            </a> --}}
 
                             <a href="{{ route('manager.pending.orders') }}" type="button"
                                 class="btn waves-effect waves-light btn-rounded btn-outline-secondary mr-3 text-capitalize"
@@ -64,10 +58,9 @@
                                             <th>{{ __('manager/sales.reference_number') }} #</th>
                                             <th>{{ __('manager/sales.customer') }}</th>
                                             <th>{{ __('manager/sales.ins') }}</th>
-                                            {{-- <th>T. Amnt</th> --}}
-                                            <th>Ins Due Amnt</th>
-                                            <th>Pt Due Amnt</th>
-                                            <th>Status</th>
+                                            <th>{{__('manager/sales.ins_due_amount')}}</th>
+                                            <th>{{__('manager/sales.ins_due_amount')}}</th>
+                                            <th>{{__('manager/sales.status')}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

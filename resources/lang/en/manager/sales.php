@@ -11,6 +11,7 @@ return [
     'price'=>'Price',
     'paid'=>'Paid',
     'sell'=>'Sell',
+    'retail' => 'Retail',
     'sell_message'=>'This will create an invoice for the client! Proceed?',
     'cancel_order'=>'Cancel',
     'cancel_order_message'=>'Are you sure to cancel this order?',
