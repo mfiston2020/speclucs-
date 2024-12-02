@@ -46,7 +46,8 @@ class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     $description   = $data['description'];
                     $product_name   = $data['product_name'];
 
-                    if (!Product::where('product_name', $product_name)->exists()) {
+                    if (!Product::where('product_name', $product_name)->where('description', $description)->exists()) {
+                    // dd('hello');
                         $product    =   Product::create([
                             'cost'              =>  $cost,
                             'stock'             =>  $on_hand_quantity,
@@ -60,6 +61,8 @@ class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
                             'deffective_stock'  =>  '0',
                         ]);
                         $this->stocktrackRepo->saveTrackRecord($product->id, 0, $product->stock, $product->stock, 'initial', 'rm', 'in');
+                    } else {
+                        $count++;
                     }
                 }
             }
