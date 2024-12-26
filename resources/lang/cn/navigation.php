@@ -38,7 +38,7 @@ return
     'settings'=>'設置',
     'clinic_settings'=>'診所設置',
     'logout'=>'登出',
-    'footer_copyright'=>'AQUA SAFI Ltd. 保留所有權利。設計開發者',
+    'footer_copyright'=>'XEN Ltd. 保留所有權利。設計開發者',
 
     'yes'=>'是的',
     'no'=>'不',

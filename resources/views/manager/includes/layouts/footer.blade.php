@@ -3,7 +3,7 @@
 <!-- ============================================================== -->
 <footer class="footer text-center">
     {{ __('navigation.footer_copyright')}} <a target="_blank"
-        href="http://www.fiston.xyz">AQUA SAFI Ltd</a>.
+        href="http://www.fiston.xyz">XEN Ltd</a>.
 </footer>
 <!-- ============================================================== -->
 <!-- End footer -->

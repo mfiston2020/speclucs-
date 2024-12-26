@@ -8,6 +8,7 @@ use App\Http\Livewire\Manager\Report\ProductReport;
 use App\Http\Livewire\Manager\Report\StockEfficiency;
 use App\Http\Livewire\Manager\Report\StockHistory;
 use App\Http\Livewire\Manager\Report\UserPerfomanceReport;
+use App\Http\Livewire\Manager\Sales\BulkOrder;
 use App\Http\Livewire\Manager\Sales\ProductRetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -193,6 +194,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     // sales
     Route::get('/sales/retail', ProductRetail::class)->name('retail');
+    Route::get('/sales/bulk/Orders', BulkOrder::class)->name('bulk.order');
 
     // ============= All lab requests routes =========================
     Route::get('/request/request/{type}', [\App\Http\Controllers\Manager\LabRequestController::class, 'indexWithTye'])->name('lab.requests.type');

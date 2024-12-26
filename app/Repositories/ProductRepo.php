@@ -49,7 +49,7 @@ class ProductRepo implements ProductInterface
                             ->where('cylinder', format_values($productDescription['cylinder']))
                             ->where('eye', 'any')
                             ->where('company_id', $productDescription['supplier'])
-                            // ->where('company_id', userInfo()->company_id)
+                            ->where('company_id', userInfo()->company_id)
                             ->select('product_id')->first();
 
                         $productResult   =   Product::find($product_id);
@@ -79,7 +79,7 @@ class ProductRepo implements ProductInterface
                             ->where('add', format_values($productDescription['addition']))
                             ->where('eye', $productDescription['type'] == '3' ?
                                 ($productDescription['eye'] == 'right' ? 'Right' : 'Left') : ($productDescription['eye'] == 'right' ? 'R' : 'L'))
-                            // ->where('company_id', userInfo()->company_id)
+                            ->where('company_id', userInfo()->company_id)
                             ->where('company_id', $productDescription['supplier'])
                             ->select('product_id')->first();
 

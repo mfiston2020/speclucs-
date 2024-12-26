@@ -239,6 +239,13 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-item">
+                        <a href="{{ route('manager.bulk.order') }}" class="sidebar-link">
+                            <i class="mdi mdi-folder-plus"></i>
+                            <span class="hide-menu"> Bulk Order </span>
+                        </a>
+                    </li>
+
                     {{-- <li class="sidebar-item"><a href="{{ route('manager.order') }}" class="sidebar-link"><i
                                 class="mdi mdi-cart-plus"></i><span class="hide-menu">
                                 {{ __('navigation.lab_orders') }} </span></a>

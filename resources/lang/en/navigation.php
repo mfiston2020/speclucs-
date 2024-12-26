@@ -40,7 +40,7 @@ return
         'clinic_settings' => 'Clinic Settings',
         'logout' => 'Logout',
 
-        'footer_copyright' => 'All Rights Reserved by AQUA SAFI Ltd. Designed and Developed by',
+        'footer_copyright' => 'All Rights Reserved by XEN Ltd. Designed and Developed by',
 
         'yes' => 'Yes',
         'no' => 'No',

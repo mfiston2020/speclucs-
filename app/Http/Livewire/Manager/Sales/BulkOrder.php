@@ -20,16 +20,20 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class ProductRetail extends Component
+class BulkOrder extends Component
 {
+
     // repository
-    public $informationMessage, $autoL = false, $autoR = false, $hide_r_axis = false, $hide_l_axis = false;
+    public $informationMessage, $hide_r_axis = false, $hide_l_axis = false;
 
     // variables for cloud
     public $cloud_id, $hospital_name, $visionCenters, $visionCenter;
 
+    public $name;
+
     // variables for visionCenter
     public $suppliers, $supplier;
+    public $totalLens   = 0, $totalFrames = 0, $totalAccessories = 0;
 
     // client information variables
     public $firstname, $lastname, $tin_number, $phone;
@@ -41,7 +45,8 @@ class ProductRetail extends Component
     public $rightEye = false, $leftEye = false, $showPaymentSection = false, $leftLen = false, $rightLen = false, $leftLenFound = true, $rightLenFound = false, $searchProduct = false, $showsubmit = false, $isCloudOrder = 'no', $isBulkOrder = false, $leftPriceRange = null, $rightPriceRange = null;
 
     // =-=============== variables for the bulk orders ==================
-    public $addedLensList=[], $addFrameList = [], $addedAccessoriesList = [];
+    public $addedLensList = [], $addFrameList = [], $addedAccessoriesList = [];
+    public $showLens    =   true, $showFrames    =   true, $showAccessories    =   true, $right_len_quantity, $left_lent_quantity, $left_len_quantity;
 
     // ============== lens selection variables ========
     public $lens_type, $lens_index, $lens_coating, $lens_chromatic;
@@ -70,16 +75,6 @@ class ProductRetail extends Component
     public $insurance_percentage_frame, $insurance_payment_frame, $insurance_approved_frame, $patient_payment_frame, $ordered_frames;
 
     public $invoiceStatus   =   'requested';
-
-    protected $rules = [
-        'cloud_id' => 'required_if:isCloudOrder,==,yes'
-    ];
-
-    // showing cloud form and hidding it
-    function hideCloud($value)
-    {
-        $this->isCloudOrder =   $value;
-    }
 
     function updatedhospital_name()
     {
@@ -178,101 +173,194 @@ class ProductRetail extends Component
         }
     }
 
-    // if product not found give price if it's in the pricing range
-    function autoPricingLeft()
-    {
-
-        $this->leftPriceRange   =   null;
-        $left_sphere = $this->l_sphere == 0 ? $this->l_sphere : ($this->r_sign == 'minus' ? -1 * abs($this->l_sphere) : abs($this->l_sphere));
-
-        if (initials($this->lensType->where('id', $this->lens_type)->pluck('name')->first()) != 'SV') {
-            // L
-            $this->validate([
-                'l_addition' => 'required'
-            ], [
-                'l_addition.required' => 'This field is required',
-            ]);
-
-            $this->leftPriceRange = LensPricing::where('type_id', $this->lens_type)
-                ->where('index_id', $this->lens_index)
-                ->where('chromatic_id', $this->lens_chromatic)
-                ->where('coating_id', $this->lens_coating)
-                ->whereRaw("{$left_sphere} BETWEEN sphere_from AND sphere_to")
-                ->whereRaw("{$this->l_cylinder} BETWEEN cylinder_to AND cylinder_from")
-                ->whereRaw("{$this->l_addition} BETWEEN addition_from AND addition_to")
-                ->select('id', 'price', 'cost', 'wholesale_price')->first();
-        } else {
-            // L
-            $this->leftPriceRange = LensPricing::where('type_id', $this->lens_type)
-                ->where('index_id', $this->lens_index)
-                ->where('chromatic_id', $this->lens_chromatic)
-                ->where('coating_id', $this->lens_coating)
-                ->whereRaw("{$left_sphere} BETWEEN sphere_from AND sphere_to")
-                ->whereRaw("{$this->l_cylinder} BETWEEN cylinder_to AND cylinder_from")
-                ->select('id', 'price', 'cost', 'wholesale_price')
-                ->first();
-        }
-        if (is_null($this->leftPriceRange)) {
-            $this->autoL =   false;
-        } else {
-            $this->autoL =   true;
-        }
-        return $this->leftPriceRange ?? 0;
-    }
-
-    // if product not found give price if it's in the pricing range
-    function autoPricingRight()
-    {
-
-        $this->rightPriceRange   =   null;
-        $right_sphere = $this->r_sphere == 0 ? $this->r_sphere : ($this->r_sign == 'minus' ? -1 * abs($this->r_sphere) : abs($this->r_sphere));
-
-
-        // dd($right_cylinder);
-
-        if (initials($this->lensType->where('id', $this->lens_type)->pluck('name')->first()) != 'SV') {
-            $this->validate([
-                'r_addition'=>'required'
-            ],[
-                'r_addition.required'=>'This field is required',
-            ]);
-            $this->rightPriceRange = LensPricing::where('type_id', $this->lens_type)
-                ->where('index_id', $this->lens_index)
-                ->where('chromatic_id', $this->lens_chromatic)
-                ->where('coating_id', $this->lens_coating)
-                ->whereRaw("{$right_sphere} BETWEEN sphere_from AND sphere_to")
-                ->whereRaw("{$this->r_cylinder} BETWEEN cylinder_to AND cylinder_from")
-                ->whereRaw("{$this->r_addition} BETWEEN addition_from AND addition_to")
-                ->select('id', 'price', 'cost', 'wholesale_price')->first();
-        } else {
-            // L
-            $this->rightPriceRange = LensPricing::where('type_id', $this->lens_type)
-                ->where('index_id', $this->lens_index)
-                ->where('chromatic_id', $this->lens_chromatic)
-                ->where('coating_id', $this->lens_coating)
-                ->whereRaw("{$right_sphere} BETWEEN sphere_from AND sphere_to")
-                ->whereRaw("{$this->r_cylinder} BETWEEN cylinder_to AND cylinder_from")
-                ->select('id', 'price', 'cost', 'wholesale_price')
-                ->first();
-        }
-        if (is_null($this->rightPriceRange)) {
-            $this->autoR =   false;
-        } else {
-            $this->autoR =   true;
-        }
-        // dd($this->rightPriceRange);
-        return $this->rightPriceRange ?? 0;
-    }
-
     function showModal($msg)
     {
         $this->informationMessage   =   $msg;
         $this->dispatch('showwarningModal');
     }
 
+    function showTotal()
+    {
+        $this->showPaymentSection   =   true;
+    }
+
+    function checkTotal($type)
+    {
+        if ($type == 'lens') {
+            $this->totalLens    =   0;
+            for ($i = 0; $i < count($this->addedLensList); $i++) {
+                $this->totalLens  =  $this->totalLens + ($this->addedLensList[$i]['product']->price * $this->addedLensList[$i]['quantity']);
+            }
+        }
+        if ($type == 'frame') {
+            $this->totalFrames  =   0;
+            for ($i = 0; $i < count($this->addFrameList); $i++) {
+                $this->totalFrames  =  $this->totalFrames + ($this->addFrameList[$i]['product']->price * $this->addFrameList[$i]['quantity']);
+            }
+        }
+        if ($type == 'accessory') {
+            $this->totalAccessories =   0;
+            for ($i = 0; $i < count($this->addedAccessoriesList); $i++) {
+                $this->totalAccessories  =  $this->totalAccessories + ($this->addedAccessoriesList[$i]['product']->price * $this->addedAccessoriesList[$i]['quantity']);
+            }
+        }
+    }
+
+    function showProducts($typeOfProduct)
+    {
+        if ($typeOfProduct == 'lens') {
+            $this->showLens =   !$this->showLens;
+        }
+    }
+
+    function checkProduct($type)
+    {
+        if ($type == 'lens') {
+            $this->checkAvailability();
+        }
+    }
+
+    function addProductToList($type, $eyeSide)
+    {
+        $totalOfAllList =   0;
+
+        if ($type == 'lens') {
+
+            if (count($this->rightLenInfo) > 0 && $eyeSide == 'right') {
+
+                $rightLimit =   $this->rightLen ? ($this->rightLenQty - $this->rightBooked < 0 ? 0 : $this->rightLenQty - $this->rightBooked) : 0;
+
+                $this->validate([
+                    'right_len_quantity' => 'required|numeric|max:' . $rightLimit
+                ]);
+
+                if ($this->rightLenInfo && !is_null($this->right_len_quantity)) {
+                    $listCount  =   count($this->addedLensList);
+                    $this->addedLensList[$listCount]['product']     =   $this->rightLenInfo[0];
+                    $this->addedLensList[$listCount]['quantity']    =   $this->right_len_quantity;
+                    $this->addedLensList[$listCount]['eye']         =   'Right';
+
+                    $this->r_sphere     =   null;
+                    $this->r_cylinder   =   null;
+                    $this->r_axis       =   null;
+                    $this->r_addition   =   null;
+                    $this->rightLenInfo =   [];
+                    $this->rightLen  =   null;
+                    $this->right_len_quantity   =   null;
+
+                    $this->checkTotal('lens');
+                }
+            }
+
+            if (count($this->leftLenInfo) > 0 && $eyeSide == 'left') {
+
+                $leftLimit =   $this->leftLen ? ($this->leftLenQty - $this->leftBooked < 0 ? 0 : $this->leftLenQty - $this->leftBooked) : 0;
+
+                $this->validate([
+                    'left_len_quantity' => 'required|numeric|max:' . $leftLimit
+                ]);
+
+                if ($this->leftLenInfo && !is_null($this->left_len_quantity)) {
+                    $listCount  =   count($this->addedLensList);
+                    $this->addedLensList[$listCount]['product']     =   $this->leftLenInfo[0];
+                    $this->addedLensList[$listCount]['quantity']    =   $this->left_len_quantity;
+                    $this->addedLensList[$listCount]['eye']         =   'Left';
+
+                    $this->l_sphere     =   null;
+                    $this->l_cylinder   =   null;
+                    $this->l_axis       =   null;
+                    $this->l_addition   =   null;
+                    $this->leftLen  =   null;
+                    $this->left_len_quantity    =   null;
+                    $this->leftLenInfo  =   [];
+
+                    $this->checkTotal('lens');
+                }
+            }
+        }
+
+        if ($type == 'frame') {
+
+            $this->validate([
+                'frame_quantity' => 'required|numeric|max:' . $this->frame_stock
+            ]);
+
+            $this->checkAvailability();
+
+            $count  =   count($this->addFrameList);
+            $this->addFrameList[$count]['product'] =   $this->frameInfo;
+            $this->addFrameList[$count]['quantity'] =   $this->frame_quantity;
+
+            $this->frame    =   null;
+            $this->frame_quantity    =   null;
+            $this->frame_location    =   null;
+            $this->frame_unit_price    =   null;
+            $this->frame_stock    =   null;
+
+            $this->checkTotal('frame');
+        }
+
+        if ($type == 'accessory') {
+
+            $this->validate([
+                'accessory_quantity' => 'required|numeric|max:' . $this->accessory_stock
+            ]);
+
+            $this->checkAvailability();
+
+            $count  =   count($this->addedAccessoriesList);
+            $this->addedAccessoriesList[$count]['product'] =   $this->accessoryInfo;
+            $this->addedAccessoriesList[$count]['quantity'] =   $this->accessory_quantity;
+
+            $this->accessory    =   null;
+            $this->accessory_quantity    =   null;
+            $this->accessory_location    =   null;
+            $this->accessory_unit_price    =   null;
+            $this->accessory_stock    =   null;
+
+            $this->checkTotal('accessory');
+        }
+    }
+
+    function removeProductFromList($key, $type)
+    {
+
+        if ($type == 'lens') {
+            unset($this->addedLensList[$key]['product']);
+            unset($this->addedLensList[$key]['quantity']);
+            unset($this->addedLensList[$key]['eye']);
+            unset($this->addedLensList[$key]);
+
+            $this->addedLensList    =   array_values($this->addedLensList);
+
+            $this->checkTotal('lens');
+        }
+
+        if ($type == 'frame') {
+            unset($this->addFrameList[$key]['product']);
+            unset($this->addFrameList[$key]['quantity']);
+            unset($this->addFrameList[$key]);
+
+            $this->addFrameList    =   array_values($this->addFrameList);
+
+            $this->checkTotal('frame');
+        }
+
+        if ($type == 'accessory') {
+            unset($this->addedAccessoriesList[$key]['product']);
+            unset($this->addedAccessoriesList[$key]['quantity']);
+            unset($this->addedAccessoriesList[$key]);
+
+            $this->addedAccessoriesList    =   array_values($this->addedAccessoriesList);
+
+            $this->checkTotal('accessory');
+        }
+    }
+
     // checking product availability
     function checkAvailability()
     {
+        $this->informationMessage   =   null;
         $left_sphere = $this->l_sphere == 0 ? $this->l_sphere : ($this->l_sign == 'minus' ? -1 * abs($this->l_sphere) : abs($this->l_sphere));
         $right_sphere = $this->r_sphere == 0 ? $this->r_sphere : ($this->r_sign == 'minus' ? -1 * abs($this->r_sphere) : abs($this->r_sphere));
 
@@ -283,7 +371,7 @@ class ProductRetail extends Component
             $this->showModal('Please fill out all the required lens information');
             return;
         }
-        if ($this->frame == null && $this->searchProduct == false && $this->accessory == null) {
+        if (count($this->addedLensList) <= 0 && count($this->addFrameList) <= 0 && count($this->addedAccessoriesList) <= 0) {
             $this->showModal('select at least one product');
             return;
         }
@@ -327,13 +415,13 @@ class ProductRetail extends Component
 
             $repo   =   new ProductRepo();
 
-            $right_len_Results = $repo->searchProduct($right_data);
-            $left_len_Results = $repo->searchProduct($left_data);
+            $right_len_Results  = $repo->searchProduct($right_data);
+            $left_len_Results   = $repo->searchProduct($left_data);
+            // dd($left_len_Results);
 
             $this->rightLenInfo =   $right_len_Results;
             $this->leftLenInfo =   $left_len_Results;
 
-            // dd($left_len_Results[0]->id);
 
             $this->rightLenFound    =   $right_len_Results == 'product-not-found' ? false : true;
             $this->rightLen         =   $right_len_Results == 'product-not-found' ? false : true;
@@ -365,31 +453,19 @@ class ProductRetail extends Component
             }
             // if left len is the only product
             else if ($left_len_Results != 'product-not-found' && $right_len_Results == 'product-not-found') {
-                $rightPrice =   $this->autoPricingRight() ? $this->autoPricingRight()->price : 0;
-                $this->total_lens_amount =    $left_len_Results[0]->price + $rightPrice;
+                $this->total_lens_amount =    $left_len_Results[0]->price;
 
                 $invoiceStock =   Invoice::where('status', 'requested')->whereRelation('soldproduct', 'product_id', $left_len_Results[0]->id)->withSum('soldproduct', 'quantity')->get();
 
                 $this->leftBooked  =   $invoiceStock->sum('soldproduct_sum_quantity');
             }
-            // if right len is the only product
+            // if left len is the only product
             else if ($left_len_Results == 'product-not-found' && $right_len_Results != 'product-not-found') {
-                $leftPrice  =   0;
-                $leftPrice  =   $this->autoPricingLeft() ? $this->autoPricingLeft()->price : 0;
-                $this->total_lens_amount =    $right_len_Results[0]->price + $leftPrice;
+                $this->total_lens_amount =    $right_len_Results[0]->price;
 
                 // checking for booked stock on lens
                 $invoiceStock =   Invoice::where('status', 'requested')->whereRelation('soldproduct', 'product_id', $right_len_Results[0]->id)->withSum('soldproduct', 'quantity')->get();
                 $this->rightBooked  =   $invoiceStock->sum('soldproduct_sum_quantity');
-            }
-
-            // if both lens are not found
-            else {
-                $leftPrice  =   $this->autoPricingLeft() ? $this->autoPricingLeft()->price : 0;
-                $rightPrice  =   $this->autoPricingRight() ? $this->autoPricingRight()->price : 0;
-                // $rightPrice =   $this->autoPricingRight()->price;
-
-                $this->total_lens_amount    =   $leftPrice + $rightPrice;
             }
         }
         if ($this->frame) {
@@ -398,83 +474,15 @@ class ProductRetail extends Component
         if ($this->accessory) {
             $this->accessory_total_amount   =   ($this->accessory_unit_price + $this->accessory_price_adjust) * $this->accessory_quantity;
         }
-        $this->showPaymentSection   =   true;
-    }
-
-    // insurance percentages calculations
-    function calculateInsurance()
-    {
-        $this->checkAvailability();
-        if ($this->insurance_type == 'private') {
-            $this->insurance_payment_lens    =   0;
-            $this->insurance_payment_frame   =   0;
-            $this->patient_payment_frame     =   $this->frame_total_amount;
-            $this->patient_payment_lens      =   $this->total_lens_amount;
-        } elseif ($this->insurance_type == null) {
-            $this->showModal('Select Insurance type first');
-            return;
-        } elseif (!is_null($this->insurance_type) && is_null($this->insurance_percentage_frame) || is_null($this->insurance_percentage_lens)) {
-            $this->showModal('Insurance approved amount and percentage for Lens required');
-            return;
-        } elseif (!is_null($this->insurance_type) && is_null($this->insurance_approved_lens) || is_null($this->insurance_approved_frame)) {
-            $this->showModal('Insurance approved amount and percentage for frame required');
-            return;
-        } else {
-
-            if ($this->insurance_approved_frame < $this->frame_total_amount) {
-                // $this->insurance_payment_frame    =   $this->frame_total_amount;
-                $this->insurance_payment_frame    =   ($this->insurance_approved_frame  *   $this->insurance_percentage_frame) / 100;
-            }
-
-            if ($this->insurance_approved_frame >= $this->frame_total_amount) {
-                $this->insurance_payment_frame    =   ($this->frame_total_amount  *   $this->insurance_percentage_frame) / 100;
-            }
-
-            if ($this->insurance_approved_lens < $this->total_lens_amount) {
-                // $this->insurance_payment_lens    =   $this->total_lens_amount;
-                $this->insurance_payment_lens    =   ($this->insurance_approved_lens  *   $this->insurance_percentage_lens) / 100;
-            }
-
-            if ($this->insurance_approved_lens >= $this->total_lens_amount) {
-                $this->insurance_payment_lens    =   ($this->total_lens_amount  *   $this->insurance_percentage_lens) / 100;
-            }
-
-            if ($this->insurance_payment_lens > $this->total_lens_amount) {
-                $this->insurance_payment_lens    =   $this->total_lens_amount;
-                $this->patient_payment_frame = 0;
-            } else {
-
-                $this->patient_payment_lens      =  round((($this->total_lens_amount -   $this->insurance_payment_lens) < 0) ? 0 : $this->total_lens_amount -   $this->insurance_payment_lens, 2);
-            }
-
-            if ($this->insurance_payment_frame >= $this->frame_total_amount) {
-                $this->insurance_payment_frame    =   $this->frame_total_amount;
-            } else {
-
-                $this->patient_payment_frame      =   round((($this->frame_total_amount -   $this->insurance_payment_frame) < 0) ? 0 : $this->frame_total_amount -   $this->insurance_payment_frame, 2);
-            }
-        }
-        $this->showsubmit = true;
+        // $this->showPaymentSection   =   true;
     }
 
     // function to handle form submit
     function saveOrder()
     {
-        $this->validate();
+        if (count($this->addedLensList)<=0 && count($this->addFrameList)<=0 && count($this->addedAccessoriesList)<=0) {
 
-
-        $this->checkAvailability();
-
-
-        if ($this->lens_type && $this->lens_coating && $this->lens_chromatic && $this->lens_index) {
-            $this->searchProduct    =   true;
-        } elseif ($this->lens_type || $this->lens_coating || $this->lens_chromatic || $this->lens_index) {
-
-            $this->searchProduct    =   false;
-        }
-
-
-        if ($this->frame == null && $this->searchProduct == false && $this->accessory == null) {
+            dd(count($this->addFrameList));
             $this->showModal('select at least one product');
             return;
         } else {
@@ -508,13 +516,8 @@ class ProductRetail extends Component
                 }
             }
 
-
             if (!$this->rightLen || !$this->leftLen) {
                 $this->invoiceStatus  =   'requested';
-            }
-
-            if ($this->autoL && $this->autoR) {
-                $this->invoiceStatus  =   'Confirmed';
             }
 
             $invoice    =   new Invoice();
@@ -523,7 +526,7 @@ class ProductRetail extends Component
             $invoice->status            =   'pending';
             $invoice->user_id           =   userInfo()->id;
             $invoice->total_amount      =   '0';
-            $invoice->cloud_id          =   $this->cloud_id;
+            $invoice->cloud_id          =   $this->name;
             $invoice->hospital_name     =   $this->hospital_name;
             $invoice->company_id        =   userInfo()->company_id;
             $invoice->client_id         =   null;
@@ -547,50 +550,32 @@ class ProductRetail extends Component
                 'invoice_id'    =>  $invoice->id,
             ]);
 
-            if ($this->lens_type || $this->lens_coating || $this->lens_chromatic) {
-                if ($this->leftLenFound && $this->rightLenFound) {
-                    $this->save('lens', 'available', $invoice->id, 'left');
-                    $this->save('lens', 'available', $invoice->id, 'right');
-                }
+            if (count($this->addedLensList) > 0) {
 
-                if (!$this->leftLenFound && $this->rightLenFound) {
-                    $this->save('lens', 'not-available', $invoice->id, 'left');
-                    $this->save('lens', 'available', $invoice->id, 'right');
-                }
-
-                if ($this->leftLenFound && !$this->rightLenFound) {
-                    $this->save('lens', 'available', $invoice->id, 'left');
-                    $this->save('lens', 'not-available', $invoice->id, 'right');
-                }
-
-                if (!$this->leftLenFound && !$this->rightLenFound) {
-                    $this->save('lens', 'not-available', $invoice->id, 'left');
-                    $this->save('lens', 'not-available', $invoice->id, 'right');
+                if ($this->lens_type || $this->lens_coating || $this->lens_chromatic) {
+                    for ($i = 0; $i < count($this->addedLensList); $i++) {
+                        $this->save('lens', 'available', $invoice->id, $this->addedLensList[$i]['eye'], $this->addedLensList[$i]['product'], $this->addedLensList[$i]['quantity']);
+                    }
                 }
             }
 
-            if ($this->frame) {
-                $this->save('frame', 'available', $invoice->id);
+            if (count($this->addFrameList) > 0) {
+                for ($i = 0; $i < count($this->addFrameList); $i++) {
+                    $this->save('lens', 'available', $invoice->id, '', $this->addFrameList[$i]['product'], $this->addFrameList[$i]['quantity']);
+                }
             }
 
-            if ($this->accessory) {
-                $this->save('accessory', 'available', $invoice->id);
+            if (count($this->addedAccessoriesList) > 0) {
+                for ($i = 0; $i < count($this->addedAccessoriesList); $i++) {
+                    $this->save('lens', 'available', $invoice->id, '', $this->addedAccessoriesList[$i]['product'], $this->addedAccessoriesList[$i]['quantity']);
+                }
             }
         }
     }
 
-    // function to toggle bulk order
-    function changeBulkOrder(){
-        $this->isBulkOrder  =   !$this->isBulkOrder;
-    }
-
     // function to save product in the database
-    function save($type, $availability, $invoiceId, $eye = '')
+    function save($type, $availability, $invoiceId, $eye = '', $productInfo, $quantity)
     {
-        $left_sphere = $this->l_sphere == 0 ? $this->l_sphere : ($this->l_sign == 'minus' ? -1 * abs($this->l_sphere) : abs($this->l_sphere));
-        $right_sphere = $this->r_sphere == 0 ? $this->r_sphere : ($this->r_sign == 'minus' ? -1 * abs($this->r_sphere) : abs($this->r_sphere));
-
-
         $total = 0;
 
         if ($availability == 'available' && $type == 'lens') {
@@ -598,75 +583,27 @@ class ProductRetail extends Component
             $sold   =   new SoldProduct();
 
             $sold->company_id   =   userInfo()->company_id;
-            $sold->product_id   =   $eye == 'right' ? $this->rightLenInfo[0]->id : $this->leftLenInfo[0]->id;
+            $sold->product_id   =   $productInfo->id;
             $sold->invoice_id   =   $invoiceId;
-            $sold->quantity     =   '1';
+            $sold->quantity     =   $quantity;
             $sold->discount     =   '0';
             $sold->eye          =   $eye;
-            $sold->unit_price   =   $eye == 'right' ? $this->rightLenInfo[0]->price : $this->leftLenInfo[0]->price;
-            $sold->total_amount =   $eye == 'right' ? $this->rightLenInfo[0]->price : $this->leftLenInfo[0]->price;
-            $sold->segment_h    =   $eye == 'right' ? $this->r_segment_height : $this->l_segment_height;
-            $sold->mono_pd      =   $eye == 'right' ? $this->r_mono_pd : $this->l_mono_pd;
+            $sold->unit_price   =   $productInfo->price;
+            $sold->total_amount =   $productInfo->price * $quantity;
             $sold->axis         =   $eye == 'right' ? $this->r_axis : $this->l_axis;
-            $sold->is_private   =   $this->insurance_type == 'private' ? 'yes' : null;
-            $sold->insurance_id =   $this->insurance_type == 'private' ? null : $this->insurance_type;
-            $sold->percentage   =   $this->insurance_type == 'private' ? 0 : $this->insurance_percentage_lens;
-
-            $sold->patient_payment   =   $this->patient_payment_lens / 2;
-            $sold->approved_amount   =   $this->insurance_approved_lens;
-            $sold->insurance_payment =   $this->insurance_payment_lens / 2;
             $sold->save();
 
-            $total  += $sold->total_amount;
-        }
-
-        if ($availability == 'not-available' && $type == 'lens') {
-            $data = [
-                'invoice_id' => $invoiceId,
-
-                'type'      => $this->lens_type,
-                'coating'   => $this->lens_coating,
-                'index'     => $this->lens_index,
-                'chromatic' => $this->lens_chromatic,
-
-                'eye'       => $eye,
-                'sphere'    => $eye == 'right' ? $right_sphere : $left_sphere,
-                'cylinder'  => $eye == 'right' ? $this->r_cylinder : $this->l_cylinder,
-                'axis'      => $eye == 'right' ? $this->r_axis : $this->l_axis,
-                'addition'  => $eye == 'right' ? $this->r_addition : $this->l_addition,
-
-                // pricing when a product was found in a range
-                'price'     => $eye == 'right' ? ($this->autoR ? $this->autoPricingRight()->price : 0) : ($this->autoL ? $this->autoPricingLeft()->price : 0),
-                'cost'      => $eye == 'right' ? ($this->autoR ? $this->autoPricingRight()->cost : 0) : ($this->autoL ? $this->autoPricingLeft()->cost : 0),
-                'wholesale_price' => $eye == 'right' ? ($this->autoR ? $this->autoPricingRight()->wholesale_price : 0) : ($this->autoL ? $this->autoPricingLeft()->wholesale_price : 0),
-
-                'mono_pd'   => $this->r_mono_pd,
-                'segment_h' => $this->r_segment_height
-            ];
-
-            // dd($data);
-
-            $repo   =   new ProductRepo();
-
-            $repo->addUnavailableProduct($data);
+            $total  = $total + $sold->total_amount;
         } else {
             $sellOther   =   new SoldProduct();
             if ($type == 'frame') {
 
                 $sellOther->company_id   =   userInfo()->company_id;
-                $sellOther->product_id   =   $this->frameInfo->id;
+                $sellOther->product_id   =   $productInfo->id;
                 $sellOther->invoice_id   =   $invoiceId;
-                $sellOther->quantity     =   '1';
-                $sellOther->discount     =   $this->frame_price_adjust;
-                $sellOther->unit_price   =   $this->frame_unit_price;
-                $sellOther->total_amount =   $this->frame_total_amount;
-                $sellOther->is_private   =   $this->insurance_type == 'private' ? 'yes' : null;
-                $sellOther->insurance_id =   $this->insurance_type == 'private' ? null : $this->insurance_type;
-                $sellOther->percentage   =   $this->insurance_type == 'private' ? 0 : $this->insurance_percentage_frame;
-
-                $sellOther->patient_payment   =   $this->patient_payment_frame;
-                $sellOther->approved_amount   =   $this->insurance_approved_frame;
-                $sellOther->insurance_payment =   $this->insurance_payment_frame;
+                $sellOther->quantity     =   $quantity;
+                $sellOther->unit_price   =   $productInfo->price;
+                $sellOther->total_amount =   $productInfo->price * $quantity;
                 $sellOther->save();
 
                 $total  += $sellOther->total_amount;
@@ -675,19 +612,11 @@ class ProductRetail extends Component
             if ($type == 'accessory') {
                 $sellOther   =   new SoldProduct();
                 $sellOther->company_id   =   userInfo()->company_id;
-                $sellOther->product_id   =   $this->accessoryInfo->id;
+                $sellOther->product_id   =   $productInfo->id;
                 $sellOther->invoice_id   =   $invoiceId;
-                $sellOther->quantity     =   $this->accessory_quantity;
-                $sellOther->discount     =   $this->accessory_price_adjust;
-                $sellOther->unit_price   =   $this->accessory_unit_price;
-                $sellOther->total_amount =   $this->accessory_total_amount;
-                $sellOther->is_private   =   $this->insurance_type == 'private' ? 'yes' : null;
-                $sellOther->insurance_id =   $this->insurance_type == 'private' ? null : $this->insurance_type;
-                $sellOther->percentage   =   $this->insurance_type == 'private' ? 0 : $this->insurance_percentage_frame;
-
-                $sellOther->patient_payment   =   null;
-                $sellOther->approved_amount   =   null;
-                $sellOther->insurance_payment =   null;
+                $sellOther->quantity     =   $quantity;
+                $sellOther->unit_price   =   $productInfo->price;
+                $sellOther->total_amount =   $productInfo->price * $quantity;
                 $sellOther->save();
 
                 $total  += $sellOther->total_amount;
@@ -703,7 +632,9 @@ class ProductRetail extends Component
 
     function updated($type)
     {
+        // right side
         if ($type == 'r_cylinder') {
+            $this->rightLen =   false;
             if ($this->r_cylinder == 0) {
                 $this->hide_r_axis = true;
                 $this->r_axis = 0;
@@ -712,7 +643,19 @@ class ProductRetail extends Component
                 $this->hide_r_axis = false;
             }
         }
+        if ($type == 'r_sphere') {
+            $this->rightLen =   false;
+        }
+        if ($type == 'r_sphere') {
+            $this->rightLen =   false;
+        }
+        if ($type == 'r_addition') {
+            $this->rightLen =   false;
+        }
+
+        // left side 
         if ($type == 'l_cylinder') {
+            $this->leftLen =   false;
             if ($this->l_cylinder == 0) {
                 $this->hide_l_axis = true;
                 $this->l_axis = 0;
@@ -720,6 +663,21 @@ class ProductRetail extends Component
                 $this->l_axis = null;
                 $this->hide_l_axis = false;
             }
+        }
+        if (
+            $type == 'l_sphere'
+        ) {
+            $this->leftLen =   false;
+        }
+        if (
+            $type == 'l_sphere'
+        ) {
+            $this->leftLen =   false;
+        }
+        if (
+            $type == 'l_addition'
+        ) {
+            $this->leftLen =   false;
         }
     }
 
@@ -746,6 +704,6 @@ class ProductRetail extends Component
 
     public function render()
     {
-        return view('livewire.manager.sales.product-retail')->layout('livewire.livewire-slot');
+        return view('livewire.manager.sales.bulk-order')->layout('livewire.livewire-slot');
     }
 }
