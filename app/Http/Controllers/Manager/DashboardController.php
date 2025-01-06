@@ -36,7 +36,7 @@ class DashboardController extends Controller
         }
 
         foreach ($products as $key => $product) {
-            if (is_numeric($product->cost)) {
+            if (is_numeric($product->cost) && is_numeric($product->stock)) {
                 $amount     =   $product->cost * $product->stock;
                 $totalValue =   $totalValue + $amount;
             }
