@@ -171,8 +171,9 @@
                         <tbody>
                             @foreach ($products as $key=> $product)
                             @php
-                                $po =   $productRepo->productStockEfficiency($product->id,$product->soldproducts->sum('quantity'),$product->stock,$product->category_id,$leadTime);
-                                // dd($po);
+                                if (is_numeric($product->stock)) {
+                                    $po =   $productRepo->productStockEfficiency($product->id,$product->soldproducts->sum('quantity'),$product->stock,$product->category_id,$leadTime);
+                                }
 
                                 $leadTimeQuantity   =   ($po['usage']*$leadTime)/$totalDays;
                                 $orderQuantity      =   floor((($po['usage']*2)+$leadTimeQuantity)-$po['stock']);
