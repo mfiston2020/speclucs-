@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    // return view('welcome');
+    
     if (Auth::user()) {
         return redirect()->intended('manager');
     } else {
