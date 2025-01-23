@@ -54,7 +54,7 @@
 
 
             {{-- Stock Adjustment report --}}
-            <a href="{{ route('manager.adjustment.report')}}" class="col-lg-4 col-md-6 text-secondary">
+            <a href="{{ route('manager.adjustment.report') }}" class="col-lg-4 col-md-6 text-secondary">
                 <div class="">
                     <div class="card border-right border-secondary">
                         <div class="card-body">
@@ -74,7 +74,7 @@
 
 
             {{-- Stock History report --}}
-            <a href="{{ route('manager.product.stock.report')}}" class="col-lg-4 col-md-6 text-primary">
+            <a href="{{ route('manager.product.stock.report') }}" class="col-lg-4 col-md-6 text-primary">
                 <div class="">
                     <div class="card border-right border-primary">
                         <div class="card-body">
@@ -94,7 +94,7 @@
 
 
             {{-- Stock History report --}}
-            <a href="{{ route('manager.user.perfomance.report')}}" class="col-lg-4 col-md-6 text-success">
+            <a href="{{ route('manager.user.perfomance.report') }}" class="col-lg-4 col-md-6 text-success">
                 <div class="">
                     <div class="card border-right border-success">
                         <div class="card-body">
@@ -114,7 +114,7 @@
 
 
             {{-- Stock Efficiency report --}}
-            <a href="{{ route('manager.stock.efficiency.report')}}" class="col-lg-4 col-md-6 text-warning">
+            <a href="{{ route('manager.stock.efficiency.report') }}" class="col-lg-4 col-md-6 text-warning">
                 <div class="">
                     <div class="card border-right border-warning">
                         <div class="card-body">
@@ -124,6 +124,26 @@
                                 </div>
                                 <div class="ml-auto">
                                     <h3>Stock Efficiency Report</h3>
+                                    <small class="text-dark">Get the efficiency report of products in stock!</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+
+            {{-- Stock Efficiency report --}}
+            <a href="{{ route('manager.sold.lens.report') }}" class="col-lg-4 col-md-6 text-secondary">
+                <div class="">
+                    <div class="card border-right border-secondary">
+                        <div class="card-body">
+                            <div class="d-flex no-block align-items-center">
+                                <div>
+                                    <span class="text-secondary display-6"><i class="ti-stats-up"></i></span>
+                                </div>
+                                <div class="ml-auto">
+                                    <h3>Sold Lens Report</h3>
                                     <small class="text-dark">Get the efficiency report of products in stock!</small>
                                 </div>
                             </div>

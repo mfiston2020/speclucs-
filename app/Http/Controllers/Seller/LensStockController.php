@@ -104,8 +104,6 @@ class LensStockController extends Controller
                 }
             }
 
-            // return $products_id_array;
-
             return view('seller.stockLens.results',
             compact('lens_type','index','chromatics','coatings','results','sphere','sphere_max','sphere_min',
             'cylinder','cylinder_min','cylinder_max','lt','ix','chrm','ct','add','add_max','add_min','products_id_array'));

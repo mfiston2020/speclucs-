@@ -15,7 +15,7 @@
 
 {{-- ==== Breadcumb ======== --}}
 {{-- {{-- @section('current', 'Order') --}}
-@section('page_name', 'New Order')
+@section('page_name', 'Report')
 {{-- === End of breadcumb == --}}
 
 @section('content')

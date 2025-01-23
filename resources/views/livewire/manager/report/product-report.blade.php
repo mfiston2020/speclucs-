@@ -108,7 +108,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#work-in-progress" role="tab">
                             <span class="hidden-sm-up"><i class="ti-home"></i></span>
                             <span class="hidden-xs-down">
@@ -124,11 +124,12 @@
                                 Finished Goods
                             </span>
                         </a>
-                    </li>
+                    </li> --}}
 
                 </ul>
 
                 <div class="tab-content">
+
                     <div class="tab-pane active mt-4" id="raw-material" role="tabpanel">
 
                         <a onclick="ExportToExcel('xlsx')" href="#" class=" mt-2 mb-2 ml-2 btn waves-effect waves-light btn-rounded btn-outline-success" style="align-items: right;">
@@ -309,13 +310,14 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane mt-4" id="work-in-progress" role="tabpanel">
+                    {{-- <div class="tab-pane mt-4" id="work-in-progress" role="tabpanel">
                         work in progress
                     </div>
 
                     <div class="tab-pane mt-4" id="finished-goods" role="tabpanel">
                         finished goods
-                    </div>
+                    </div> --}}
+
                 </div>
             </div>
         </div>
