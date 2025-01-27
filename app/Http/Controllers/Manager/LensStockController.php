@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\SoldProduct;
 use App\Repositories\ProductRepo;
+use App\Repositories\StockTrackRepo;
 use Illuminate\Http\Request;
 
 
@@ -230,5 +232,48 @@ class LensStockController extends Controller
             compact('productStock','lens_type','index','chromatics','coatings','sphere','sphere_max','sphere_min',
             'cylinder','cylinder_min','cylinder_max','lt','ix','chrm','ct','add','add_max','add_min'));
         }
+    }
+
+    function lensStockReportForm(){
+
+        $lens_type  =   \App\Models\LensType::all();
+        $index      =   \App\Models\PhotoIndex::all();
+        $coatings   =   \App\Models\PhotoCoating::all();
+        $chromatics =   \App\Models\PhotoChromatics::all();
+        
+        return view('manager.report.lensReport', compact('lens_type', 'index', 'chromatics', 'coatings'));    
+    }
+    
+    function lensStockReportSearch(Request $request){
+
+        $results  =   [];
+
+        $request->validate([
+            'end_date'  => 'required|date|after:start_date',
+            'start_date' => 'required|date',
+            'len_type' => 'required',
+            'indx'     => 'required',
+            'chromatic' => 'required',
+            'coating'   => 'required',
+        ]);
+
+        $repo   =   new StockTrackRepo();
+
+        $results   =   $repo->stockLens($request->len_type, $request->indx, $request->chromatic, $request->coating);
+
+        $soldLens =   SoldProduct::where('company_id', auth()->user()->company_id)->wherebetween('created_at', [$request->start_date, $request->end_date])->select('id', 'product_id', 'quantity')->get();
+
+        if (count($results) > 0) {
+            $searchFoundSomething =   'yes';
+        } else {
+            $searchFoundSomething =   'no';
+        }
+
+        $stDate =   $request->start_date;
+        $edDate =   $request->end_date;
+
+        // dd($soldLens->where('product_id', '9497')->sum('quantity'));
+
+        return view('manager.report.lensReportResult',compact('results', 'soldLens','stDate', 'edDate'));
     }
 }

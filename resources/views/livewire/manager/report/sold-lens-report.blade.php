@@ -130,8 +130,8 @@
             @if ($searchFoundSomething=='no')
                 <div class="alert alert-warning alert-rounded col-lg-7 col-md-9 col-sm-12">
                     <b>Warning! </b> No Product found for this search!!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span
-                            aria-hidden="true">×</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
+                        <span aria-hidden="true">×</span>
                     </button>
                 </div>
             @endif
@@ -162,25 +162,24 @@
                                             <tr>
                                                 <th>{{$i}}</th>
                                                 @for ($j = $results['cylinder_max']; $j >= $results['cylinder_min']; $j=$j-0.25)
-                                                <span hidden>{{$product_id=\App\Models\Power::where(['cylinder'=>format_values($j)])->where('company_id',Auth::user()->company_id)->where(['sphere'=>format_values($i)])
-                                                                        ->where('type_id',$len_type)
-                                                                        ->where('index_id',$indx)
-                                                                        ->where('chromatics_id',$chromatic)
-                                                                        ->where('coating_id',$coating)
-                                                                        ->pluck('product_id')->first()}}</span>
+                                                    @php
+                                                        $product_id=$results['powers']->where('cylinder',$j)
+                                                                        ->where('sphere',$i)
+                                                                        ->pluck('product_id')->first();
 
-                                                <span hidden>{{$stock=\App\Models\Product::where(['id'=>$product_id])->select('*')->sum('stock')}}</span>
-                                                <td>
-                                                    @if ($stock==0)
-                                                        <center>
-                                                            <span>-</span>
-                                                        </center>
-                                                    @else
-                                                        <center>
-                                                            <span class="label label-success">{{$stock}}</span>
-                                                        </center>
-                                                    @endif
-                                                </td>
+                                                        $quantity=\App\Models\SoldProduct::where('company_id', auth()->user()->company_id)->wherebetween('created_at', [$this->start_date, $this->end_date])->where('product_id', $product_id)->sum('quantity');
+                                                    @endphp
+                                                    <td>
+                                                        @if ($quantity==0 )
+                                                            <center>
+                                                                <span>-</span>
+                                                            </center>
+                                                        @else
+                                                            <center>
+                                                                <span class="label label-success">{{$quantity}}</span>
+                                                            </center>
+                                                        @endif
+                                                    </td>
                                                 @endfor
                                             </tr>
                                         @endfor

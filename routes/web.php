@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     // return view('welcome');
-    
+
     if (Auth::user()) {
         return redirect()->intended('manager');
     } else {
@@ -439,7 +439,9 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::get('/product-report', ProductReport::class)->name('product.report');
     Route::get('/product-history-report', StockHistory::class)->name('product.stock.report');
     Route::get('/stock-efficiency-report', StockEfficiency::class)->name('stock.efficiency.report');
-    Route::get('/sold-lens-report', SoldLensReport::class)->name('sold.lens.report');
+
+    Route::get('/sold-lens-report', [\App\Http\Controllers\Manager\LensStockController::class, 'lensStockReportForm'])->name('sold.lens.report');
+    Route::post('/sold-lens-report/save', [\App\Http\Controllers\Manager\LensStockController::class, 'lensStockReportSearch'])->name('sold.lens.report.search');
 });
 
 // ===========================================================================

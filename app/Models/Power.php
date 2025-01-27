@@ -38,4 +38,8 @@ class Power extends Model
     function index(){
         return $this->belongsTo(PhotoIndex::class,'index_id');
     }
+
+    function product(){
+        return $this->belongsTo(Product::class,'product_id');
+    }
 }
