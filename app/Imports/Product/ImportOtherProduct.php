@@ -37,7 +37,6 @@ class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 if ($un_filtered_data->filter()->isNotEmpty()) {
 
                     $data   =   $un_filtered_data->filter();
-
                     
                     $cost   = $data['cost'];
                     $on_hand_quantity   = $un_filtered_data['stock'];
@@ -46,7 +45,7 @@ class ImportOtherProduct implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     $description   = $data['description'];
                     $product_name   = $data['product_name'];
 
-                    if (!Product::where('product_name', $product_name)->where('description', $description)->exists()) {
+                    if (!Product::where('product_name', $product_name)->where('company_id', Auth::user()->company_id)->where('description', $description)->exists()) {
                     // dd('hello');
                         $product    =   Product::create([
                             'cost'              =>  $cost,
