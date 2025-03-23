@@ -251,6 +251,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::post('/receiptfinalize/{receiptfinalize}', [\App\Http\Controllers\Manager\ReceiptsController::class, 'finalizeReceipt'])->name('finalize.receipt');
 
     Route::get('/receiptInvoice/{receiptInvoice}', [\App\Http\Controllers\Manager\ReceiptsController::class, 'invoiceDetail'])->name('invoice.receipt');
+    Route::get('/receiptInvoice/package-list/{id}', [\App\Http\Controllers\Manager\ReceiptsController::class, 'packageList'])->name('invoice.package.list');
 
     Route::post('/receiptNewProduct', [\App\Http\Controllers\Manager\ReceiptsController::class, 'newProduct'])->name('receipt.new.product');
     Route::get('/receiptremoveProduct/{receiptremoveProduct}', [\App\Http\Controllers\Manager\ReceiptsController::class, 'removeReceiptProduct'])->name('receipt.remover.product');

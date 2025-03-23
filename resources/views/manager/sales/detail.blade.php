@@ -22,9 +22,14 @@
                             </h4>
                             <hr>
 
+                            <a href="{{ route('manager.invoice.package.list', Crypt::encrypt($invoice->id)) }}"
+                                class="pull-right btn btn-outline-primary mr-2 ">
+                                <i class="fa fa-print"></i> Package List
+                            </a>
+
                             <a href="{{ route('manager.invoice.receipt', Crypt::encrypt($invoice->id)) }}"
                                 class="pull-right btn btn-outline-warning ">
-                                <i class="fa fa-print"></i> Print Receipt
+                                <i class="fa fa-print"></i> Print Invoice
                             </a>
 
                             @if ($invoice->status == 'delivered')

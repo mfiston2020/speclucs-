@@ -182,7 +182,7 @@ class ReceiptsController extends Controller
             $pro    =   array_unique($p);
 
             foreach ($pro as $product) {
-                $product_   =   ReceivedProduct::where(['product_id' => $product])->where('receipt_id',$id)->where('company_id', Auth::user()->company_id)->select('stock')->get();
+                $product_   =   ReceivedProduct::where(['product_id' => $product])->where('receipt_id', $id)->where('company_id', Auth::user()->company_id)->select('stock')->get();
 
                 foreach ($product_ as $all_quantity) {
                     $product_stock  =   Product::find($product);
@@ -197,7 +197,6 @@ class ReceiptsController extends Controller
                     $product_stock->save();
 
                     $quantity   =   0;
-
                 }
             }
 
@@ -444,5 +443,15 @@ class ReceiptsController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('errorMsg', 'Something went wrong!');
         }
+    }
+
+    function packageList($id)
+    {
+        $id         =   Crypt::decrypt($id);
+        $invoice    =   Invoice::where(['id' => $id])->with('soldproduct')->withsum('soldproduct', 'patient_payment')->withsum('unavailableProducts', 'price')->with('unavailableProducts')->first();
+
+        $companyInfo    =   getuserCompanyInfo();
+
+        return view('manager.receipt.package-list', compact('invoice', 'companyInfo'));
     }
 }
