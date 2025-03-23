@@ -22,12 +22,12 @@
                                         </a>
                                     @endif
                                 </div>
-                                @if (userInfo()->permissions=='lab' || userInfo()->permissions=='manager')
-                                    <a wire:click="changeBulkOrder" class="btn btn-secondary btn-rounded text-white">
+                                {{-- @if (userInfo()->permissions=='lab' || userInfo()->permissions=='manager')
+                                    <a href="manager.bulk.order" class="btn btn-secondary btn-rounded text-white">
                                         <i @class(['badge badge-pill badge-danger'=>$isBulkOrder])>{{$isBulkOrder?'-':''}}</i>
                                         <i class="mdi mdi-folder-plus"></i> Bulk Order
                                     </a>
-                                @endif
+                                @endif --}}
                             </h4>
                         </div>
                     </div>

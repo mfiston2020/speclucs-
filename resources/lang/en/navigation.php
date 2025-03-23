@@ -14,6 +14,7 @@ return
         'grn_receipt' => '(GRN) Receipt',
         'lens_stock' => 'Lens Stock',
         'purchase_order' => 'Parchase Order',
+        'cloud_stock_adjustment' => 'Cloud Stock Adjustment',
         'quotation' => 'Quotations',
 
         'finance_department' => 'Finance Department',

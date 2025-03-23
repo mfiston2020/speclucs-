@@ -125,8 +125,8 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     Route::post('/saveProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'save'])->name('product.save');
     Route::get('/createProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'create'])->name('product.create');
     Route::get('/importProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'importProduct'])->name('product.import');
-    Route::post('/import/update/Product', [\App\Http\Controllers\Manager\ProductsController::class, 'importProductUpdate'])->name('update.product.import');
     Route::post('/saveImportProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'saveImport'])->name('product.import.save');
+    Route::post('/import/update/Product', [\App\Http\Controllers\Manager\ProductsController::class, 'importProductUpdate'])->name('update.product.import');
     Route::post('/importOtherProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'importOtherProducts'])->name('product.import.other.product');
 
     // ============================== all routes for user settings =============================
@@ -252,6 +252,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     Route::get('/receiptInvoice/{receiptInvoice}', [\App\Http\Controllers\Manager\ReceiptsController::class, 'invoiceDetail'])->name('invoice.receipt');
     Route::get('/receiptInvoice/package-list/{id}', [\App\Http\Controllers\Manager\ReceiptsController::class, 'packageList'])->name('invoice.package.list');
+    Route::get('/receiptInvoice/delivery-note/{id}', [\App\Http\Controllers\Manager\ReceiptsController::class, 'deliveryNote'])->name('invoice.deliviery.note');
 
     Route::post('/receiptNewProduct', [\App\Http\Controllers\Manager\ReceiptsController::class, 'newProduct'])->name('receipt.new.product');
     Route::get('/receiptremoveProduct/{receiptremoveProduct}', [\App\Http\Controllers\Manager\ReceiptsController::class, 'removeReceiptProduct'])->name('receipt.remover.product');
@@ -443,6 +444,10 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
 
     Route::get('/sold-lens-report', [\App\Http\Controllers\Manager\LensStockController::class, 'lensStockReportForm'])->name('sold.lens.report');
     Route::post('/sold-lens-report/save', [\App\Http\Controllers\Manager\LensStockController::class, 'lensStockReportSearch'])->name('sold.lens.report.search');
+
+    // ===================== Cloud Stock Adjustment ===============
+    Route::get('/cloud/StockAdjustment', [\App\Http\Controllers\Manager\CloudStockAdjustmentController::class, 'index'])->name('cloud.stock.adjustment');
+    Route::post('/cloud/StockAdjustment/Import', [\App\Http\Controllers\Manager\CloudStockAdjustmentController::class, 'saveImport'])->name('cloud.product.import.save');
 });
 
 // ===========================================================================

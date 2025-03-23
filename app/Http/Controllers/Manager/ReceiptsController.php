@@ -454,4 +454,14 @@ class ReceiptsController extends Controller
 
         return view('manager.receipt.package-list', compact('invoice', 'companyInfo'));
     }
+
+    function deliveryNote($id)
+    {
+        $id         =   Crypt::decrypt($id);
+        $invoice    =   Invoice::where(['id' => $id])->with('soldproduct')->withsum('soldproduct', 'patient_payment')->withsum('unavailableProducts', 'price')->with('unavailableProducts')->first();
+
+        $companyInfo    =   getuserCompanyInfo();
+
+        return view('manager.receipt.delivery-note', compact('invoice', 'companyInfo'));
+    }
 }

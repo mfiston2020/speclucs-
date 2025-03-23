@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-body printableArea">
-                    <h3><b>PACKAGE LIST</b> <span class="pull-right">#{{ sprintf('%04d', $invoice->reference_number) }}</span>
+                    <h3><b>PACKING LIST</b> <span class="pull-right">#{{ sprintf('%04d', $invoice->reference_number) }}</span>
 
                         @if ($invoice->hospital_name!=null)
                             | [{{$invoice->cloud_id}}] {{$invoice->hospital_name}}
@@ -71,8 +71,8 @@
                                         </p>
                                         <p class="m-t-30"><b>Phone :</b> {{ $invoice->phone??'-' }}</p>
                                         <p class="m-t-30"><b>TIN Number :</b> {{ $invoice->tin_number??'-' }}</p>
-                                        <p><b>Invoice Date:</b> <i class="fa fa-calendar"></i>
-                                            {{ date('Y-m-d H:m:s', strtotime($invoice->updated_at)) }}</p>
+                                        <p><b>Date:</b> <i class="fa fa-calendar"></i>
+                                            {{ date('Y-m-d H:m', strtotime($invoice->updated_at)) }}</p>
                                     </address>
                                 @endif
                             </div>
@@ -87,14 +87,10 @@
                                             <th class="text-right">Seg H</th>
                                             <th class="text-right">Mono PD</th>
                                             <th class="text-right">Quantity</th>
-                                            {{-- <th class="text-right">Unit Cost</th>
-                                            <th class="text-right">Total</th> --}}
                                         </tr>
                                     </thead>
                                     @php
                                         $total_=0;
-                                        $Instotal_=0;
-                                        $Pttotal_=0;
                                     @endphp
                                     <tbody>
                                         @foreach ($invoice->unavailableProducts as $key => $product)
@@ -126,15 +122,13 @@
                                                             {{ $product->addition }}</span>
                                                     @endif
                                                 </td>
-                                                @php
-                                                    $total_+=$product->price;
-                                                @endphp
                                                 <td class="text-right">{{ is_null($product->segment_h)?'-':$product->segment_h }}</td>
                                                 <td class="text-right">{{ is_null($product->mono_pd)?'-': $product->mono_pd}}</td>
                                                 <td class="text-right">{{ $product->quantity }} </td>
-                                                {{-- <td class="text-right"> {{ format_money($product->price) }} </td>
-                                                <td class="text-right"> {{ format_money($product->price * $product->quantity) }} </td> --}}
                                             </tr>
+                                                @php
+                                                    $total_+=$product->quantity;
+                                                @endphp
                                         @endforeach
 
                                         @foreach ($invoice->soldproduct as $key => $product)
@@ -159,19 +153,12 @@
                                                         @endif
                                                     @endif
                                                 </td>
-                                                @php
-                                                    $total_+=$product->quantity*$product->unit_price;
-                                                    if ($invoice->insurance_id) {
-                                                        $percentage     =   ($total_*$product->percentage)/100;
-                                                        $Pttotal_       =   $total_-$percentage;
-                                                        $Instotal_      =   $percentage;
-                                                    }
-                                                @endphp
                                                 <td class="text-right">{{ is_null($product->segment_h)?'-':$product->segment_h }}</td>
                                                 <td class="text-right">{{ is_null($product->mono_pd)?'-': $product->mono_pd}}</td>
                                                 <td class="text-right">{{ $product->quantity }} </td>
-                                                {{-- <td class="text-right"> {{ format_money($product->unit_price) }} </td>
-                                                <td class="text-right"> {{ format_money($product->total_amount) }} </td> --}}
+                                                @php
+                                                    $total_+=$product->quantity;
+                                                @endphp
                                             </tr>
                                         @endforeach
 
@@ -181,33 +168,35 @@
                         </div>
                         <div class="col-md-12">
                             <div class="pull-right m-t-30 text-right">
-                                @php
-                                    $total_invoice_amount = $total_;
-                                @endphp
-                                <p>Total amount: {{ format_money($total_invoice_amount) }}</p>
-                                @if ($invoice->insurance_id)
-                                    <p>Ins amount: {{ format_money($Instotal_) }}</p>
-                                    <p>Pt amount: {{ format_money($Pttotal_) }}</p>
-                                @endif
-                                <p>Total paid: {{ format_money($total_invoice_amount - $invoice->due) }}</p>
-                                <p>Due: {{ format_money($invoice->due) }}</p>
-                                <p>vat (18%) : {{ format_money(0) }} </p>
-                                <hr>
-                                <h3><b>Total :</b>
-                                    @if ($invoice->insurance_id)
-                                        {{ format_money($Pttotal_) }}
-                                    @else
-                                        {{ format_money($total_invoice_amount) }}
-                                    @endif
+                                <h3><b>Total Quantity :</b>
+                                    {{ $total_ }}
                                 </h3>
                             </div>
                             <div class="clearfix"></div>
                         </div>
-                                    @php
-                                        $total_=0;
-                                        $Instotal_=0;
-                                        $Pttotal_=0;
-                                    @endphp
+                        @php
+                            $total_=0;
+                        @endphp
+                    </div>
+
+                    <div class="row">
+                        <div class="col-10 row">
+                            <div class="cols-md-4">Prepared By:______________________________</div> 
+                            <div class="cols-md-4"> &nbsp; Date: _____/ _______/ _______</div>  
+                            <div class="cols-md-4"> &nbsp; &nbsp; Signature: _________________</div>
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-10 mt-4 row">
+                            <div class="cols-md-4">Verified By:______________________________</div> 
+                            <div class="cols-md-4"> &nbsp; &nbsp; Date: _____/ _______/ _______</div>  
+                            <div class="cols-md-4"> &nbsp; &nbsp; Signature: _________________</div>
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-10 mt-4 row">
+                            <div class="cols-md-4">Approved By:______________________________</div> 
+                            <div class="cols-md-4"> &nbsp;Date: _____/ _______/ _______</div>  
+                            <div class="cols-md-4"> &nbsp; &nbsp; Signature: _________________</div>
+                        </div>
                     </div>
                 </div>
                 <hr class="noprint">

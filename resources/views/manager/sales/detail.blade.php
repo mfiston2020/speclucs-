@@ -24,12 +24,17 @@
 
                             <a href="{{ route('manager.invoice.package.list', Crypt::encrypt($invoice->id)) }}"
                                 class="pull-right btn btn-outline-primary mr-2 ">
-                                <i class="fa fa-print"></i> Package List
+                                <i class="fa fa-print"></i> Packing List
+                            </a>
+
+                            <a href="{{ route('manager.invoice.deliviery.note', Crypt::encrypt($invoice->id)) }}"
+                                class="pull-right btn btn-outline-secondary mr-2 ">
+                                <i class="fa fa-print"></i> Delivery Note
                             </a>
 
                             <a href="{{ route('manager.invoice.receipt', Crypt::encrypt($invoice->id)) }}"
                                 class="pull-right btn btn-outline-warning ">
-                                <i class="fa fa-print"></i> Print Invoice
+                                <i class="fa fa-print"></i> Invoice
                             </a>
 
                             @if ($invoice->status == 'delivered')

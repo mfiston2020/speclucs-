@@ -140,25 +140,7 @@
                                                     </a>
                                                 </td>
                                             @else
-
                                                 <td>
-                                                    <span>{{ $product->price }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span>{{ $product->wholesale_price ?? '-' }}</span>
-                                                </td>
-                                                <td>
-                                                    <span>{{ $product->cost }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span>{{ $product->stock }}
-                                                    </span>
-                                                </td>
-
-
-                                                {{-- <td>
                                                     <span class="text-primary">{{ $product->price }}</span>
                                                 </td>
                                                 <td>
@@ -167,7 +149,7 @@
                                                 <td>
                                                     <span class="text-primary">{{ $product->stock }}
                                                     </span>
-                                                </td> --}}
+                                                </td>
                                             @endif
                                             {{-- <td>{{$product->deffective_stock}}</td> --}}
                                             <td>

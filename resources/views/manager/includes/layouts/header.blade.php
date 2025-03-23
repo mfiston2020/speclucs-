@@ -343,9 +343,22 @@
                             </span></a>
                     </li>
 
-                    <li class="sidebar-item"><a href="{{ route('manager.po') }}" class="sidebar-link"><i
-                                class="mdi mdi-account-convert"></i><span class="hide-menu">
-                                {{ __('navigation.purchase_order') }} </span></a>
+                    <li class="sidebar-item">
+                        <a href="{{ route('manager.po') }}" class="sidebar-link">
+                            <i class="mdi mdi-account-convert"></i>
+                            <span class="hide-menu">
+                                {{ __('navigation.purchase_order') }} 
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="{{ route('manager.cloud.stock.adjustment') }}" class="sidebar-link">
+                            <i class="mdi mdi-file-restore"></i>
+                            <span class="hide-menu">
+                                {{ __('navigation.cloud_stock_adjustment') }} 
+                            </span>
+                        </a>
                     </li>
 
                 @endif

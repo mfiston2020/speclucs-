@@ -103,7 +103,7 @@
                                     class="col-sm-3 text-right control-label col-form-label invalid">Cost</label>
                                 <div class="col-sm-9">
                                     <input type="number" class="form-control" id="cost" placeholder="cost Here"
-                                        name="cost" value="{{ old('cost') }}" step="any">
+                                        name="cost" value="{{ old('cost') }}">
                                 </div>
                             </div>
 

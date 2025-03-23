@@ -1,6 +1,6 @@
 @extends('manager.includes.app')
 
-@section('title', 'Dashboard - Invoice Detail')
+@section('title', 'Dashboard - Delivery note')
 
 @push('css')
     <style>
@@ -13,8 +13,8 @@
 @endpush
 
 {{-- ==== Breadcumb ======== --}}
-@section('current', 'Invoice Detail')
-@section('page_name', 'Invoice Detail')
+@section('current', 'Delivery note')
+@section('page_name', 'Delivery note')
 {{-- === End of breadcumb == --}}
 
 @section('content')
@@ -22,14 +22,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-body printableArea">
-                    <h3><b>INVOICE</b> <span class="pull-right">#{{ sprintf('%04d', $invoice->reference_number) }}</span>
+                    <h3><b>DELIVERY NOTE</b> <span class="pull-right">#{{ sprintf('%04d', $invoice->reference_number) }}</span>
 
                         @if ($invoice->hospital_name!=null)
                             | [{{$invoice->cloud_id}}] {{$invoice->hospital_name}}
                         @else
                             | {{$invoice->client_name}}
                         @endif
-
                     </h3>
                     <hr>
                     <div class="row">
@@ -58,8 +57,8 @@
                                         <p class="m-t-30"><b>Name :</b> {{ $clients_information->name }}</p>
                                         <p class="m-t-30"><b>Phone :</b> {{ $clients_information->phone }}</p>
                                         <p class="m-t-30"><b>Email :</b> {{ $clients_information->email }}</p>
-                                        <p><b>Invoice Date :</b> <i class="fa fa-calendar"></i>
-                                            {{ date('Y-m-d H:m:s', strtotime($invoice->updated_at)) }}</p>
+                                        <p><b> Date :</b> <i class="fa fa-calendar"></i>
+                                            {{ date('Y-m-d H:m', strtotime($invoice->updated_at)) }}</p>
                                     </address>
                                 @else
                                     <address>
@@ -72,7 +71,7 @@
                                         </p>
                                         <p class="m-t-30"><b>Phone :</b> {{ $invoice->phone??'-' }}</p>
                                         <p class="m-t-30"><b>TIN Number :</b> {{ $invoice->tin_number??'-' }}</p>
-                                        <p><b>Invoice Date:</b> <i class="fa fa-calendar"></i>
+                                        <p><b> Date:</b> <i class="fa fa-calendar"></i>
                                             {{ date('Y-m-d H:m:s', strtotime($invoice->updated_at)) }}</p>
                                     </address>
                                 @endif
@@ -180,7 +179,9 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 d-flex justify-content-between">
+                            <div></div>
+
                             <div class="pull-right m-t-30 text-right">
                                 @php
                                     $total_invoice_amount = $total_;
@@ -193,8 +194,15 @@
                                 <p>Total paid: {{ format_money($total_invoice_amount - $invoice->due) }}</p>
                                 <p>Due: {{ format_money($invoice->due) }}</p>
                                 <p>vat (18%) : {{ format_money(0) }} </p>
-                                <hr>
-                                <h3><b>Total :</b>
+                            </div>
+                            
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 border-top" style="width:100% !important; float: right; padding: 1.4rem 0 1.4rem 0">
+                            <div></div>
+                            <div>
+                                <h3>
+                                    <b>Total :</b>
                                     @if ($invoice->insurance_id)
                                         {{ format_money($Pttotal_) }}
                                     @else
@@ -202,14 +210,16 @@
                                     @endif
                                 </h3>
                             </div>
-                            <div class="clearfix"></div>
+                                
+                            @php
+                                $total_=0;
+                                $Instotal_=0;
+                                $Pttotal_=0;
+                            @endphp
                         </div>
-                                    @php
-                                        $total_=0;
-                                        $Instotal_=0;
-                                        $Pttotal_=0;
-                                    @endphp
                     </div>
+
+
                     <div class="row">
                         <div class="col-10 row">
                             <div class="cols-md-4">Prepared By:______________________________</div> 
@@ -226,6 +236,12 @@
                         <div class="col-10 mt-4 row">
                             <div class="cols-md-4">Approved By:______________________________</div> 
                             <div class="cols-md-4"> &nbsp;Date: _____/ _______/ _______</div>  
+                            <div class="cols-md-4"> &nbsp; &nbsp; Signature: _________________</div>
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-10 mt-4 row">
+                            <div class="cols-md-4">Received By:______________________________</div> 
+                            <div class="cols-md-4"> &nbsp; Date: _____/ _______/ _______</div>  
                             <div class="cols-md-4"> &nbsp; &nbsp; Signature: _________________</div>
                         </div>
                     </div>
