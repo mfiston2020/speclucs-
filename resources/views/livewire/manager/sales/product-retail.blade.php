@@ -540,10 +540,10 @@
                             </div>
                         </div>
 
-                        <hr>
-                        <div>
+                        {{-- <hr> --}}
+                        {{-- <div>
                             <button class="btn btn-sm btn-primary">Add product Lens</button>
-                        </div>
+                        </div> --}}
 
                     </div>
                 </div>
