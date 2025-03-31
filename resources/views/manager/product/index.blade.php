@@ -194,7 +194,8 @@
                                         <th>Product</th>
                                         <th>Description</th>
                                         <th>Power</th>
-                                        <th>Price</th>
+                                        <th>Price [{{getuserCompanyInfo()->currency}}]</th>
+                                        <th>Wholesale Price [{{getuserCompanyInfo()->currency}}]</th>
                                         <th>cost</th>
                                         <th>Stock</th>
                                         <th>Location</th>

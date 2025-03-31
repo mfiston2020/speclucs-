@@ -22,6 +22,7 @@ class Product extends Model
         'fitting_cost',
         'product_name',
         'deffective_stock',
+        'slug_name',
     ];
 
     // protected $hidden = [
@@ -33,8 +34,9 @@ class Product extends Model
         return $this->BelongsTo(Category::class);
     }
 
-    function productTrack(){
-        return $this->hasMany(TrackStockRecord::class,'product_id');
+    function productTrack()
+    {
+        return $this->hasMany(TrackStockRecord::class, 'product_id');
     }
 
     function power()
@@ -42,7 +44,8 @@ class Product extends Model
         return $this->hasOne(Power::class);
     }
 
-    function soldProducts(){
+    function soldProducts()
+    {
         return $this->hasMany(SoldProduct::class, 'product_id');
     }
 
@@ -51,15 +54,18 @@ class Product extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    function stockRecords(){
+    function stockRecords()
+    {
         return $this->hasMany(TrackStockRecord::class);
     }
 
-    function costOfGoodSold($year){
-        return $this->soldProducts->where('product_id',$this->id)->where('created_at',$year)->sum('quantity');
+    function costOfGoodSold($year)
+    {
+        return $this->soldProducts->where('product_id', $this->id)->where('created_at', $year)->sum('quantity');
     }
 
-    function fifo($date){
+    function fifo($date)
+    {
         return $this->soldProducts->where('product_id', $this->id)->where('created_at', $date)->where('type', 'rm')->sum('incoming');
     }
 }

@@ -24,11 +24,11 @@ class CloudStockAdjustmentController extends Controller
 
             $count  =   session('countSkippedImport');
 
-            if ($count > 0) {
-                return redirect()->route('manager.product')->with('successMsg', 'Importing successful skipped ' . $count . ' Duplicates');
-            } else {
-                return redirect()->route('manager.product')->with('successMsg', 'Importing successful');
-            }
+            // if ($count > 0) {
+                return redirect()->route('manager.product')->with('successMsg', 'Importing successful added ' . $count . ' New Products');
+            // } else {
+            //     // return redirect()->route('manager.product')->with('successMsg', 'Importing successful');
+            // }
         } catch (\Throwable $th) {
             return redirect()->back()->with('errorMsg', 'Oops! something Went Wrong!');
         }
