@@ -9,7 +9,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CloudStockAdjustmentController extends Controller
 {
-    function index(){
+    function index()
+    {
         return view('manager.productAdjust.import');
     }
 
@@ -25,7 +26,12 @@ class CloudStockAdjustmentController extends Controller
             $count  =   session('countSkippedImport');
 
             // if ($count > 0) {
+            if (session('errorMsg')) {
+                return redirect()->back();
+            } else {
                 return redirect()->route('manager.product')->with('successMsg', 'Importing successful added ' . $count . ' New Products');
+            }
+
             // } else {
             //     // return redirect()->route('manager.product')->with('successMsg', 'Importing successful');
             // }

@@ -97,23 +97,23 @@
 
     {{-- @livewireScripts --}}
     <!-- All Jquery -->
-    <script src="{{ asset('dashboard/assets/libs/jquery/dist/jquery.min.js')}}"></script>
+    <script src="{{ asset('dashboard/assets/libs/jquery/dist/jquery.min.js') }}"></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="{{ asset('dashboard/assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
-    <script src="{{ asset('dashboard/assets/libs/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+    <script src="{{ asset('dashboard/assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
+    <script src="{{ asset('dashboard/assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <!-- apps -->
-    <script src="{{ asset('dashboard/assets/dist/js/app.min.js')}}"></script>
-    <script src="{{ asset('dashboard/assets/dist/js/app.init.light-sidebar.js')}}"></script>
-    <script src="{{ asset('dashboard/assets/dist/js/app-style-switcher.js')}}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/app.min.js') }}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/app.init.light-sidebar.js') }}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/app-style-switcher.js') }}"></script>
     <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="{{ asset('dashboard/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')}}"></script>
-    <script src="{{ asset('dashboard/assets/extra-libs/sparkline/sparkline.js')}}"></script>
+    <script src="{{ asset('dashboard/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}"></script>
+    <script src="{{ asset('dashboard/assets/extra-libs/sparkline/sparkline.js') }}"></script>
     <!--Wave Effects -->
-    <script src="{{ asset('dashboard/assets/dist/js/waves.js')}}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/waves.js') }}"></script>
     <!--Menu sidebar -->
-    <script src="{{ asset('dashboard/assets/dist/js/sidebarmenu.js')}}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/sidebarmenu.js') }}"></script>
     <!--Custom JavaScript -->
-    <script src="{{ asset('dashboard/assets/dist/js/custom.min.js')}}"></script>
+    <script src="{{ asset('dashboard/assets/dist/js/custom.min.js') }}"></script>
     <!--This page JavaScript -->
     @stack('scripts')
 </body>

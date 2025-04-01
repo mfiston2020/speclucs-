@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-md-12 col-sm-12">
 
-                <form action="{{ route('manager.cloud.product.import.save') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('manager.cloud.product.import.save') }}" onsubmit="loader()" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card card-body">
                         <h4 class="card-title mb-3 pb-3 border-bottom">Product File - [ Patient Data Export ]</h4>
@@ -34,9 +34,10 @@
 
                         <div class="flex w-full justify-between">
 
-                            <button type="submit" class="btn btn-success rounded-pill px-4 mt-5">
+                            <button type="submit" class="btn btn-success rounded-pill px-4 mt-5" id="submitButton">
                                 Import
                             </button>
+                            <img src="{{ asset('dashboard/assets/images/loading2.gif') }}" height="30" alt="" id="laoder" class="mt-5">
                         </div>
 
                         </div>
@@ -50,5 +51,14 @@
 @endsection
 
 @push('scripts')
+
+<script>
+
+    $('#laoder').hide();
+    function loader(){
+        $('#submitButton').hide();
+        $('#laoder').show();
+    }
+</script>
 
 @endpush

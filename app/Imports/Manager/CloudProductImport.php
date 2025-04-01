@@ -45,47 +45,56 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
     public function collection(Collection $collection)
     {
+        if (count($collection->filter()->toArray()) <= 500) {
+            $data   =   $collection->filter()->toArray();
 
-        foreach ($collection as $un_filtered_data) {
-            try {
+            foreach (array_chunk($data, 100) as $un_filtered_data) {
+                try {
 
-                // BF_PREM [Bifocal Photo]
+                    // BF_PREM [Bifocal Photo]
 
-                // BF_BASIC [Bifocal Clear]
+                    // BF_BASIC [Bifocal Clear]
 
-                // anything without Coating Is HC
+                    // anything without Coating Is HC
 
-                // ANYTHING WITHOUT INDEX THE INDEX WILL BE 1.56
+                    // ANYTHING WITHOUT INDEX THE INDEX WILL BE 1.56
 
-                // BF SH CIRCLE this means its rounded 
+                    // BF SH CIRCLE this means its rounded 
 
-                // BF SH LINE is just BIFOCAL in the system
+                    // BF SH LINE is just BIFOCAL in the system
 
-                // ARC means this is HMC
+                    // ARC means this is HMC
 
 
-                if ($un_filtered_data->filter()->isNotEmpty()) {
+                    // if ($un_filtered_data->filter()->isNotEmpty()) {
 
-                    $data   =   $un_filtered_data;
+                    foreach ($un_filtered_data as $key => $dataChunk) {
+                        $data   =   $dataChunk;
 
-                    $lensInformation    =   $this->findType($data);
+                        // dd($dataChunk['frame_description']);
 
-                    if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
+                        $lensInformation    =   $this->findType($data);
 
-                        // checkin the availability of the product
-                        $this->checkLensExistance($lensInformation, 'right', $data);
-                        $this->checkLensExistance($lensInformation, 'left', $data);
+                        if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
+
+                            // checkin the availability of the product
+                            $this->checkLensExistance($lensInformation, 'right', $data);
+                            $this->checkLensExistance($lensInformation, 'left', $data);
+                        }
+
+                        if ($dataChunk['frame_description']) {
+                            $this->checkFrameExistance($data);
+                        }
                     }
-
-                    if ($un_filtered_data['frame_description']) {
-                        $this->checkFrameExistance($data);
-                    }
+                    // }
+                } catch (\Throwable $th) {
+                    dd($th);
                 }
-            } catch (\Throwable $th) {
-                dd($th);
             }
+            session()->flash('countSkippedImport', $this->count);
+        }else{
+            session()->flash('errorMsg','The excel sheet contains more than 500 records please reduce them to less or equal to 500 records!');
         }
-        session()->flash('countSkippedImport', $this->count);
     }
 
     function findType($product)
@@ -255,7 +264,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
         if (is_null($product)) {
             try {
-                $product    =   Product::create([
+                $product    =   Product::insertGetId([
                     'category_id'   =>  $this->category,
                     'location'      =>  $data['location'] ?? null,
                     'product_name'  =>  $info['type']->name,
@@ -270,10 +279,14 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'fitting_cost'  =>  '0',
                     'company_id'    =>  auth()->user()->company_id,
                     'deffective_stock' =>  '0',
+                    'created_at'    =>  now()->toDateTimeString(),
+                    'updated_at'    =>  now()->toDateTimeString(),
                 ]);
 
-                Power::create([
-                    'product_id'    =>  $product->id,
+                // dd($product);
+
+                Power::insert([
+                    'product_id'    =>  $product,
                     'type_id'       =>  $info['type']->id,
                     'index_id'      =>  $info['index']->id,
                     'chromatics_id' =>  $info['chromatic_aspect']->id,
@@ -284,9 +297,12 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'add'           =>  initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_add']) : format_values($data['os_add'])) : null,
                     'eye'           =>  initials($info['type']->name) == 'SV' ? 'any' : $eye,
                     'company_id'    =>  auth()->user()->company_id,
+                    // 'created_at'    =>  now()->toDateTimeString(),
+                    // 'updated_at'    =>  now()->toDateTimeString(),
                 ]);
-                $this->stocktrackRepo->saveTrackRecord($product->id, 0, 1, 1, 'initial', 'rm', 'in');
-                $this->stocktrackRepo->saveTrackRecord($product->id, 0, 1, 1, 'initial', 'rm', 'out');
+                $this->count += 1;
+                $this->stocktrackRepo->saveTrackRecord($product, 0, 1, 1, 'initial', 'rm', 'in');
+                $this->stocktrackRepo->saveTrackRecord($product, 0, 1, 1, 'initial', 'rm', 'out');
             } catch (\Throwable $th) {
                 dd($th);
             }
@@ -304,9 +320,8 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 ->first();
 
             if (!is_null($product_)) {
-                $this->count += 1;
-                // $this->stocktrackRepo->saveTrackRecord($product_->id, 0, 1, 1, 'initial', 'rm', 'in');
-                // $this->stocktrackRepo->saveTrackRecord($product_->id, 0, 1, 1, 'initial', 'rm', 'out');
+                $this->stocktrackRepo->saveTrackRecord($product_->product_id, 0, 1, 1, 'initial', 'rm', 'in');
+                $this->stocktrackRepo->saveTrackRecord($product_->product_id, 0, 1, 1, 'initial', 'rm', 'out');
             }
         }
     }
@@ -314,10 +329,10 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
     function checkFrameExistance($name)
     {
         $cleanName  =   cleanString($name['frame_description']);
-        $frame  =   Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->first();
-        // dd($frame);
+        $frame      =   Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->first();
+
         if (is_null($frame)) {
-            $product    =   Product::create([
+            $product    =   Product::insertGetId([
                 'cost'              =>  '0',
                 'stock'             =>  '1',
                 'price'             =>  '0',
@@ -329,18 +344,19 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 'product_name'      =>  $name['frame_sku'],
                 'slug_name'         =>  $cleanName,
                 'deffective_stock'  =>  '0',
+                // 'created_at'    =>  now()->toDateTimeString(),
+                // 'updated_at'    =>  now()->toDateTimeString(),
             ]);
             $this->count += 1;
-            $this->stocktrackRepo->saveTrackRecord($product->id, 0, 1, 1, 'initial', 'rm', 'in');
-            $this->stocktrackRepo->saveTrackRecord($product->id, 0, 1, 1, 'initial', 'rm', 'out');
+            $this->stocktrackRepo->saveTrackRecord($product, 0, 1, 1, 'initial', 'rm', 'in');
+            $this->stocktrackRepo->saveTrackRecord($product, 0, 1, 1, 'initial', 'rm', 'out');
 
             // dd($product);
         } else {
             if (!is_null($frame  =   Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->first())) {
                 # code...
-                $this->count += 1;
-                // $this->stocktrackRepo->saveTrackRecord($frame->id, 0, 1, 1, 'initial', 'rm', 'in');
-                // $this->stocktrackRepo->saveTrackRecord($frame->id, 0, 1, 1, 'initial', 'rm', 'out');
+                $this->stocktrackRepo->saveTrackRecord($frame->id, 0, 1, 1, 'initial', 'rm', 'in');
+                $this->stocktrackRepo->saveTrackRecord($frame->id, 0, 1, 1, 'initial', 'rm', 'out');
             }
         }
     }
