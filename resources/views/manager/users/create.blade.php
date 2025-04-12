@@ -57,6 +57,7 @@
                                     name="permission" id="permission" required>
                                     <option value="">Select</option>
 
+                                    <option value="manager" {{(old('permission')=='manager')?'selected':''}}> Manager </option>
                                     <option value="accountant" {{(old('permission')=='accountant')?'selected':''}}> Accountant </option>
                                     <option value="doctor" {{(old('permission')=='doctor')?'selected':''}}> Ophthalmologist</option>
                                     <option value="lab" {{(old('permission')=='lab')?'selected':''}}> Lab Technician </option>

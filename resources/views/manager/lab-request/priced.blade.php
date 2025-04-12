@@ -273,7 +273,7 @@
                                                                                                 @if ($request->hospital_name!=null)
                                                                                                     [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                                                 @else
-                                                                                                    {{$request->client_name}}
+                                                                                                    {{$request->client_name.' - '.$request->phone}}
                                                                                                 @endif
                                                                                             @endif
                                                                                         </h4>
@@ -761,7 +761,7 @@
                                                                                                 @if ($request->hospital_name!=null)
                                                                                                     [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                                                 @else
-                                                                                                    {{$request->client_name}}
+                                                                                                    {{$request->client_name.' - '.$request->phone}}
                                                                                                 @endif
                                                                                             @endif
                                                                                         </h4>

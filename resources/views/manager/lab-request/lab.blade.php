@@ -144,7 +144,7 @@
                                                                     <div class="modal-header">
                                                                         <div>
                                                                             <h4 class="modal-title text-info">
-                                                                                {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                                                {{ $request->client_id != null ? $request->client->name : $request->client_name .' - '.$request->phone }}
                                                                             </h4>
                                                                             <br>
 
@@ -744,7 +744,7 @@
                                                                 <div class="modal-header">
                                                                     <div>
                                                                         <h4 class="modal-title text-info">
-                                                                            {{ $request->client_id != null ? $request->client->name : $request->client_name }}
+                                                                            {{ $request->client_id != null ? $request->client->name : $request->client_name.' - '.$request->phone }}
                                                                         </h4>
                                                                         <br>
 

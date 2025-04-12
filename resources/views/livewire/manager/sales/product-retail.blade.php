@@ -53,14 +53,6 @@
                                 </div>
                             </div>
 
-                            <!--/span-->
-                            {{-- <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Hospital Name</label>
-                                    <input type="text" wire:model.blur="hospital_name" class="form-control">
-                                </div>
-                            </div> --}}
-
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Hospital Name</label>
@@ -84,7 +76,7 @@
                                     <select class="form-control @error('insurance_type') is-invalid @enderror custom-select"
                                         wire:model.blur='insurance_type' required>
                                         <option value="">** Select Type **</option>
-                                        <option value="private" selected>private</option>
+                                        <option value="private" selected="selected">private</option>
                                         @if (count($insuranceList) > 0)
 
                                             @foreach ($insuranceList as $insurance)
@@ -177,7 +169,7 @@
                                 <select style="width: 100%; height:2rem;"  class="form-control @error('insurance_type') is-invalid @enderror custom-select"
                                     wire:model.blur='insurance_type' required>
                                     <option value="">** Select Type **</option>
-                                    <option value="private">private</option>
+                                    <option value="private" selected>private</option>
                                     @if (count($insuranceList) > 0)
 
                                         @foreach ($insuranceList as $insurance)
@@ -723,6 +715,24 @@
                                 </div>
                             </div> --}}
                         </div>
+                            @if (!is_null($accessory))
+                                <hr>
+                                <div class="row">
+                                    <!--/span-->
+
+                                    <div class="form-group col-2">
+                                        <label>Stock Booked</label>
+                                        <h5 class="text-primary">{{number_format($ordered_acc)}}</h5>
+                                    </div>
+
+                                    <div class="form-group col-3">
+                                        <label>Stock Available for orders</label>
+                                        <h5 class="text-primary">
+                                            {{(int)$accessory_stock-(int)$ordered_acc}}
+                                        </h5>
+                                    </div>
+                                </div>
+                            @endif
 
 
                         <div class="row d-flex justify-content-center items-center mt-4">

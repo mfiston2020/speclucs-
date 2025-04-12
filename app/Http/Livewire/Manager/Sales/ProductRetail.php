@@ -67,7 +67,7 @@ class ProductRetail extends Component
     public $insurance_percentage_lens, $insurance_payment_lens, $insurance_approved_lens, $patient_payment_lens, $insurance_type;
 
     // frame variables for insurance calculations ======
-    public $insurance_percentage_frame, $insurance_payment_frame, $insurance_approved_frame, $patient_payment_frame, $ordered_frames;
+    public $insurance_percentage_frame, $insurance_payment_frame, $insurance_approved_frame, $patient_payment_frame, $ordered_frames, $ordered_acc;
 
     public $invoiceStatus   =   'requested';
 
@@ -128,10 +128,9 @@ class ProductRetail extends Component
 
         $frameResult = $repo->searchProduct($data);
 
-        $invoiceStock   =   Invoice::where('status', 'requested')->where('company_id', userInfo()->company_id)->whereRelation('soldproduct', 'product_id', $frameResult->id)->withSum('soldproduct', 'quantity')->get();
+        $invoiceStock   =   Invoice::whereIn('status', ['requested', 'Confirmed'])->where('company_id', userInfo()->company_id)->whereRelation('soldproduct', 'product_id', $frameResult->id)->withSum('soldproduct', 'quantity')->get();
 
-
-        $this->ordered_frames   =   $invoiceStock->sum('soldproduct_sum_quantity');
+        $this->ordered_frames   =   count($invoiceStock);
         // dd($invoiceStock->sum('soldproduct_sum_quantity'));
 
         $this->frameInfo    =   $frameResult;
@@ -161,6 +160,11 @@ class ProductRetail extends Component
         $repo   =   new ProductRepo();
 
         $accResult = $repo->searchProduct($data);
+
+        $invoiceStock   =   Invoice::whereIn('status', ['requested', 'Confirmed'])->where('company_id', userInfo()->company_id)->whereRelation('soldproduct', 'product_id', $accResult->id)->withSum('soldproduct', 'quantity')->get();
+
+        $this->ordered_acc   =   count($invoiceStock);
+
         $this->accessoryInfo    =   $accResult;
 
         if ($accResult) {

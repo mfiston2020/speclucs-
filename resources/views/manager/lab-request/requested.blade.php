@@ -111,7 +111,7 @@
                                                                             @if ($request->hospital_name!=null)
                                                                             [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                             @else
-                                                                                {{$request->client_name}}
+                                                                                {{$request->client_name.' - '.$request->phone}}
                                                                             @endif
                                                                         @endif
                                                                         {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
@@ -238,7 +238,7 @@
                                                                                                         <span>{{ $product->product->power->sphere }}
                                                                                                             /
                                                                                                             {{ $product->product->power->cylinder }}
-                                                                                                            <span class="text-primary">*{{ $product->axis }}</span>
+                                                                                                            <span class="text-primary">*{{ round($product->product?->power?->axis) }}</span>
                                                                                                             @if (initials($product->product->product_name) != 'SV')
                                                                                                                 {{ $product->product->power->add }}
                                                                                                             @endif
@@ -528,7 +528,7 @@
                                                                                                 @if ($request->hospital_name!=null)
                                                                                                     [{{$request->cloud_id}}] {{$request->hospital_name}}
                                                                                                 @else
-                                                                                                    {{$request->client_name}}
+                                                                                                    {{$request->client_name.' - '.$request->phone}}
                                                                                                 @endif
                                                                                             @endif
                                                                                             {{-- {{ $request->client_id != null ? $request->client->name : $request->client_name }} --}}
@@ -604,8 +604,8 @@
                                                                                                     <div class="col-2">
                                                                                                             <span>{{ $product->product->power->sphere }}
                                                                                                                 /
-                                                                                                                {{ $product->product->power->cylinder }}
-                                                                                                                <span class="text-primary">*{{ $product->axis }}</span>
+                                                                                                                {{ $product->product->power->cylinder }}hjkkolp[]
+                                                                                                                <span class="text-primary">*{{ round($product->product?->power?->axis) }}</span>
                                                                                                                 @if ($product?->product_name)
                                                                                                                     @if (initials($product->product_name) != 'SV')
                                                                                                                         {{ $product->product->power->add }}

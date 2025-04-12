@@ -95,7 +95,7 @@ class ReceiptsController extends Controller
     {
         $this->validate($request, [
             'product' => 'required',
-            'stock' => 'required | integer',
+            'stock' => 'required | numeric',
         ]);
 
         $id   =   0;
@@ -123,7 +123,6 @@ class ReceiptsController extends Controller
                 $products->save();
                 return redirect()->route('manager.receipt.detail', Crypt::encrypt($request->receipt_id))->with('successMsg', 'Product has been successfully Added!');
             } catch (\Throwable $th) {
-                //throw $th;
                 return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
             }
         } else {
@@ -150,7 +149,7 @@ class ReceiptsController extends Controller
     public function saveDetail(Request $request, $id)
     {
         $this->validate($request, [
-            'stock' => 'required | integer',
+            'stock' => 'required | numeric',
         ]);
 
         $product    =   ReceivedProduct::find(Crypt::decrypt($id));
@@ -251,9 +250,9 @@ class ReceiptsController extends Controller
                 'sphere' => 'required',
                 'cylinder' => 'required',
                 // ======================
-                'lens_stock' => 'required | integer',
-                'lens_price' => 'required | integer',
-                'lens_cost' => 'required | integer',
+                'lens_stock' => 'required | numeric',
+                'lens_price' => 'required | numeric',
+                'lens_cost' => 'required | numeric',
             ]);
             $description    =   initials($lens_type->name) . " " . $indx->name . " " . $chro->name . " " . $coat->name;
 
@@ -347,9 +346,9 @@ class ReceiptsController extends Controller
                 'add' => 'required',
                 'eye' => 'required',
                 // ======================
-                'lens_stock' => 'required | integer',
-                'lens_price' => 'required | integer',
-                'lens_cost' => 'required | integer',
+                'lens_stock' => 'required | numeric',
+                'lens_price' => 'required | numeric',
+                'lens_cost' => 'required | numeric',
             ]);
             $description    =   initials($lens_type->name) . " " . $indx->name . " " . $chro->name . " " . $coat->name;
 

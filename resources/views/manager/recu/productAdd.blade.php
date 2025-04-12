@@ -330,23 +330,6 @@
                     @csrf
                     <div class="card-body">
 
-                        {{-- <input type="hidden" name="receipt_id" value="{{$id}}">
-                    <div class="form-group row">
-                        <label for="pname" class="col-sm-3 text-right control-label col-form-label">Product</label>
-                        <div class="col-sm-9">
-                            <select class="select2 form-control custom-select" style="width: 100%; height:36px;"
-                                name="product" id="product" required>
-                                <option value="">Select</option>
-                                @foreach ($products as $product)
-                                <option value="{{$product->id}}" {{(old('product')==$product->id)?'selected':''}}>
-                                    {{$product->product_name}} - {{$product->description}}
-                                </option>
-                                @endforeach
-
-                            </select>
-                        </div>
-                    </div> --}}
-
                         <input type="hidden" name="receipt_id" value="{{ $id }}">
                         <input type="hidden" name="category" id="category_">
 
@@ -372,24 +355,21 @@
                         <div class="form-group row">
                             <label class="col-sm-3 text-right control-label col-form-label">price</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="lens_price"
-                                    value="{{ old('lens_price') }}" required>
+                                <input type="text" class="form-control" name="lens_price" value="{{ old('lens_price') }}" required>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="cost" class="col-sm-3 text-right control-label col-form-label">Cost</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="lens_cost"
-                                    value="{{ old('lens_cost') }}" required>
+                                <input type="text" class="form-control" name="lens_cost" value="{{ old('lens_cost') }}" required>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="cost" class="col-sm-3 text-right control-label col-form-label">Location</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="location"
-                                    value="{{ old('location') }}" required>
+                                <input type="text" class="form-control" name="location" value="{{ old('location') }}" required>
                             </div>
                         </div>
                     </div>

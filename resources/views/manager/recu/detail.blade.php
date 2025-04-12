@@ -68,7 +68,7 @@
                                             @if (initials($prod->product_name)=='SV')
                                                 <span>{{$power->sphere}} / {{$power->cylinder}}</span>
                                             @else
-                                                <span>{{$power->sphere}} / {{$power->sphere}} *{{$power->axis}}  {{$power->add}}</span>
+                                                <span>{{$power->sphere}} / {{ $power->cylinder }} *{{$power->axis}}  {{$power->add}}</span>
                                             @endif
                                         @else
                                             <span>
