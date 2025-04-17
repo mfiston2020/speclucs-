@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
+class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows, WithBatchInserts
 {
     /**
      * @param Collection $collection
@@ -42,13 +43,12 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
         $this->chromatics   =   PhotoChromatics::select(['id', 'name'])->get();
     }
 
-
     public function collection(Collection $collection)
     {
-        if (count($collection->filter()->toArray()) <= 500) {
-            $data   =   $collection->filter()->toArray();
+        // if (count($collection->filter()->toArray()) >= 500) {
+            // $data   =   $collection->filter()->toArray();
 
-            foreach (array_chunk($data, 100) as $un_filtered_data) {
+            // foreach (array_chunk($data, 100) as $un_filtered_data) {
                 try {
 
                     // BF_PREM [Bifocal Photo]
@@ -59,42 +59,42 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
                     // ANYTHING WITHOUT INDEX THE INDEX WILL BE 1.56
 
-                    // BF SH CIRCLE this means its rounded 
+                    // BF SH CIRCLE this means its rounded
 
                     // BF SH LINE is just BIFOCAL in the system
 
                     // ARC means this is HMC
 
 
-                    // if ($un_filtered_data->filter()->isNotEmpty()) {
+                    foreach ($collection as $dataChunk) {
+                        if ($dataChunk->filter()->isNotEmpty()) {
 
-                    foreach ($un_filtered_data as $key => $dataChunk) {
-                        $data   =   $dataChunk;
+                            $data   =   $dataChunk;
 
-                        // dd($dataChunk['frame_description']);
+                            // dd($dataChunk['frame_description']);
 
-                        $lensInformation    =   $this->findType($data);
+                            $lensInformation    =   $this->findType($data);
 
-                        if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
+                            if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
 
-                            // checkin the availability of the product
-                            $this->checkLensExistance($lensInformation, 'right', $data);
-                            $this->checkLensExistance($lensInformation, 'left', $data);
-                        }
+                                // checkin the availability of the product
+                                $this->checkLensExistance($lensInformation, 'right', $data);
+                                $this->checkLensExistance($lensInformation, 'left', $data);
+                            }
 
-                        if ($dataChunk['frame_description']) {
-                            $this->checkFrameExistance($data);
+                            // if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                            //     $this->checkFrameExistance($data);
+                            // }
                         }
                     }
-                    // }
                 } catch (\Throwable $th) {
                     dd($th);
                 }
-            }
+            // }
             session()->flash('countSkippedImport', $this->count);
-        }else{
-            session()->flash('errorMsg','The excel sheet contains more than 500 records please reduce them to less or equal to 500 records!');
-        }
+        // } else {
+        //     session()->flash('errorMsg', 'The excel sheet!');
+        // }
     }
 
     function findType($product)
@@ -273,7 +273,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                         . ucfirst($info['chromatic_aspect']->name) . " "
                         . strtoupper($info['coating']->name),
 
-                    'stock'         =>  1,
+                    'stock'         =>  0,
                     'price'         =>  '0',
                     'cost'          =>  '1',
                     'fitting_cost'  =>  '0',
@@ -331,10 +331,12 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
         $cleanName  =   cleanString($name['frame_description']);
         $frame      =   Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->first();
 
+
         if (is_null($frame)) {
-            $product    =   Product::insertGetId([
+
+            $product    =   Product::create([
                 'cost'              =>  '0',
-                'stock'             =>  '1',
+                'stock'             =>  '0',
                 'price'             =>  '0',
                 'location'          =>  '-',
                 'company_id'        =>  Auth::user()->company_id,
@@ -347,11 +349,11 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 // 'created_at'    =>  now()->toDateTimeString(),
                 // 'updated_at'    =>  now()->toDateTimeString(),
             ]);
-            $this->count += 1;
-            $this->stocktrackRepo->saveTrackRecord($product, 0, 1, 1, 'initial', 'rm', 'in');
-            $this->stocktrackRepo->saveTrackRecord($product, 0, 1, 1, 'initial', 'rm', 'out');
 
-            // dd($product);
+
+            $this->count += 1;
+            $this->stocktrackRepo->saveTrackRecord($product->id, 0, 1, 1, 'initial', 'rm', 'in');
+            $this->stocktrackRepo->saveTrackRecord($product->id, 0, 1, 1, 'initial', 'rm', 'out');
         } else {
             if (!is_null($frame  =   Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->first())) {
                 # code...
@@ -359,5 +361,9 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 $this->stocktrackRepo->saveTrackRecord($frame->id, 0, 1, 1, 'initial', 'rm', 'out');
             }
         }
+    }
+
+    public function batchSize(): int{
+        return 50;
     }
 }

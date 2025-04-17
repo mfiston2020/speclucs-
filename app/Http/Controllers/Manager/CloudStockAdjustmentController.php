@@ -22,6 +22,7 @@ class CloudStockAdjustmentController extends Controller
 
         try {
             Excel::import(new CloudProductImport(), $request->excelFile);
+            // Excel::queueImport(new CloudProductImport(), $request->excelFile);
 
             $count  =   session('countSkippedImport');
 
@@ -31,12 +32,8 @@ class CloudStockAdjustmentController extends Controller
             } else {
                 return redirect()->route('manager.product')->with('successMsg', 'Importing successful added ' . $count . ' New Products');
             }
-
-            // } else {
-            //     // return redirect()->route('manager.product')->with('successMsg', 'Importing successful');
-            // }
         } catch (\Throwable $th) {
-            return redirect()->back()->with('errorMsg', 'Oops! something Went Wrong!');
+            return redirect()->back()->with('errorMsg', 'Oops! something Went Wrong!'.$th);
         }
     }
 }

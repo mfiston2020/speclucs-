@@ -33,10 +33,6 @@ class StockHistory extends Component
         'lens_type'=>'required_if:category,1'
     ];
 
-    // function loadMore(){
-    //     $this->searchInformation();
-    // }
-
     function updatedCategory(){
         if ($this->category=='1') {
             $this->types    =   LensType::get();
@@ -54,6 +50,7 @@ class StockHistory extends Component
         if ($this->start_date > $this->end_date) {
             dd('operation not allowed!');
         } else {
+
             $datecount  =   0;
             $carbonDate =   Carbon::create($this->start_date);
             $dateDiff   =   $carbonDate->diffInDays($this->end_date);
@@ -88,13 +85,14 @@ class StockHistory extends Component
                                         ->get();
             }
 
+            // dd($this->products);
+
             if (count($this->products) <= 0) {
                 $this->searchFoundSomething = 'no';
             } else {
                 $this->searchFoundSomething = 'yes';
             }
         }
-        // dd($this->products[0]->category);
 
         $this->result   =   true;
     }
@@ -105,7 +103,6 @@ class StockHistory extends Component
     }
 
     public function render(){
-        // $this->searchInformation();
         $this->categories   =   Category::get();
         return view('livewire.manager.report.stock-history')->layout('livewire.livewire-slot');
     }

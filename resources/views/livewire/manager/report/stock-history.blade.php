@@ -119,8 +119,7 @@
 
                                 <tr>
                                     <td>{{ $product->id }}</td>
-                                    <td>{{ $product->category->name }}
-                                    </td>
+                                    <td>{{ $product->category->name }}</td> 
                                     <td>{{ $product->product_name }}</td>
 
                                     <td>{{ lensDescription($product->description) }}</td>
@@ -136,8 +135,8 @@
                                             <span>-</span>
                                         @endif
                                     </td>
-                                    <td>{{ format_money($product->price) }}</td>
-                                    <td>{{ format_money($product->cost) }}</td>
+                                    <td>{{ number_format($product->price) }} RWF</td>
+                                    <td>{{ ($product->cost) }} RWF</td>
 
                                     <td>
                                         <a href="#!" class="update" data-name="stock" data-type="text"
