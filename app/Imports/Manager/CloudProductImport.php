@@ -2,7 +2,7 @@
 
 namespace App\Imports\Manager;
 
-use App\Models\Category;
+use App\Models\CloudProductTransaction;
 use App\Models\LensType;
 use App\Models\PhotoChromatics;
 use App\Models\PhotoCoating;
@@ -15,10 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows, WithBatchInserts
+class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 {
     /**
      * @param Collection $collection
@@ -49,52 +48,47 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             // $data   =   $collection->filter()->toArray();
 
             // foreach (array_chunk($data, 100) as $un_filtered_data) {
-                try {
+        try {
 
-                    // BF_PREM [Bifocal Photo]
+            // BF_PREM [Bifocal Photo]
 
-                    // BF_BASIC [Bifocal Clear]
+            // BF_BASIC [Bifocal Clear]
 
-                    // anything without Coating Is HC
+            // anything without Coating Is HC
 
-                    // ANYTHING WITHOUT INDEX THE INDEX WILL BE 1.56
+            // ANYTHING WITHOUT INDEX THE INDEX WILL BE 1.56
 
-                    // BF SH CIRCLE this means its rounded
+            // BF SH CIRCLE this means its rounded
 
-                    // BF SH LINE is just BIFOCAL in the system
+            // BF SH LINE is just BIFOCAL in the system
 
-                    // ARC means this is HMC
+            // ARC means this is HMC
 
 
-                    foreach ($collection as $dataChunk) {
-                        if ($dataChunk->filter()->isNotEmpty()) {
+            foreach ($collection as $dataChunk) {
+                if ($dataChunk->filter()->isNotEmpty()) {
 
-                            $data   =   $dataChunk;
+                    if (!is_null($dataChunk['lens']) && !is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                        $data   =   $dataChunk;
 
-                            // dd($dataChunk['frame_description']);
+                        $lensInformation    =   $this->findType($data);
 
-                            $lensInformation    =   $this->findType($data);
+                        if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
 
-                            if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
+                            $this->checkLensExistance($lensInformation, 'right', $data);
+                            $this->checkLensExistance($lensInformation, 'left', $data);
+                        }
 
-                                // checkin the availability of the product
-                                $this->checkLensExistance($lensInformation, 'right', $data);
-                                $this->checkLensExistance($lensInformation, 'left', $data);
-                            }
-
-                            // if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
-                            //     $this->checkFrameExistance($data);
-                            // }
+                        if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                            $this->checkFrameExistance($data);
                         }
                     }
-                } catch (\Throwable $th) {
-                    dd($th);
                 }
-            // }
-            session()->flash('countSkippedImport', $this->count);
-        // } else {
-        //     session()->flash('errorMsg', 'The excel sheet!');
-        // }
+            }
+        } catch (\Throwable $th) {
+            dd($th);
+        }
+        session()->flash('countSkippedImport', $this->count);
     }
 
     function findType($product)
@@ -258,7 +252,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             ->where('add', initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_add'] ?? null) : format_values($data['os_add'] ?? null)) : null)
             ->where('eye', initials($info['type']->name) == 'SV' ? 'any' : $eye)
             ->where('company_id', auth()->user()->company_id)
-            ->first();
+            ->pluck('product_id')->first();
 
         // =====================================================================
 
@@ -275,12 +269,13 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
                     'stock'         =>  0,
                     'price'         =>  '0',
-                    'cost'          =>  '1',
+                    'cost'          =>  '0',
                     'fitting_cost'  =>  '0',
                     'company_id'    =>  auth()->user()->company_id,
                     'deffective_stock' =>  '0',
                     'created_at'    =>  now()->toDateTimeString(),
                     'updated_at'    =>  now()->toDateTimeString(),
+                    // 'transaction_id'    =>  $data['transaction_id']
                 ]);
 
                 // dd($product);
@@ -297,31 +292,24 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'add'           =>  initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_add']) : format_values($data['os_add'])) : null,
                     'eye'           =>  initials($info['type']->name) == 'SV' ? 'any' : $eye,
                     'company_id'    =>  auth()->user()->company_id,
-                    // 'created_at'    =>  now()->toDateTimeString(),
-                    // 'updated_at'    =>  now()->toDateTimeString(),
+                    'created_at'    =>  now()->toDateTimeString(),
+                    'updated_at'    =>  now()->toDateTimeString(),
+                ]);
+
+                CloudProductTransaction::create([
+                    'product_id'=>$product,
+                    'transaction_id'=>$data['transaction_id']
                 ]);
                 $this->count += 1;
-                $this->stocktrackRepo->saveTrackRecord($product, 0, 1, 1, 'initial', 'rm', 'in');
-                $this->stocktrackRepo->saveTrackRecord($product, 0, 1, 1, 'initial', 'rm', 'out');
             } catch (\Throwable $th) {
                 dd($th);
             }
         } else {
-            $product_ =   Power::where('type_id', $info['type']->id)
-                ->where('index_id', $info['index']->id)
-                ->where('chromatics_id', $info['chromatic_aspect']->id)
-                ->where('coating_id', $info['coating']->id)
-                ->where('sphere', $eye == 'right' ? format_values($data['od_sphere'] ?? 0) : format_values($data['os_sphere'] ?? 0))
-                ->where('cylinder', $eye == 'right' ? format_values($data['od_cylinder'] ?? 0) : format_values($data['os_cylinder'] ?? 0))
-                ->where('axis', initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_axis'] ?? 0) : format_values($data['os_axis'] ?? 0)) : 0)
-                ->where('add', initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_add'] ?? null) : format_values($data['os_add'] ?? null)) : null)
-                ->where('eye', initials($info['type']->name) == 'SV' ? 'any' : $eye)
-                ->where('company_id', auth()->user()->company_id)
-                ->first();
-
-            if (!is_null($product_)) {
-                $this->stocktrackRepo->saveTrackRecord($product_->product_id, 0, 1, 1, 'initial', 'rm', 'in');
-                $this->stocktrackRepo->saveTrackRecord($product_->product_id, 0, 1, 1, 'initial', 'rm', 'out');
+            if (!is_null($product)) {
+                CloudProductTransaction::create([
+                    'product_id'=>$product,
+                    'transaction_id'=>$data['transaction_id']
+                ]);
             }
         }
     }
@@ -331,10 +319,9 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
         $cleanName  =   cleanString($name['frame_description']);
         $frame      =   Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->first();
 
-
         if (is_null($frame)) {
 
-            $product    =   Product::create([
+            $product    =   Product::insertGetId([
                 'cost'              =>  '0',
                 'stock'             =>  '0',
                 'price'             =>  '0',
@@ -346,24 +333,24 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 'product_name'      =>  $name['frame_sku'],
                 'slug_name'         =>  $cleanName,
                 'deffective_stock'  =>  '0',
-                // 'created_at'    =>  now()->toDateTimeString(),
-                // 'updated_at'    =>  now()->toDateTimeString(),
+                'created_at'    =>  now()->toDateTimeString(),
+                'updated_at'    =>  now()->toDateTimeString(),
             ]);
 
+            CloudProductTransaction::create([
+                'product_id'=>$product,
+                'transaction_id'=>$name['transaction_id']
+            ]);
 
             $this->count += 1;
-            $this->stocktrackRepo->saveTrackRecord($product->id, 0, 1, 1, 'initial', 'rm', 'in');
-            $this->stocktrackRepo->saveTrackRecord($product->id, 0, 1, 1, 'initial', 'rm', 'out');
         } else {
-            if (!is_null($frame  =   Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->first())) {
-                # code...
-                $this->stocktrackRepo->saveTrackRecord($frame->id, 0, 1, 1, 'initial', 'rm', 'in');
-                $this->stocktrackRepo->saveTrackRecord($frame->id, 0, 1, 1, 'initial', 'rm', 'out');
-            }
+                CloudProductTransaction::create([
+                    'product_id'=>$frame->id,
+                    'transaction_id'=>$name['transaction_id']
+                ]);
+            // Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->update([
+            //     'transaction_id'=>$name['transaction_id']
+            // ]);
         }
-    }
-
-    public function batchSize(): int{
-        return 50;
     }
 }

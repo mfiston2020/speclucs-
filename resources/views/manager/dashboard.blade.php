@@ -214,20 +214,20 @@
                                 </h2>
                                 {{-- <span class="ml-auto">Users per minute</span> --}}
                             </div>
-                            <div class="m-t-20 m-b-30 text-center">
+                            {{-- <div class="m-t-20 m-b-30 text-center">
                                 <div id="active-users"></div>
                             </div>
                             <h5>{{__('manager/dashboard.top_expense')}}</h5>
                             <ul class="list-group list-group-flush">
                                 @foreach ($expenses as $item)
-                                <li class="list-group-item d-flex justify-content-between align-items-center justify-content-between">
-                                    {{$item->title}}
-                                    <span
-                                        class="badge badge-light badge-pill">{{
-                                            format_money($item->amount)}}</span>
-                                </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center justify-content-between">
+                                        {{-- {{$item->title}} --}
+                                        <span class="badge badge-light badge-pill">
+                                            {{ format_money(0)}}
+                                        </span>
+                                    </li>
                                 @endforeach
-                            </ul>
+                            </ul> --}}
                         </div>
                     </div>
                 </div>

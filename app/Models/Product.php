@@ -23,6 +23,7 @@ class Product extends Model
         'product_name',
         'deffective_stock',
         'slug_name',
+        'transaction_id',
     ];
 
     // protected $hidden = [

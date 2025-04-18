@@ -3,10 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Invoice;
-use App\Models\UnavailableProduct;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,33 +31,17 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             \URL::forceScheme('https');
         }
+        Model::automaticallyEagerLoadRelationships();
 
         view()->composer('manager.includes.layouts.header', function ($view) {
-            // $count_notification     =   count(\App\Models\SupplierNotify::where('supplier_id', Auth::user()->company_id)->where('status', '0')->get());
-            // $notifications           =   \App\Models\SupplierNotify::where('supplier_id', Auth::user()->company_id)->where('status', '0')->orderBy('created_at', 'desc')->get();
 
             $ordersCount            =   Invoice::where('company_id',userInfo()->company_id)->select('status')->get();
             $ordersCountOutside     =   Invoice::where('supplier_id',userInfo()->company_id)->where('status','<>','canceled')->select('status')->get();
 
             $requested  =   Invoice::where('company_id', userInfo()->company_id)->whereDoesntHave('unavailableProducts')->where('status','requested')->count() + Invoice::where('supplier_id', userInfo()->company_id)->where('status','requested')->whereDoesntHave('unavailableProducts')->count();
 
-            // dd(Invoice::where('supplier_id', userInfo()->company_id)
-            //                                 ->whereIn('status',['Confirm','priced'])
-            //                                 ->without('soldproduct')
-            //                                 ->with('unavailableProducts',function($query){
-            //                                     $query->with('product',function($q){
-            //                                         $q->with(['power','category']);
-            //                                     });
-            //                                 })
-            //                                 ->orderBy('created_at','desc')
-            //                                 ->count());
 
-            // $pendingProducts    =   UnavailableProduct::where('company_id',userInfo()->company_id)->where('status','pending')->count();
-
-            $view
-            // ->with('count_notification', $count_notification)
-            //     ->with('notifications', $notifications)
-                ->with('from_out',$ordersCountOutside->count())
+            $view->with('from_out',$ordersCountOutside->count())
                 ->with('orderCount',$ordersCount->count())
                 ->with('booking',$ordersCount->where('status','booked')->count() + $ordersCountOutside->where('status','booked')->count())
                 ->with('requested',$requested)
@@ -73,7 +55,6 @@ class AppServiceProvider extends ServiceProvider
                 ->with('completed',$ordersCount->where('status','completed')->count()+$ordersCountOutside->where('status','completed')->count())
                 ->with('delivered',$ordersCount->where('status','delivered')->count()+$ordersCountOutside->where('status','delivered')->count())
                 ;
-                // ->with('pending_product_on_invoice',$pendingProducts);
         });
     }
 }
