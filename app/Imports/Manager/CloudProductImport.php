@@ -44,51 +44,53 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
     public function collection(Collection $collection)
     {
-        // if (count($collection->filter()->toArray()) >= 500) {
+        if (count($collection->filter()->toArray()) <= 1450) {
             // $data   =   $collection->filter()->toArray();
 
-            // foreach (array_chunk($data, 100) as $un_filtered_data) {
-        try {
+                // foreach (array_chunk($data, 100) as $un_filtered_data) {
+            try {
 
-            // BF_PREM [Bifocal Photo]
+                // BF_PREM [Bifocal Photo]
 
-            // BF_BASIC [Bifocal Clear]
+                // BF_BASIC [Bifocal Clear]
 
-            // anything without Coating Is HC
+                // anything without Coating Is HC
 
-            // ANYTHING WITHOUT INDEX THE INDEX WILL BE 1.56
+                // ANYTHING WITHOUT INDEX THE INDEX WILL BE 1.56
 
-            // BF SH CIRCLE this means its rounded
+                // BF SH CIRCLE this means its rounded
 
-            // BF SH LINE is just BIFOCAL in the system
+                // BF SH LINE is just BIFOCAL in the system
 
-            // ARC means this is HMC
+                // ARC means this is HMC
 
 
-            foreach ($collection as $dataChunk) {
-                if ($dataChunk->filter()->isNotEmpty()) {
+                foreach ($collection as $dataChunk) {
+                    if ($dataChunk->filter()->isNotEmpty()) {
 
-                    if (!is_null($dataChunk['lens']) && !is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
-                        $data   =   $dataChunk;
+                        if (!is_null($dataChunk['lens']) && !is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                            $data   =   $dataChunk;
 
-                        $lensInformation    =   $this->findType($data);
+                            $lensInformation    =   $this->findType($data);
 
-                        if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
+                            if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
 
-                            $this->checkLensExistance($lensInformation, 'right', $data);
-                            $this->checkLensExistance($lensInformation, 'left', $data);
-                        }
+                                $this->checkLensExistance($lensInformation, 'right', $data);
+                                $this->checkLensExistance($lensInformation, 'left', $data);
+                            }
 
-                        if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
-                            $this->checkFrameExistance($data);
+                            if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                                $this->checkFrameExistance($data);
+                            }
                         }
                     }
                 }
+            } catch (\Throwable $th) {
+                dd($th);
             }
-        } catch (\Throwable $th) {
-            dd($th);
-        }
         session()->flash('countSkippedImport', $this->count);
+    }else{
+        session()->flash('errorMsg','The file should not exceed 1,450 records');
     }
 
     function findType($product)
@@ -353,4 +355,5 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             // ]);
         }
     }
+}
 }
