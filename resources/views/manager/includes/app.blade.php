@@ -69,7 +69,8 @@
                     </div>
                 @endif
             @endif
-                <div class="row">
+
+            <div class="row">
                     <div class="col-5 align-self-center">
                         <h4 class="page-title text-capitalize">@yield('page_name')</h4>
                         <div class="d-flex align-items-center">

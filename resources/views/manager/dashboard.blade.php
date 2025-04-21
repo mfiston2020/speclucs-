@@ -18,6 +18,10 @@
 
 
         @if (userInfo()->permissions=='manager')
+
+
+            @livewire('manager.cloud.add-product-to-lab')
+
             <div class="row">
                 <div class="col-12">
                     <livewire:no-internet/>

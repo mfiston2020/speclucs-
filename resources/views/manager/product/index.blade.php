@@ -34,6 +34,10 @@
 @section('content')
 
     <div class="container-fluid">
+
+
+            @livewire('manager.cloud.add-product-to-lab')
+            
         <!-- Sales chart -->
         <div class="row">
             <span hidden>{{ $product_sold = 0 }}</span>

@@ -44,7 +44,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
     public function collection(Collection $collection)
     {
-        if (count($collection->filter()->toArray()) <= 1450) {
+        if (count($collection->filter()->toArray()) <= 1200) {
             // $data   =   $collection->filter()->toArray();
 
                 // foreach (array_chunk($data, 100) as $un_filtered_data) {
@@ -90,8 +90,9 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             }
         session()->flash('countSkippedImport', $this->count);
     }else{
-        session()->flash('errorMsg','The file should not exceed 1,450 records');
+        session()->flash('errorMsg','The file should not exceed 1,200 records');
     }
+}
 
     function findType($product)
     {
@@ -298,8 +299,11 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'updated_at'    =>  now()->toDateTimeString(),
                 ]);
 
-                CloudProductTransaction::create([
+                CloudProductTransaction::insert([
+                    'eye'       =>  $eye,
                     'product_id'=>$product,
+                    'company_id'=>auth()->user()->company_id,
+                    'vision_center'=>$data['vision_center'],
                     'transaction_id'=>$data['transaction_id']
                 ]);
                 $this->count += 1;
@@ -308,8 +312,11 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             }
         } else {
             if (!is_null($product)) {
-                CloudProductTransaction::create([
+                CloudProductTransaction::insert([
+                    'eye'       =>  $eye,
                     'product_id'=>$product,
+                    'vision_center'=>$data['vision_center'],
+                    'company_id'=>auth()->user()->company_id,
                     'transaction_id'=>$data['transaction_id']
                 ]);
             }
@@ -339,21 +346,24 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 'updated_at'    =>  now()->toDateTimeString(),
             ]);
 
-            CloudProductTransaction::create([
+            CloudProductTransaction::insert([
                 'product_id'=>$product,
+                'vision_center'=>$name['vision_center'],
+                'company_id'=>auth()->user()->company_id,
                 'transaction_id'=>$name['transaction_id']
             ]);
 
             $this->count += 1;
         } else {
-                CloudProductTransaction::create([
-                    'product_id'=>$frame->id,
-                    'transaction_id'=>$name['transaction_id']
-                ]);
+            CloudProductTransaction::insert([
+                'product_id'=>$frame->id,
+                'vision_center'=>$name['vision_center'],
+                'company_id'=>auth()->user()->company_id,
+                'transaction_id'=>$name['transaction_id']
+            ]);
             // Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->update([
             //     'transaction_id'=>$name['transaction_id']
             // ]);
         }
     }
-}
 }

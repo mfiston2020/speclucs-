@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('cloud_product_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->nullable()->constrained('products','id')->cascadeOnDelete();
+            $table->foreignId('company_id')->nullable()->constrained('company_information','id')->cascadeOnDelete();
+            $table->string('eye')->nullable();
+            $table->string('vision_center')->nullable();
             $table->string('transaction_id')->nullable();
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
