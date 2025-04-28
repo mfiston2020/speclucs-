@@ -21,19 +21,15 @@ class AddProductToLab extends Component
 
             $value->status='done';
             $value->save();
-
-            session()->put('transId',$value->transaction_id);
         }
-        session()->put('transId',null);
     }
 
     function mount(){
-        session()->put('transId',null);
-        session()->put('invoiceId',null);
         $this->orders   =   CloudProductTransaction::with('product')->where('company_id',auth()->user()->company_id)->where('status','pending')->get();
     }
     public function render()
     {
+        $this->orders   =   CloudProductTransaction::with('product')->where('company_id',auth()->user()->company_id)->where('status','pending')->get();
         return view('livewire.manager.cloud.add-product-to-lab');
     }
 }
