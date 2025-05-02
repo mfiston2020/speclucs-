@@ -29,6 +29,8 @@ class CloudStockAdjustmentController extends Controller
             // if ($count > 0) {
             if (session('errorMsg')) {
                 return redirect()->back();
+            }elseif (session('warningMsg')){
+                return redirect()->back();
             } else {
                 return redirect()->route('manager.product')->with('successMsg', 'Importing successful added ' . $count . ' New Products');
             }

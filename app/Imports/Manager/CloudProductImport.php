@@ -3,6 +3,7 @@
 namespace App\Imports\Manager;
 
 use App\Models\CloudProductTransaction;
+use App\Models\Invoice;
 use App\Models\LensType;
 use App\Models\PhotoChromatics;
 use App\Models\PhotoCoating;
@@ -68,25 +69,53 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 foreach ($collection as $dataChunk) {
                     if ($dataChunk->filter()->isNotEmpty()) {
 
-                        if (!is_null($dataChunk['lens']) && !is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
-                            $data   =   $dataChunk;
+                        if (($dataChunk['sale_no_sale']=="Sale" || is_null($dataChunk['sale_no_sale'])) ) {
 
-                            $lensInformation    =   $this->findType($data);
+                            if (!Invoice::where('company_id',auth()->user()->company_id)->where('transaction_id',$dataChunk['transaction_id'])->exists()) {
+                                // if (!is_null($dataChunk['lens']) && $dataChunk['frame_description']=="Lenses Only") {
+                                //     $data   =   $dataChunk;
 
-                            if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
+                                //     $lensInformation    =   $this->findType($data);
 
-                                $this->checkLensExistance($lensInformation, 'right', $data);
-                                $this->checkLensExistance($lensInformation, 'left', $data);
-                            }
+                                //     if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
 
-                            if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
-                                $this->checkFrameExistance($data);
+                                //         $this->checkLensExistance($lensInformation, 'right', $data);
+                                //         $this->checkLensExistance($lensInformation, 'left', $data);
+                                //     }
+                                // }
+
+                                // if (!is_null($dataChunk['frame_description']) && $dataChunk['lens']=="Frame Only") {
+                                //     $data   =   $dataChunk;
+
+                                //     if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                                //         $this->checkFrameExistance($data);
+                                //     }
+                                // }
+
+                                // if (!is_null($dataChunk['lens']) && !is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                                //     $data   =   $dataChunk;
+
+                                //     $lensInformation    =   $this->findType($data);
+
+                                //     if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
+
+                                //         $this->checkLensExistance($lensInformation, 'right', $data);
+                                //         $this->checkLensExistance($lensInformation, 'left', $data);
+                                //     }
+
+                                //     if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                                //         $this->checkFrameExistance($data);
+                                //     }
+                                // }
+                            } else {
+                               session()->flash('warningMsg','This file was uploaded before Check !');
+                               break;
                             }
                         }
                     }
                 }
             } catch (\Throwable $th) {
-                dd($th);
+                session()->flash('errorMsg','Whoops! Something went Wrong!');
             }
         session()->flash('countSkippedImport', $this->count);
     }else{
@@ -103,7 +132,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
         $typ    =   null;
 
         // single visions
-        if ($product['lens'] == 'SV_PREM' || $product['lens'] == 'SV_BASIC' || $product['lens'] == 'SV ,1.67, Clear, HC') {
+        if ($product['lens'] == 'SV_PREM' || $product['lens'] == 'Blue Cut SV' || $product['lens'] == 'SV_BASIC' || $product['lens'] == 'SV ,1.67, Clear, HC') {
             $this->category =   '1';
 
             // type
@@ -126,9 +155,9 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
                 // Coating
                 if ($product['lens'] == 'SV_PREM') {
-                    $productIndex  =   '1.5';
+                    $productIndex  =   '1.56';
                 } else {
-                    $productIndex  =   '1.5';
+                    $productIndex  =   '1.56';
                 }
                 // ==============================
 
@@ -136,7 +165,10 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 // Coating
                 if ($product['lens'] == 'SV_PREM_') {
                     $productCoating  =   'HMC';
-                } else {
+                }elseif($product['lens'] == 'Blue Cut SV'){
+                    $productCoating  =   'BLUE CUT HC';
+                }
+                 else {
                     $productCoating  =   'HC';
                 }
                 // ==============================
@@ -245,6 +277,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
     function checkLensExistance($info, $eye, $data)
     {
+
         $product =   Power::where('type_id', $info['type']->id)
             ->where('index_id', $info['index']->id)
             ->where('chromatics_id', $info['chromatic_aspect']->id)
@@ -346,21 +379,26 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 'updated_at'    =>  now()->toDateTimeString(),
             ]);
 
-            CloudProductTransaction::insert([
-                'product_id'=>$product,
-                'vision_center'=>$name['vision_center'],
-                'company_id'=>auth()->user()->company_id,
-                'transaction_id'=>$name['transaction_id']
-            ]);
+            
+            if (!CloudProductTransaction::where('product_id',$product)->where('transaction_id',$name['transaction_id'])->exists()) {
+                CloudProductTransaction::insert([
+                    'product_id'=>$product,
+                    'vision_center'=>$name['vision_center'],
+                    'company_id'=>auth()->user()->company_id,
+                    'transaction_id'=>$name['transaction_id']
+                ]);
+            }
 
             $this->count += 1;
         } else {
-            CloudProductTransaction::insert([
-                'product_id'=>$frame->id,
-                'vision_center'=>$name['vision_center'],
-                'company_id'=>auth()->user()->company_id,
-                'transaction_id'=>$name['transaction_id']
-            ]);
+            if (!CloudProductTransaction::where('product_id',$frame->id)->where('transaction_id',$name['transaction_id'])->exists()) {
+                CloudProductTransaction::insert([
+                    'product_id'=>$frame->id,
+                    'vision_center'=>$name['vision_center'],
+                    'company_id'=>auth()->user()->company_id,
+                    'transaction_id'=>$name['transaction_id']
+                ]);
+            }
             // Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->update([
             //     'transaction_id'=>$name['transaction_id']
             // ]);

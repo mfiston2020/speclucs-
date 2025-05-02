@@ -23,7 +23,8 @@ class SoldProduct extends Model
         return $this->belongsTo(Insurance::class);
     }
 
-    function hasLens():bool{
+    function hasLens(){
+        return 'yes';
         if ($this->product()->where('category_id','1')->exists()) {
             return true;
         }else{

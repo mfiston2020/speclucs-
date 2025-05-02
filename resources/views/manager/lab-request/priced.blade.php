@@ -84,6 +84,7 @@
                                                             <tr>
                                                                 <th> <input type="checkbox" onclick="checkUncheckrequestId(this)"> </th>
                                                                 <th>Request # </th>
+                                                                <th>Transaction ID</th>
                                                                 <th>CLOUD ID</th>
                                                                 <th>Patient Name</th>
                                                                 <th>Description</th>
@@ -113,6 +114,11 @@
                                                                         <td>
                                                                             <a href="#!" data-toggle="modal" data-target="#proddd-{{ $key }}-detail">
                                                                                 Request #{{ sprintf('SPCL-%04d', $request->id) }}
+                                                                            </a>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="#!">
+                                                                                <span>{{ $request->transaction_id }}</span>
                                                                             </a>
                                                                         </td>
                                                                         <td>
@@ -255,7 +261,9 @@
                                                                             @endif
                                                                         </td>
                                                                     </tr>
+                                                                @endforeach
 
+                                                                @foreach ($requests_priced as $key => $request)
                                                                     {{-- modal --}}
 
                                                                     <div class="modal fade bs-example-modal-lg" id="proddd-{{ $key }}-detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">

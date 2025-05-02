@@ -22,10 +22,15 @@ class AddProductToLab extends Component
             $value->status='done';
             $value->save();
         }
+        session()->flash('successMsg','All orders added to priced!');
+        $this->redirect('/manager/request/request/priced');
     }
 
     function mount(){
         $this->orders   =   CloudProductTransaction::with('product')->where('company_id',auth()->user()->company_id)->where('status','pending')->get();
+        foreach ($this->orders as $key => $value) {
+            array_push($this->countOrders,$value->transaction_id);
+        }
     }
     public function render()
     {
