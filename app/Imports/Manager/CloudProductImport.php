@@ -72,41 +72,41 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                         if (($dataChunk['sale_no_sale']=="Sale" || is_null($dataChunk['sale_no_sale'])) ) {
 
                             if (!Invoice::where('company_id',auth()->user()->company_id)->where('transaction_id',$dataChunk['transaction_id'])->exists()) {
-                                // if (!is_null($dataChunk['lens']) && $dataChunk['frame_description']=="Lenses Only") {
-                                //     $data   =   $dataChunk;
+                                if (!is_null($dataChunk['lens']) && $dataChunk['frame_description']=="Lenses Only") {
+                                    $data   =   $dataChunk;
 
-                                //     $lensInformation    =   $this->findType($data);
+                                    $lensInformation    =   $this->findType($data);
 
-                                //     if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
+                                    if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
 
-                                //         $this->checkLensExistance($lensInformation, 'right', $data);
-                                //         $this->checkLensExistance($lensInformation, 'left', $data);
-                                //     }
-                                // }
+                                        $this->checkLensExistance($lensInformation, 'right', $data);
+                                        $this->checkLensExistance($lensInformation, 'left', $data);
+                                    }
+                                }
 
-                                // if (!is_null($dataChunk['frame_description']) && $dataChunk['lens']=="Frame Only") {
-                                //     $data   =   $dataChunk;
+                                if (!is_null($dataChunk['frame_description']) && $dataChunk['lens']=="Frame Only") {
+                                    $data   =   $dataChunk;
 
-                                //     if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
-                                //         $this->checkFrameExistance($data);
-                                //     }
-                                // }
+                                    if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                                        $this->checkFrameExistance($data);
+                                    }
+                                }
 
-                                // if (!is_null($dataChunk['lens']) && !is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
-                                //     $data   =   $dataChunk;
+                                if (!is_null($dataChunk['lens']) && !is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                                    $data   =   $dataChunk;
 
-                                //     $lensInformation    =   $this->findType($data);
+                                    $lensInformation    =   $this->findType($data);
 
-                                //     if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
+                                    if ($lensInformation['type'] && $lensInformation['index'] && $lensInformation['chromatic_aspect'] && $lensInformation['coating']) {
 
-                                //         $this->checkLensExistance($lensInformation, 'right', $data);
-                                //         $this->checkLensExistance($lensInformation, 'left', $data);
-                                //     }
+                                        $this->checkLensExistance($lensInformation, 'right', $data);
+                                        $this->checkLensExistance($lensInformation, 'left', $data);
+                                    }
 
-                                //     if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
-                                //         $this->checkFrameExistance($data);
-                                //     }
-                                // }
+                                    if (!is_null($dataChunk['frame_description']) && !is_null($dataChunk['frame_sku'])) {
+                                        $this->checkFrameExistance($data);
+                                    }
+                                }
                             } else {
                                session()->flash('warningMsg','This file was uploaded before Check !');
                                break;

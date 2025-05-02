@@ -87,9 +87,9 @@
                                                                 <th>Transaction ID</th>
                                                                 <th>CLOUD ID</th>
                                                                 <th>Patient Name</th>
-                                                                <th>Description</th>
-                                                                <th>Right Eye</th>
-                                                                <th>Left Eye</th>
+                                                                {{-- <th>Description</th> --}}
+                                                                {{-- <th>Right Eye</th>
+                                                                <th>Left Eye</th> --}}
                                                                 <th>Request Date</th>
                                                                 <th>Request Age</th>
                                                                 <th>Payment</th>
@@ -143,7 +143,7 @@
                                                                                 @endif
                                                                             @endif
                                                                         </td>
-                                                                        @php
+                                                                        {{-- @php
                                                                             $availability_right = true;
                                                                             $availability_left = true;
                                                                             $description = null;
@@ -240,7 +240,7 @@
                                                                             @else
                                                                                 <span class="text-center">-</span>
                                                                             @endif
-                                                                        </td>
+                                                                        </td> --}}
                                                                         <td>
                                                                             {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
                                                                         </td>
