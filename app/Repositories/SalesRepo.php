@@ -64,11 +64,11 @@ class SalesRepo implements SalesInterface{
 
         $invoice->save();
 
-        // TrackOrderRecord::create([
-        //     'status'        =>  $invoiceStatus,
-        //     'user_id'       =>  auth()->user()->id,
-        //     'invoice_id'    =>  $invoice->id,
-        // ]);
+        TrackOrderRecord::create([
+            'status'        =>  $invoiceStatus,
+            'user_id'       =>  auth()->user()->id,
+            'invoice_id'    =>  $invoice->id,
+        ]);
         $this->saveProductOrder($invoice->id,$product);
 
     } else{
