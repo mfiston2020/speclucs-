@@ -45,7 +45,6 @@ class SalesRepo implements SalesInterface{
         $invoice->status            =   'pending';
         $invoice->user_id           =   userInfo()->id;
         $invoice->total_amount      =   '0';
-        // $invoice->cloud_id          =   $cloud_id;
         $invoice->hospital_name     =   $product['transaction']['vision_center'];
         $invoice->company_id        =   userInfo()->company_id;
         $invoice->client_id         =   null;

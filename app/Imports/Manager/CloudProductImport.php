@@ -303,7 +303,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                         . ucfirst($info['chromatic_aspect']->name) . " "
                         . strtoupper($info['coating']->name),
 
-                    'stock'         =>  0,
+                    'stock'         =>  1,
                     'price'         =>  '0',
                     'cost'          =>  '0',
                     'fitting_cost'  =>  '0',
@@ -365,7 +365,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
             $product    =   Product::insertGetId([
                 'cost'              =>  '0',
-                'stock'             =>  '0',
+                'stock'             =>  '1',
                 'price'             =>  '0',
                 'location'          =>  '-',
                 'company_id'        =>  Auth::user()->company_id,
@@ -399,9 +399,6 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'transaction_id'=>$name['transaction_id']
                 ]);
             }
-            // Product::where('slug_name', $cleanName)->where('company_id', Auth::user()->company_id)->update([
-            //     'transaction_id'=>$name['transaction_id']
-            // ]);
         }
     }
 }

@@ -17,7 +17,6 @@ class AddProductToLab extends Component
 
             $productRepo  =   new SalesRepo();
             $productRepo->createInvoice($product);
-            $this->processed    +=  1;
 
             $value->status='done';
             $value->save();
