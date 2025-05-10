@@ -103,8 +103,7 @@ class ProductRepo implements ProductInterface
     }
 
     // function to show the product stock efficiency
-    function productStockEfficiency(string $product_id, int $usag, int $stoc, int $cat, int $days = null)
-    {
+    function productStockEfficiency(string $product_id, int $usag, int $stoc, int $cat, int $days = null){
 
         $usage              =   0;
         $status             =   0;
