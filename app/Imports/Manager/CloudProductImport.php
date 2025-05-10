@@ -281,7 +281,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             ->where('coating_id', $info['coating']->id)
             ->where('sphere', $eye == 'right' ?  : format_values((int)$data['os_sign'].$data['os_sphere'] ?? 0))
             ->where('cylinder', $eye == 'right' ? format_values($data['od_cylinder'] ?? 0) : format_values($data['os_cylinder'] ?? 0))
-            ->where('axis', initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_axis'] ?? 0) : format_values($data['os_axis'] ?? 0)) : null)
+            ->where('axis', initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_axis'] ?? 0) : format_values($data['os_axis'] ?? 0)) : 0)
             ->where('add', initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_add'] ?? null) : format_values($data['od_add'] ?? null)) : null)
             ->where('eye', initials($info['type']->name) == 'SV' ? 'any' : $eye)
             ->where('company_id', auth()->user()->company_id)
@@ -318,7 +318,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'coating_id'    =>  $info['coating']->id,
                     'sphere'        =>  $eye == 'right' ? format_values($data['od_sign'].$data['od_sphere'] ?? 0) : format_values($data['os_sign'].$data['os_sphere'] ?? 0),
                     'cylinder'      =>  $eye == 'right' ? format_values($data['od_cylinder'] ?? 0) : format_values($data['os_cylinder'] ?? 0),
-                    'axis'          =>  initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_axis'] ?? 0) : format_values($data['os_axis'] ?? 0)) : null,
+                    'axis'          =>  initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_axis'] ?? 0) : format_values($data['os_axis'] ?? 0)) : 0,
                     'add'           =>  initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_add']) : format_values($data['od_add'])) : null,
                     'eye'           =>  initials($info['type']->name) == 'SV' ? 'any' : $eye,
                     'company_id'    =>  auth()->user()->company_id,
