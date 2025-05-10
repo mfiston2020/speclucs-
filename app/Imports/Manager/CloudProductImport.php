@@ -108,14 +108,14 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                                     }
                                 }
                             } else {
-                               session()->flash('warningMsg','This file was uploaded before Check !');
-                               break;
+                            //    session()->flash('warningMsg','This file was uploaded before Check !');
+                            //    break;
                             }
                         }
                     }
                 }
             } catch (\Throwable $th) {
-                session()->flash('errorMsg','Whoops! Something went Wrong!');
+                session()->flash('errorMsg','Whoops! Something went Wrong!'.$th);
             }
         session()->flash('countSkippedImport', $this->count);
     }else{
@@ -197,9 +197,9 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
             // Index
             if ($product['lens'] == 'BF_PREM_ARC') {
-                $productIndex  =   '1.5';
+                $productIndex  =   '1.56';
             } else {
-                $productIndex  =   '1.5';
+                $productIndex  =   '1.56';
             }
             // ==============================
 
@@ -270,22 +270,19 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
         $productInfo['coating']             =   $ctng;
         $productInfo['chromatic_aspect']    =   $chr;
 
-        // dd($productInfo['type']->name);
-
         return $productInfo;
     }
 
     function checkLensExistance($info, $eye, $data)
     {
-
         $product =   Power::where('type_id', $info['type']->id)
             ->where('index_id', $info['index']->id)
             ->where('chromatics_id', $info['chromatic_aspect']->id)
             ->where('coating_id', $info['coating']->id)
-            ->where('sphere', $eye == 'right' ? format_values($data['od_sphere'] ?? 0) : format_values($data['os_sphere'] ?? 0))
+            ->where('sphere', $eye == 'right' ?  : format_values((int)$data['os_sign'].$data['os_sphere'] ?? 0))
             ->where('cylinder', $eye == 'right' ? format_values($data['od_cylinder'] ?? 0) : format_values($data['os_cylinder'] ?? 0))
             ->where('axis', initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_axis'] ?? 0) : format_values($data['os_axis'] ?? 0)) : 0)
-            ->where('add', initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_add'] ?? null) : format_values($data['os_add'] ?? null)) : null)
+            ->where('add', initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_add'] ?? null) : format_values($data['od_add'] ?? null)) : null)
             ->where('eye', initials($info['type']->name) == 'SV' ? 'any' : $eye)
             ->where('company_id', auth()->user()->company_id)
             ->pluck('product_id')->first();
@@ -311,10 +308,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'deffective_stock' =>  '0',
                     'created_at'    =>  now()->toDateTimeString(),
                     'updated_at'    =>  now()->toDateTimeString(),
-                    // 'transaction_id'    =>  $data['transaction_id']
                 ]);
-
-                // dd($product);
 
                 Power::insert([
                     'product_id'    =>  $product,
@@ -322,10 +316,10 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'index_id'      =>  $info['index']->id,
                     'chromatics_id' =>  $info['chromatic_aspect']->id,
                     'coating_id'    =>  $info['coating']->id,
-                    'sphere'        =>  $eye == 'right' ? format_values($data['od_sphere'] ?? 0) : format_values($data['os_sphere'] ?? 0),
+                    'sphere'        =>  $eye == 'right' ? format_values($data['od_sign'].$data['od_sphere'] ?? 0) : format_values($data['os_sign'].$data['os_sphere'] ?? 0),
                     'cylinder'      =>  $eye == 'right' ? format_values($data['od_cylinder'] ?? 0) : format_values($data['os_cylinder'] ?? 0),
                     'axis'          =>  initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_axis'] ?? 0) : format_values($data['os_axis'] ?? 0)) : 0,
-                    'add'           =>  initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_add']) : format_values($data['os_add'])) : null,
+                    'add'           =>  initials($info['type']->name) != 'SV' ? ($eye == 'right' ? format_values($data['od_add']) : format_values($data['od_add'])) : null,
                     'eye'           =>  initials($info['type']->name) == 'SV' ? 'any' : $eye,
                     'company_id'    =>  auth()->user()->company_id,
                     'created_at'    =>  now()->toDateTimeString(),

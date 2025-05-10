@@ -87,7 +87,7 @@
                                                         @else
                                                             @if ($request->hospital_name!=null)
                                                                 <span>
-                                                                    [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                                    [{{$request->cloud_id??$request->transaction_id}}] {{$request->hospital_name}}
                                                                 </sp>
                                                             @else
                                                                 <span>

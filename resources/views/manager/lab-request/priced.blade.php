@@ -84,12 +84,12 @@
                                                             <tr>
                                                                 <th> <input type="checkbox" onclick="checkUncheckrequestId(this)"> </th>
                                                                 <th>Request # </th>
-                                                                <th>Transaction ID</th>
+                                                                {{-- <th>Transaction ID</th> --}}
                                                                 <th>CLOUD ID</th>
                                                                 <th>Patient Name</th>
-                                                                {{-- <th>Description</th> --}}
-                                                                {{-- <th>Right Eye</th>
-                                                                <th>Left Eye</th> --}}
+                                                                <th>Description</th>
+                                                                <th>Right Eye</th>
+                                                                <th>Left Eye</th>
                                                                 <th>Request Date</th>
                                                                 <th>Request Age</th>
                                                                 <th>Payment</th>
@@ -116,17 +116,17 @@
                                                                                 Request #{{ sprintf('SPCL-%04d', $request->id) }}
                                                                             </a>
                                                                         </td>
-                                                                        <td>
+                                                                        {{-- <td>
                                                                             <a href="#!">
                                                                                 <span>{{ $request->transaction_id }}</span>
                                                                             </a>
-                                                                        </td>
+                                                                        </td> --}}
                                                                         <td>
                                                                             @if ($request->client_id != null)
                                                                                 -
                                                                             @else
                                                                                 @if ($request->hospital_name!=null)
-                                                                                    {{$request->cloud_id}}
+                                                                                    {{$request->cloud_id??$request->transaction_id}}
                                                                                 @else
                                                                                     -
                                                                                 @endif
@@ -143,7 +143,7 @@
                                                                                 @endif
                                                                             @endif
                                                                         </td>
-                                                                        {{-- @php
+                                                                        @php
                                                                             $availability_right = true;
                                                                             $availability_left = true;
                                                                             $description = null;
@@ -196,7 +196,8 @@
                                                                                         {{ format_values($right_len->sphere) }}
                                                                                         /
                                                                                         {{ format_values($right_len->cylinder) }}
-                                                                                        <span class="text-primary">*{{ ($right_len_befor_product->axis ?? 0) }}</span>
+                                                                                        {{-- <span class="text-primary">*{{ ($right_len_befor_product->axis ?? 0) }}</span> --}}
+                                                                                        <span class='text-primary'>*{{ $right_len_befor_product->axis=='-'|| is_null($right_len_befor_product->axis)?'0':$right_len_befor_product->axis }}</span>
                                                                                         
                                                                                         @if (!is_null($right_len))
                                                                                             {{ $right_len->addition }}
@@ -207,7 +208,8 @@
                                                                                         {{ format_values($right_len->power->sphere) }}
                                                                                         /
                                                                                         {{ format_values($right_len->power->cylinder) }}
-                                                                                        <span class="text-primary">*{{ ($right_len_befor_product->axis ?? 0) }}</span>
+                                                                                        {{-- <span class="text-primary">*{{ ($right_len_befor_product->axis ?? 0) }}</span> --}}
+                                                                                        <span class='text-primary'>*{{ $right_len_befor_product->axis=='-'|| is_null($right_len_befor_product->axis)?'0':$right_len_befor_product->axis }}</span>
                                                                                         
                                                                                         @if (initials($right_len->product_name)!='SV')
                                                                                             {{ $right_len->power->add }}
@@ -224,7 +226,8 @@
                                                                                     {{ format_values($left_len->sphere) }}
                                                                                     /
                                                                                     {{ format_values($left_len->cylinder) }}
-                                                                                        <span class="text-primary">*{{ ($left_len_befor_product->axis ?? 0) }}</span>
+                                                                                        {{-- <span class="text-primary">*{{ ($left_len_befor_product->axis ?? 0) }}</span> --}}
+                                                                                        <span class='text-primary'>*{{ $left_len_befor_product->axis=='-'|| is_null($left_len_befor_product->axis)?'0':$left_len_befor_product->axis }}</span>
                                                                                         @if (!is_null($left_len))
                                                                                             {{ $left_len->addition }}
                                                                                         @endif
@@ -232,7 +235,8 @@
                                                                                     {{ format_values($left_len->power->sphere) }}
                                                                                     /
                                                                                     {{ format_values($left_len->power->cylinder) }}
-                                                                                        <span class="text-primary">*{{ ($left_len_befor_product->axis ?? 0) }}</span>
+                                                                                        {{-- <span class="text-primary">*{{ ($left_len_befor_product->axis ?? 0) }}</span> --}}
+                                                                                        <span class='text-primary'>*{{ $left_len_befor_product->axis=='-'|| is_null($left_len_befor_product->axis)?'0':$left_len_befor_product->axis }}</span>
                                                                                     @if (initials($left_len->product_name)!='SV')
                                                                                         {{ $left_len->power->add }}
                                                                                     @endif
@@ -240,7 +244,7 @@
                                                                             @else
                                                                                 <span class="text-center">-</span>
                                                                             @endif
-                                                                        </td> --}}
+                                                                        </td>
                                                                         <td>
                                                                             {{ date('Y-m-d H:i', strtotime($request->created_at)) }}
                                                                         </td>
@@ -338,7 +342,7 @@
                                                                                                         <span>{{ $invoice_product->power->sphere }}
                                                                                                             /
                                                                                                             {{ $invoice_product->power->cylinder }}
-                                                                                                            <span class='text-primary'>*{{ $product->axis??0 }}</span>
+                                                                                                            <span class='text-primary'>*{{ $product->axis=='-'|| is_null($product->axis)?'0':$product->axis }}</span>
                                                                                                             {{ $invoice_product->power->add }}</span>
                                                                                                 </div>
                                                                                                 <div class="col-2 row">

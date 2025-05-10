@@ -178,7 +178,7 @@
                                                                                     {{$request->client->name}}
                                                                                 @else
                                                                                     @if ($request->hospital_name!=null)
-                                                                                    [{{$request->cloud_id}}] {{$request->hospital_name}}
+                                                                                    [{{$request->cloud_id??$request->transaction_id}}] {{$request->hospital_name}}
                                                                                     @else
                                                                                         {{$request->client_name}}
                                                                                     @endif
