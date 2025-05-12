@@ -31,7 +31,7 @@ class DashboardController extends Controller
         foreach ($soldproducts as $key => $sold) {
             $total_product_cost +=  (float)$sold->product->cost * (float)$sold->quantity;
 
-            $income     =   $sold->total_amount - ($sold->quantity * ($sold->product->cost));
+            $income     =   (float)$sold->total_amount - ((float)$sold->quantity * ((float)$sold->product->cost));
             $earning    =  $earning + $income;
         }
 
