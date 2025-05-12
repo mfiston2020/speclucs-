@@ -66,7 +66,7 @@
                                 <div class="card-body">
                                     <div class="d-flex no-block align-items-center justify-content-between">
                                         <div>
-                                            <h2>{{number_format($suppliers)}}
+                                            <h2>{{ number_format($suppliers) }}
                                             </h2>
                                             <h6 class="text-success">{{__('navigation.suppliers')}}</h6>
                                         </div>

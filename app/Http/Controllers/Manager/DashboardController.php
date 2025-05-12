@@ -29,7 +29,7 @@ class DashboardController extends Controller
         $suppliers  =   \App\Models\Supplier::where('company_id', Auth::user()->company_id)->count();
 
         foreach ($soldproducts as $key => $sold) {
-            $total_product_cost +=  $sold->product->cost * $sold->quantity;
+            $total_product_cost +=  (float)$sold->product->cost * (float)$sold->quantity;
 
             $income     =   $sold->total_amount - ($sold->quantity * ($sold->product->cost));
             $earning    =  $earning + $income;
