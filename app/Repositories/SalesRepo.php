@@ -29,12 +29,13 @@ class SalesRepo implements SalesInterface{
 
     $invoiceStatus  =   null;
     $count          =   0;
-
+    
     $reference  =   Invoice::where('company_id', userInfo()->company_id)->select('reference_number')->count();
 
-    $productbooking =   Invoice::where('status', 'requested')->whereRelation('soldproduct', 'product_id', $product['product']['product_id'])->withSum('soldproduct', 'quantity')->get();
+    $productbooking =   Invoice::where('status', 'requested')->whereRelation('soldproduct', 'product_id', $product['product']['id'])->withSum('soldproduct', 'quantity')->get();
     $prductbookingQuantity  =   $productbooking->sum('soldproduct_sum_quantity');
 
+    
     if ($product['product']['stock'] < 1) {
         $invoiceStatus  =   'Confirmed';
     } else {
@@ -44,6 +45,10 @@ class SalesRepo implements SalesInterface{
             $invoiceStatus  =   'requested';
         }
     }
+    if ($prductbookingQuantity>$product['product']['stock']-1) {
+        $invoiceStatus  =   'Booked';
+    }
+    
     if (!Invoice::where('transaction_id',$product['transaction']['transaction_id'])->exists()) {
     
         $invoice    =   new Invoice();
