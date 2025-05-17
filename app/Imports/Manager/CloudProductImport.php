@@ -220,7 +220,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
             if ( $product['lens'] =='Progressive with Cylinders') {
 
-                $productType   =   'PROGRESSIVE Justus';
+                $productType   =   'PROGRESSIVE JUSTUS';
 
                 $this->category =   '1';
                 // ==============================
