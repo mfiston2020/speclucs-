@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('from_out',$ordersCountOutside->count())
                 ->with('orderCount',$ordersCount->count())
-                ->with('booking',$ordersCount->where('status','booked')->count() + $ordersCountOutside->where('status','booked')->count())
+                ->with('booking',$ordersCount->whereIn('status',['Booked','booked'])->count() + $ordersCountOutside->where('status','booked')->count())
                 ->with('requested',$requested)
                 // ->with('requested',Invoice::where('company_id', userInfo()->company_id)->where('status','requested')->whereDoesntHave('unavailableProducts')->count())
                 ->with('priced',$ordersCount->whereIn('status',['Confirmed','priced'])->count() + $ordersCountOutside->whereIn('status',['Confirmed','priced'])->count())
