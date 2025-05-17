@@ -29,7 +29,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
     private $coating;
     private $lens_type;
     private $chromatics;
-    // private $stocktrackRepo;
+    private $stocktrackRepo;
     private $countSkipped;
     private $category;
 
