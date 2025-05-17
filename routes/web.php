@@ -26,7 +26,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/sign-in');
+    // return view('welcome');
 });
 
 Route::get('/sign-in', function () {

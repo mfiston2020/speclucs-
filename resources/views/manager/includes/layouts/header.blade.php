@@ -405,7 +405,7 @@
 
 
 
-                @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'accountant')
+                @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'accountant' || userInfo()->permissions == 'store')
                     <!-- User Profile-->
                     @if (userInfo()->permissions == 'manager')
                         <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span
@@ -418,7 +418,7 @@
                         </li>
                     @endif
 
-                    @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'accountant')
+                    @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store' || userInfo()->permissions == 'accountant')
                         <li class="sidebar-item"><a href="{{ route('manager.report') }}" class="sidebar-link"><i
                                     class="mdi mdi-note-multiple"></i><span class="hide-menu">
                                     {{ __('navigation.report') }} </span></a>
