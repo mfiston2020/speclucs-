@@ -39,8 +39,8 @@ class UsersController extends Controller
     {
         $this->validate($request,[
             'name'=>'required',
-            'phone'=>'required',
-            'email'=>'required',
+            'phone'=>'required|unique:users,phone',
+            'email'=>'required|unique:users,email',
             'permission'=>'required',
         ]);
 
@@ -59,7 +59,7 @@ class UsersController extends Controller
             $user->save();
             return redirect()->route('manager.users')->with('successMsg','User Account Successfully Created');
         } catch (\Throwable $th) {
-            return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong!' );
+            return redirect()->back()->withInput()->with('errorMsg','Sorry Something Went Wrong!'.$th );
         }
     }
 
