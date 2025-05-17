@@ -115,7 +115,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     }
                 }
             } catch (\Throwable $th) {
-                session()->flash('errorMsg','Whoops! Something went Wrong!'.$th);
+                session()->flash('errorMsg','Whoops! Something went Wrong!');
             }
         session()->flash('countSkippedImport', $this->count);
     }else{
