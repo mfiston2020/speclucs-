@@ -14,6 +14,7 @@ use App\Repositories\StockTrackRepo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -28,13 +29,14 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
     private $coating;
     private $lens_type;
     private $chromatics;
-    private $stocktrackRepo;
-    private $count;
+    // private $stocktrackRepo;
+    private $countSkipped;
     private $category;
 
     function __construct()
     {
         $this->count        =   0;
+        $this->countSkipped =   0;
 
         $this->stocktrackRepo = new StockTrackRepo();
         $this->lens_type    =   LensType::select(['id', 'name'])->get();
@@ -64,7 +66,6 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 // BF SH LINE is just BIFOCAL in the system
 
                 // ARC means this is HMC
-
 
                 foreach ($collection as $dataChunk) {
                     if ($dataChunk->filter()->isNotEmpty()) {
@@ -108,6 +109,7 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                                     }
                                 }
                             } else {
+                                Session::put('skippedUpload',$this->countSkipped++);
                             //    session()->flash('warningMsg','This file was uploaded before Check !');
                             //    break;
                             }
