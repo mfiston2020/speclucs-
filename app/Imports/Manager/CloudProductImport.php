@@ -216,35 +216,54 @@ class CloudProductImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
         }
 
         // progressive
-        if ($product['rx_type'] == 'Progressive') {
+        if ($product['rx_type'] == 'Progressive'|| $product['lens'] =='Progressive with Cylinders') {
 
-            // extracting information to get the values of the lens
-            $extracted  =   explode(' ', str_replace(',', '', $product['lens']));
+            if ( $product['lens'] =='Progressive with Cylinders') {
 
-            if ($extracted[1] != 'Muchos' && $extracted[1] != 'Justus' && $extracted[1] != 'Clarus') {
-                $inserted = array(' ');
-                array_splice($extracted, 1, 0, $inserted);
-                $productType   =   'PROGRESSIVE';
+                $productType   =   'PROGRESSIVE Justus';
+
+                $this->category =   '1';
+                // ==============================
+
+                // chromatics
+                $productChromatics  =   'Photo';
+                // ==============================
+
+                // Index
+                $productIndex  = 1.56;
+                // ==============================
+
+                // Coating
+                $productCoating  = 'HC';
+                // ==============================
             } else {
-                $productType   =   'PROGRESSIVE ' . strtoupper($extracted[1]);
+                // extracting information to get the values of the lens
+                $extracted  =   explode(' ', str_replace(',', '', $product['lens']));
+
+                if ($extracted[1] != 'Muchos' && $extracted[1] != 'Justus' && $extracted[1] != 'Clarus') {
+                    $inserted = array(' ');
+                    array_splice($extracted, 1, 0, $inserted);
+                    $productType   =   'PROGRESSIVE';
+                } else {
+                    $productType   =   'PROGRESSIVE ' . strtoupper($extracted[1]);
+                }
+
+                $this->category =   '1';
+                // ==============================
+
+                // chromatics
+                $productChromatics  =   $extracted[4];
+                // ==============================
+
+                // Index
+                $productIndex  = $extracted[2];
+                // ==============================
+
+
+                // Coating
+                $productCoating  = $extracted[3];
+                // ==============================
             }
-
-            $this->category =   '1';
-            // ==============================
-
-            // chromatics
-            $productChromatics  =   $extracted[4];
-            // ==============================
-
-            // Index
-            $productIndex  = $extracted[2];
-            // ==============================
-
-
-            // Coating
-            $productCoating  = $extracted[3];
-            // ==============================
-
 
             $type   =   $this->lens_type->where('name', strtoupper($productType))->first();
 
