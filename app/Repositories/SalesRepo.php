@@ -32,10 +32,17 @@ class SalesRepo implements SalesInterface{
 
     $reference  =   Invoice::where('company_id', userInfo()->company_id)->select('reference_number')->count();
 
+    $productbooking =   Invoice::where('status', 'requested')->whereRelation('soldproduct', 'product_id', $product['product']['product_id'])->withSum('soldproduct', 'quantity')->get();
+    $prductbookingQuantity  =   $productbooking->sum('soldproduct_sum_quantity');
+
     if ($product['product']['stock'] < 1) {
         $invoiceStatus  =   'Confirmed';
     } else {
-        $invoiceStatus  =   'requested';
+        if ($prductbookingQuantity>$product['product']['stock']-1) {
+            $invoiceStatus  =   'Booked';
+        } else {
+            $invoiceStatus  =   'requested';
+        }
     }
     if (!Invoice::where('transaction_id',$product['transaction']['transaction_id'])->exists()) {
     
