@@ -48,16 +48,17 @@
             @php
                 $lastPayment    =   \App\Models\CompanyPayment::where('company_id', getuserCompanyInfo()->id)->pluck('until')->last();
                 $dt             =   \Carbon\Carbon::createMidnightDate($lastPayment);
+                $today          =   \Carbon\Carbon::today();
             @endphp
 
             <div class="page-breadcrumb">
-            @if ($dt->diffInDays(date('Y-m-d'))<=30 && $dt->diffInDays(date('Y-m-d'))>0)
-                <div class="alert {{ $dt->diffInDays(date('Y-m-d'))<=5?'alert-danger':'alert-secondary' }} alert-rounded col-lg-12 col-md-12 col-sm-12">
-                    <b><i class="fa fa-exclamation-triangle"></i> Warning! </b>Your Payment is due in <strong class="text-primary">{{$dt->diffInDays(date('Y-m-d'))}} days</strong>
+            @if ($today->diffInDays($dt)<=30 && $today->diffInDays($dt)>0)
+                <div class="alert {{ $today->diffInDays($dt)<=5?'alert-danger':'alert-secondary' }} alert-rounded col-lg-12 col-md-12 col-sm-12">
+                    <b><i class="fa fa-exclamation-triangle"></i> Warning! </b>Your Payment is due in <strong class="text-primary">{{$today->diffInDays($dt)}} days</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span></button>
                 </div>
-            @elseif ($dt->diffInDays(date('Y-m-d'))<=0)
-                @if ($dt->diffInDays(date('Y-m-d'))==0)
+            @elseif ($today->diffInDays($dt)<=0)
+                @if ($today->diffInDays($dt)==0)
                     <div class="alert alert-danger alert-rounded col-lg-12 col-md-12 col-sm-12">
                         <b><i class="fa fa-exclamation-triangle"></i> Warning! </b>Your Payment is due in <strong class="text-primary">Today!</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">x</span></button>
