@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Invoice;
+use App\Models\SupplierNotify;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('manager.includes.layouts.header', function ($view) {
 
             $ordersCount            =   Invoice::where('company_id',userInfo()->company_id)->select('status')->get();
+            $count_notification     =   SupplierNotify::where('supplier_id',userInfo()->company_id)->orderBy('created_at','DESC')->where('status','0')->get();
             $ordersCountOutside     =   Invoice::where('supplier_id',userInfo()->company_id)->where('status','<>','canceled')->select('status')->get();
 
             $requested  =   Invoice::where('company_id', userInfo()->company_id)->whereDoesntHave('unavailableProducts')->where('status','requested')->count() + Invoice::where('supplier_id', userInfo()->company_id)->where('status','requested')->whereDoesntHave('unavailableProducts')->count();
@@ -54,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
                 ->with('production',$ordersCount->where('status','in production')->count()+$ordersCountOutside->where('status','in production')->count())
                 ->with('completed',$ordersCount->where('status','completed')->count()+$ordersCountOutside->where('status','completed')->count())
                 ->with('delivered',$ordersCount->where('status','delivered')->count()+$ordersCountOutside->where('status','delivered')->count())
+                ->with('count_notification',$count_notification)
                 ;
         });
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Models\SupplierNotify;
 use App\Repositories\StockTrackRepo;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,7 @@ class UpdateContent extends Controller
                 $product->stock     =   $value;
                 $product->save();
 
+                stockWatningNotify($product->id,$product->stock);
 
                 return 'success out';
             }
@@ -41,6 +43,7 @@ class UpdateContent extends Controller
                 $product->stock     =   $value;
                 $product->save();
 
+                stockWatningNotify($product->id,$product->stock);
 
                 return 'success in';
             }

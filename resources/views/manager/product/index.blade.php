@@ -46,6 +46,11 @@
                     <div class="card-body">
                         <div class="row">
                             <h4 class="card-title">All Products</h4>
+                            <div class="col-6 float-right">
+                                <span class="label label-danger">0</span>
+                                <span class="label label-warning">1-9</span>
+                                <span class="label label-success">10 and above</span>
+                            </div>
                             <hr>
                                 @if (userInfo()->permissions == 'manager' || userInfo()->permissions == 'store')
                                     <a href="{{ route('manager.product.create') }}"
@@ -137,7 +142,7 @@
                                                     <a href="#!" class="update" data-name="cost" data-type="text" data-pk="{{ $product->id }}" data-title="Enter Product Name">{{ $product->cost }}
                                                     </a>
                                                 </td>
-                                                <td>
+                                                <td style="background-color: {{$product->stock<=1?'#ff00008a':($product->stock<=9?'#ffed1b':'')}}">
                                                     <a href="#!" class="update" data-name="stock" data-type="text"
                                                         data-pk="{{ $product->id }}"
                                                         data-title="Enter Product Name">{{ $product->stock }}
@@ -156,7 +161,7 @@
                                                     <span>{{ $product->cost }}
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td style="background-color: {{$product->stock<=1?'#ff00008a':($product->stock<=9?'#ffed1b':'')}}">
                                                     <span>{{ $product->stock }}
                                                     </span>
                                                 </td>

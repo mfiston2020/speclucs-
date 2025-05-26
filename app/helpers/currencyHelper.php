@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\CompanyInformation;
+use App\Models\SupplierNotify;
 
 function format_money($money)
 {
@@ -208,4 +209,30 @@ function cleanString($string)
 {
     $string = str_replace(' ', '-', $string);
     return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+}
+
+function stockWatningNotify($product_id,$stock){
+
+
+    if ($stock<=1) {
+        $notification   =   new SupplierNotify();
+
+        $notification->company_id   =   userInfo()->company_id;
+        $notification->supplier_id  =   userInfo()->company_id;
+        $notification->product_id   =   $product_id;
+        $notification->notification_type   =   'product status';
+        $notification->notification =   'Product Out of Stock';
+        $notification->save();
+    }
+
+    if ($stock<=9) {
+        $notification   =   new SupplierNotify();
+
+        $notification->company_id   =   userInfo()->company_id;
+        $notification->supplier_id  =   userInfo()->company_id;
+        $notification->product_id   =   $product_id;
+        $notification->notification_type   =   'product status';
+        $notification->notification =   'Product Need Attention!';
+        $notification->save();
+    }
 }

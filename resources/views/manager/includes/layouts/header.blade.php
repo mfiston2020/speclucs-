@@ -79,11 +79,11 @@
                 <!-- ============================================================== -->
                 <!-- Comment -->
                 <!-- ============================================================== -->
-                {{-- @if ($count_notification > 0)
+                @if ($count_notification->count() > 0)
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle waves-effect waves-dark" href="#"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i
-                                class="mdi mdi-bell font-24" style="color: red"></i>
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                            <i class="mdi mdi-bell font-24" style="color: red"></i>
 
                         </a>
                         <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
@@ -91,43 +91,52 @@
                             <ul class="list-style-none">
                                 <li>
                                     <div class="drop-title bg-primary text-white">
-                                        <h4 class="m-b-0 m-t-5">{{ $count_notification }} New</h4>
+                                        <h4 class="m-b-0 m-t-5">{{ $count_notification->count() }} New</h4>
                                         <span class="font-light">Notifications</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="message-center notifications">
                                         <!-- Message -->
-                                        @foreach ($notifications as $notification)
-                                            <a href="#" class="message-item">
-                                                <span class="btn btn-danger btn-circle"><i
-                                                        class="fa fa-link"></i></span>
-                                                <div class="mail-contnet">
-                                                    <h5 class="message-title">
-                                                        {{ \App\Models\CompanyInformation::where('id', $notification->company_id)->pluck('company_name')->first() }}'s
-                                                        @if ($notification->notification == 'New Credit Request')
-                                                            Credit Request
+                                        @foreach ($count_notification as $key=> $notification)
+                                            @if ($key<3)
+                                                <a href="#" class="message-item">
+                                                    <span class="btn btn-danger btn-circle"><i
+                                                            class="fa fa-link"></i></span>
+                                                    <div class="mail-contnet">
+                                                        @if ($notification->notification_type=='product status')
+                                                            <h5 class="message-title">
+                                                                {{ $notification->product->product_name .'-'.$notification->product->description }}
+                                                            </h5>
                                                         @else
-                                                            Order
+                                                            <h5 class="message-title">
+                                                                {{ \App\Models\CompanyInformation::where('id', $notification->company_id)->pluck('company_name')->first() }}'s
+                                                                @if ($notification->notification == 'New Credit Request')
+                                                                    Credit Request
+                                                                @else
+                                                                    Order
+                                                                @endif
+                                                            </h5>
                                                         @endif
-                                                    </h5>
-                                                    <span class="mail-desc">{{ $notification->notification }}</span>
-                                                    <span
-                                                        class="time">{{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</span>
-                                                </div>
-                                            </a>
+                                                        <span class="mail-desc">{{ $notification->notification }}</span>
+                                                        <span
+                                                            class="time">{{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</span>
+                                                    </div>
+                                                </a>
+                                            @endif
                                         @endforeach
                                     </div>
                                 </li>
                                 <li>
-                                    <a class="nav-link text-center m-b-5 text-dark"
-                                        href="{{ route('manager.notification.clear') }}"> <strong>Clear all
-                                            notifications</strong> <i class="fa fa-trash"></i> </a>
+                                    <a class="nav-link text-center m-b-5 text-dark" href="{{ route('manager.notification.clear') }}"> 
+                                        <strong>Clear all notifications</strong> 
+                                        <i class="fa fa-trash"></i> 
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
-                @endif --}}
+                @endif
                 <!-- ============================================================== -->
                 <!-- End Comment -->
                 <!-- ============================================================== -->

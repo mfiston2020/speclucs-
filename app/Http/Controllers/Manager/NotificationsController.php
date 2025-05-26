@@ -17,11 +17,17 @@ class NotificationsController extends Controller
 
     public function clear()
     {
-        $notification   =   \App\Models\SupplierNotify::where('supplier_id',Auth::user()->company_id)->get();
-        foreach ($notification as $key => $noti) {
-            $noti->status   =   '1';
-            $noti->save();
-        }
+        try {
+            $notification   =   \App\Models\SupplierNotify::where('company_id',userInfo()->company_id)->get();
+
+            // dd($notification);
+            foreach ($notification as $key => $noti) {
+                $noti->status   =   '1';
+                $noti->save();
+            }
         return redirect()->back()->with('successMsg','Notifications cleared');
+        } catch (\Throwable $th) {
+            dd($th);
+        }
     }
 }

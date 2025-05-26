@@ -12,6 +12,7 @@ use App\Repositories\ProductRepo;
 use App\Models\UnavailableProduct;
 use App\Http\Controllers\Controller;
 use App\Models\LensType;
+use App\Models\SupplierNotify;
 use App\Models\TrackOrderRecord;
 use App\Repositories\InvoiceRepo;
 use App\Repositories\StockTrackRepo;
@@ -232,6 +233,28 @@ class LabRequestController extends Controller
             $prdt->stock=   $nmstock - $unavailable->quantity;
             $prdt->save();
 
+            if ($prdt->stock<=1) {
+                $notification   =   new SupplierNotify();
+
+                $notification->company_id   =   userInfo()->company_id;
+                // $notification->supplier_id  =   $request->supplier_id;
+                $notification->product_id   =   $prdt->id;
+                $notification->notification_type   =   'product status';
+                $notification->notification =   'Product Out of Stock';
+                $notification->save();
+            }
+
+            if ($prdt->stock<=9) {
+                $notification   =   new SupplierNotify();
+
+                $notification->company_id   =   userInfo()->company_id;
+                $notification->supplier_id  =   userInfo()->company_id;
+                $notification->product_id   =   $prdt->id;
+                $notification->notification_type   =   'product status';
+                $notification->notification =   'Product Need Attention!';
+                $notification->save();
+            }
+
             $this->stocktrackRepo->saveTrackRecord($prdt->id, $nmstock, $unavailable->quantity, $prdt->stock, 'sent to lab', 'rm', 'out');
         }
 
@@ -241,6 +264,29 @@ class LabRequestController extends Controller
             $nmstock    =   $prdt->stock;
             $prdt->stock=   $nmstock - $sold->quantity;
             $prdt->save();
+
+
+            if ($prdt->stock<=1) {
+                $notification   =   new SupplierNotify();
+
+                $notification->company_id   =   userInfo()->company_id;
+                $notification->supplier_id  =   userInfo()->company_id;
+                $notification->product_id   =   $prdt->id;
+                $notification->notification_type   =   'product status';
+                $notification->notification =   'Product Out of Stock';
+                $notification->save();
+            }
+
+            if ($prdt->stock<=9) {
+                $notification   =   new SupplierNotify();
+
+                $notification->company_id   =   userInfo()->company_id;
+                $notification->supplier_id  =   userInfo()->company_id;
+                $notification->product_id   =   $prdt->id;
+                $notification->notification_type   =   'product status';
+                $notification->notification =   'Product Need Attention!';
+                $notification->save();
+            }
 
             $this->stocktrackRepo->saveTrackRecord($prdt->id, $nmstock, $sold->quantity, $prdt->stock, 'sent to lab', 'rm', 'out');
         }
