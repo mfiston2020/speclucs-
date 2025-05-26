@@ -47,7 +47,7 @@
                         <div class="row">
                             <h4 class="card-title">All Products</h4>
                             <div class="col-6 float-right">
-                                <span class="label label-danger">0</span>
+                                <span class="label label-danger">0-1</span>
                                 <span class="label label-warning">1-9</span>
                                 {{-- <span class="label label-success">10 and above</span> --}}
                             </div>
@@ -71,11 +71,11 @@
                                     <i class="fa fa-download"></i> Export To Excel
                                 </a>
 
-                                <a href="{{ route('manager.lens.stock', 0) }}"
+                                {{-- <a href="{{ route('manager.lens.stock', 0) }}"
                                     class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-warning"
                                     style="align-items: right;">
                                     <i class="fa fa-inbox"></i> Lens Stock
-                                </a>
+                                </a> --}}
 
                         </div>
                         <hr>
