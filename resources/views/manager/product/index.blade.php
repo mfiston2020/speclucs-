@@ -71,11 +71,11 @@
                                     <i class="fa fa-download"></i> Export To Excel
                                 </a>
 
-                                <a href="{{ route('manager.lens.stock', 0) }}"
+                                {{-- <a href="{{ route('manager.lens.stock', 0) }}"
                                     class="ml-2 btn waves-effect waves-light btn-rounded btn-outline-warning"
                                     style="align-items: right;">
                                     <i class="fa fa-inbox"></i> Lens Stock
-                                </a>
+                                </a> --}}
 
                         </div>
                         <hr>
