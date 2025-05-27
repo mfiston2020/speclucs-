@@ -81,11 +81,13 @@
                 <!-- ============================================================== -->
                 @if ($count_notification->count() > 0)
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle waves-effect waves-dark" href="#"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
-                            <i class="mdi mdi-bell font-24" style="color: red"></i>
 
+                        <a class="nav-link dropdown-toggle waves-effect position-relative waves-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                            <i class="mdi mdi-bell font-24" style="color: red"></i>
+                            <div class="spinner-grow spinner-grow-sm position-absolute top-10 start-0" role="status"></div>
+                            {{-- <span class="position-absolute top-0 start-100 translate-middle spinner-border spinner-border-sm badge border border-light rounded-circle bg-danger p-2"><span class="visually-hidden"></span></span> --}}
                         </a>
+                        
                         <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
                             <span class="with-arrow"><span class="bg-primary"></span></span>
                             <ul class="list-style-none">

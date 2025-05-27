@@ -234,14 +234,16 @@
                                                                                                     </span>
                                                                                                 </div>
                                                                                                 <div class="col-2">
-                                                                                                    <!-- {{$product->product}} -->
-                                                                                                        <span>{{ $product->product->power->sphere }}
-                                                                                                            /
-                                                                                                            {{ $product->product->power->cylinder }}
-                                                                                                            <span class="text-primary">*{{ round($product->product?->power?->axis) }}</span>
-                                                                                                            @if (initials($product->product->product_name) != 'SV')
-                                                                                                                {{ $product->product->power->add }}
-                                                                                                            @endif
+                                                                                                <!-- {{$product->product}} -->
+                                                                                                    <span>{{ $product->product->power->sphere }}
+                                                                                                    /
+                                                                                                    {{ $product->product->power->cylinder }}
+                                                                                                    <span class="text-primary">*
+                                                                                                        {{ $product->axis }}
+                                                                                                    </span>
+                                                                                                    @if (initials($product->product->product_name) != 'SV')
+                                                                                                        {{ $product->product->power->add }}
+                                                                                                    @endif
                                                                                                 </div>
                                                                                                 <div class="col-2 row">
                                                                                                     <span>
@@ -605,7 +607,7 @@
                                                                                                             <span>{{ $product->product->power->sphere }}
                                                                                                                 /
                                                                                                                 {{ $product->product->power->cylinder }}hjkkolp[]
-                                                                                                                <span class="text-primary">*{{ round($product->product?->power?->axis) }}</span>
+                                                                                                                <span class="text-primary">*{{ round($product->axis) }}</span>
                                                                                                                 @if ($product?->product_name)
                                                                                                                     @if (initials($product->product_name) != 'SV')
                                                                                                                         {{ $product->product->power->add }}
