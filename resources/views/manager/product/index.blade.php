@@ -90,6 +90,9 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Category</th>
+                                        @if (getuserCompanyInfo()->onlineshop=='1')
+                                            <th>Picture</th>
+                                        @endif
                                         <th>Product</th>
                                         <th>Description</th>
                                         <th>Power</th>
@@ -106,6 +109,22 @@
                                     @foreach ($products as $key => $product)
                                         <tr>
                                             <td>{{ $product->id }}</td>
+                                            @if (getuserCompanyInfo()->onlineshop=='1')
+                                                <td>
+                                                    @if ($product->picture)
+                                                    <center>
+                                                        <a href="#!" data-toggle="modal" data-target="#product-{{ $key }}">
+                                                            <img style="height:2.5rem" src="{{ Storage::disk('product_picture')->url($product->picture)}}" alt="">
+                                                        </a>
+                                                    </center>
+                                                    @else
+                                                        <a href="#!" data-toggle="modal" data-target="#product-{{ $key }}" class="ml-2 btn waves-effect waves-light btn-outline-success"
+                                                            style="align-items: right;">
+                                                            <i class="fa fa-plus-circle"></i> Picture
+                                                        </a>
+                                                    @endif
+                                                </td>
+                                            @endif
                                             <td>{{ $product->category->name }}
                                             </td>
                                             <td>{{ $product->product_name }}</td>
@@ -193,6 +212,42 @@
                                                 {{ number_format($product_sold) }}
                                             </td> --}}
                                         </tr>
+                                        <div class="modal fade bs-example-modal-lg" id="product-{{ $key }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                                            <div class="modal-dialog modal-md modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <div>
+                                                            <h4 class="modal-title text-info">
+                                                                {{ $product->product_name }}
+                                                            </h4>
+                                                        </div>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form class="form-horizontal form-material" action="{{route('manager.product.save.picture')}}" method="POST" enctype="multipart/form-data">
+                                                            @csrf
+
+                                                            <div class="m-b-30 row">
+                                                                <div class="col-12">
+                                                                    <div class="form-group">
+                                                                    <label for="">Product Picture</label><br>
+                                                                        <input type="file" class="form-control" name="picture">
+                                                                        <input type="hidden" readonly name="productId" class="form-control" value="{{$product->id}}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <hr>
+                                                            <div class="form-group m-b-0 text-left">
+                                                            <button type="submit" class="btn btn-info waves-effect waves-light">Upload</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                    <!-- /.modal-content -->
+                                                </div>
+                                            <!-- /.modal-dialog -->
+                                            </div>
+                                        </div>
                                         <span hidden>{{ $product_sold = 0 }}</span>
                                     @endforeach
                                 </tbody>
@@ -200,6 +255,9 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Category</th>
+                                        @if (getuserCompanyInfo()->onlineshop=='1')
+                                            <th>Picture</th>
+                                        @endif
                                         <th>Product</th>
                                         <th>Description</th>
                                         <th>Power</th>

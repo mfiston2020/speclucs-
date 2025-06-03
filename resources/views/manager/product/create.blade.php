@@ -13,7 +13,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <form class="form-horizontal" action="{{ route('manager.product.save') }}" method="POST">
+        <form class="form-horizontal" action="{{ route('manager.product.save') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
 
@@ -122,6 +122,14 @@
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="location" placeholder="Location Here"
                                         name="location" value="{{ old('location') }}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="price"
+                                    class="col-sm-3 text-right control-label col-form-label invalid">Picture</label>
+                                <div class="col-sm-9">
+                                    <input type="file" class="form-control" id="picture" placeholder="picture Here" name="picture" value="{{ old('picture') }}">
                                 </div>
                             </div>
                         </div>

@@ -14,6 +14,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Repositories\StockTrackRepo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductsController extends Controller
@@ -46,6 +47,17 @@ class ProductsController extends Controller
     public function save(Request $request)
     {
         // return $request->all();
+
+        $picture    =   null;
+
+        // dd(getuserCompanyInfo()->company_name);
+
+        if ($request->has('picture')) {
+            $request->validate([
+                'picture'=>'image'
+            ]);
+            $picture    =   Storage::disk('product_picture')->put('/',$request->picture);
+        }
 
         $this->validate($request, [
             'category' => 'required',
@@ -164,6 +176,7 @@ class ProductsController extends Controller
             $product->cost              =   $request->cost;
             $product->location          =   $request->location;
             $product->supplier_id       =   $request->supplier;
+            $product->picture          =   $picture;
             $product->company_id        =   Auth::user()->company_id;
 
             try {
@@ -172,9 +185,31 @@ class ProductsController extends Controller
 
                 return redirect()->route('manager.product')->with('successMsg', 'Product Created Successfully');
             } catch (\Throwable $th) {
-                return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong! ');
+                return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong!');
             }
         }
+    }
+
+    function savePicture(Request $request){
+        $request->validate(['picture'=>'required|image']);
+
+        $picture    =   null;
+
+        // dd(getuserCompanyInfo()->company_name);
+
+        if ($request->has('picture')) {
+            $picture    =   Storage::disk('product_picture')->put('/',$request->picture);
+        }
+
+        try {
+            Storage::disk('product_picture')->delete(Product::where('id',$request->productId)->pluck('picture')->first());
+            Product::where('id',$request->productId)->update(['picture'=>$picture]);
+
+            return redirect()->route('manager.product')->with('successMsg', 'Product Updated!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->withInput()->with('errorMsg', 'Sorry Something Went Wrong!');
+        }
+        
     }
 
     function importProduct()

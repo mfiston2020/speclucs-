@@ -237,7 +237,7 @@ class LabRequestController extends Controller
                 $notification   =   new SupplierNotify();
 
                 $notification->company_id   =   userInfo()->company_id;
-                // $notification->supplier_id  =   $request->supplier_id;
+                $notification->supplier_id  =   userInfo()->company_id;
                 $notification->product_id   =   $prdt->id;
                 $notification->notification_type   =   'product status';
                 $notification->notification =   'Product Out of Stock';

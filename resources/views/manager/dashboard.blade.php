@@ -183,6 +183,14 @@
 
             <div class="row">
                 <!-- column -->
+                <div class="col-sm-12 col-lg-8">
+                    <div class="card card-hover">
+                        <div class="card-body">
+                            <div id="product-stock-chart"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-sm-12 col-lg-4">
                     <div class="card card-hover">
                         <div class="card-body">
@@ -209,14 +217,14 @@
                     </div>
                 </div>
                 <!-- column -->
-                <div class="col-sm-12 col-lg-4">
+                {{-- <div class="col-sm-12 col-lg-4">
                     <div class="card card-hover">
                         <div class="card-body">
                             <h4 class="card-title">{{__('manager/dashboard.top_expense')}}</h4>
                             <div class="d-flex">
                                 <h2>{{format_numbers($expenses_count)}} <small><i class="ti-arrow-up text-success"></i></small>
                                 </h2>
-                                {{-- <span class="ml-auto">Users per minute</span> --}}
+                                {{-- <span class="ml-auto">Users per minute</span> --}
                             </div>
                             {{-- <div class="m-t-20 m-b-30 text-center">
                                 <div id="active-users"></div>
@@ -231,7 +239,7 @@
                                         </span>
                                     </li>
                                 @endforeach
-                            </ul> --}}
+                            </ul> --}
                         </div>
                     </div>
                 </div>
@@ -243,7 +251,7 @@
                             <div class="d-flex">
                                 <h2>{{format_numbers(count($customerInvoices))}} <small><i
                                             class="ti-arrow-up text-success"></i></small></h2>
-                                {{-- <span class="ml-auto">Users per minute</span> --}}
+                                {{-- <span class="ml-auto">Users per minute</span> --}
                             </div>
                             <div class="m-t-20 m-b-30 text-center">
                                 <div id="active-users"></div>
@@ -253,7 +261,7 @@
                                 @foreach ($customerInvoices as $item)
                                 <li class="list-group-item d-flex justify-content-between align-items-center justify-content-between">
                                     {{\App\Models\Customer::where(['id'=>$item->client_id])->pluck('name')->first()}}
-                                    {{-- Invoice #{{sprintf('%04d',$item->reference_number)}} --}}
+                                    {{-- Invoice #{{sprintf('%04d',$item->reference_number)}} --}
                                     <span class="">{{date('Y-m-d',strtotime($item->created_at))}}</span>
                                     <span
                                         class="text-{{($item->status=='pending')?'waring':'success'}}">{{$item->status}}</span>
@@ -263,7 +271,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         @endif
     </div>
@@ -272,6 +280,7 @@
 
 @push('scripts')
 <!--chartis chart-->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="{{ asset('dashboard/assets/libs/chartist/dist/chartist.min.js')}}"></script>
 <script src="{{ asset('dashboard/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js')}}"></script>
 <script>
@@ -318,5 +327,70 @@
             });
         }
     });
+
+    var options = {
+          series: [{
+          name: 'NORMAL STOCK',
+          data: [44, 55, 41, 67, 22]
+        }, {
+          name: 'NEEDS ATTENTION',
+          data: [11, 17, 15, 15, 21]
+        }, {
+          name: 'OUT OF STOCK',
+          data: [21, 7, 25, 13, 22]
+        }],
+          chart: {
+          type: 'bar',
+          height: 350,
+          stacked: true,
+          toolbar: {
+            show: true
+          },
+          zoom: {
+            enabled: true
+          }
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: 'bottom',
+              offsetX: -10,
+              offsetY: 0
+            }
+          }
+        }],
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            borderRadius: 10,
+            borderRadiusApplication: 'end', // 'around', 'end'
+            borderRadiusWhenStacked: 'last', // 'all', 'last'
+            dataLabels: {
+              total: {
+                enabled: true,
+                style: {
+                  fontSize: '13px',
+                  fontWeight: 900,
+                }
+              }
+            }
+          },
+        },
+        xaxis: {
+          categories: ['SV','BF','PG','Frames','Accessories'],
+        },
+        legend: {
+          position: 'right',
+          offsetY: 40
+        },
+        fill: {
+            opacity: 1,
+            colors: ['#40A0FC', '#FEBC4A','#FF6378' ],
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#product-stock-chart"), options);
+        chart.render()
 </script>
 @endpush

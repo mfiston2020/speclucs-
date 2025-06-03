@@ -119,8 +119,13 @@ class CompaniesController extends Controller
 
         $clinic_state           =   $request->clinic;
         $vision_center_state    =   $request->vision_center;
+        $onlineshopStatus       =   $request->online_shop;
         $sms_state              =   $request->sms;
         $sms                    =   (int)$company->sms_quantity + (int)$request->additional_sms;
+
+
+        // dd($request->all());
+
 
         if ($clinic_state) {
             $clinic_state  =   '1';
@@ -134,12 +139,19 @@ class CompaniesController extends Controller
             $sms_state  =   '0';
         }
 
+        if ($onlineshopStatus) {
+            $onlineshopStatus  =   '1';
+        } else {
+            $onlineshopStatus  =   '0';
+        }
+
         if ($vision_center_state) {
             $vision_center_state  =   '1';
         } else {
             $vision_center_state  =   '0';
         }
 
+        $company->onlineshop         =   $onlineshopStatus;
         $company->is_clinic         =   $clinic_state;
         $company->can_send_sms      =   $sms_state;
         $company->is_vision_center  =   $vision_center_state;

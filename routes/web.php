@@ -128,6 +128,7 @@ Route::prefix('manager')->name('manager.')->middleware('manager')->group(functio
     // ================= All product routes =========================
     Route::get('/product', [\App\Http\Controllers\Manager\ProductsController::class, 'index'])->name('product');
     Route::post('/saveProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'save'])->name('product.save');
+    Route::post('/saveProduct/picture', [\App\Http\Controllers\Manager\ProductsController::class, 'savePicture'])->name('product.save.picture');
     Route::get('/createProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'create'])->name('product.create');
     Route::get('/importProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'importProduct'])->name('product.import');
     Route::post('/saveImportProduct', [\App\Http\Controllers\Manager\ProductsController::class, 'saveImport'])->name('product.import.save');
