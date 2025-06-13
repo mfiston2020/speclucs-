@@ -236,7 +236,7 @@ class OrdersController extends Controller
                         => 'Dear ' . $order->firstname . ', ' . $company_name->company_name . ' would like to inform you that your glasses are ready, You can passby anytime and collect them Thank you!', 'action'
                         => 'send-sms'),
                         CURLOPT_HTTPHEADER => array(
-                            'x-api-key: ecb697cc-99f3-913e-a618-aae6038c4613-5f82c0d9'
+                            'x-api-key: '
                         ),
                     ));
 

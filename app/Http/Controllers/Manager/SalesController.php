@@ -411,7 +411,7 @@ class SalesController extends Controller
                     // => array('to' => $client_phone,'from' => 'SPECLUCS','unicode' => '0','sms'
                     // => 'Dear '.$client_name.', You are supposed to pay '.format_money($invoice->total_amount).' by cash or via MoMo of '.$company_name->company_name.'. Thank you for your appreciation & we are honored to have a client like YOU.','action'=> 'send-sms'),
                     //     CURLOPT_HTTPHEADER => array(
-                    //     'x-api-key: ecb697cc-99f3-913e-a618-aae6038c4613-5f82c0d9'
+                    //     'x-api-key: '
                     // ),
                     // ));
 

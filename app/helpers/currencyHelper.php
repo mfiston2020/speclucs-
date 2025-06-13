@@ -5,11 +5,15 @@ use App\Models\SupplierNotify;
 
 function format_money($money)
 {
-    $currency   =   getuserCompanyInfo()->currency=='USD'?'$':getuserCompanyInfo()->currency;
-    if (!$money) {
-        return $currency." 0.00";
+    if (!auth()->user()) {
+        $currency   =   'RWF';
+    } else {
+        $currency   =   getuserCompanyInfo()->currency=='USD'?'$':getuserCompanyInfo()->currency;
+        if (!$money) {
+            return $currency." 0.00";
+        }
     }
-
+    
     $money = number_format($money, 2);
 
     if (strpos($money, '-') !== false) {

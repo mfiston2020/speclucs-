@@ -316,7 +316,7 @@ class PatientsController extends Controller
                     => 'Hello '.$patientNumber->firstname.', '.$company_name->company_name.' is sending you the invoice of '.$total_amount.'RWF','action'
                     => 'send-sms'),
                     CURLOPT_HTTPHEADER => array(
-                        'x-api-key: ecb697cc-99f3-913e-a618-aae6038c4613-5f82c0d9'
+                        'x-api-key: '
                     ),
                     ));
 

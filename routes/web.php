@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\ShopController;
 use App\Http\Livewire\Manager\PurchaseOrder;
 use App\Http\Livewire\Manager\Report\AdjustMentReport;
 use App\Http\Livewire\Manager\Report\ClosingReport;
 use App\Http\Livewire\Manager\Report\ProductReport;
-use App\Http\Livewire\Manager\Report\SoldLensReport;
 use App\Http\Livewire\Manager\Report\StockEfficiency;
 use App\Http\Livewire\Manager\Report\StockHistory;
 use App\Http\Livewire\Manager\Report\UserPerfomanceReport;
@@ -26,9 +26,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect('/sign-in');
+    if (url('/')!='https://speclucs.rw') {
+        return intertia('Home');
+    }else{
+        return redirect('/sign-in');
+    }
     // return view('welcome');
 });
+
+Route::get('/shop', [ShopController::class,'index'])->name('specshop');
 
 Route::get('/sign-in', function () {
     // return view('welcome');
