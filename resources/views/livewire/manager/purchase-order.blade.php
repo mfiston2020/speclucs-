@@ -178,7 +178,7 @@
                                 $leadTimeQuantity   =   ((float)$po['usage']*(float)$leadTime)/(float)$totalDays;
                                 $orderQuantity      =   floor((((float)$po['usage']*2)+(float)$leadTimeQuantity)-(float)$po['stock']);
 
-                                $totalCost = $totalCost + ((($orderQuantity>0)?$product->cost * (float)$orderQuantity:0));
+                                $totalCost = (float)$totalCost + ((((float)$orderQuantity>0)?(float)$product->cost * (float)$orderQuantity:0));
                             @endphp
                                 <tr>
                                     <td>{{ $key+1 }}</td>
