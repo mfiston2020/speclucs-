@@ -199,7 +199,7 @@
                                     </td>
                                     <td>{{($orderQuantity<0)?'0':$orderQuantity}}</td>
                                     <td>{{ $product->cost}}</td>
-                                    <td>{{ ($orderQuantity>0)?$product->cost * $orderQuantity:0 }}</td>
+                                    <td>{{ ($orderQuantity>0)?(float)$product->cost * (float)$orderQuantity:0 }}</td>
                                 </tr>
                             @endforeach
                             <h4 class="card-title mb-3">
